@@ -3,940 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
-<title>Al-Mufrodat — Arabische woordenschat</title>
-<meta name="theme-color" content="#EFE4D4">
+<title>Al-Mufrodat — Medina Arabisch · Woordenschat, Grammatica & Dialogen</title>
+<meta name="theme-color" content="#F5F0E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  --paper:#EFE4D4; --paper-deep:#E5D4C0; --surface:#F7EEE2;
-  --ink:#3B2A1C; --ink-soft:#5C4432; --muted:#8A7060;
-  --line:#E2D0B8; --line-strong:#D2B896;
-  --forest:#6B4630; --forest-dark:#4E3222; --forest-soft:#F0E2D0;
-  --on-forest:#F7EEE2;
-  --clay:#A35A42; --clay-soft:#F3E4DA; --ok:#5A6B48; --ok-soft:#E6EBD8;
-  --purple:#6B4630; --purple-soft:#F0E2D0; --on-purple:#F7EEE2;
-  --blue:#6B4630; --blue-soft:#F0E2D0; --on-blue:#F7EEE2;
-  --radius:16px; --shadow:none;
-  --font:Figtree,system-ui,sans-serif; --ar:Amiri,serif;
-}
-
-[data-theme="dark"]{
-  --paper:#181410; --paper-deep:#221C16; --surface:#261F18;
-  --ink:#F0E4D4; --ink-soft:#D2C0AA; --muted:#A89078;
-  --line:#3A3026; --line-strong:#4C4034;
-  --forest:#D4B08C; --forest-dark:#C4A07C; --forest-soft:#2E261E;
-  --on-forest:#181410;
-  --clay:#D4A090; --clay-soft:#32241E; --ok:#B4C49A; --ok-soft:#22281C;
-  --purple:#D4B08C; --purple-soft:#2E261E; --on-purple:#181410;
-  --blue:#D4B08C; --blue-soft:#2E261E; --on-blue:#181410;
-  --shadow:none;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-font-smoothing:antialiased;color-scheme:light}
-[data-theme="dark"]{color-scheme:dark}
-[data-theme="dark"] .app-header-inner .title,
-[data-theme="dark"] .app-header-inner .sub{color:var(--ink)}
-[data-theme="dark"] .app-header .brand{color:var(--forest)}
-[data-theme="dark"] .hdr-back{color:var(--ink);border-color:var(--line)}
-[data-theme="dark"] .tab{color:var(--muted)}
-[data-theme="dark"] .tab.active{color:var(--forest)}
-[data-theme="dark"] .card,
-[data-theme="dark"] .book-lesson,
-[data-theme="dark"] .book-dialogue,
-[data-theme="dark"] .lesson,
-[data-theme="dark"] .wl-row,
-[data-theme="dark"] .flash-card{background:var(--surface);border-color:var(--line);color:var(--ink)}
-[data-theme="dark"] .btn-secondary{background:var(--paper-deep);border-color:var(--line-strong);color:var(--ink)}
-[data-theme="dark"] .btn-ghost{color:var(--ink-soft)}
-[data-theme="dark"] .icon-btn{background:var(--paper-deep);border-color:var(--line);color:var(--ink)}
-[data-theme="dark"] .search,
-[data-theme="dark"] input,
-[data-theme="dark"] textarea{background:var(--paper-deep);border-color:var(--line);color:var(--ink)}
-[data-theme="dark"] .opt{background:var(--surface);border-color:var(--line);color:var(--ink)}
-[data-theme="dark"] .path-card{background:var(--surface);border-color:var(--line);color:var(--ink)}
-[data-theme="dark"] .path-card.vocab{background:linear-gradient(160deg,#152824,var(--surface));border-color:var(--forest)}
-[data-theme="dark"] .path-card.grammar{background:linear-gradient(160deg,var(--purple-soft),var(--surface));border-color:var(--purple)}
-[data-theme="dark"] .lesson-tabs{background:var(--paper-deep);border-color:var(--line)}
-[data-theme="dark"] .lesson-tab{color:var(--muted)}
-[data-theme="dark"] .lesson-tab.active{background:var(--surface);color:var(--ink)}
-[data-theme="dark"] .path-badge.vocab{background:var(--forest-soft);color:var(--forest)}
-[data-theme="dark"] .path-badge.grammar{background:#2A2438;color:#C4A8E0}
-[data-theme="dark"] .continue .btn{background:var(--surface);color:inherit}
-[data-theme="dark"] .continue.grammar .btn{background:var(--on-purple);color:var(--purple)}
-[data-theme="dark"] .continue.conv .btn{background:var(--on-blue);color:var(--blue)}
-[data-theme="dark"] .continue .btn.ghost{background:transparent;color:var(--paper);border-color:rgba(255,255,255,.35)}
-[data-theme="dark"] .who-phon{color:var(--muted)}
-[data-theme="dark"] .chip{background:var(--paper-deep);color:var(--ink-soft);border-color:var(--line)}
-[data-theme="dark"] .empty{color:var(--muted)}
-[data-theme="dark"] .welcome .header h1,
-[data-theme="dark"] .header h1{color:var(--ink)}
-
-body{font-family:var(--font);background:var(--paper);color:var(--ink);min-height:100dvh;caret-color:transparent}
-input,textarea,select,[contenteditable="true"]{caret-color:var(--ink)}
-button,.tab,.path-card,.card,.lesson,.book-lesson,.opt,.icon-btn{caret-color:transparent;-webkit-user-select:none;user-select:none}
-
-button{font:inherit;cursor:pointer;border:none;background:none;color:inherit;-webkit-tap-highlight-color:transparent}
-input,select,textarea{font:inherit;color:inherit}
-#app{max-width:720px;margin:0 auto;padding:calc(12px + env(safe-area-inset-top)) 12px calc(96px + env(safe-area-inset-bottom));min-height:100dvh}
-.ar{font-family:var(--ar);direction:rtl}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 18px;border-radius:12px;font-weight:600;font-size:14px;transition:.15s}
-.btn-primary{background:var(--forest);color:var(--on-forest)}
-.btn-primary:active{background:var(--forest-dark)}
-.btn-secondary{background:var(--surface);border:1.5px solid var(--line-strong)}
-.btn-ghost{color:var(--ink-soft)}
-.btn-danger{background:var(--clay);color:#fff}
-.btn:disabled{opacity:.4;cursor:default}
-.btn-block{width:100%}
-.btn-sm{min-height:38px;padding:0 12px;font-size:13px;border-radius:10px}
-.icon-btn{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--line);background:var(--surface);color:var(--ink-soft)}
-.icon-btn:hover{border-color:var(--forest);color:var(--forest)}
-.card{background:var(--surface);border:1.5px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
-.progress{height:8px;background:var(--paper-deep);border-radius:99px;overflow:hidden}
-.progress>i{display:block;height:100%;background:var(--forest);border-radius:inherit;transition:width .4s}
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:10px}
-.back{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink-soft);min-height:40px}
-.back span{width:32px;height:32px;border-radius:10px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:16px}
-.tabbar{position:fixed;left:0;right:0;bottom:0;top:auto;z-index:60;background:color-mix(in srgb, var(--surface) 94%, transparent);border-top:1px solid var(--line);border-bottom:none;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:6px 10px calc(6px + env(safe-area-inset-bottom))}
-[data-theme="dark"] .tabbar{background:rgba(18,20,26,.96);border-top-color:var(--line)}
-.tabbar-inner{max-width:720px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
-.tab{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:16px;font-size:10px;font-weight:700;color:var(--muted)}
-.tab.active{color:var(--forest);background:var(--forest-soft)}
-.tab svg{width:20px;height:20px}
-.header{text-align:center;padding:8px 0 18px}
-.header .logo{font-family:var(--ar);font-size:42px;font-weight:700;color:var(--forest);line-height:1}
-.header h1{font-size:24px;font-weight:700;margin-top:8px;letter-spacing:-.02em}
-.header p{color:var(--muted);font-size:14px;margin-top:4px}
-.stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.chip{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);font-size:12px;font-weight:600;color:var(--ink-soft)}
-.continue{background:var(--forest);color:var(--on-forest);border-radius:var(--radius);padding:18px;margin:14px 0}
-.continue .lbl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.75}
-.continue h2{font-size:18px;margin:4px 0 2px}
-.continue .meta{font-size:13px;opacity:.8;margin-bottom:12px}
-.continue .row{display:flex;gap:8px}
-.continue .btn{flex:1;background:var(--on-forest);color:var(--forest)}
-.continue.grammar{background:var(--purple);color:var(--on-purple)}
-.continue.grammar .btn{background:var(--on-purple);color:var(--purple)}
-.continue.conv{background:var(--blue);color:var(--on-blue)}
-.continue.conv .btn{background:var(--on-blue);color:var(--blue)}
-.continue .btn.ghost{background:transparent;color:inherit;border:1.5px solid currentColor;opacity:.85}
-.section-h{display:flex;align-items:baseline;justify-content:space-between;margin:28px 0 10px}
-.section-h h2{font-size:18px;font-weight:700}
-.section-h span{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-.lesson{border:1.5px solid var(--line);background:var(--surface);border-radius:var(--radius);padding:14px;margin-bottom:10px}
-.lesson .status{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
-.lesson .status.new{color:var(--muted)}.lesson .status.busy{color:var(--forest)}.lesson .status.done{color:var(--ok)}
-.lesson h3{font-size:15px;font-weight:700}
-.lesson .blurb{font-size:13px;color:var(--muted);margin:2px 0 10px}
-.lesson .row{display:flex;gap:8px;margin-top:10px}
-.lesson .row .btn{flex:1}
-.flash-card{min-height:320px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;cursor:pointer;padding:48px 20px 28px;-webkit-tap-highlight-color:rgba(31,79,69,.12)}.flash-card:active{transform:scale(.99);background:var(--paper)}
-.flash-card .tag{position:absolute;top:14px;left:16px;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
-.flash-card .speak{position:absolute;top:10px;right:10px}
-.flash-card .big-ar{font-family:var(--ar);font-size:clamp(40px,12vw,64px);font-weight:700;line-height:1.25;direction:rtl}
-.flash-card .translit{color:var(--muted);font-size:14px;margin-top:6px}
-.flash-card .hint{margin-top:22px;font-size:11px;font-weight:700;color:var(--forest);letter-spacing:.08em;text-transform:uppercase}
-.flash-card .nl{font-size:28px;font-weight:700}
-.flash-controls{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:18px}
-.swipe-hint{display:none;text-align:center;font-size:11px;color:var(--muted);margin-top:10px;font-weight:600}
-@media (hover:none) and (pointer:coarse){.swipe-hint{display:block}}
-.card{touch-action:pan-y}
-.qcard{position:relative;text-align:center;padding:28px 18px}
-.qcard .qlabel{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.qcard .qmain{font-size:28px;font-weight:700;margin:10px 0 4px}
-.qcard .qar{font-family:var(--ar);font-size:clamp(40px,11vw,56px);font-weight:700;direction:rtl;margin:8px 0}
-.options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
-@media(max-width:420px){.options{grid-template-columns:1fr}}
-.opt{min-height:64px;border:2px solid var(--line);border-radius:12px;background:var(--paper);font-family:var(--ar);font-size:22px;direction:rtl;padding:10px;display:flex;align-items:center;justify-content:center;gap:8px}
-.opt:active{border-color:var(--forest)}
-.opt.correct{background:var(--ok);border-color:var(--ok);color:#fff}
-.opt.wrong{background:var(--clay);border-color:var(--clay);color:#fff}
-.opt:disabled{cursor:default}
-.type-row{display:flex;gap:8px;margin-top:16px}
-.type-row input{flex:1;min-height:46px;border:1.5px solid var(--line);border-radius:12px;padding:0 14px;background:var(--paper)}
-.type-row input:focus{outline:none;border-color:var(--forest);box-shadow:0 0 0 3px rgba(31,79,69,.12)}
-.dont-know{margin-top:14px;font-size:13px;color:var(--muted);text-decoration:underline;font-weight:600}
-.feedback{position:fixed;left:0;right:0;bottom:0;z-index:45;padding:14px 16px calc(78px + env(safe-area-inset-bottom));transform:translateY(120%);transition:transform .28s cubic-bezier(.22,1,.36,1);border-top:3px solid transparent;pointer-events:none;visibility:hidden}
-.feedback.show{transform:translateY(0);pointer-events:auto;visibility:visible}
-.feedback.ok{background:var(--ok-soft);border-color:var(--ok)}
-.feedback.no{background:var(--clay-soft);border-color:var(--clay)}
-.feedback-inner{max-width:520px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.feedback .txt{font-weight:700;font-size:14px}
-.feedback.ok .txt{color:var(--ok)}.feedback.no .txt{color:var(--clay)}
-.summary{text-align:center;padding:36px 20px}
-.summary h2{font-size:26px;margin:8px 0}
-.summary p{color:var(--muted);margin-bottom:16px}
-.badge{display:inline-block;background:var(--forest-soft);color:var(--forest);padding:6px 14px;border-radius:999px;font-weight:700;font-size:13px;margin-bottom:20px}
-.search{width:100%;min-height:46px;border:1.5px solid var(--line);border-radius:12px;padding:0 14px;background:var(--surface);margin:10px 0 16px}
-.search:focus{outline:none;border-color:var(--forest)}
-.wl-group{margin-bottom:18px}
-.wl-h{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
-.wl-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
-.wl-row .nl{flex:1;font-weight:600;font-size:14px}
-.wl-row .ar{font-size:22px}
-.form label{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:12px 0 5px}
-.form input,.form select{width:100%;min-height:44px;border:1.5px solid var(--line);border-radius:10px;padding:0 12px;background:var(--paper)}
-.form input:focus,.form select:focus{outline:none;border-color:var(--forest)}
-.form .ar-in{font-family:var(--ar);font-size:20px;direction:rtl}
-.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:12px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:60;max-width:90%}
-.toast.show{opacity:1}
-.book-lesson{border:1.5px solid var(--line);background:var(--surface);border-radius:var(--radius);padding:14px;margin-bottom:10px;cursor:pointer}
-.book-lesson .status{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}.book-lesson .status.new{color:var(--muted)}.book-lesson .status.busy{color:#5B3A7A}.book-lesson .status.done{color:var(--ok)}.book-lesson h3{font-size:15px;font-weight:700}
-.book-lesson p{font-size:13px;color:var(--muted);margin-top:2px}
-.grammar-block{margin-bottom:16px}
-.grammar-block h3{font-size:15px;font-weight:700;margin-bottom:8px;color:var(--forest)}
-.grammar-block ul{padding-left:18px;margin-bottom:12px}
-.grammar-block li{font-size:14px;line-height:1.5;margin-bottom:6px;color:var(--ink-soft)}
-.ex{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:12px}
-.ex .ar{font-size:20px;font-weight:700}
-.ex .nl{font-size:13px;color:var(--muted);text-align:right}
-.welcome{padding:24px 4px 12px}
-.welcome .steps{margin:20px 0}
-.step{display:flex;gap:12px;padding:12px;border:1.5px solid var(--line);background:var(--surface);border-radius:12px;margin-bottom:8px}
-.step .n{width:28px;height:28px;border-radius:50%;background:var(--forest-soft);color:var(--forest);display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0}
-.step b{display:block;font-size:14px}
-.step span{font-size:13px;color:var(--muted)}
-.empty{text-align:center;color:var(--muted);padding:32px 12px;font-style:italic}
-.dots{display:flex;justify-content:center;gap:6px;margin-top:14px}
-.dot{width:9px;height:9px;border-radius:50%;background:var(--paper-deep)}
-.dot.on{background:var(--forest)}
-/* Fixed app header — always visible */
-.app-header,.app-header-OLD-HIDDEN{display:none!important;pointer-events:none!important}
-.app-header-OLD-HIDDEN{
-  position:fixed;left:0;right:0;top:0;z-index:45;
-  background:var(--surface);
-  border-bottom:1px solid var(--line);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  padding:8px 14px calc(8px);
-  padding-top:calc(8px + env(safe-area-inset-top));
-}
-.app-header-inner{
-  max-width:900px;margin:0 auto;
-  display:flex;align-items:center;gap:10px;min-height:40px;
-}
-.app-header .brand{
-  font-family:var(--ar);font-size:20px;font-weight:700;color:var(--forest);line-height:1;
-  flex-shrink:0;
-}
-.app-header .ctx{flex:1;min-width:0}
-.app-header .ctx .path-badge{
-  display:inline-flex;align-items:center;gap:4px;
-  font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  padding:2px 8px;border-radius:999px;margin-bottom:2px;
-}
-.app-header .ctx .path-badge.vocab{background:var(--forest-soft);color:var(--forest)}
-.app-header .ctx .path-badge.grammar{background:#E8E0F0;color:#5B3A7A}
-.app-header .ctx .title{
-  font-size:13px;font-weight:700;color:var(--ink);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-.app-header .ctx .sub{
-  font-size:11px;color:var(--muted);font-weight:600;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-.app-header .hdr-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.app-header .hdr-back{
-  width:36px;height:36px;border-radius:10px;border:1.5px solid var(--line);
-  background:var(--surface);display:grid;place-items:center;
-  font-size:16px;color:var(--ink-soft);flex-shrink:0;
-}
-.app-header .hdr-back:active{background:var(--paper-deep)}
-.path-cards{display:flex;flex-direction:column;gap:8px;margin:12px 0}
-.path-card{
-  border:1.5px solid var(--line);background:var(--surface);border-radius:18px;
-  padding:14px 16px;cursor:pointer;text-align:left;transition:.15s;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:auto;
-}
-.path-card:active{transform:scale(.98)}
-.path-card.vocab{border-color:var(--forest);background:linear-gradient(160deg,var(--forest-soft),var(--surface))}
-.path-card.grammar{border-color:#9B7AB8;background:linear-gradient(160deg,#F3EDF8,var(--surface))}
-.path-card .pc-icon{font-size:28px;margin-bottom:6px}
-.path-card h3{font-size:16px;font-weight:700;margin:0;flex-shrink:0}
-.path-card p{font-size:12px;color:var(--muted);line-height:1.4;margin:0;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.path-card .pc-meta{font-size:11px;font-weight:700;margin:0;flex-shrink:0;white-space:nowrap;color:var(--ink-soft)}
-
-
-.pic-frame{background:var(--paper);border:1.5px solid var(--line);border-radius:16px;padding:16px 18px;margin:8px auto 14px;display:flex;justify-content:center;align-items:center;max-width:200px;box-shadow:0 2px 8px rgba(44,74,58,.06)}.pic-frame svg{display:block;width:72px;height:72px}.pic-photo{padding:0;overflow:hidden;max-width:200px;border-radius:16px}.pic-photo img{display:block;width:160px;height:160px;object-fit:cover;background:var(--paper-deep)}.flash-card .pic-frame{margin-bottom:12px}
-.pic-frame svg{display:block}
-
-
-.lesson-tabs{position:sticky;top:8px;z-index:15;display:flex;gap:6px;margin:12px 0 16px;padding:4px;background:var(--paper-deep);border-radius:14px;border:1.5px solid var(--line);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.lesson-tabs::-webkit-scrollbar{display:none}
-.lesson-tab{flex:1;min-width:0;padding:10px 8px;border:none;border-radius:10px;background:transparent;font-family:inherit;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;transition:.15s;white-space:nowrap;text-align:center}
-.lesson-tab.active{background:var(--forest);color:var(--paper);box-shadow:0 2px 8px rgba(44,74,58,.2)}
-.lesson-tab .tab-count{display:block;font-size:10px;font-weight:600;opacity:.75;margin-top:2px}
-.lesson-pane{display:none}
-.lesson-pane.active{display:block}
-@media(max-width:420px){
-  .lesson-tab{font-size:12px;padding:9px 6px}
-  .pic-frame{padding:12px;max-width:100%}
-  .pic-frame svg{width:56px;height:56px}
-}
-@media(min-width:700px){
-  .lesson-tab{font-size:14px;padding:12px 14px}
-  .pic-frame{max-width:260px}
-}
-
-
-/* App padding: fixed header top + tabbar bottom (mobile) */
-#app{
-  padding-bottom:calc(72px + env(safe-area-inset-bottom));
-  padding-top:calc(12px + env(safe-area-inset-top));
-  margin:0 auto;
-  max-width:520px;
-}
-/* Desktop: tabbar also at top under header */
-@media(min-width:768px){
-  .tabbar{
-    top:0!important;bottom:auto!important;padding-top:calc(6px + env(safe-area-inset-top))!important;
-    border-bottom:1px solid var(--line)!important;
-    border-top:none!important;
-    padding:6px 20px!important;
-  }
-  .tabbar-inner{max-width:720px!important;gap:8px}
-  .tab{flex-direction:row!important;gap:8px;padding:10px 14px;font-size:13px;justify-content:center}
-  #app{
-    padding-top:calc(64px + env(safe-area-inset-top))!important;
-    padding-bottom:40px!important;
-    max-width:720px;
-  }
-  .app-header-inner{max-width:720px}
-}
-/* Feedback above bottom tabbar on mobile */
-.feedback{bottom:calc(60px + env(safe-area-inset-bottom))!important}
-@media(min-width:768px){
-  .feedback{bottom:0!important}
-}
-
-
-
-.conv-hero{width:100%;max-height:160px;object-fit:cover;border-radius:14px;margin-bottom:12px;background:var(--paper-deep);border:1.5px solid var(--line)}
-.book-dialogue{background:var(--surface);border:1.5px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--shadow)}
-.book-dialogue h3{font-size:15px;font-weight:700;color:var(--forest);margin-bottom:4px}
-.book-dialogue .sub{font-size:12px;color:var(--muted);margin-bottom:12px}
-.book-line{display:grid;grid-template-columns:12px 1fr;gap:2px;align-items:start;padding:0;margin:0;border-bottom:none;cursor:pointer}
-.book-line:last-child{border-bottom:none}
-.book-dialogue-wrap{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:start;margin-bottom:14px}
-@media(max-width:560px){.book-dialogue-wrap{grid-template-columns:100px 1fr;gap:10px}}
-.conv-side-img{width:140px;height:140px;object-fit:cover;border-radius:14px;border:1.5px solid var(--line);background:var(--paper-deep);box-shadow:var(--shadow)}
-@media(max-width:560px){.conv-side-img{width:100px;height:100px}}
-.book-dialogue{margin-bottom:0;padding:12px}
-.book-line .num{font-size:10px;font-weight:700;color:var(--muted);padding-top:4px}
-.book-line .who{font-size:13px;font-weight:700;margin-bottom:0;display:inline-block;padding:1px 6px;border-radius:5px;color:#fff;font-family:var(--ar);line-height:1.25}.who-phon{display:block;font-size:10px;font-weight:600;color:var(--muted);margin:1px 0 2px 0;padding:0;text-align:left;direction:ltr;font-style:italic;line-height:1.15;width:100%}
-.book-line{border-right:none}
-.book-line[data-color]{border-right-color:var(--spk)}
-
-.book-line .ar{font-size:15px;font-weight:700;line-height:1.15;text-align:right;margin:0}
-.book-line .nl{display:none;font-size:12px;font-weight:600;color:var(--ink);margin-top:1px;margin-bottom:0;padding:2px 5px;background:var(--paper-deep);border-radius:5px;text-align:right;direction:ltr;line-height:1.2}
-.book-line.open .nl{display:block}
-.line-actions{display:inline-flex;flex-direction:row;gap:0;align-items:center;vertical-align:middle;margin-right:4px}
-.line-actions .icon-btn,.line-actions button{
-  width:22px!important;height:22px!important;min-height:22px!important;padding:0!important;
-  font-size:11px!important;border-radius:6px;opacity:.75;flex-shrink:0;
-  border:none!important;background:transparent!important;box-shadow:none!important;
-}
-.line-actions button:active{opacity:1}
-.ar-row{display:flex;align-items:center;justify-content:flex-end;gap:2px;flex-wrap:nowrap}
-.ar-row .ar{flex:1;min-width:0}
-.mic-btn.listening{background:#C45C26;color:#fff;animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
-.speak-result{font-size:12px;font-weight:600;margin-top:4px;padding:4px 8px;border-radius:8px;text-align:right}
-.speak-result.ok{background:#E6F2EC;color:var(--ok)}
-.speak-result.bad{background:#FCEDEA;color:var(--clay)}
-.speak-result.hint{background:var(--paper-deep);color:var(--muted)}
-.book-line .tap{margin:0;line-height:1.1;font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;margin-top:1px;text-align:left;direction:ltr}
-.book-line.open .tap{display:none}
-.book-phrases{margin-top:8px}
-.book-phrases .row{display:grid;grid-template-columns:1fr auto;gap:8px;padding:10px 0;border-bottom:1px solid var(--line);cursor:pointer}
-.book-phrases .row .ar{font-size:18px;font-weight:700;text-align:right}
-.book-phrases .row .nl{display:none;font-size:13px;color:var(--muted);text-align:left;direction:ltr;margin-top:4px}
-.book-phrases .row.open .nl{display:block}
-
-
-/* Dark mode: banner/header/tabbar altijd donker */
-[data-theme="dark"] .app-header{
-  background:#12141A !important;
-  border-bottom-color:#2A2F3A !important;
-}
-[data-theme="dark"] .tabbar{
-  background:#12141A !important;
-  border-color:#2A2F3A !important;
-}
-[data-theme="dark"] .app-header .ctx .title{color:#E8EAED !important}
-[data-theme="dark"] .app-header .ctx .sub{color:#9AA0AC !important}
-[data-theme="dark"] .app-header .brand{color:#3D9B86 !important}
-[data-theme="dark"] .app-header .hdr-back{
-  background:#1E222C !important;
-  border-color:#2A2F3A !important;
-  color:#E8EAED !important;
-}
-[data-theme="dark"] .app-header .btn-secondary{
-  background:#1E222C !important;
-  border-color:#3A4150 !important;
-  color:#E8EAED !important;
-}
-[data-theme="dark"] .app-header .ctx .path-badge.vocab{
-  background:#1A3330 !important;color:#3D9B86 !important;
-}
-[data-theme="dark"] .app-header .ctx .path-badge.grammar{
-  background:#2A2438 !important;color:#C4A8E0 !important;
-}
-
-
-
-
-/* Praten: kleine foto links, tekst rechts bij elkaar */
-.book-dialogue-wrap{
-  display:grid !important;
-  grid-template-columns:96px 1fr !important;
-  gap:12px !important;
-  align-items:start !important;
-  margin-bottom:14px !important;
-}
-@media(max-width:480px){
-  .book-dialogue-wrap{grid-template-columns:72px 1fr !important;gap:8px !important}
-}
-.conv-side-slot{display:none!important}
-.conv-side-slot-HIDDEN{
-  position:relative !important;
-  width:96px !important;
-  height:96px !important;
-  max-height:96px !important;
-  aspect-ratio:1 !important;
-  border-radius:12px !important;
-  overflow:hidden !important;
-  background:var(--paper-deep) !important;
-  border:1.5px solid var(--line) !important;
-  flex-shrink:0 !important;
-}
-@media(max-width:480px){
-  .conv-side-slot{width:72px !important;height:72px !important;max-height:72px !important}
-}
-.conv-side-slot .conv-side-img,
-img.conv-side-img{
-  position:absolute !important;
-  inset:0 !important;
-  width:100% !important;
-  height:100% !important;
-  object-fit:cover !important;
-  display:block !important;
-  border:none !important;
-  border-radius:12px !important;
-}
-.book-dialogue{
-  display:block !important;
-  padding:0 !important;
-  margin:0 !important;
-  background:transparent !important;
-  border:none !important;
-  box-shadow:none !important;
-  min-width:0 !important;
-}
-.book-dialogue > div:first-child{
-  display:flex !important;
-  flex-wrap:wrap !important;
-  align-items:center !important;
-  gap:6px !important;
-  margin-bottom:6px !important;
-}
-.book-line{
-  display:block !important;
-  padding:2px 0 !important;
-  margin:0 !important;
-  border:none !important;
-  width:100% !important;
-}
-.book-line .num{display:none !important}
-.book-line > div{min-width:0 !important;width:100% !important}
-.book-line .who{
-  display:inline-block !important;
-  font-size:12px !important;
-  padding:1px 6px !important;
-  margin:0 0 1px 0 !important;
-}
-.who-phon{
-  display:inline !important;
-  font-size:10px !important;
-  margin:0 0 0 6px !important;
-  text-align:left !important;
-  font-style:italic !important;
-  color:var(--muted) !important;
-}
-.ar-row{
-  display:flex !important;
-  flex-direction:row !important;
-  align-items:center !important;
-  justify-content:flex-end !important;
-  gap:4px !important;
-  width:100% !important;
-  margin:0 !important;
-}
-.ar-row .ar,
-.book-line .ar{
-  display:block !important;
-  flex:1 1 auto !important;
-  font-size:17px !important;
-  line-height:1.3 !important;
-  text-align:right !important;
-  margin:0 !important;
-  min-width:0 !important;
-}
-.line-actions{
-  display:inline-flex !important;
-  flex-direction:row !important;
-  flex-shrink:0 !important;
-  order:-1 !important;
-}
-.line-actions button{
-  width:22px !important;
-  height:22px !important;
-  font-size:12px !important;
-  opacity:.75 !important;
-  border:none !important;
-  background:transparent !important;
-  padding:0 !important;
-}
-.book-line .nl{
-  display:none;
-  font-size:13px !important;
-  margin:2px 0 4px !important;
-  padding:3px 6px !important;
-  text-align:right !important;
-  width:100% !important;
-}
-.book-line.open .nl,
-.book-line.show-all .nl{display:block !important}
-
-.conv-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:18px 0 8px;flex-wrap:wrap}
-.conv-nav .btn{min-height:42px;padding:0 14px}
-.conv-nav .btn:disabled{opacity:.35;pointer-events:none}
-.conv-dots{display:flex;gap:6px;align-items:center;justify-content:center;flex:1}
-.conv-dot{width:8px;height:8px;border-radius:50%;background:var(--line-strong);border:none;padding:0;cursor:pointer}
-.conv-dot.on{background:var(--forest);transform:scale(1.25)}
-
-.ar-mark .tok-ok{color:var(--ok)!important;background:rgba(45,90,61,.12);border-radius:3px;padding:0 1px}
-.ar-mark .tok-bad{color:#C45C26!important;background:rgba(196,92,38,.14);border-radius:3px;padding:0 1px;text-decoration:underline;text-decoration-style:wavy}
-.ar-mark .tok-haraka{color:#B45309!important;background:rgba(180,83,9,.12);border-radius:3px;padding:0 1px}
-.ar-mark .tok-haraka .tash,.ar-mark .tash.bad{
-  color:#B45309;background:rgba(180,83,9,.22);border-radius:3px;outline:2px dotted #B45309;padding:0 1px
-}
-.ar-mark .tok-ok .tash{color:var(--ok)}
-.ar-mark .tok-now{
-  background:rgba(61,155,134,.18)!important;border-radius:4px;padding:0 3px;
-  box-shadow:0 0 0 2px rgba(61,155,134,.35);
-  animation:tokpulse 1.15s ease-in-out infinite
-}
-@keyframes tokpulse{0%,100%{opacity:1}50%{opacity:.62}}
-.ar-mark .tash{font-weight:800}
-.tarteel-leg{display:flex;flex-wrap:wrap;gap:6px 10px;font-size:12px;color:var(--muted);margin:8px 0 4px;justify-content:center}
-.tarteel-leg b{font-weight:700}
-.zeg-mushaf{
-  font-family:var(--ar);font-size:clamp(42px,13vw,68px);font-weight:700;line-height:1.45;
-  direction:rtl;text-align:center;margin:8px 0 4px;min-height:72px
-}
-.book-line.line-ok{border-inline-start:3px solid var(--ok);padding-inline-start:6px}
-.book-line.line-bad{border-inline-start:3px solid #C45C26;padding-inline-start:6px}
-.book-line.line-mid{border-inline-start:3px solid #C4A035;padding-inline-start:6px}
-.book-line.line-active{background:rgba(61,155,134,.08);border-radius:8px}
-.dlg-score{font-size:14px;font-weight:700;margin-bottom:6px}
-.dlg-score .pct{font-size:20px}
-
-.ar-mark .tok-wait{color:var(--muted)!important;opacity:.55}
-.ar-mark .tok-plain{color:inherit}
-.ar-mark .tok-plain .tash{
-  color:var(--forest);font-weight:800;
-  border-bottom:2px dotted var(--forest);padding:0 1px
-}
-.hide-ar .tok-wait,
-.hide-ar .tok-now{
-  color:transparent!important;
-  background:var(--paper-deep)!important;
-  box-shadow:none;
-  border-radius:8px;
-  min-width:2.4ch;
-  display:inline-block;
-  user-select:none
-}
-.hide-ar .tok-wait .tash,
-.hide-ar .tok-now .tash{visibility:hidden}
-.hide-ar.peek .tok-wait,
-.hide-ar.peek .tok-now{
-  color:inherit!important;
-  background:rgba(61,155,134,.14)!important
-}
-.hide-ar.peek .tok-wait .tash,
-.hide-ar.peek .tok-now .tash{visibility:visible}
-.hide-ar .zeg-tr{filter:blur(10px);user-select:none}
-.hide-ar.peek .zeg-tr{filter:none}
-.cmp-sheet{
-  position:fixed;left:0;right:0;bottom:calc(64px + env(safe-area-inset-bottom));
-  z-index:70;margin:0 auto;max-width:560px;width:100%;
-  background:var(--surface);border:1.5px solid var(--line);border-radius:18px 18px 0 0;
-  padding:14px 16px 18px;box-shadow:0 -10px 32px rgba(0,0,0,.14)
-}
-.cmp-sheet .cmp-k{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
-.cmp-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
-.cmp-lab{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:2px}
-.cmp-ar{font-family:var(--ar);font-size:28px;font-weight:700;direction:rtl;line-height:1.35}
-.cmp-hint{font-size:13px;color:var(--ink-soft);margin:8px 0 4px;line-height:1.4}
-.end-pill{
-  display:inline-block;font-family:system-ui,sans-serif;font-size:12px;font-weight:800;
-  padding:3px 9px;border-radius:999px;background:var(--paper-deep);color:var(--ink);
-  margin-inline-start:8px;direction:ltr;letter-spacing:.02em;vertical-align:middle;white-space:nowrap
-}
-.end-pill.ok{background:var(--ok-soft);color:var(--ok)}
-.end-pill.bad{background:rgba(196,92,38,.14);color:#C45C26}
-.end-pill.maybe{background:rgba(180,83,9,.14);color:#B45309}
-.mk-heat{display:inline-block;width:8px;height:8px;border-radius:50%;margin-inline-start:6px;vertical-align:middle;background:var(--line)}
-.mk-heat.warm{background:#D4A017}
-.mk-heat.hot{background:#C45C26}
-.wl-row.warm{box-shadow:inset -3px 0 0 #D4A017}
-.wl-row.hot{box-shadow:inset -3px 0 0 #C45C26}
-.said-live{font-size:13px;color:var(--muted);min-height:18px;text-align:center;margin:2px 0 4px}
-.flash-mushaf{font-family:var(--ar);font-size:clamp(36px,10vw,56px);font-weight:700;line-height:1.45;direction:rtl;text-align:center}
-.tok-ok,.tok-bad,.tok-haraka,.tok-now,.tok-wait,.tok-plain{cursor:pointer}
-
-.dlg-practice-result{display:block!important;min-height:28px;margin-top:8px;padding:10px 12px;border-radius:12px}
-.speak-result.ok{background:var(--ok-soft)!important;color:var(--ok)!important}
-.speak-result.bad{background:rgba(196,92,38,.12)!important;color:#C45C26!important}
-.speak-result.hint{background:var(--paper-deep)!important;color:var(--ink-soft)!important}
-.dlg-score{font-size:14px;font-weight:700}
-.dlg-score .pct{font-size:22px;font-weight:800}
-
-.theme-fab{
-  position:fixed;z-index:50;
-  right:12px;bottom:calc(72px + env(safe-area-inset-bottom));
-  width:42px;height:42px;border-radius:50%;
-  border:1.5px solid var(--line);background:var(--surface);color:var(--ink);
-  box-shadow:var(--shadow);font-size:18px;
-  display:grid;place-items:center;cursor:pointer;
-}
-@media(min-width:900px){
-  .theme-fab{top:calc(12px + env(safe-area-inset-top));bottom:auto;right:20px}
-}
-
-.mvp-h{font-size:22px;font-weight:700;margin:0 0 4px;letter-spacing:-.02em}
-.mvp-sub{font-size:13px;color:var(--muted);margin:0 0 16px;line-height:1.4}
-.mvp-kicker{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
-.mvp-list{display:flex;flex-direction:column;gap:8px}
-.mvp-row{
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-  width:100%;text-align:left;padding:14px 14px;
-  background:var(--surface);border:1.5px solid var(--line);border-radius:14px;
-  cursor:pointer;color:inherit;
-}
-.mvp-row:active{transform:scale(.99)}
-.mvp-title{font-size:15px;font-weight:700}
-.mvp-ar{font-size:14px;color:var(--ink-soft);margin-top:2px}
-.mvp-meta{font-size:13px;font-weight:700;color:var(--forest);flex-shrink:0}
-.mvp-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
-.book-dialogue-wrap{margin-top:4px}
-
-.conv-banner{
-  width:100%;
-  height:168px;
-  border-radius:16px;
-  overflow:hidden;
-  margin-bottom:14px;
-  border:1.5px solid var(--line);
-  background:var(--paper-deep);
-  position:relative;
-}
-.conv-banner img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  object-position:center 32%;
-  display:block;
-}
-.conv-banner .conv-banner-fade{
-  position:absolute;left:0;right:0;bottom:0;height:40%;
-  background:linear-gradient(transparent, rgba(0,0,0,.25));
-  pointer-events:none;
-}
-@media(min-width:600px){.conv-banner{height:200px}}
-/* side photo off */
-.book-dialogue-wrap{
-  display:block !important;
-  grid-template-columns:unset !important;
-}
-.conv-side-slot{display:none !important}
-
-.path-cards{display:grid;grid-template-columns:1fr;gap:10px}
-@media(min-width:480px){.path-cards{grid-template-columns:repeat(3,1fr)}}
-.path-card.talk{border-color:#1E5A7A;background:linear-gradient(160deg,#E4F1F6,var(--surface))}
-[data-theme="dark"] .path-card.talk{background:linear-gradient(160deg,var(--blue-soft),var(--surface));border-color:var(--blue)}
-.lesson-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px}
-.lesson-actions .btn{min-width:0;padding:0 6px;font-size:12px}
-.hub-toolbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:12px}
-.hub-toolbar .grow{flex:1;min-width:8px}
-.session-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
-.session-top .prog{flex:1;height:6px;background:var(--paper-deep);border-radius:99px;overflow:hidden}
-.session-top .prog i{display:block;height:100%;background:var(--forest);border-radius:99px}
-.qlabel{font-size:12px;font-weight:700;color:var(--muted);text-transform:none;letter-spacing:0;margin-bottom:8px}
-.q-pic{display:flex;justify-content:center;margin:8px 0}
-.q-pic .pic-frame{width:120px;height:120px;border-radius:16px}
-.pic-frame{width:112px;height:112px;border-radius:14px;overflow:hidden;border:1.5px solid var(--line);background:var(--paper-deep)}
-.pic-frame img{width:100%;height:100%;object-fit:cover;display:block}
-.conv-banner{height:168px}
-@media(min-width:600px){.conv-banner{height:200px}}
-.book-line{padding:10px 0;border-bottom:1px solid var(--line)}
-.book-line .who{display:inline-block;font-size:10px;font-weight:700;color:#fff;padding:2px 8px;border-radius:99px;margin-bottom:4px}
-.book-line .ar{font-size:22px;line-height:1.55}
-.book-line .nl{font-size:13px;color:var(--muted);margin-top:4px;display:none}
-.book-line.open .nl,.book-line.show-all .nl{display:block}
-.line-actions{display:flex;gap:4px;opacity:.75}
-.line-actions button{width:34px;height:34px;border:0;background:var(--paper-deep);border-radius:10px;cursor:pointer}
-.theme-fab{bottom:calc(88px + env(safe-area-inset-bottom)) !important}
-.tab{font-size:10px;padding:7px 2px}
-@media(min-width:900px){
-  .tabbar{left:0;right:0}
-}
-.header .logo{font-size:28px}
-.header h1{font-size:20px;margin-top:4px}
-.header{padding:4px 0 10px;text-align:left}
-
-[data-theme="dark"] .tab.active{background:var(--forest-soft);color:var(--forest)}
-[data-theme="dark"] .tabbar{background:rgba(18,17,15,.92);border-top-color:var(--line)}
-[data-theme="dark"] .progress{background:var(--paper-deep)}
-[data-theme="dark"] .progress i{background:var(--forest)}
-[data-theme="dark"] .opt.correct{background:var(--ok-soft);border-color:var(--ok)}
-[data-theme="dark"] .opt.wrong{background:var(--clay-soft);border-color:var(--clay)}
-[data-theme="dark"] .speak-result.ok{background:var(--ok-soft);color:var(--ok)}
-[data-theme="dark"] .speak-result.bad{background:var(--clay-soft);color:var(--clay)}
-[data-theme="dark"] .speak-result.hint{background:var(--paper-deep);color:var(--ink-soft)}
-[data-theme="dark"] .conv-banner{border-color:var(--line);background:var(--paper-deep)}
-[data-theme="dark"] .mvp-row{background:var(--surface);border-color:var(--line);color:var(--ink)}
-[data-theme="dark"] .theme-fab{background:var(--surface);border-color:var(--line);color:var(--ink)}
-[data-theme="dark"] .back{color:var(--ink-soft)}
-[data-theme="dark"] .qar,.book-line .ar{color:var(--ink)}
-#app{max-width:680px}
-.header .logo{letter-spacing:.02em}
-.path-card{min-height:0}
-.lesson{padding:14px 14px 12px}
-.tabbar{box-shadow:0 -8px 24px rgba(0,0,0,.04)}
-[data-theme="dark"] .tabbar{box-shadow:0 -8px 24px rgba(0,0,0,.25)}
-
-.path-lesson{display:flex;gap:12px;align-items:flex-start}
-.path-num{
-  width:40px;height:40px;border-radius:50%;flex-shrink:0;
-  display:grid;place-items:center;font-weight:800;font-size:15px;
-  background:var(--paper-deep);color:var(--muted);border:2px solid var(--line);
-}
-.path-lesson.busy .path-num{background:var(--forest-soft);color:var(--forest);border-color:var(--forest)}
-.path-lesson.done .path-num{background:var(--forest);color:var(--on-forest);border-color:var(--forest)}
-.path-body{flex:1;min-width:0}
-.path-body h3{font-size:16px;margin:2px 0 4px}
-.path-body .btn{width:100%;margin-top:8px}
-.path-alts{display:flex;gap:12px;justify-content:center;margin-top:8px}
-.path-alts button{font-size:12px;font-weight:700;color:var(--muted);padding:4px 0;background:none;border:0}
-.path-alts button:active{color:var(--forest)}
-.sum-score{font-size:48px;font-weight:800;letter-spacing:-.03em;color:var(--forest);line-height:1}
-.sum-score span{font-size:22px;color:var(--muted);font-weight:600}
-.card.summary{text-align:center;padding:28px 18px}
-.card.summary h2{margin:8px 0 4px}
-.card.summary p{color:var(--muted);margin-bottom:16px}
-
-.who-row{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:4px}
-.book-line .who{
-  font-size:15px;font-weight:800;padding:4px 10px;border-radius:999px;
-  font-family:var(--ar);line-height:1.2;
-}
-.book-line .who-phon{
-  font-size:13px;font-weight:700;color:var(--ink-soft);letter-spacing:.02em;
-}
-.tab{font-size:8.5px;letter-spacing:-.01em}
-
-.parse-slots{display:flex;flex-direction:column;gap:8px;margin:10px 0}
-.parse-slot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1.5px dashed var(--line-strong);border-radius:14px;background:var(--surface);text-align:start}
-.parse-slot.drop{border-color:var(--forest);background:var(--forest-soft)}
-.parse-slot.filled{border-style:solid}
-.parse-lab{font-size:12px;font-weight:700;color:var(--muted);flex:1}
-.parse-tok{font-size:22px}
-.parse-bank{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:8px}
-.parse-chip{padding:8px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);min-height:44px}
-.parse-chip .ar{font-size:20px}
-.parse-chip.on{border-color:var(--forest);background:var(--forest-soft)}
-.lesson-tabs{overflow-x:auto;flex-wrap:nowrap}
-
-.parse-chip{display:flex;flex-direction:column;align-items:center;gap:2px}
-.parse-right{display:flex;flex-direction:column;align-items:flex-end}
-.parse-info{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--paper-deep);font-size:11px;margin-inline-start:4px;color:var(--forest)}
-.parse-explain{background:var(--forest-soft);border:1.5px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px;font-size:13px;line-height:1.45}
-.parse-explain p{margin:6px 0 8px;color:var(--ink-soft)}
-
-.parse-explain .parse-line{margin:0;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px;line-height:1.4;color:var(--ink)}
-.parse-explain .parse-line.parse-h{font-weight:800;border-bottom:0;padding-top:12px;color:var(--forest)}
-.parse-explain .who-phon{margin-bottom:8px}
-
-.resume-row{
-  display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 12px;
-  width:100%;text-align:start;padding:12px 14px;margin-bottom:12px;
-  border:1.5px solid var(--line);border-radius:14px;background:var(--surface);
-}
-.resume-k{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--forest)}
-.resume-t{font-weight:700;flex:1}
-.resume-m{font-size:12px;color:var(--muted)}
-.book-line{display:grid;grid-template-columns:92px 1fr;gap:10px;align-items:start;padding:8px 0;border-bottom:1px solid var(--line)}
-.who-col{text-align:start}
-.who-name{font-size:20px;font-weight:800;line-height:1.25;font-family:var(--ar)}
-.who-col .who-phon{font-size:11px;font-weight:600;margin-top:2px;color:var(--muted)}
-.line-main .ar{font-size:22px}
-.book-line .who{display:none}
-
-[data-ar="s"] .ar,[data-ar="s"] .qar,[data-ar="s"] .big-ar{font-size:90%}
-[data-ar="l"] .book-line .ar,[data-ar="l"] .qar,[data-ar="l"] .big-ar{font-size:120%}
-.search,input.search{caret-color:var(--ink);-webkit-user-select:text;user-select:text}
-
-.lesson input,.lesson textarea,input,textarea{ -webkit-user-select:text!important; user-select:text!important; caret-color:var(--ink); pointer-events:auto; }
-
-
-.book-dialogue .who-name{
-  font-size:24px !important;
-  font-weight:800 !important;
-  line-height:1.2 !important;
-}
-.book-dialogue .who-col .who-phon{
-  font-size:13px !important;
-  font-weight:600;
-}
-
-.book-dialogue .who-row{
-  display:flex !important;
-  flex-direction:column;
-  align-items:flex-start;
-  gap:2px;
-  margin:0 0 4px 18px !important;
-  padding-left:4px;
-}
-.book-dialogue .who-row .who{
-  display:inline-block !important;
-  font-size:22px !important;
-  font-weight:800 !important;
-  font-family:var(--ar) !important;
-  line-height:1.2 !important;
-  padding:5px 12px !important;
-  border-radius:12px !important;
-  color:#fff !important;
-}
-.book-dialogue .who-row .who-phon{
-  display:block !important;
-  font-size:14px !important;
-  font-weight:700 !important;
-  margin-left:4px;
-  color:var(--ink-soft) !important;
-}
-
-.learn-mini{display:flex;align-items:center;justify-content:center;gap:10px;margin:4px 0 8px}
-.learn-count{font-size:13px;font-weight:700;color:var(--muted)}
-.mini-btn{width:36px;height:36px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);font-size:16px;padding:0;display:grid;place-items:center}
-.qcard .qlabel{display:none}
-
-.mini-btn.on{background:var(--forest);color:var(--on-forest);border-color:var(--forest)}
-
-.book-line .ar.ar-mark .tok-ok{color:#1B7A3A !important}
-.book-line .ar.ar-mark .tok-bad{color:#B42318 !important}
-.book-line .ar.ar-mark .tok-wait{color:var(--muted) !important}
-.book-line.line-ok .who, .book-line.line-ok .who-name{outline:2px solid #1B7A3A}
-.book-line.line-bad .who, .book-line.line-bad .who-name{outline:2px solid #B42318}
-.book-line.line-active .ar{opacity:1}
-
-/* look only — audio JS unchanged */
-html,body{
-  margin:0 !important;
-  height:100% !important;
-  max-height:100% !important;
-  min-height:0 !important;
-  overflow:hidden !important;
-  position:relative !important;
-  background:var(--paper);
-}
-#app{
-  position:absolute !important;
-  inset:0 !important;
-  overflow-y:auto !important;
-  overflow-x:hidden !important;
-  -webkit-overflow-scrolling:touch;
-  overscroll-behavior-y:contain;
-  min-height:0 !important;
-  padding-bottom:96px !important;
-}
-#tabbar-host{
-  position:absolute !important;
-  left:0;right:0;bottom:0 !important;
-  top:auto !important;
-  z-index:200;
-  background:var(--paper);
-  pointer-events:none;
-}
-#tabbar-host .tabbar, #tabbar-host .tab{pointer-events:auto}
-
-#tabbar-host .tabbar{
-  position:relative !important;
-  left:auto !important;
-  right:auto !important;
-  bottom:auto !important;
-  top:auto !important;
-  padding-bottom:calc(8px + env(safe-area-inset-bottom)) !important;
-  background:var(--paper)!important;
-  backdrop-filter:none!important;
-  border-top:1px solid var(--line);
-}
-.tab.active{color:var(--forest)!important;background:var(--forest-soft)!important}
-.btn-primary{background:var(--forest)!important;color:var(--on-forest)!important}
-.path-card,.path-card.vocab,.path-card.grammar,.path-card.talk{
-  background:var(--surface)!important;border:1px solid var(--line)!important
-}
-.continue,.continue.grammar,.continue.conv{
-  background:var(--surface)!important;color:var(--ink)!important;border:1px solid var(--line)!important
-}
-.continue .btn,.continue.grammar .btn,.continue.conv .btn{
-  background:var(--forest)!important;color:var(--on-forest)!important
-}
-.continue .btn.ghost{background:transparent!important;color:var(--ink)!important;border:1px solid var(--line-strong)!important}
-.header .logo{color:var(--forest)!important}
-.book-dialogue{padding:10px 12px}
-.book-line{
-  display:block !important;
-  grid-template-columns:unset !important;
-  padding:10px 0 !important;
-  margin:0 !important;
-  border:none !important;
-  border-bottom:1px solid var(--line) !important;
-}
-.book-line:last-child{border-bottom:none !important}
-.who-row{display:flex !important;align-items:baseline !important;gap:8px !important;margin:0 0 4px !important;flex-wrap:wrap !important}
-.book-line .who,.book-line .who-name{
-  display:inline-block !important;
-  background:transparent !important;
-  color:var(--ink) !important;
-  -webkit-text-fill-color:var(--ink) !important;
-  font-size:22px !important;
-  font-weight:800 !important;
-  padding:0 !important;
-  border-radius:0 !important;
-  font-family:var(--ar) !important;
-  line-height:1.2 !important;
-}
-.who-phon{display:inline !important;font-size:13px !important;color:var(--muted)!important;font-style:normal!important}
-.ar-row{display:flex !important;align-items:flex-start !important;gap:8px !important}
-.book-line .ar{font-size:21px !important;line-height:1.45 !important;font-weight:700 !important}
-.line-actions button{width:28px !important;height:28px !important;background:transparent !important;border:none !important;opacity:.55}
-.card,.lesson,.book-lesson,.flash-card{box-shadow:none!important;border:1px solid var(--line)!important}
-
-.gram-pic{margin:8px auto 14px}
-.gram-pic .pic-frame{width:180px;height:180px;max-width:70vw;max-height:70vw;border-radius:16px}
-.gram-pic .pic-frame img{width:100%;height:100%;object-fit:cover}
-@media(min-width:768px){
-  #app{padding-top:calc(20px + env(safe-area-inset-top))!important;padding-bottom:calc(96px + env(safe-area-inset-bottom))!important}
-  .tab{font-size:12px!important}
-}
-.opt.opt-nl{font-family:var(--font);font-size:15px;font-weight:600;direction:ltr;min-height:54px;text-align:center}
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div id="sidebar-host"></div>
+<div id="topbar-host"></div>
 <div id="app"></div>
 <div id="cmp-host"></div>
 <div id="tabbar-host"></div>
@@ -2944,6 +2021,156 @@ function currentPath(){
 function appHeader(){ return ''; }
 
 
+
+let sbCollapsed = false;
+let sbOpenMenu = null; // 'vocab' | 'gram' | 'conv' | null
+try{sbCollapsed = localStorage.getItem('alm_sb_collapsed')==='1'}catch(e){}
+function applySbCollapsed(){
+  if(sbCollapsed) document.body.classList.add('sb-collapsed');
+  else document.body.classList.remove('sb-collapsed');
+}
+applySbCollapsed();
+
+function renderSidebar(){
+  const path = currentPath();
+  const totalW = ALL.length, mastW = mastered(ALL);
+  const gKeys = Object.keys(GRAMMAR);
+  const doneG = gKeys.filter(k => getGram(k).done || gramPct(k)>=100).length;
+  const totalItems = totalW + gKeys.length * 10;
+  const doneItems = mastW + doneG * 10;
+  const overallPct = totalItems ? Math.round(100 * doneItems / totalItems) : 0;
+  const mkCount = mistakeStats().length;
+
+  const gramOpen = sbOpenMenu === 'gram' || path === 'grammar';
+  const convOpen = sbOpenMenu === 'conv' || path === 'conv';
+
+  const gramLinks = lessonNums().map(n => {
+    const title = (LESSON_META[n]||['',''])[0];
+    const active = state.view==='book-lesson' && Number(state.bookLesson)===Number(n);
+    const num = String(n).padStart(2,'0');
+    return `<button type="button" class="${active?'active':''}" data-act="open-book" data-l="${n}"><span>${num}</span>${esc(title)}</button>`;
+  }).join('');
+
+  const convLinks = Object.entries(CONVERSATIONS).map(([u, c]) => {
+    const active = state.view==='conv-unit' && String(state.convUnit)===String(u);
+    const num = String(u).padStart(2,'0');
+    return `<button type="button" class="${active?'active':''}" data-act="open-conv" data-u="${u}"><span>${num}</span>${esc(c.titleNl)}</button>`;
+  }).join('');
+
+  return `<aside class="sidebar" id="sidebar" aria-label="Hoofdmenu">
+    <div class="sb-brand">
+      <div class="sb-brand-mark" lang="ar">م</div>
+      <div class="sb-brand-txt">
+        <strong>Al-Mufrodat</strong>
+        <span>Medina Arabisch · Deel 1</span>
+      </div>
+      <button type="button" class="sb-collapse-btn" data-act="toggle-sidebar" title="Zijbalk inklappen" aria-label="Zijbalk inklappen">
+        <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+    </div>
+
+    <div class="sb-label">Jouw leerpad</div>
+    <nav class="sb-nav">
+      <button type="button" class="sbn ${state.view==='home'?'active':''}" data-act="nav" data-v="home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+        <span>Overzicht</span>
+      </button>
+
+      <button type="button" class="sbn ${path==='vocab'&&state.view!=='words'&&state.view!=='home'?'active':''}" data-act="nav" data-v="vocab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        <span>Woordenschat</span>
+      </button>
+
+      <button type="button" class="sbn sbn-course ${path==='grammar'?'active':''}" data-act="sb-menu" data-menu="gram" aria-expanded="${gramOpen}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        <span>Grammatica</span>
+        <span class="sb-chevron">⌄</span>
+      </button>
+      <div class="sb-course-menu ${gramOpen?'open':''}">
+        ${gramLinks}
+      </div>
+
+      <button type="button" class="sbn sbn-course ${path==='conv'?'active':''}" data-act="sb-menu" data-menu="conv" aria-expanded="${convOpen}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15a4 4 0 01-4 4H8l-5 3V7a4 4 0 014-4h10a4 4 0 014 4z"/></svg>
+        <span>Dialogen</span>
+        <span class="sb-chevron">⌄</span>
+      </button>
+      <div class="sb-course-menu ${convOpen?'open':''}">
+        ${convLinks}
+      </div>
+
+      <button type="button" class="sbn ${state.view==='words'?'active':''}" data-act="nav" data-v="words">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <span>Woordenlijst</span>
+      </button>
+
+      <button type="button" class="sbn ${state.view==='mistakes'?'active':''}" data-act="nav" data-v="mistakes">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+        <span>Fouten</span>
+        ${mkCount ? `<span class="sbn-badge">${mkCount}</span>` : ''}
+      </button>
+
+      <button type="button" class="sbn ${state.view==='settings'?'active':''}" data-act="nav" data-v="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+        <span>Profiel & Opties</span>
+      </button>
+    </nav>
+
+    <div class="sb-spacer"></div>
+
+    <div class="sb-progress">
+      <div class="sb-progress-top"><span>Totale voortgang</span><strong>${overallPct}%</strong></div>
+      <div class="sb-progress-bar"><div class="sb-progress-fill" style="width:${overallPct}%"></div></div>
+      <div class="sb-progress-sub">${mastW}/${totalW} woorden · ${doneG}/${gKeys.length} lessen</div>
+    </div>
+
+    <button type="button" class="sb-theme" data-act="toggle-theme">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16"><path d="M21 12.8A9 9 0 1111.2 3 7 7 0 0021 12.8z"/></svg>
+      <span>${darkMode ? 'Lichte modus' : 'Donkere modus'}</span>
+    </button>
+  </aside>`;
+}
+
+function renderTopbar(){
+  const st = streak.last===today()||streak.last===new Date(Date.now()-864e5).toISOString().slice(0,10)?streak.count:0;
+  const viewLabels = {
+    home: 'Overzicht',
+    vocab: 'Woordenschat',
+    flash: 'Flashcards · ' + hoofdstuk(state.lesson),
+    learn: 'Oefenen · ' + hoofdstuk(state.lesson),
+    zeg: 'Zeg & Uitspraak · ' + hoofdstuk(state.lesson),
+    summary: 'Sessie-overzicht',
+    words: 'Woordenlijst',
+    add: 'Eigen woord toevoegen',
+    book: 'Grammatica · Medina-boek',
+    'book-lesson': 'Grammatica · ' + hoofdstuk(state.bookLesson),
+    conv: 'Dialogen & Gesprekken',
+    'conv-unit': 'Dialogen · Eenheid ' + (state.convUnit||''),
+    mistakes: 'Fouten herhalen',
+    settings: 'Profiel & Instellingen'
+  };
+  const curLabel = viewLabels[state.view] || 'Al-Mufrodat';
+  const av = userName ? userName.trim()[0].toUpperCase() : 'م';
+  return `<header class="topbar" id="topbar">
+    <button type="button" class="sb-toggle" data-act="toggle-sidebar" title="Zijbalk in-/uitklappen" aria-label="Zijbalk in- of uitklappen">
+      <svg class="icon-open" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <svg class="icon-closed" viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h16"/></svg>
+    </button>
+    <div class="tb-crumb"><span>Al-Mufrodat</span><span>›</span><strong>${esc(curLabel)}</strong></div>
+    <div style="flex:1"></div>
+    <div class="tb-ar-size" title="Grootte Arabisch schrift">
+      <button type="button" class="${arSize==='s'?'on':''}" data-act="set-ar" data-s="s">A-</button>
+      <button type="button" class="${arSize==='m'?'on':''}" data-act="set-ar" data-s="m">A</button>
+      <button type="button" class="${arSize==='l'?'on':''}" data-act="set-ar" data-s="l">A+</button>
+    </div>
+    <div class="tb-streak"><span>🔥</span><span>${st} ${st===1?'dag':'dagen'}</span></div>
+    <button type="button" class="tb-theme" data-act="toggle-theme" title="Wissel thema">
+      <span>${darkMode ? '☀️ Licht' : '🌙 Donker'}</span>
+    </button>
+    <button type="button" class="tb-avatar" data-act="nav" data-v="settings" title="Profiel">${esc(av)}</button>
+  </header>`;
+}
+
 function tabbar(){
   const path=currentPath();
   const items=[
@@ -2971,89 +2198,97 @@ function nextLesson(){
 
 function renderVocabHub(){
   const total=ALL.length, m=mastered(ALL), pct=total?Math.round(100*m/total):0;
-  const next=nextLesson();
-  const nws=wordsFor(next); const nm=mastered(nws);
-  const meta=next==='all'?['Alle hoofdstukken','Herhaal']:LESSON_META[next]||[hoofdstuk(next),''];
   let lessons='';
   for(const n of lessonNums()){
     const ws=wordsFor(n); const mm=mastered(ws); const p=ws.length?Math.round(100*mm/ws.length):0;
     const stt=p>=100?'done':p>0?'busy':'new';
-    const lab=p>=100?'Beheerst':p>0?'Bezig':'Nieuw';
+    const lab=p>=100?'Beheerst':p>0?'Bezig · '+p+'%':'Nieuw';
     const title=(LESSON_META[n]||['',''])[0];
+    const sub=(LESSON_META[n]||['',''])[1]||'';
     lessons+=`<div class="lesson path-lesson ${stt}">
       <div class="path-num">${n}</div>
       <div class="path-body">
-        <div class="status ${stt}">${lab}</div>
+        <div class="status ${stt}">${lab} · ${mm}/${ws.length} woorden</div>
         <h3>${esc(hoofdstuk(n))} · ${esc(title)}</h3>
-        <div class="blurb">${mm}/${ws.length} · ${p}%</div>
+        <div class="blurb">${esc(sub)}</div>
         <div class="progress"><i style="width:${p}%"></i></div>
-        <button class="btn btn-primary btn-sm" data-act="start-learn" data-l="${n}">${p>=100?'Herhaal':'Start'}</button>
+        <button class="btn btn-primary btn-sm" data-act="start-learn" data-l="${n}">${p>=100?'Herhaal hoofdstuk':'Start oefenen'}</button>
         <div class="path-alts">
-          <button type="button" data-act="start-flash" data-l="${n}">Kaarten</button>
-          <button type="button" data-act="start-zeg" data-l="${n}">Zeg</button>
+          <button type="button" data-act="start-flash" data-l="${n}">🗂 Kaarten</button>
+          <button type="button" data-act="start-zeg" data-l="${n}">🎤 Zeg & Harakaat</button>
+          <button type="button" data-act="open-book" data-l="${n}">📖 Grammatica</button>
         </div>
       </div>
     </div>`;
   }
-  return`
-    <div class="hub-toolbar">
-      <h2 class="mvp-h" style="margin:0">Woorden</h2>
-      <span class="grow"></span>
-      <button class="btn btn-secondary btn-sm" data-act="nav" data-v="words">Lijst</button>
+  return`<div class="desktop-page">
+    <div class="sh">
+      <div class="sh-main">
+        <div class="sh-eyebrow">Woordenschat · ${m} / ${total} beheerst</div>
+        <h1>Woorden per hoofdstuk</h1>
+        <p>Oefen de woorden uit het Medina-boek met flashcards, meerkeuze, schrijfvragen en live uitspraakcontrole op de tanwīn en korte klinkers.</p>
+      </div>
+      <div class="sh-progress-box">
+        <div class="sh-progress-label">Beheersing</div>
+        <div class="sh-progress-pct">${pct}%</div>
+        <div class="sh-progress-bar"><div class="sh-progress-fill" style="width:${pct}%"></div></div>
+      </div>
     </div>
-    <p class="mvp-sub">Kies een hoofdstuk. Zeg = voorlezen met harakaat-check. Fouten oefenen als Tarteel.</p>
-    <div class="hub-toolbar" style="margin-bottom:10px">
-      <button class="btn btn-sm ${quizDir==='ar2nl'?'btn-primary':'btn-secondary'}" data-act="set-quiz-dir" data-d="ar2nl">AR→NL</button>
-      <button class="btn btn-sm ${quizDir==='nl2ar'?'btn-primary':'btn-secondary'}" data-act="set-quiz-dir" data-d="nl2ar">NL→AR</button>
-      <button class="btn btn-sm ${quizDir==='mix'?'btn-primary':'btn-secondary'}" data-act="set-quiz-dir" data-d="mix">Mix</button>
-      <span class="grow"></span>
-      <button class="btn btn-sm ${showPics?'btn-primary':'btn-secondary'}" data-act="toggle-pics">${showPics?'Foto aan':'Foto uit'}</button>
-    </div>
-    <div class="progress" style="margin-bottom:14px"><i style="width:${pct}%"></i></div>
 
-    ${lessons}
-    <div class="card" style="margin-top:8px">
-      <h3 style="font-size:15px;margin-bottom:4px">Mix alle woorden</h3>
-      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">${total} woorden door elkaar</p>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-primary btn-sm" style="flex:1" data-act="start-learn" data-l="all">Mix oefenen</button>
-        <button class="btn btn-secondary btn-sm" style="flex:1" data-act="start-flash" data-l="all">Mix kaarten</button>
-      </div>
-      <div style="display:flex;gap:8px;margin-top:8px">
-        <button class="btn btn-secondary btn-sm" style="flex:1" data-act="start-zeg" data-l="all">Mix Zeg</button>
-        ${mistakes.length?`<button class="btn btn-secondary btn-sm" style="flex:1" data-act="start-zeg" data-l="fouten">Fouten (${mistakeStats().length})</button>`:''}
+    <div class="hub-toolbar" style="margin-bottom:16px">
+      <button class="btn btn-sm ${quizDir==='ar2nl'?'btn-primary':'btn-secondary'}" data-act="set-quiz-dir" data-d="ar2nl">AR → NL</button>
+      <button class="btn btn-sm ${quizDir==='nl2ar'?'btn-primary':'btn-secondary'}" data-act="set-quiz-dir" data-d="nl2ar">NL → AR</button>
+      <button class="btn btn-sm ${quizDir==='mix'?'btn-primary':'btn-secondary'}" data-act="set-quiz-dir" data-d="mix">Gemengd</button>
+      <span class="grow"></span>
+      <button class="btn btn-sm ${showPics?'btn-primary':'btn-secondary'}" data-act="toggle-pics">${showPics?'🖼 Foto\'s aan':'🖼 Foto\'s uit'}</button>
+      <button class="btn btn-secondary btn-sm" data-act="nav" data-v="words">📋 Woordenlijst</button>
+      <button class="btn btn-secondary btn-sm" data-act="nav" data-v="add">+ Eigen woord</button>
+    </div>
+
+    <div class="desktop-grid-2">
+      ${lessons}
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px">
+        <div>
+          <h3 style="font-size:16px;font-weight:700;margin-bottom:2px">Alles door elkaar oefenen</h3>
+          <p style="font-size:13px;color:var(--muted)">Test jezelf over alle ${total} woorden uit hoofdstuk 1 t/m 10 tegelijk.</p>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <button class="btn btn-primary btn-sm" data-act="start-learn" data-l="all">Mix oefenen</button>
+          <button class="btn btn-secondary btn-sm" data-act="start-flash" data-l="all">Mix kaarten</button>
+          <button class="btn btn-secondary btn-sm" data-act="start-zeg" data-l="all">Mix Zeg</button>
+          ${mistakes.length?`<button class="btn btn-secondary btn-sm" data-act="start-zeg" data-l="fouten">Fouten (${mistakeStats().length})</button>`:''}
+        </div>
       </div>
     </div>
-    <div style="display:flex;gap:8px;margin-top:14px">
-      <button class="btn btn-secondary btn-sm" style="flex:1" data-act="nav" data-v="words">Woordenlijst</button>
-      <button class="btn btn-secondary btn-sm" style="flex:1" data-act="nav" data-v="add">+ Eigen woord</button>
-    </div>`;
+  </div>`;
 }
 
 function renderHome(){
   if(!onboarded){
     return`<div class="welcome">
-      <div class="header">
-        <div class="logo ar" lang="ar">المفردات</div>
-        <h1>Al-Mufrodat</h1>
-        <p>Leer Arabisch stap voor stap</p>
+      <div class="header" style="text-align:center">
+        <div class="logo ar" lang="ar" style="font-size:44px">المفردات</div>
+        <h1 style="font-size:28px;margin-top:8px">Al-Mufrodat</h1>
+        <p>Leer Arabische woordenschat, grammatica en uitspraak stap voor stap op basis van het Medina-boek (Deel 1).</p>
       </div>
       <div class="steps">
         <div class="step" data-act="start-onboard" data-mode="flash" style="cursor:pointer">
           <div class="n">1</div>
-          <div><b>Woorden</b><span>Kaarten en oefenen</span></div>
+          <div><b>Woordenschat & Uitspraak (Zeg)</b><span>Flashcards, meerkeuze en live tanwīn/harakaat-check</span></div>
         </div>
         <div class="step" data-act="start-onboard" data-mode="book" style="cursor:pointer">
           <div class="n">2</div>
-          <div><b>Grammatica</b><span>Uitleg, voorbeelden, oefeningen</span></div>
+          <div><b>Medina Grammatica & Zinsontleding</b><span>Volledige lesstekst, voorbeelden, quiz en iʿrāb-ontleding</span></div>
         </div>
         <div class="step" data-act="start-onboard" data-mode="learn" style="cursor:pointer">
           <div class="n">3</div>
-          <div><b>Herhaal in rondes</b><span>10 vragen, met voortgang</span></div>
+          <div><b>Arabische Dialogen</b><span>Beluister gesprekken per spreker en spreek ze zin voor zin na</span></div>
         </div>
       </div>
-      <button class="btn btn-primary btn-block" data-act="start-onboard" data-mode="home">Aan de slag</button>
-      
+      <button class="btn btn-primary btn-block" data-act="start-onboard" data-mode="home">Start met leren →</button>
     </div>`;
   }
   const total=ALL.length, m=mastered(ALL), pct=total?Math.round(100*m/total):0;
@@ -3062,18 +2297,134 @@ function renderHome(){
   const meta=next==='all'?['Alle hoofdstukken','Herhaal']:LESSON_META[next]||[hoofdstuk(next),''];
   const st=streak.last===today()||streak.last===new Date(Date.now()-864e5).toISOString().slice(0,10)?streak.count:0;
   const gCount=Object.keys(GRAMMAR).length;
+  const cCount=Object.keys(CONVERSATIONS).length;
+  const mkCount=mistakeStats().length;
+
   return`
+  <!-- DESKTOP AL-WAJIBAT STYLE HOME -->
+  <div class="home-desktop-only">
+    <div class="hero-banner">
+      <div class="hero-left">
+        <div class="hero-eyebrow-desktop">${userName ? ('Salaam ' + esc(userName) + ' · jouw persoonlijke leeromgeving') : 'Jouw persoonlijke leeromgeving'}</div>
+        <h1 class="hero-title"><span class="hero-title-main">Al-Mufrodat</span><br><span class="hero-title-accent">Medina Arabisch · Deel 1</span></h1>
+        <p class="hero-desc">Beheers de woordenschat, grammaticaregels (iʿrāb) en dialogen van <em>Durūs al-Lughah al-ʿArabiyyah</em> — met gesproken audio, zinsontleding en directe uitspraakcontrole op elke harakah.</p>
+        <div class="hero-btns">
+          <button type="button" class="btn btn-primary" data-act="start-learn" data-l="${next}">Start met leren · ${next==='all'?'Alles':hoofdstuk(next)} →</button>
+          <button type="button" class="btn btn-secondary" data-act="nav" data-v="book">Grammatica & Regels</button>
+          <button type="button" class="btn btn-ghost" data-act="nav" data-v="conv">Dialogen</button>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-ar" lang="ar">العَرَبِيَّةُ مِفْتَاحُ العُلُومِ</div>
+        <div class="hero-card-label">Medina Cursus · Hoofdstuk 1–10</div>
+        <div class="hero-card-title">${next==='all'?'Alle hoofdstukken voltooid':(esc(hoofdstuk(next)) + ' · ' + esc(meta[0]))}</div>
+        <div class="hero-card-foot">
+          <span>${m} van ${total} woorden beheerst</span>
+          <span class="hero-card-badge">${pct}% voortgang</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="home-dashboard">
+      <button type="button" class="home-nudge" data-act="start-learn" data-l="${next}">
+        <span class="home-nudge-ic">→</span>
+        <span>Ga verder waar je was: <strong>${next==='all'?'Herhaal alle woorden':(esc(hoofdstuk(next))+' — '+esc(meta[0]))}</strong> (${nm}/${nws.length} beheerst)</span>
+        <span class="home-nudge-cta">Verder oefenen →</span>
+      </button>
+
+      <div class="home-stats">
+        <div class="home-stat"><i>▣</i><b>${total}</b> woorden</div>
+        <div class="home-stat"><i>◎</i><b>${gCount}</b> grammatica-lessen</div>
+        <div class="home-stat"><i>💬</i><b>${cCount}</b> dialoog-eenheden</div>
+        <div class="home-stat"><i>🔥</i><b>${st}</b> ${st===1?'dag':'dagen'} reeks</div>
+      </div>
+
+      <div class="dua-card">
+        <div class="dua-kicker">
+          <span>Duʿāʾ voor nuttige kennis</span>
+          <button type="button" class="btn btn-sm btn-secondary" data-act="speak-text" data-text="اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا، وَرِزْقًا طَيِّبًا، وَعَمَلًا مُتَقَبَّلًا" style="min-height:28px;padding:0 10px;font-size:12px">🔊 Beluister</button>
+        </div>
+        <div class="dua-ar" dir="rtl" lang="ar">اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا، وَرِزْقًا طَيِّبًا، وَعَمَلًا مُتَقَبَّلًا</div>
+        <div class="dua-fon">Allāhumma innī asʾaluka ʿilman nāfiʿan, wa rizqan ṭayyiban, wa ʿamalan mutaqabbalā.</div>
+        <div class="dua-nl">"O Allāh, ik vraag U om nuttige kennis, goed levensonderhoud en aanvaarde daden."</div>
+        <div class="dua-src">Overgeleverd door Ibn Mājah — dagelijkse smeekbede na het ochtendgebed</div>
+      </div>
+
+      <section class="home-section">
+        <div class="home-section-head">
+          <div>
+            <div class="home-kicker">Jouw route</div>
+            <h2>Van begrijpen naar beheersen</h2>
+          </div>
+          <button type="button" class="home-section-link" data-act="nav" data-v="words">Bekijk volledige woordenlijst (${total}) →</button>
+        </div>
+        <div class="route-cards">
+          <button type="button" class="route-card" data-act="nav" data-v="vocab">
+            <div class="route-card-top"><span>01</span><span class="route-card-icon">▣</span></div>
+            <h3>Woordenschat</h3>
+            <p>Leer per hoofdstuk met flashcards, schrijfvragen en Zeg-uitspraakcontrole.</p>
+            <strong>${m}/${total} beheerst (${pct}%) →</strong>
+          </button>
+          <button type="button" class="route-card" data-act="nav" data-v="book">
+            <div class="route-card-top"><span>02</span><span class="route-card-icon">◇</span></div>
+            <h3>Grammatica & Iʿrāb</h3>
+            <p>Volledige Medina-uitleg, klikbare voorbeelden, oefenvragen en zinsontleding.</p>
+            <strong>Open ${gCount} hoofdstukken →</strong>
+          </button>
+          <button type="button" class="route-card" data-act="nav" data-v="conv">
+            <div class="route-card-top"><span>03</span><span class="route-card-icon">💬</span></div>
+            <h3>Dialogen & Spraak</h3>
+            <p>Beluister natuurlijke Arabische gesprekken en oefen elke regel met de microfoon.</p>
+            <strong>Open ${cCount} eenheden →</strong>
+          </button>
+        </div>
+      </section>
+
+      <section class="home-section">
+        <div class="home-section-head">
+          <div>
+            <div class="home-kicker">Snel starten</div>
+            <h2>Direct aan de slag met een oefenvorm</h2>
+          </div>
+        </div>
+        <div class="core-strip">
+          <button type="button" class="core-item" data-act="start-zeg" data-l="${next}">
+            <span class="core-no">01</span>
+            <span><b>Zeg & Harakaat-check</b><small>Spreek woorden hardop uit met tanwīn-controle</small></span>
+            <span class="core-arrow">→</span>
+          </button>
+          <button type="button" class="core-item" data-act="start-flash" data-l="${next}">
+            <span class="core-no">02</span>
+            <span><b>Flashcards (${hoofdstuk(next)})</b><small>Draai kaarten om met audio & transcriptie</small></span>
+            <span class="core-arrow">→</span>
+          </button>
+          <button type="button" class="core-item" data-act="${mkCount ? 'nav' : 'open-book'}" data-v="mistakes" data-l="${lastGrammar||1}" data-tab="ontleed">
+            <span class="core-no">03</span>
+            <span><b>${mkCount ? ('Fouten herhalen ('+mkCount+')') : 'Zinsontleding (Iʿrāb)'}</b><small>${mkCount ? 'Oefen woorden die eerder misgingen' : 'Ontleed Arabische zinnen stap voor stap'}</small></span>
+            <span class="core-arrow">→</span>
+          </button>
+        </div>
+      </section>
+
+      <div class="site-credit">
+        Gebaseerd op <strong>Durūs al-Lughah al-ʿArabiyyah li-Ghayr an-Nāṭiqīna bihā</strong> (Medina-boek Deel 1) van dr. V. Abdur Rahim.
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE COMPACT HOME -->
+  <div class="home-mobile-only">
     <div class="header" style="padding-bottom:8px">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
         <div>
           <div class="logo ar" lang="ar">المفردات</div>
           <h1>${userName?('Salaam, '+esc(userName)):'Al-Mufrodat'}</h1>
-          <p>${userName?'Al-Mufrodat · ga verder':'Ga verder waar je was'}</p>
+          <p>${userName?'Medina Arabisch · ga verder':'Leer Arabisch stap voor stap'}</p>
         </div>
         <button type="button" class="btn btn-secondary btn-sm" data-act="toggle-theme" style="min-height:36px;padding:0 12px;flex-shrink:0" aria-label="Donkere modus">${darkMode?'☀️ Licht':'🌙 Donker'}</button>
       </div>
       <div class="stats">
-        <span class="chip">${m}/${total} woorden</span>
+        <span class="chip">${m}/${total} woorden (${pct}%)</span>
         <span class="chip">🔥 ${st}</span>
       </div>
     </div>
@@ -3081,7 +2432,7 @@ function renderHome(){
     <button type="button" class="resume-row" data-act="start-learn" data-l="${next}" style="margin-top:4px;margin-bottom:12px">
       <span class="resume-k">Ga verder</span>
       <span class="resume-t">${next==='all'?'Herhaal alle woorden':(esc(hoofdstuk(next))+' · '+esc(meta[0]))}</span>
-      <span class="resume-m">${nm}/${nws.length} beheerst →</span>
+      <span class="resume-m">${nm}/${nws.length} →</span>
     </button>
 
     <div class="path-cards">
@@ -3091,60 +2442,60 @@ function renderHome(){
         <div class="pc-meta">${m}/${total} · ${pct}%</div>
       </button>
       <button class="path-card grammar" data-act="nav" data-v="book">
-        <h3>Regels</h3>
-        <p>Uitleg · voorbeelden · oefenen</p>
-        <div class="pc-meta">${gCount} hoofdstukken</div>
+        <h3>Grammatica</h3>
+        <p>Uitleg · voorbeelden · ontleden</p>
+        <div class="pc-meta">${gCount} lessen</div>
       </button>
       <button class="path-card talk" data-act="nav" data-v="conv">
         <h3>Dialogen</h3>
         <p>Beluisteren en nazeggen</p>
-        <div class="pc-meta">${Object.keys(CONVERSATIONS).length} eenheden</div>
+        <div class="pc-meta">${cCount} eenheden</div>
       </button>
     </div>
     ${mistakes.length?`<button type="button" class="resume-row" data-act="nav" data-v="mistakes" style="margin-top:12px">
       <span class="resume-k">Fouten</span>
-      <span class="resume-t">${mistakeStats().length} woorden om te herhalen</span>
-      <span class="resume-m">Oefen</span>
+      <span class="resume-t">${mkCount} woorden om te herhalen</span>
+      <span class="resume-m">Oefen →</span>
     </button>`:''}
-
+  </div>
 `;
 }
-
 function renderFlash(){
-  const pool=state.pool; if(!pool.length)return`<div class="empty">Geen woorden.</div>`;
+  const pool=state.pool; if(!pool.length)return`<div class="desktop-narrow"><div class="empty">Geen woorden.</div></div>`;
   const w=pool[state.idx]; const f=state.flipped;
-  // flashDir: ar2nl = show Arabic first; nl2ar = show Dutch first
   const showFrontAr = flashDir!=='nl2ar';
   let front, back;
   if(showFrontAr){
-    front=`${wordPic(w)}<div class="big-ar flash-mushaf ar-mark" lang="ar">${wrapTash(w.ar,'plain')}</div>`;
-    back=`${wordPic(w)}<div class="nl">${esc(w.nl)}</div>`;
+    front=`${wordPic(w)}<div class="big-ar flash-mushaf ar-mark" lang="ar">${wrapTash(w.ar,'plain')}</div><div class="translit">${esc(w.translit||'')}</div>`;
+    back=`${wordPic(w)}<div class="nl">${esc(w.nl)}</div><div class="translit" style="margin-top:8px"><span class="ar" lang="ar" style="font-size:22px">${esc(w.ar)}</span> · ${esc(w.translit||'')}</div>`;
   }else{
     front=`${wordPic(w)}<div class="nl">${esc(w.nl)}</div>`;
-    back=`${wordPic(w)}<div class="big-ar flash-mushaf ar-mark" lang="ar">${wrapTash(w.ar,'plain')}</div>`;
+    back=`${wordPic(w)}<div class="big-ar flash-mushaf ar-mark" lang="ar">${wrapTash(w.ar,'plain')}</div><div class="translit">${esc(w.translit||'')} · ${esc(w.nl)}</div>`;
   }
-  return`
+  return`<div class="desktop-narrow">
     <div class="session-top">
-      <button class="back" data-act="nav" data-v="vocab" style="margin:0"><span>←</span></button>
-      <div class="prog"><i style="width:${pool.length?Math.round(100*state.idx/pool.length):0}%"></i></div>
+      <button class="back" data-act="nav" data-v="vocab" style="margin:0"><span>←</span> Woorden</button>
+      <div class="prog"><i style="width:${pool.length?Math.round(100*(state.idx+1)/pool.length):0}%"></i></div>
       <span style="font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap">${esc(hoofdstuk(state.lesson))} · ${state.idx+1}/${pool.length}</span>
-      <button type="button" class="btn btn-sm ${autoSpeak?'btn-primary':'btn-secondary'}" data-act="toggle-speak">${autoSpeak?'🔊':'🔇'}</button>
+      <button type="button" class="btn btn-sm ${autoSpeak?'btn-primary':'btn-secondary'}" data-act="toggle-speak" title="Automatisch voorlezen">${autoSpeak?'🔊':'🔇'}</button>
     </div>
     <div class="learn-mini">
-      <button type="button" class="mini-btn ${flashDir!=='nl2ar'?'on':''}" data-act="set-flash-dir" data-d="ar2nl">AR</button>
-      <button type="button" class="mini-btn ${flashDir==='nl2ar'?'on':''}" data-act="set-flash-dir" data-d="nl2ar">NL</button>
-      <button type="button" class="mini-btn" data-act="toggle-pics">${showPics?'🖼':'◻'}</button>
+      <button type="button" class="mini-btn ${flashDir!=='nl2ar'?'on':''}" data-act="set-flash-dir" data-d="ar2nl" title="Arabisch voorop">AR</button>
+      <button type="button" class="mini-btn ${flashDir==='nl2ar'?'on':''}" data-act="set-flash-dir" data-d="nl2ar" title="Nederlands voorop">NL</button>
+      <button type="button" class="mini-btn ${showPics?'on':''}" data-act="toggle-pics" title="Foto's aan/uit">${showPics?'🖼':'◻'}</button>
     </div>
     <div class="card flash-card" data-act="flip" role="button" tabindex="0" aria-label="Tik om te omdraaien" style="cursor:pointer;-webkit-user-select:none;user-select:none">
+      <span class="tag">${esc(hoofdstuk(w.lesson||state.lesson))}</span>
       <button class="icon-btn speak" data-act="speak" data-id="${w.id}" aria-label="Hoor">🔊</button>
       ${f?back:front}
-      <div class="hint">${f?'Tik om terug':'Tik voor antwoord'}</div>
+      <div class="hint">${f?'Tik of druk Spatie om terug te draaien':'Tik of druk Spatie voor antwoord'}</div>
     </div>
     <div class="flash-controls">
       <button class="icon-btn" data-act="flash-prev" ${state.idx===0?'disabled':''} aria-label="Vorige">←</button>
-      <span style="font-size:13px;font-weight:600;color:var(--muted);min-width:64px;text-align:center">${state.idx+1} / ${pool.length}</span>
+      <span style="font-size:13px;font-weight:700;color:var(--muted);min-width:72px;text-align:center">${state.idx+1} / ${pool.length}</span>
       <button class="icon-btn" data-act="flash-next" ${state.idx>=pool.length-1?'disabled':''} aria-label="Volgende">→</button>
-    </div>`;
+    </div>
+  </div>`;
 }
 
 
@@ -3361,31 +2712,36 @@ function nextZeg(ok){
 }
 function renderZeg(){
   const w=state.current;
-  if(!w)return`<div class="empty">Klaar.</div>`;
+  if(!w)return`<div class="desktop-narrow"><div class="empty">Klaar.</div></div>`;
   const n=state.lesson==='all'?'Alle hoofdstukken':state.lesson==='fouten'?'Jouw fouten':hoofdstuk(state.lesson);
-  return`
-    <button class="back" data-act="nav" data-v="vocab"><span>←</span> Terug</button>
-    <div class="hub-toolbar"><div class="mvp-kicker">Zeg · ${esc(n)} · ${Math.min(state.asked+1,state.sessionLen)}/${state.sessionLen}</div>
-    <button type="button" class="btn btn-sm ${hideText?'btn-primary':'btn-secondary'}" data-act="toggle-hide">${hideText?'👁 Verborgen':'👁 Tekst'}</button>
-    <button type="button" class="btn btn-sm ${autoSpeak?'btn-primary':'btn-secondary'}" data-act="toggle-speak">${autoSpeak?'🔊 Aan':'🔇 Uit'}</button></div>
-    <h2 class="mvp-h">${hideText?'Zeg uit het hoofd':'Lees voor'}</h2>
-    <p class="mvp-sub">${hideText?'Tekst is verborgen — zeg het woord inclusief de uitgang.':'Zeg het woord met de uitgang. Groen alleen als de klank klopt — niet als de telefoon alleen de stam hoort.'}</p>
-    <div class="q-pic">${wordPic(w)}</div>
-    <div class="zeg-target ${hideText?'hide-ar':''}">
-      <div class="zeg-mushaf ar-mark" lang="ar">${wrapTash(w.ar,'wait')}</div>
-      <div class="who-phon zeg-tr" style="text-align:center">${translitEndHtml(w)}</div>
+  return`<div class="desktop-narrow">
+    <div class="hub-toolbar">
+      <button class="back" data-act="nav" data-v="vocab" style="margin:0"><span>←</span> Terug</button>
+      <span class="grow"></span>
+      <button type="button" class="btn btn-sm ${hideText?'btn-primary':'btn-secondary'}" data-act="toggle-hide">${hideText?'👁 Verborgen':'👁 Tekst'}</button>
+      <button type="button" class="btn btn-sm ${autoSpeak?'btn-primary':'btn-secondary'}" data-act="toggle-speak">${autoSpeak?'🔊 Aan':'🔇 Uit'}</button>
     </div>
-    <div style="text-align:center;font-size:16px;font-weight:600;margin:4px 0 2px">${esc(w.nl)}</div>
-    <div class="said-live"></div>
-    ${tarteelLeg()}
-    <div class="zeg-result speak-result hint" style="display:block;margin:12px 0">Tik op Zeg en lees het woord voor.</div>
-    <div class="mvp-actions" style="justify-content:center">
-      <button class="btn btn-primary" data-act="zeg-listen">🎤 Zeg</button>
-      <button class="btn btn-secondary" data-act="speak-word" data-ar="${esc(w.ar)}">🔊 Hoor</button>
-      ${hideText?`<button class="btn btn-secondary" data-act="zeg-peek">👁 Kijk</button>`:''}
-      <button class="btn btn-ghost" data-act="zeg-skip">Sla over</button>
+    <div class="card" style="text-align:center;padding:24px 20px">
+      <div class="mvp-kicker">Zeg & Harakaat · ${esc(n)} · ${Math.min(state.asked+1,state.sessionLen)}/${state.sessionLen}</div>
+      <h2 class="mvp-h">${hideText?'Zeg uit het hoofd':'Lees hardop voor'}</h2>
+      <p class="mvp-sub" style="max-width:460px;margin:0 auto 12px">${hideText?'Tekst is verborgen — zeg het woord inclusief de uitgang.':'Spreek het woord duidelijk uit met de juiste eindklank (tanwīn/harakah).'}</p>
+      <div class="q-pic">${wordPic(w)}</div>
+      <div class="zeg-target ${hideText?'hide-ar':''}">
+        <div class="zeg-mushaf ar-mark" lang="ar">${wrapTash(w.ar,'wait')}</div>
+        <div class="who-phon zeg-tr" style="text-align:center">${translitEndHtml(w)}</div>
+      </div>
+      <div style="text-align:center;font-size:17px;font-weight:700;margin:6px 0 4px;color:var(--forest)">${esc(w.nl)}</div>
+      <div class="said-live"></div>
+      ${tarteelLeg()}
+      <div class="zeg-result speak-result hint" style="display:block;margin:12px 0;text-align:center">Tik op 🎤 Zeg en lees het woord voor.</div>
+      <div class="mvp-actions" style="justify-content:center">
+        <button class="btn btn-primary" data-act="zeg-listen">🎤 Zeg</button>
+        <button class="btn btn-secondary" data-act="speak-word" data-ar="${esc(w.ar)}">🔊 Hoor</button>
+        ${hideText?`<button class="btn btn-secondary" data-act="zeg-peek">👁 Kijk</button>`:''}
+        <button class="btn btn-ghost" data-act="zeg-skip">Sla over →</button>
+      </div>
     </div>
-  `;
+  </div>`;
 }
 
 function startLearn(sel){
@@ -3445,11 +2801,11 @@ function renderLearn(){
   if(q.type==='mc-nl2ar'){
     body=`<div class="q-pic">${wordPic(w)}</div>
       <div class="qmain">${esc(w.nl)}</div>
-      <div class="options">${q.options.map(o=>`<button class="opt" data-act="answer" data-id="${o.id}" data-ok="${o.id===w.id}"><span class="ar-mark">${wrapTash(o.ar,'plain')}</span></button>`).join('')}</div>`;
+      <div class="options">${q.options.map((o,idx)=>`<button class="opt" data-act="answer" data-id="${o.id}" data-ok="${o.id===w.id}"><span class="opt-key">${idx+1}</span><span class="ar-mark">${wrapTash(o.ar,'plain')}</span></button>`).join('')}</div>`;
   }else if(q.type==='mc-ar2nl'){
     body=`<div class="q-pic">${wordPic(w)}</div>
       <div class="qar ar-mark" lang="ar">${wrapTash(w.ar,'plain')}</div>
-      <div class="options">${q.options.map(o=>`<button class="opt opt-nl" data-act="answer" data-id="${o.id}" data-ok="${o.id===w.id}">${esc(o.nl)}</button>`).join('')}</div>`;
+      <div class="options">${q.options.map((o,idx)=>`<button class="opt opt-nl" data-act="answer" data-id="${o.id}" data-ok="${o.id===w.id}"><span class="opt-key">${idx+1}</span>${esc(o.nl)}</button>`).join('')}</div>`;
   }else if(q.type==='typed-nl2ar'){
     body=`<div class="q-pic">${wordPic(w)}</div>
       <div class="qmain">${esc(w.nl)}</div>
@@ -3460,7 +2816,7 @@ function renderLearn(){
       <div class="qar ar-mark" lang="ar">${wrapTash(w.ar,'plain')}</div>
       <div class="type-row"><input id="type-in" autocomplete="off" placeholder="Typ Nederlands…"><button class="btn btn-primary" data-act="submit-typed">Check</button></div>`;
   }
-  return`
+  return`<div class="desktop-narrow">
     <div class="learn-mini" style="justify-content:space-between">
       <button class="back" data-act="nav" data-v="vocab" style="margin:0"><span>←</span></button>
       <span class="learn-count">${esc(hoofdstuk(state.lesson))} · ${Math.min(state.asked+1,state.sessionLen)}/${state.sessionLen}</span>
@@ -3481,7 +2837,8 @@ function renderLearn(){
         <div class="txt" id="fb-txt"></div>
         <button class="btn btn-primary btn-sm" data-act="continue-learn" id="fb-btn">Volgende</button>
       </div>
-    </div>`;
+    </div>
+  </div>`;
 }
 
 function showFb(ok,text){
@@ -3548,7 +2905,7 @@ function renderSummary(){
     const lab=m.haraka && !m.word?'harakaat':m.haraka?'mix':'woord';
     return '<button type="button" data-act="zeg-one" data-id="'+esc(m.id||'')+'" style="display:block;width:100%;background:none;border:0;padding:0;margin:6px 0;color:inherit">'+wrapTash(m.ar, m.haraka?'haraka':'bad')+' <span style="font-size:12px;color:var(--muted)">'+lab+' · '+m.n+'×</span></button>';
   }).join('')}</div>`:'';
-  return`
+  return`<div class="desktop-narrow">
     <div class="card summary">
       <div class="sum-score">${state.correct}<span>/${state.sessionLen}</span></div>
       <h2>Klaar</h2>
@@ -3558,108 +2915,162 @@ function renderSummary(){
       <button class="btn btn-primary btn-block" data-act="${state.lesson==='fouten'?'start-zeg':'start-learn'}" data-l="${state.lesson}">Nog een ronde</button>
       ${state.lesson==='fouten'?'':`<button class="btn btn-secondary btn-block" style="margin-top:8px" data-act="start-zeg" data-l="${state.lesson}">Nu Zeggen</button>`}
       <button class="btn btn-ghost btn-block" style="margin-top:8px" data-act="nav" data-v="vocab">Naar hoofdstukken</button>
-    </div>`;
+    </div>
+  </div>`;
 }
 
 
 function renderSettings(){
-  return`
-    <h2 class="mvp-h">Profiel</h2>
-    <p class="mvp-sub">Jouw naam en voorkeuren</p>
-    <div class="lesson">
-      <div style="font-weight:700;margin-bottom:6px">Naam</div>
-      <input id="set-name" data-name="user" class="search" type="text" autocomplete="name" placeholder="Hoe heet je?" value="${esc(userName)}" maxlength="24" style="width:100%;-webkit-user-select:text;user-select:text">
-      <button class="btn btn-primary btn-sm" style="margin-top:8px" data-act="save-name">Opslaan</button>
-    </div>
-    <div class="lesson">
-      <div class="hub-toolbar">
-        <div><div style="font-weight:700">Thema</div><div class="blurb">${darkMode?'Donker':'Licht'}</div></div>
-        <button class="btn btn-sm ${darkMode?'btn-primary':'btn-secondary'}" data-act="toggle-theme">${darkMode?'Donker':'Licht'}</button>
+  const total=ALL.length, m=mastered(ALL), pct=total?Math.round(100*m/total):0;
+  return`<div class="desktop-page">
+    <div class="sh">
+      <div class="sh-main">
+        <div class="sh-eyebrow">Persoonlijke instellingen</div>
+        <h1>Profiel & Voorkeuren</h1>
+        <p>Pas jouw naam, weergave, geluid en uitspraakcontrole aan. Alle voortgang wordt lokaal bewaard op dit apparaat.</p>
+      </div>
+      <div class="sh-progress-box">
+        <div class="sh-progress-label">Woordenschat</div>
+        <div class="sh-progress-pct">${pct}%</div>
+        <div class="sh-progress-bar"><div class="sh-progress-fill" style="width:${pct}%"></div></div>
       </div>
     </div>
-    <div class="lesson">
-      <div class="hub-toolbar">
-        <div><div style="font-weight:700">Foto's</div><div class="blurb">${showPics?'Aan':'Uit'}</div></div>
-        <button class="btn btn-sm ${showPics?'btn-primary':'btn-secondary'}" data-act="toggle-pics">${showPics?'Aan':'Uit'}</button>
-      </div>
-    </div>
-    <div class="lesson">
-      <div class="hub-toolbar">
-        <div><div style="font-weight:700">Auto-voorlezen</div><div class="blurb">${autoSpeak?'Arabisch wordt voorgelezen':'Uit'}</div></div>
-        <button class="btn btn-sm ${autoSpeak?'btn-primary':'btn-secondary'}" data-act="toggle-speak">${autoSpeak?'Aan':'Uit'}</button>
-      </div>
-    </div>
-    <div class="lesson">
-      <div class="hub-toolbar">
-        <div><div style="font-weight:700">Verberg tekst</div><div class="blurb">${hideText?'Zeg uit het hoofd, zoals Tarteel':'Woord blijft zichtbaar'}</div></div>
-        <button class="btn btn-sm ${hideText?'btn-primary':'btn-secondary'}" data-act="toggle-hide">${hideText?'Aan':'Uit'}</button>
-      </div>
-    </div>
-    <div class="lesson">
-      <div class="hub-toolbar">
-        <div><div style="font-weight:700">Harakaat checken</div><div class="blurb">${checkHarakat?'Fouten in de uitgang tellen mee':'Alleen het woord'}</div></div>
-        <button class="btn btn-sm ${checkHarakat?'btn-primary':'btn-secondary'}" data-act="toggle-harakat">${checkHarakat?'Aan':'Uit'}</button>
-      </div>
-    </div>
-    <div class="lesson">
-      <div style="font-weight:700;margin-bottom:8px">Arabisch schrift</div>
-      <div class="hub-toolbar">
-        <button class="btn btn-sm ${arSize==='s'?'btn-primary':'btn-secondary'}" data-act="set-ar" data-s="s">Klein</button>
-        <button class="btn btn-sm ${arSize==='m'?'btn-primary':'btn-secondary'}" data-act="set-ar" data-s="m">Normaal</button>
-        <button class="btn btn-sm ${arSize==='l'?'btn-primary':'btn-secondary'}" data-act="set-ar" data-s="l">Groot</button>
-      </div>
-    </div>
-    <div class="lesson">
-      <div style="font-weight:700;margin-bottom:8px">Vragenrichting</div>
-      <div class="hub-toolbar">
-        <button class="btn btn-sm ${quizDir==='ar2nl'?'btn-primary':'btn-secondary'}" data-act="set-quiz-dir" data-d="ar2nl">AR→NL</button>
-        <button class="btn btn-sm ${quizDir==='nl2ar'?'btn-primary':'btn-secondary'}" data-act="set-quiz-dir" data-d="nl2ar">NL→AR</button>
-        <button class="btn btn-sm ${quizDir==='mix'?'btn-primary':'btn-secondary'}" data-act="set-quiz-dir" data-d="mix">Mix</button>
-      </div>
-    </div>
-    <div class="lesson">
-      <div style="font-weight:700;margin-bottom:8px">Kaarten eerst</div>
-      <div class="hub-toolbar">
-        <button class="btn btn-sm ${flashDir==='ar2nl'?'btn-primary':'btn-secondary'}" data-act="set-flash-dir" data-d="ar2nl">Eerst AR</button>
-        <button class="btn btn-sm ${flashDir==='nl2ar'?'btn-primary':'btn-secondary'}" data-act="set-flash-dir" data-d="nl2ar">Eerst NL</button>
-      </div>
-    </div>
-    <button class="btn btn-primary btn-block" data-act="nav" data-v="words">Woordenlijst</button>
-    <button class="btn btn-ghost btn-block" style="margin-top:8px;color:var(--clay)" data-act="reset-progress">Voortgang wissen</button>
-  `;
-}
 
+    <div class="desktop-grid-2">
+      <div class="lesson">
+        <div style="font-weight:700;margin-bottom:6px">Jouw naam</div>
+        <div style="display:flex;gap:8px">
+          <input id="set-name" data-name="user" class="search" type="text" autocomplete="name" placeholder="Hoe heet je?" value="${esc(userName)}" maxlength="24" style="margin:0;flex:1">
+          <button class="btn btn-primary btn-sm" data-act="save-name" style="min-height:44px">Opslaan</button>
+        </div>
+      </div>
+      <div class="lesson">
+        <div class="hub-toolbar" style="margin:0">
+          <div><div style="font-weight:700">Thema</div><div class="blurb" style="margin:2px 0 0">${darkMode?'Donkere modus actief':'Lichte modus actief'}</div></div>
+          <span class="grow"></span>
+          <button class="btn btn-sm ${darkMode?'btn-primary':'btn-secondary'}" data-act="toggle-theme">${darkMode?'🌙 Donker':'☀️ Licht'}</button>
+        </div>
+      </div>
+      <div class="lesson">
+        <div class="hub-toolbar" style="margin:0">
+          <div><div style="font-weight:700">Illustraties & Foto's</div><div class="blurb" style="margin:2px 0 0">${showPics?'Zichtbaar bij woorden en vragen':'Verborgen'}</div></div>
+          <span class="grow"></span>
+          <button class="btn btn-sm ${showPics?'btn-primary':'btn-secondary'}" data-act="toggle-pics">${showPics?'Aan':'Uit'}</button>
+        </div>
+      </div>
+      <div class="lesson">
+        <div class="hub-toolbar" style="margin:0">
+          <div><div style="font-weight:700">Automatisch voorlezen</div><div class="blurb" style="margin:2px 0 0">${autoSpeak?'Arabisch wordt direct uitgesproken':'Alleen bij tik op 🔊'}</div></div>
+          <span class="grow"></span>
+          <button class="btn btn-sm ${autoSpeak?'btn-primary':'btn-secondary'}" data-act="toggle-speak">${autoSpeak?'Aan':'Uit'}</button>
+        </div>
+      </div>
+      <div class="lesson">
+        <div class="hub-toolbar" style="margin:0">
+          <div><div style="font-weight:700">Tekst verbergen (Tarteel-modus)</div><div class="blurb" style="margin:2px 0 0">${hideText?'Zeg uit het hoofd':'Arabische tekst blijft zichtbaar'}</div></div>
+          <span class="grow"></span>
+          <button class="btn btn-sm ${hideText?'btn-primary':'btn-secondary'}" data-act="toggle-hide">${hideText?'Aan':'Uit'}</button>
+        </div>
+      </div>
+      <div class="lesson">
+        <div class="hub-toolbar" style="margin:0">
+          <div><div style="font-weight:700">Harakaat & Tanwīn-check</div><div class="blurb" style="margin:2px 0 0">${checkHarakat?'Strenge controle op eindklanken (-un/-u/-i)':'Alleen woordstam controleren'}</div></div>
+          <span class="grow"></span>
+          <button class="btn btn-sm ${checkHarakat?'btn-primary':'btn-secondary'}" data-act="toggle-harakat">${checkHarakat?'Aan':'Uit'}</button>
+        </div>
+      </div>
+      <div class="lesson">
+        <div style="font-weight:700;margin-bottom:8px">Grootte Arabisch schrift</div>
+        <div class="hub-toolbar" style="margin:0">
+          <button class="btn btn-sm ${arSize==='s'?'btn-primary':'btn-secondary'}" style="flex:1" data-act="set-ar" data-s="s">Klein</button>
+          <button class="btn btn-sm ${arSize==='m'?'btn-primary':'btn-secondary'}" style="flex:1" data-act="set-ar" data-s="m">Normaal</button>
+          <button class="btn btn-sm ${arSize==='l'?'btn-primary':'btn-secondary'}" style="flex:1" data-act="set-ar" data-s="l">Groot</button>
+        </div>
+      </div>
+      <div class="lesson">
+        <div style="font-weight:700;margin-bottom:8px">Vragenrichting & Flashcards</div>
+        <div class="hub-toolbar" style="margin:0">
+          <button class="btn btn-sm ${quizDir==='ar2nl'?'btn-primary':'btn-secondary'}" data-act="set-quiz-dir" data-d="ar2nl">AR→NL</button>
+          <button class="btn btn-sm ${quizDir==='nl2ar'?'btn-primary':'btn-secondary'}" data-act="set-quiz-dir" data-d="nl2ar">NL→AR</button>
+          <button class="btn btn-sm ${quizDir==='mix'?'btn-primary':'btn-secondary'}" data-act="set-quiz-dir" data-d="mix">Mix</button>
+          <span class="grow"></span>
+          <button class="btn btn-sm ${flashDir==='ar2nl'?'btn-primary':'btn-secondary'}" data-act="set-flash-dir" data-d="ar2nl">Kaart: AR</button>
+          <button class="btn btn-sm ${flashDir==='nl2ar'?'btn-primary':'btn-secondary'}" data-act="set-flash-dir" data-d="nl2ar">Kaart: NL</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap">
+      <button class="btn btn-primary" style="flex:1;min-width:180px" data-act="nav" data-v="words">📋 Open woordenlijst</button>
+      <button class="btn btn-secondary" style="flex:1;min-width:180px" data-act="nav" data-v="add">+ Eigen woord toevoegen</button>
+      <button class="btn btn-ghost" style="color:var(--clay)" data-act="reset-progress">Voortgang wissen</button>
+    </div>
+  </div>`;
+}
 
 function renderWords(){
   const q=(state.searchQ||'').trim().toLowerCase();
-  let html=`<div class="hub-toolbar" style="margin-bottom:6px">
-      <button class="back" data-act="nav" data-v="vocab" style="margin:0"><span>←</span> Terug</button>
+  const flt=state.wlFilter||'all';
+  const total=ALL.length, m=mastered(ALL), pct=total?Math.round(100*m/total):0;
+  const hotCount=ALL.filter(w=>heatOf(w.id)).length;
+  const todoCount=total-m;
+
+  const chPills=lessonNums().map(n=>`<button type="button" class="wl-pill ${String(flt)==='l'+n?'on':''}" data-act="wl-filter" data-f="l${n}">H${n}</button>`).join('');
+
+  let html=`<div class="desktop-page">
+    <div class="hub-toolbar" style="margin-bottom:8px">
+      <button class="back" data-act="nav" data-v="vocab" style="margin:0"><span>←</span> Woordenschat</button>
       <span class="grow"></span>
       <button class="btn btn-secondary btn-sm" data-act="nav" data-v="add">+ Eigen woord</button>
     </div>
-    <h2 style="font-size:22px;font-weight:700">Woordenlijst</h2>
-    <p style="font-size:13px;color:var(--muted);margin-top:4px">${ALL.length} woorden · tik 🔊 voor uitspraak</p>
-    <input class="search" id="wl-q" placeholder="Zoek Nederlands, Arabisch…" value="${esc(state.searchQ||'')}">`;
+    <div class="sh">
+      <div class="sh-main">
+        <div class="sh-eyebrow">Naslagwerk · ${ALL.length} woorden</div>
+        <h1>Volledige woordenlijst</h1>
+        <p>Zoek op Nederlands, Arabisch of transcriptie, of filter op hoofdstuk en beheersing. Tik op 🔊 om de uitspraak inclusief tanwīn te beluisteren.</p>
+      </div>
+      <div class="sh-progress-box">
+        <div class="sh-progress-label">Beheerst</div>
+        <div class="sh-progress-pct">${m} / ${total}</div>
+        <div class="sh-progress-bar"><div class="sh-progress-fill" style="width:${pct}%"></div></div>
+      </div>
+    </div>
+    <input class="search" id="wl-q" placeholder="Zoek Nederlands, Arabisch of transcriptie (bijv. baytun, moskee, كتاب)…" value="${esc(state.searchQ||'')}">
+    <div class="wl-filters">
+      <button type="button" class="wl-pill ${flt==='all'?'on':''}" data-act="wl-filter" data-f="all">Alle (${total})</button>
+      <button type="button" class="wl-pill ${flt==='mast'?'on':''}" data-act="wl-filter" data-f="mast">✓ Beheerst (${m})</button>
+      <button type="button" class="wl-pill ${flt==='todo'?'on':''}" data-act="wl-filter" data-f="todo">⏳ Te leren (${todoCount})</button>
+      ${hotCount?`<button type="button" class="wl-pill ${flt==='hot'?'on':''}" data-act="wl-filter" data-f="hot">🔥 Vaak mis (${hotCount})</button>`:''}
+      ${chPills}
+    </div>`;
+
   for(const n of lessonNums()){
+    if(flt.startsWith('l') && Number(flt.slice(1))!==Number(n)) continue;
     const ws=wordsFor(n).filter(w=>{
+      const isMast=getP(w.id).box>=MASTERY;
+      if(flt==='mast' && !isMast) return false;
+      if(flt==='todo' && isMast) return false;
+      if(flt==='hot' && !heatOf(w.id)) return false;
       if(!q)return true;
       return `${w.nl} ${w.en} ${w.translit} ${w.ar}`.toLowerCase().includes(q);
     });
     if(!ws.length)continue;
-    html+=`<div class="wl-group"><div class="wl-h">${esc(hoofdstuk(n))} · ${esc((LESSON_META[n]||[''])[0])}</div>`;
+    html+=`<div class="wl-group"><div class="wl-h" style="display:flex;justify-content:space-between;align-items:center"><span>${esc(hoofdstuk(n))} · ${esc((LESSON_META[n]||[''])[0])} (${ws.length})</span><button type="button" style="font-size:11px;color:var(--forest);font-weight:700;text-transform:none;letter-spacing:0" data-act="start-learn" data-l="${n}">Oefen H${n} →</button></div>`;
     for(const w of ws){
       const heat=heatOf(w.id);
+      const isMast=getP(w.id).box>=MASTERY;
       html+=`<div class="wl-row ${heat}">
-        <button class="icon-btn" style="width:36px;height:36px;font-size:14px" data-act="speak" data-id="${w.id}">🔊</button>
-        <div class="nl">${esc(w.nl)}${heat?`<span class="mk-heat ${heat}" title="vaak mis"></span>`:''}<div style="font-size:11px;color:var(--muted);font-weight:500">${esc(w.translit)}</div></div>
+        <button class="icon-btn" style="width:36px;height:36px;font-size:14px" data-act="speak" data-id="${w.id}" aria-label="Luister">🔊</button>
+        <div class="nl">${esc(w.nl)}${isMast?' <span style="color:var(--ok);font-size:12px" title="Beheerst">✓</span>':''}${heat?`<span class="mk-heat ${heat}" title="vaak mis"></span>`:''}<div style="font-size:11.5px;color:var(--muted);font-weight:500">${esc(w.translit)}</div></div>
         <div class="ar ar-mark" lang="ar">${wrapTash(w.ar,'plain')}</div>
       </div>`;
     }
     html+=`</div>`;
   }
-  if(q && !html.includes('wl-group')){
-    html+=`<div class="empty" style="margin-top:24px">Geen woorden gevonden voor «${esc(state.searchQ)}».</div>`;
+  if(!html.includes('wl-group')){
+    html+=`<div class="empty" style="margin-top:24px">Geen woorden gevonden voor deze selectie.</div>`;
   }
+  html+=`</div>`;
   return html;
 }
 
@@ -3668,25 +3079,34 @@ function renderAdd(){
     <div class="wl-row">
       <div class="nl"><span class="ar" style="font-size:20px">${w.ar}</span><div style="font-size:12px;color:var(--muted)">${esc(w.nl)} · ${esc(hoofdstuk(w.lesson))}</div></div>
       <button style="color:var(--clay);font-size:12px;font-weight:600" data-act="del-custom" data-id="${w.id}">verwijder</button>
-    </div>`).join('')||`<div class="empty">Nog geen eigen woorden.</div>`;
-  const opts=lessonNums().map(n=>`<option value="${n}">${esc(hoofdstuk(n))}</option>`).join('');
-  return`
+    </div>`).join('')||`<div class="empty">Nog geen eigen woorden toegevoegd.</div>`;
+  const opts=lessonNums().map(n=>`<option value="${n}">${esc(hoofdstuk(n))} · ${esc((LESSON_META[n]||[''])[0])}</option>`).join('');
+  return`<div class="desktop-narrow">
     <button class="back" data-act="nav" data-v="vocab" style="margin-bottom:8px"><span>←</span> Terug</button>
-    <h2 style="font-size:22px;font-weight:700">Eigen woord</h2>
-    <p style="font-size:13px;color:var(--muted);margin:4px 0 12px">Mis je iets? Voeg het toe aan een hoofdstuk.</p>
-    <div class="card form">
-      <label>Arabisch</label><input class="ar-in" id="f-ar" placeholder="كِتَاب">
-      <label>Transcriptie</label><input id="f-tr" placeholder="kitaab">
-      <label>Nederlands</label><input id="f-nl" placeholder="boek">
-      <label>Engels</label><input id="f-en" placeholder="book">
-      <label>Hoofdstuk</label><select id="f-ls">${opts}</select>
-      <button class="btn btn-primary btn-block" style="margin-top:16px" data-act="add-word">Toevoegen</button>
+    <div class="sh">
+      <div class="sh-main">
+        <div class="sh-eyebrow">Eigen woorden</div>
+        <h1>Woord toevoegen</h1>
+        <p>Mis je een woord? Voeg het toe aan een hoofdstuk zodat het direct meedoet in flashcards en oefeningen.</p>
+      </div>
     </div>
-    <h3 style="margin:22px 0 8px;font-size:15px">Jouw woorden</h3>
-    <div class="card">${list}</div>`;
+    <div class="card form">
+      <label>Arabisch (met harakaat)</label><input class="ar-in" id="f-ar" placeholder="كِتَابٌ">
+      <label>Transcriptie</label><input id="f-tr" placeholder="kitaabun">
+      <label>Nederlands</label><input id="f-nl" placeholder="boek">
+      <label>Engels (optioneel)</label><input id="f-en" placeholder="book">
+      <label>Hoofdstuk</label><select id="f-ls">${opts}</select>
+      <button class="btn btn-primary btn-block" style="margin-top:16px" data-act="add-word">Toevoegen aan woordenlijst</button>
+    </div>
+    <h3 style="margin:22px 0 8px;font-size:15px">Jouw toegevoegde woorden</h3>
+    <div class="card">${list}</div>
+  </div>`;
 }
 
 function renderBook(){
+  const gKeys = Object.keys(GRAMMAR);
+  const doneG = gKeys.filter(k => getGram(k).done || gramPct(k)>=100).length;
+  const avgPct = gKeys.length ? Math.round(gKeys.reduce((acc,k)=>acc+gramPct(k),0)/gKeys.length) : 0;
   let items='';
   for(const n of lessonNums()){
     const g=GRAMMAR[n];
@@ -3695,19 +3115,18 @@ function renderBook(){
     const sub=g.title||(LESSON_META[n]||['',''])[1]||'';
     const nEx=g.exercises?g.exercises.length:0;
     const pct=gramPct(n);
-    const sc=gramScore(n);
     const gp=getGram(n);
     let status='', statusCls='new';
-    if(gp.done||pct>=100){status='Klaar';statusCls='done'}
+    if(gp.done||pct>=100){status='Voltooid';statusCls='done'}
     else if(pct>0||gp.tab){status='Bezig · '+pct+'%';statusCls='busy'}
     else{status='Nieuw';statusCls='new'}
     items+=`<button type="button" class="lesson path-lesson ${statusCls}" data-act="open-book" data-l="${n}">
       <div class="path-num">${n}</div>
       <div class="path-body" style="text-align:left">
-        <div class="status ${statusCls}">${status}</div>
+        <div class="status ${statusCls}">${status} · ${nEx} vragen</div>
         <h3>${esc(hoofdstuk(n))} · ${esc(title)}</h3>
         <p class="blurb">${esc(sub)}</p>
-        ${(nEx && pct>0)?`<div class="progress" style="margin-top:8px"><i style="width:${pct}%"></i></div>`:''}
+        <div class="progress" style="margin-top:6px"><i style="width:${pct}%"></i></div>
       </div>
     </button>`;
   }
@@ -3717,26 +3136,32 @@ function renderBook(){
     const title=(LESSON_META[n]||['',''])[0];
     const gp=getGram(n);
     const tab=gp.tab||'uitleg';
-    const tabLbl={uitleg:'Uitleg',voorbeelden:'Voorbeelden',oefenen:'Oefenen'}[tab]||'Uitleg';
+    const tabLbl={uitleg:'Uitleg',voorbeelden:'Voorbeelden',oefenen:'Oefenen',ontleed:'Ontleden'}[tab]||'Uitleg';
     cont=`<button type="button" class="resume-row" data-act="open-book" data-l="${n}" data-tab="${tab}">
-      <span class="resume-k">Verder</span>
+      <span class="resume-k">Verder lezen</span>
       <span class="resume-t">${esc(hoofdstuk(n))} · ${esc(title)}</span>
-      <span class="resume-m">${esc(tabLbl)}</span>
+      <span class="resume-m">${esc(tabLbl)} →</span>
     </button>`;
   }
-  return`
-    <div class="path-badge grammar" style="display:inline-flex;margin-bottom:8px">Grammatica</div>
-    <h2 style="font-size:20px;font-weight:700;margin-bottom:4px">Medina Boek</h2>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.45">
-      Uitleg en oefeningen uit het Medina-boek. Voortgang blijft bewaard.
-    </p>
+  return`<div class="desktop-page">
+    <div class="sh">
+      <div class="sh-main">
+        <div class="sh-eyebrow">Grammatica · ${doneG} / ${gKeys.length} voltooid</div>
+        <h1>Medina-boek · Deel 1</h1>
+        <p>Bestudeer per hoofdstuk de volledige Nederlandstalige uitleg, luister naar de Arabische voorbeeldzinnen, maak de oefenvragen en ontleed de zinnen (iʿrāb).</p>
+      </div>
+      <div class="sh-progress-box">
+        <div class="sh-progress-label">Oefeningen</div>
+        <div class="sh-progress-pct">${avgPct}%</div>
+        <div class="sh-progress-bar"><div class="sh-progress-fill" style="width:${avgPct}%"></div></div>
+      </div>
+    </div>
     ${cont}
-    <div class="section-h"><h2>Hoofdstukken</h2><span>${Object.keys(GRAMMAR).length}</span></div>
-    ${items}`;
+    <div class="desktop-grid-2">
+      ${items}
+    </div>
+  </div>`;
 }
-
-
-
 const PARSE_TASKS = {
   1:[
     {ar:'هَذَا كِتَابٌ',nl:'Dit is een boek',parts:[
@@ -4148,14 +3573,19 @@ function renderParsePane(n){
 }
 
 function renderBookLesson(){
-  const n=state.bookLesson;
+  const n=Number(state.bookLesson)||1;
   const g=GRAMMAR[n];
   const title=(LESSON_META[n]||[hoofdstuk(n),''])[0];
-  if(!g)return`<div class="empty">Geen uitleg voor dit hoofdstuk.</div>`;
+  if(!g)return`<div class="desktop-narrow"><div class="empty">Geen uitleg voor dit hoofdstuk.</div></div>`;
   const tab=state.bookTab||'uitleg';
-  const points=''; // rendered inline below
   const examples=g.examples||[];
   const exercises=g.exercises||[];
+  const nums=lessonNums();
+  const idx=nums.indexOf(n);
+  const prevN=idx>0?nums[idx-1]:null;
+  const nextN=(idx>=0&&idx<nums.length-1)?nums[idx+1]:null;
+  const pct=gramPct(n);
+
   const ex=(examples).map(e=>`
     <div class="ex">
       <div>
@@ -4165,12 +3595,25 @@ function renderBookLesson(){
       <button class="icon-btn" style="width:36px;height:36px;flex-shrink:0" data-act="speak-text" data-text="${esc(e.ar)}">🔊</button>
     </div>`).join('');
 
+  return`<div class="desktop-narrow">
+  <div class="hub-toolbar" style="margin-bottom:8px">
+    <button class="back" data-act="book-list" style="margin:0"><span>←</span> Alle hoofdstukken</button>
+    <span class="grow"></span>
+    <button class="btn btn-secondary btn-sm" data-act="start-learn" data-l="${n}">🗂 Oefen woorden H${n}</button>
+  </div>
 
-  return`
-  <button class="back" data-act="book-list" style="margin-bottom:8px"><span>←</span> Alle hoofdstukken</button>
-  <h2 style="font-size:20px;font-weight:700;margin-bottom:4px">${esc(hoofdstuk(n))} · ${esc(title)}</h2>
-  <p style="color:var(--forest);font-weight:600;font-size:14px;margin-bottom:6px">${esc(g.title||'')}</p>
-  <p style="font-size:13px;color:var(--muted);margin-bottom:4px;line-height:1.45">${esc(g.summary||'')}</p>
+  <div class="sh" style="margin-bottom:14px;padding-bottom:14px">
+    <div class="sh-main">
+      <div class="sh-eyebrow">Medina-boek Deel 1 · ${esc(hoofdstuk(n))}</div>
+      <h1 style="font-size:clamp(24px,3.5vw,32px)">${esc(title)} — ${esc(g.title||'')}</h1>
+      <p>${esc(g.summary||'')}</p>
+    </div>
+    <div class="sh-progress-box">
+      <div class="sh-progress-label">Quiz-score</div>
+      <div class="sh-progress-pct">${pct}%</div>
+      <div class="sh-progress-bar"><div class="sh-progress-fill" style="width:${pct}%"></div></div>
+    </div>
+  </div>
 
   <div class="lesson-tabs" role="tablist">
     <button class="lesson-tab ${tab==='uitleg'?'active':''}" data-act="book-tab" data-tab="uitleg" role="tab">
@@ -4192,31 +3635,33 @@ function renderBookLesson(){
   </div>
 
   <div class="lesson-pane ${tab==='uitleg'?'active':''}" data-pane="uitleg">
-    <div class="card" style="margin-bottom:12px;background:linear-gradient(160deg,#F3EDF8,var(--surface));border-color:#D4C4E8">
-      <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5B3A7A;margin-bottom:4px">Medina-boek · Deel 1 · volledige lesstekst</div>
-      <p style="font-size:13px;line-height:1.45;color:var(--ink-soft)">${esc(g.summary||'')}</p>
+    <div class="book-intro-card">
+      <div class="book-intro-kicker">Kernpunten van ${esc(hoofdstuk(n))}</div>
+      <ul style="padding-left:18px;margin:4px 0 0;font-size:13.5px;color:var(--ink-soft);line-height:1.55">
+        ${(g.points||[]).map(pt=>`<li style="margin-bottom:4px">${esc(pt)}</li>`).join('')}
+      </ul>
     </div>
-    <div class="grammar-block book-text" style="background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:16px 16px 8px">
-      ${(g.fullText||[]).map(block=>{
-        if(block.h) return `<h3 style="font-size:15px;font-weight:700;color:var(--forest);margin:16px 0 8px;padding-top:8px;border-top:1px solid var(--line)">${esc(block.h)}</h3>`;
-        if(block.ar) return `<div class="ex" style="margin-bottom:8px"><div class="ar ar-mark" lang="ar">${markAr(block.ar,'plain')}</div><div class="nl">${esc(block.nl||'')}</div><button class="icon-btn" data-act="speak-text" data-text="${esc(block.ar)}" style="width:34px;height:34px;flex-shrink:0" aria-label="Hoor">🔊</button></div>`;
-        if(block.p) return `<p style="font-size:14px;line-height:1.6;color:var(--ink-soft);margin-bottom:10px">${esc(block.p)}</p>`;
+    <div class="grammar-block book-text" style="background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 18px 10px">
+      ${(g.fullText||[]).map((block,bi)=>{
+        if(block.h) return `<h3 style="font-size:15.5px;font-weight:700;color:var(--forest);margin:${bi===0?'0':'18px'} 0 8px;padding-top:${bi===0?'0':'10px'};border-top:${bi===0?'none':'1px solid var(--line)'}">${esc(block.h)}</h3>`;
+        if(block.ar) return `<div class="ex" style="margin-bottom:8px"><div><div class="ar ar-mark" lang="ar">${markAr(block.ar,'plain')}</div><div class="nl">${esc(block.nl||'')}</div></div><button class="icon-btn" data-act="speak-text" data-text="${esc(block.ar)}" style="width:34px;height:34px;flex-shrink:0" aria-label="Hoor">🔊</button></div>`;
+        if(block.p) return `<p style="font-size:14.5px;line-height:1.65;color:var(--ink-soft);margin-bottom:10px">${esc(block.p)}</p>`;
         return '';
       }).join('')}
     </div>
-    <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
-      <button class="btn btn-primary" data-act="book-tab" data-tab="voorbeelden" style="flex:1;min-width:140px">Naar voorbeelden →</button>
+    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+      <button class="btn btn-primary" data-act="book-tab" data-tab="voorbeelden" style="flex:1;min-width:140px">Naar voorbeelden (${examples.length}) →</button>
     </div>
   </div>
 
   <div class="lesson-pane ${tab==='voorbeelden'?'active':''}" data-pane="voorbeelden">
     <div class="grammar-block">
-      <h3 style="margin-bottom:8px">Voorbeelden (tik 🔊 om te beluisteren)</h3>
+      <h3 style="margin-bottom:8px">Voorbeelden uit ${esc(hoofdstuk(n))} (tik 🔊 om te beluisteren)</h3>
       ${ex||'<p style="color:var(--muted);font-size:14px">Geen voorbeelden.</p>'}
     </div>
-    <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
-      <button class="btn btn-ghost" data-act="book-tab" data-tab="uitleg" style="flex:1;min-width:120px">← Uitleg</button>
-      <button class="btn btn-primary" data-act="book-tab" data-tab="oefenen" style="flex:1;min-width:120px">Naar oefenen →</button>
+    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+      <button class="btn btn-secondary" data-act="book-tab" data-tab="uitleg" style="flex:1;min-width:120px">← Uitleg</button>
+      <button class="btn btn-primary" data-act="book-tab" data-tab="oefenen" style="flex:1;min-width:120px">Start oefeningen (${exercises.length}) →</button>
     </div>
   </div>
 
@@ -4227,19 +3672,24 @@ function renderBookLesson(){
         <div style="font-size:14px;margin-top:4px">Nog geen oefeningen voor dit hoofdstuk.</div>
       </div>`}
     <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
-      <button class="btn btn-ghost" data-act="book-tab" data-tab="voorbeelden" style="flex:1;min-width:120px">← Voorbeelden</button>
-      <button class="btn btn-ghost" data-act="book-list" style="flex:1;min-width:120px">Alle hoofdstukken</button>
+      <button class="btn btn-secondary" data-act="book-tab" data-tab="voorbeelden" style="flex:1;min-width:120px">← Voorbeelden</button>
+      <button class="btn btn-primary" data-act="book-tab" data-tab="ontleed" style="flex:1;min-width:120px">Zinsontleding (Iʿrāb) →</button>
     </div>
   </div>
 
   <div class="lesson-pane ${tab==='ontleed'?'active':''}" data-pane="ontleed">
     ${renderParsePane(n)}
     <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
-      <button class="btn btn-ghost" data-act="book-tab" data-tab="oefenen" style="flex:1;min-width:120px">← Oefenen</button>
-      <button class="btn btn-ghost" data-act="book-list" style="flex:1;min-width:120px">Alle hoofdstukken</button>
+      <button class="btn btn-secondary" data-act="book-tab" data-tab="oefenen" style="flex:1;min-width:120px">← Oefenen</button>
+      <button class="btn btn-secondary" data-act="book-list" style="flex:1;min-width:120px">Alle hoofdstukken</button>
     </div>
   </div>
-`;
+
+  <div class="book-chapter-nav">
+    ${prevN?`<button type="button" class="btn btn-secondary btn-sm" data-act="open-book" data-l="${prevN}">← ${esc(hoofdstuk(prevN))}: ${esc((LESSON_META[prevN]||[''])[0])}</button>`:'<span></span>'}
+    ${nextN?`<button type="button" class="btn btn-primary btn-sm" data-act="open-book" data-l="${nextN}">${esc(hoofdstuk(nextN))}: ${esc((LESSON_META[nextN]||[''])[0])} →</button>`:''}
+  </div>
+  </div>`;
 }
 
 function renderGramExercise(n){
@@ -4270,7 +3720,7 @@ function renderGramExercise(n){
     let cls='opt'+(isOptAr?'':' opt-nl');
     if(ans){if(isAnswer)cls+=' correct';else if(isPicked)cls+=' wrong'}
     const inner=isOptAr?`<span class="ar-mark">${markAr(o,'plain')}</span>`:formatMixed(o);
-    return `<button class="${cls}" data-act="gram-answer" data-qi="${gi}" data-oi="${j}" data-ok="${isAnswer}" ${ans?'disabled':''}>${inner}</button>`;
+    return `<button class="${cls}" data-act="gram-answer" data-qi="${gi}" data-oi="${j}" data-ok="${isAnswer}" ${ans?'disabled':''}><span class="opt-key">${j+1}</span>${inner}</button>`;
   }).join('');
   const answeredCount=Object.keys(state.gramAnswers||{}).length;
   const correctCount=Object.values(state.gramAnswers||{}).filter(a=>a.ok).length;
@@ -4307,16 +3757,19 @@ function renderGramExercise(n){
 
 
 function renderConv(){
+  const units=Object.entries(CONVERSATIONS);
   let items='';
-  for(const [n,c] of Object.entries(CONVERSATIONS)){
+  for(const [n,c] of units){
     const nDlg=(c.dialogues||[]).length;
+    const nPhr=(c.phrases||[]).length;
     items+=`<button type="button" class="mvp-row" data-act="open-conv" data-u="${n}">
       <div class="path-num" style="margin-inline-end:4px">${n}</div>
       <div style="flex:1;text-align:start">
         <div class="mvp-title">${esc(c.titleNl)}</div>
         <div class="mvp-ar ar" lang="ar">${esc(c.titleAr)}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">${nDlg} ${nDlg===1?'dialoog':'dialogen'} · ${nPhr} kernzinnen</div>
       </div>
-      <span class="mvp-meta">Start</span>
+      <span class="mvp-meta">Open →</span>
     </button>`;
   }
   let cont='';
@@ -4325,16 +3778,21 @@ function renderConv(){
     cont=`<button type="button" class="resume-row" data-act="open-conv" data-u="${lastConv.u}">
       <span class="resume-k">Verder</span>
       <span class="resume-t">Eenheid ${lastConv.u} · ${esc(cu.titleNl||'')}</span>
+      <span class="resume-m">Open dialoog →</span>
     </button>`;
   }
-  return`
-    <h2 class="mvp-h">Dialogen</h2>
-    <p class="mvp-sub">Kies een eenheid · beluister · oefen</p>
+  return`<div class="desktop-page">
+    <div class="sh">
+      <div class="sh-main">
+        <div class="sh-eyebrow">Luisteren & Spreken · ${units.length} eenheden</div>
+        <h1>Arabische Dialogen</h1>
+        <p>Beluister alledaagse Arabische gesprekken met verschillende stemmen per spreker en oefen je eigen uitspraak zin voor zin.</p>
+      </div>
+    </div>
     ${cont}
-    <div class="mvp-list">${items}</div>`;
+    <div class="desktop-grid-2">${items}</div>
+  </div>`;
 }
-
-
 function renderConvUnit(){
   const n=String(state.convUnit||'');
   const c=CONVERSATIONS[n]||CONVERSATIONS[Number(n)];
@@ -4376,7 +3834,7 @@ function renderConvUnit(){
   const bannerSrc=(showPics&&(d.image||c.image))?(d.image||c.image):'';
   const banner=bannerSrc?`<div class="conv-banner"><img src="${bannerSrc}" alt="" loading="lazy" referrerpolicy="no-referrer"/><div class="conv-banner-fade"></div></div>`:'';
   const dots=dialogs.map((_,i)=>`<button type="button" class="conv-dot ${i===di?'on':''}" data-act="conv-di" data-dir="set" data-i="${i}" aria-label="Dialoog ${i+1}"></button>`).join('');
-  return`
+  return`<div class="desktop-narrow">
     <button class="back" data-act="nav" data-v="conv" style="margin-bottom:8px"><span>←</span> Terug</button>
     ${banner}
     <div class="hub-toolbar">
@@ -4420,36 +3878,55 @@ function renderConvUnit(){
           </div>`;
         }).join('')}
       </div>
-    </div>`:''}`;
+    </div>`:''}</div>`;
 }
 
 
 function renderMistakes(){
   const stats=mistakeStats();
   if(!stats.length){
-    return`
-      <button class="back" data-act="nav" data-v="home"><span>←</span> Terug</button>
-      <h2 class="mvp-h">Fouten</h2>
-      <p class="mvp-sub">Nog geen uitspraakfouten. Oefen bij Zeg of in een dialoog — harakaat en verkeerde woorden komen hier.</p>
-      <button class="btn btn-primary btn-block" data-act="start-zeg" data-l="all">Zeg oefenen</button>`;
+    return`<div class="desktop-narrow">
+      <button class="back" data-act="nav" data-v="home" style="margin-bottom:8px"><span>←</span> Terug</button>
+      <div class="sh">
+        <div class="sh-main">
+          <div class="sh-eyebrow">Foutenanalyse</div>
+          <h1>Geen openstaande fouten</h1>
+          <p>Je hebt momenteel geen uitspraak- of woordfouten opgeslagen. Oefen bij Zeg of in een dialoog — woorden of harakaat die misgaan verschijnen automatisch hier.</p>
+        </div>
+      </div>
+      <button class="btn btn-primary" data-act="start-zeg" data-l="all">🎤 Start Zeg-oefening</button>
+    </div>`;
   }
   const rows=stats.map(m=>{
     const heat=m.n>=3?'hot':m.n>=1?'warm':'';
-    const lab=m.haraka && !m.word?'harakaat':m.haraka?'harakaat + woord':'woord';
+    const lab=m.haraka && !m.word?'harakaat-uitgang':m.haraka?'harakaat + woord':'verkeerd woord';
+    const wObj=ALL.find(x=>x.id===m.id);
+    const nlTxt=wObj?wObj.nl:'';
+    const chTxt=wObj?hoofdstuk(wObj.lesson):'';
     return `<button type="button" class="mvp-row" data-act="zeg-one" data-id="${esc(m.id||'')}">
-      <div style="flex:1;text-align:end" class="ar-mark">${wrapTash(m.ar, m.haraka?'haraka':'bad')}</div>
-      <span class="mvp-meta">${m.n}× · ${lab}<span class="mk-heat ${heat}"></span></span>
+      <div style="text-align:start">
+        <div style="font-weight:700;font-size:14.5px">${esc(nlTxt||'Uitspraak oefenen')}</div>
+        <div style="font-size:12px;color:var(--muted)">${chTxt?esc(chTxt)+' · ':''}${m.n}× mis (${lab})<span class="mk-heat ${heat}"></span></div>
+      </div>
+      <div style="flex:1;text-align:end;font-size:24px" class="ar ar-mark" lang="ar">${wrapTash(m.ar, m.haraka?'haraka':'bad')}</div>
+      <span class="mvp-meta">🎤 Oefen →</span>
     </button>`;
   }).join('');
-  return`
-    <button class="back" data-act="nav" data-v="home"><span>←</span> Terug</button>
-    <h2 class="mvp-h">Fouten</h2>
-    <p class="mvp-sub">${stats.length} woorden · tik er één om hem te herhalen. Oranje = harakaat, rood = verkeerd woord.</p>
-    <div class="mvp-actions" style="margin-bottom:12px">
-      <button class="btn btn-primary" data-act="start-zeg" data-l="fouten">Oefen alles</button>
-      <button class="btn btn-ghost" data-act="clear-mistakes">Lijst leegmaken</button>
+  return`<div class="desktop-page">
+    <button class="back" data-act="nav" data-v="home" style="margin-bottom:8px"><span>←</span> Terug</button>
+    <div class="sh">
+      <div class="sh-main">
+        <div class="sh-eyebrow">Gerichte herhaling · ${stats.length} woorden</div>
+        <h1>Jouw aandachtspunten</h1>
+        <p>Tik op een woord om het direct 5× achter elkaar met de microfoon te oefenen. Oranje markeert een harakaat/tanwīn-fout; rood markeert een woordfout.</p>
+      </div>
     </div>
-    <div class="mvp-list">${rows}</div>`;
+    <div class="mvp-actions" style="margin-bottom:16px">
+      <button class="btn btn-primary" data-act="start-zeg" data-l="fouten">🎤 Oefen alle fouten (${stats.length})</button>
+      <button class="btn btn-secondary" data-act="clear-mistakes">Lijst wissen</button>
+    </div>
+    <div class="desktop-grid-2">${rows}</div>
+  </div>`;
 }
 
 function render(){
@@ -4471,6 +3948,10 @@ function render(){
   else if(state.view==='settings')html=renderSettings();
   else if(state.view==='mistakes')html=renderMistakes();
   app.innerHTML=appHeader()+html+((state.view==='vocab'||state.view==='book'||state.view==='conv')?`<button type="button" class="theme-fab" data-act="toggle-theme" aria-label="Thema">${darkMode?'☀️':'🌙'}</button>`:'');
+  const sbHost=document.getElementById('sidebar-host');
+  if(sbHost) sbHost.innerHTML=renderSidebar();
+  const tbHost=document.getElementById('topbar-host');
+  if(tbHost) tbHost.innerHTML=renderTopbar();
   const host=document.getElementById('tabbar-host');
   if(host) host.innerHTML=tabbar();
   if(state.view==='zeg') setTimeout(autoZegListen, 400);
@@ -4518,7 +3999,24 @@ document.addEventListener('click',e=>{
   const btn=e.target.closest('[data-act]');
   if(!btn)return;
   const act=btn.dataset.act;
-  if(act==='nav'){
+  if(act==='toggle-sidebar'){
+    sbCollapsed=!sbCollapsed;
+    try{localStorage.setItem('alm_sb_collapsed',sbCollapsed?'1':'0')}catch(e){}
+    applySbCollapsed();
+    return;
+  }
+  else if(act==='sb-menu'){
+    const m=btn.dataset.menu;
+    sbOpenMenu = (sbOpenMenu===m) ? null : m;
+    if(m==='gram' && state.view!=='book' && state.view!=='book-lesson'){
+      state.path='grammar';state.view='book';state.bookLesson=null;
+    } else if(m==='conv' && state.view!=='conv' && state.view!=='conv-unit'){
+      state.path='conv';state.view='conv';state.convUnit=null;
+    }
+    render();
+    return;
+  }
+  else if(act==='nav'){
     stopAllMedia();
     hideCompare();
     const v=btn.dataset.v;
@@ -4613,6 +4111,10 @@ document.addEventListener('click',e=>{
   else if(act==='zeg-skip'){state.zegShow=false;nextZeg(false)}
   else if(act==='zeg-next'){nextZeg(true)}
   else if(act==='flip'){state.flipped=!state.flipped;render()}
+  else if(act==='wl-filter'){
+    state.wlFilter=btn.dataset.f||'all';
+    render();
+  }
   else if(act==='set-quiz-dir'){
     const d=btn.dataset.d;if(d==='mix'||d==='nl2ar'||d==='ar2nl'){quizDir=d;saveD();render()}
   }
@@ -4892,14 +4394,49 @@ document.addEventListener('click',e=>{
 
 document.addEventListener('keydown',e=>{
   if(e.target.matches('input,textarea,select'))return;
-  if(state.view==='flash'){
-    if(e.key===' '||e.key==='Enter'){e.preventDefault();state.flipped=!state.flipped;render()}
-    if(e.key==='ArrowRight'){state.idx=Math.min(state.pool.length-1,state.idx+1);state.flipped=false;render()}
-    if(e.key==='ArrowLeft'){state.idx=Math.max(0,state.idx-1);state.flipped=false;render()}
+  if(e.key==='Escape'){
+    const cmp=document.getElementById('cmp-host');
+    if(cmp&&cmp.innerHTML){hideCompare();return}
+    if(state.view==='flash'||state.view==='learn'||state.view==='zeg'||state.view==='words'||state.view==='add'){
+      stopAllMedia();state.view='vocab';state.path='vocab';render();return;
+    }
+    if(state.view==='book-lesson'){
+      stopAllMedia();state.view='book';state.path='grammar';state.bookLesson=null;render();return;
+    }
+    if(state.view==='conv-unit'){
+      stopAllMedia();state.view='conv';state.path='conv';state.convUnit=null;render();return;
+    }
   }
-  if(e.key==='Enter'){
+  if(state.view==='flash'){
+    if(e.key===' '||e.key==='Enter'){e.preventDefault();state.flipped=!state.flipped;render();return}
+    if(e.key==='ArrowRight'){state.idx=Math.min(state.pool.length-1,state.idx+1);state.flipped=false;render();return}
+    if(e.key==='ArrowLeft'){state.idx=Math.max(0,state.idx-1);state.flipped=false;render();return}
+    if(e.key==='r'||e.key==='R'){if(state.pool&&state.pool[state.idx])speakWord(state.pool[state.idx],true);return}
+  }
+  if(state.view==='learn'){
     const bar=document.getElementById('fb');
-    if(bar&&bar.classList.contains('show'))continueLearn();
+    if(e.key==='Enter' && bar && bar.classList.contains('show')){e.preventDefault();continueLearn();return}
+    if(!state.answered && ['1','2','3','4'].includes(e.key)){
+      const opts=document.querySelectorAll('.qcard .opt');
+      const btn=opts[parseInt(e.key,10)-1];
+      if(btn && !btn.disabled){e.preventDefault();btn.click();return}
+    }
+    if(e.key==='r'||e.key==='R'){if(state.current)speakWord(state.current,true);return}
+  }
+  if(state.view==='book-lesson' && state.bookTab==='oefenen'){
+    if(['1','2','3','4'].includes(e.key)){
+      const opts=document.querySelectorAll('.lesson-pane.active .opt');
+      const btn=opts[parseInt(e.key,10)-1];
+      if(btn && !btn.disabled){e.preventDefault();btn.click();return}
+    }
+    if(e.key==='ArrowRight'){
+      const nextBtn=document.querySelector('[data-act="gram-next"]:not(:disabled)');
+      if(nextBtn){e.preventDefault();nextBtn.click();return}
+    }
+    if(e.key==='ArrowLeft'){
+      const prevBtn=document.querySelector('[data-act="gram-prev"]:not(:disabled)');
+      if(prevBtn){e.preventDefault();prevBtn.click();return}
+    }
   }
 });
 
