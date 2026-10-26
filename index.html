@@ -3556,19 +3556,19 @@ function renderParsePane(n){
     </div>`;
   }
   return `
-    <p class="mvp-sub">Tik een woord, daarna het vak. Tik <b>?</b> voor uitleg over dat zinsdeel.</p>
+    <p class="mvp-sub">Kies een woord en plaats het in het juiste vak. Via <b>?</b> zie je de uitleg van dat zinsdeel.</p>
     <div class="card" style="margin-bottom:10px;width:100%;text-align:center">
       <button type="button" data-act="parse-sent" style="width:100%;background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer">
         <div class="mvp-kicker">Zin ${state.parseI+1}/${tasks.length} · tik voor vertaling</div>
         <div class="ar ar-mark" lang="ar" style="font-size:26px;margin:8px 0">${markAr(task.ar,'plain')}</div>
       </button>
-      <button type="button" class="icon-btn" data-act="speak-text" data-text="${esc(task.ar)}" aria-label="Hoor" style="width:36px;height:36px;margin:0 auto 8px">🔊</button>
+      <button type="button" class="icon-btn" data-act="speak-text" data-text="${esc(task.ar)}" aria-label="Afspelen" style="margin:0 auto 8px">${GL_ICO_SPK}</button>
       ${state.parseShowSent?`<div class="who-phon">${esc(romanizeAr(task.ar))}</div><div style="color:var(--muted);font-size:14px;margin-top:4px">${esc(task.nl)}</div>`:''}
     </div>
     ${info}
     <div class="parse-slots">${slots}</div>
     <div class="parse-bank">${bank||'<span class="blurb">Alle woorden geplaatst</span>'}</div>
-    ${complete?`<div class="speak-result ${ok?'ok':'bad'}" style="display:block;margin-top:10px">${ok?'✓ Juist ontleed':('✗ Nog niet juist<br>'+why)}</div>`:''}
+    ${complete?`<div class="speak-result ${ok?'ok':'bad'}" style="display:block;margin-top:10px">${ok?'<b>Correct ontleed</b>':('<b>Nog niet juist</b><br>'+why)}</div>`:''}
     <div class="mvp-actions" style="margin-top:12px">
       <button class="btn btn-secondary btn-sm" data-act="parse-reset">Leegmaken</button>
       ${ok?`<button class="btn btn-primary btn-sm" data-act="parse-next">${state.parseI>=tasks.length-1?'Ontleden afronden ✓':'Volgende zin'}</button>`:''}
@@ -3586,6 +3586,9 @@ const GL_STEPS=[
   {k:'klaar',l:'Afronden'}
 ];
 const GL_TAB_LABEL={start:'Overzicht',uitleg:'Leren',voorbeelden:'Luisteren',oefenen:'Oefenen',ontleed:'Ontleden',klaar:'Afronden'};
+const GL_ICO_SPK='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M18.5 5.5a9 9 0 010 13"/></svg>';
+const GL_ICO_OK='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const gl2=i=>String(i).padStart(2,'0');
 
 function glSteps(n){const gp=getGram(n);if(!gp.steps)gp.steps={};return gp.steps}
 
@@ -3661,7 +3664,7 @@ function glSplit(c){
   const lead=(pre+(m?m[0]:body)).trim();
   return {lead, rest:t.slice(pre.length+(m?m[0].length:body.length)).trim()};
 }
-/** Woordenlijst "ar nl · ar nl" als aanklikbare chips met audio */
+/** Woordenlijst "ar nl · ar nl" als aanklikbare items met audio */
 function glVocab(t,skipIntro){
   const ix=t.search(/[\u0600-\u06FF]/);
   const intro=ix>0?t.slice(0,ix).trim():'';
@@ -3670,7 +3673,7 @@ function glVocab(t,skipIntro){
     const m=it.match(/^((?:[\u0600-\u06FF\u0750-\u077F]+\s*)+)(\S[\s\S]*)?$/);
     if(!m) return `<span class="gl-chip"><small>${glMix(it)}</small></span>`;
     const ar=m[1].trim(), nl=(m[2]||'').trim();
-    return `<button type="button" class="gl-chip" data-act="speak-text" data-text="${esc(ar)}" title="Luister"><span class="ar ar-mark" lang="ar">${markAr(ar,'plain')}</span>${nl?`<small>${glMix(nl)}</small>`:''}</button>`;
+    return `<button type="button" class="gl-chip" data-act="speak-text" data-text="${esc(ar)}" title="Afspelen"><span class="ar ar-mark" lang="ar">${markAr(ar,'plain')}</span>${nl?`<small>${glMix(nl)}</small>`:''}</button>`;
   }).join('');
   return (!skipIntro&&intro?`<p class="gl-body">${glMix(intro)}</p>`:'')+`<div class="gl-vocab">${chips}</div>`;
 }
@@ -3692,13 +3695,18 @@ function glFmt(s){
   return glMix(str);
 }
 
+function glAvail(n){
+  const g=GRAMMAR[n]||{};
+  return GL_STEPS.map(s=>s.k).filter(k=>(k!=='voorbeelden'||(g.examples||[]).length)&&(k!=='oefenen'||(g.exercises||[]).length)&&(k!=='ontleed'||parseTasksFor(n).length));
+}
+function glNextTab(n,tab){const a=glAvail(n);const i=a.indexOf(tab);return a[Math.min(a.length-1,i+1)]||'klaar'}
+function glPrevTab(n,tab){const a=glAvail(n);const i=a.indexOf(tab);return a[Math.max(0,i-1)]||'start'}
+
 function glStepper(n,tab){
   const g=GRAMMAR[n]||{};
   const gp=getGram(n), st=gp.steps||{};
   const total=g.exercises?g.exercises.length:0;
   const answered=Object.keys(gp.answers||{}).length;
-  const hasEx=(g.examples||[]).length>0;
-  const hasParse=parseTasksFor(n).length>0;
   const done={
     start:!!(st.uitleg||st.voorbeelden||answered),
     uitleg:!!st.uitleg,
@@ -3707,18 +3715,19 @@ function glStepper(n,tab){
     ontleed:!!st.ontleed,
     klaar:gramPct(n)>=100
   };
-  const list=GL_STEPS.filter(s=>(s.k!=='voorbeelden'||hasEx)&&(s.k!=='oefenen'||total>0)&&(s.k!=='ontleed'||hasParse));
-  return `<nav class="gl-steps" aria-label="Leerstappen">${list.map((s,i)=>`<button type="button" class="gl-step ${tab===s.k?'on':''} ${done[s.k]?'done':''}" data-act="book-tab" data-tab="${s.k}" ${tab===s.k?'aria-current="step"':''}><span class="gl-step-n">${done[s.k]&&tab!==s.k?'✓':(i+1)}</span><span class="gl-step-l">${s.l}</span></button>`).join('')}</nav>`;
+  const avail=glAvail(n);
+  const list=GL_STEPS.filter(s=>avail.indexOf(s.k)>=0);
+  return `<nav class="gl-steps" aria-label="Leerstappen">${list.map((s,i)=>`<button type="button" class="gl-step ${tab===s.k?'on':''} ${done[s.k]?'done':''}" data-act="book-tab" data-tab="${s.k}" ${tab===s.k?'aria-current="step"':''}><span class="gl-step-n">${gl2(i+1)}</span><span class="gl-step-l">${s.l}</span><span class="gl-step-ok">${done[s.k]?GL_ICO_OK:''}</span></button>`).join('')}</nav>`;
 }
 
-function glProgress(i,total){
-  return `<div class="gl-progress"><i style="width:${total?Math.round(100*(i+1)/total):0}%"></i></div>`;
-}
-
-function glDots(total,cur,act,extra){
+/** Gesegmenteerde voortgangsbalk (klikbaar) */
+function glSegs(total,cur,act,cls){
   let out='';
-  for(let i=0;i<total;i++) out+=`<button type="button" class="gl-dot ${i===cur?'on':''} ${extra&&extra[i]?extra[i]:''}" data-act="${act}" data-dir="set" data-i="${i}" aria-label="Nummer ${i+1}"></button>`;
-  return `<div class="gl-dots">${out}</div>`;
+  for(let i=0;i<total;i++){
+    const c=cls&&cls[i]?cls[i]:(i<cur?'past':'');
+    out+=`<button type="button" class="gl-seg ${i===cur?'on':''} ${c}" data-act="${act}" data-dir="set" data-i="${i}" data-iq="${i}" aria-label="Onderdeel ${i+1}"></button>`;
+  }
+  return `<div class="gl-segs">${out}</div>`;
 }
 
 /* ---------- Stap 0: Overzicht ---------- */
@@ -3729,35 +3738,32 @@ function renderGlStart(n,g,cards){
   const started=!!(st.uitleg||(gp.card|0)>0);
   const goals=cards.map((c,i)=>{
     let t=glSplit(c).lead||c.sec||('Voorbeelden '+(i+1));
-    if(t.length>140) t=t.slice(0,137).trim()+'…';
-    return `<li><button type="button" data-act="gl-card" data-dir="set" data-i="${i}"><span class="gl-goal-n">${i+1}</span><span class="gl-goal-t">${glMix(t)}</span></button></li>`;
+    if(t.length>150) t=t.slice(0,147).trim()+'…';
+    return `<li><button type="button" data-act="gl-card" data-dir="set" data-i="${i}"><span class="gl-goal-n">${gl2(i+1)}</span><span class="gl-goal-t">${glMix(t)}</span><span class="gl-goal-go">→</span></button></li>`;
   }).join('');
   const road=[
-    ['📘','Leren',cards.length+' regelkaarten, één regel per scherm'],
-    exs?['👂','Luisteren',exs+' voorbeelden: luister, raad, check']:null,
-    total?['✍️','Oefenen',total+' vragen met uitleg en herhaal-fouten']:null,
-    parse?['🧩','Ontleden',parse+' zinnen ontleden (iʿrāb)']:null
-  ].filter(Boolean).map(r=>`<div class="gl-road-item"><span class="gl-road-ic">${r[0]}</span><div><b>${r[1]}</b><small>${esc(r[2])}</small></div></div>`).join('');
+    ['Leren',cards.length+' regelkaarten'],
+    exs?['Luisteren',exs+' voorbeelden']:null,
+    total?['Oefenen',total+' vragen']:null,
+    parse?['Ontleden',parse+' zinnen']:null
+  ].filter(Boolean).map((r,i)=>`<div class="gl-road-item"><span class="gl-road-n">${gl2(i+1)}</span><b>${r[0]}</b><small>${esc(r[1])}</small></div>`).join('');
   const full=(g.fullText||[]).map(b=>{
     if(b.h) return `<h3 class="gl-full-h">${esc(b.h)}</h3>`;
-    if(b.ar) return `<div class="ex"><div><div class="ar ar-mark" lang="ar">${markAr(b.ar,'plain')}</div><div class="nl">${esc(b.nl||'')}</div></div><button class="icon-btn" data-act="speak-text" data-text="${esc(b.ar)}" style="width:34px;height:34px;flex-shrink:0" aria-label="Hoor">🔊</button></div>`;
+    if(b.ar) return `<div class="ex"><div><div class="ar ar-mark" lang="ar">${markAr(b.ar,'plain')}</div><div class="nl">${esc(b.nl||'')}</div></div><button class="icon-btn" data-act="speak-text" data-text="${esc(b.ar)}" aria-label="Afspelen">${GL_ICO_SPK}</button></div>`;
     if(b.p) return glPara(String(b.p));
     return '';
   }).join('');
   return `<div class="gl-panel">
-    <div class="gl-kicker">Zo werkt deze les</div>
-    <h2 class="gl-h">Wat ga je leren?</h2>
-    <div class="gl-meta">
-      <span class="chip">⏱ ± ${mins} min</span>
-      <span class="chip">📘 ${cards.length} regels</span>
-      ${total?`<span class="chip">✍️ ${total} vragen</span>`:''}
-    </div>
-    <ul class="gl-goals">${goals}</ul>
+    <div class="gl-kicker">Lesoverzicht</div>
+    <h2 class="gl-h">Inhoud van deze les</h2>
+    <div class="gl-meta"><span>Circa ${mins} min</span><span>${cards.length} regels</span>${exs?`<span>${exs} voorbeelden</span>`:''}${total?`<span>${total} vragen</span>`:''}</div>
+    <ol class="gl-goals">${goals}</ol>
+    <div class="gl-sub">Leerpad</div>
     <div class="gl-road">${road}</div>
     <div class="gl-actions">
-      <button type="button" class="btn btn-primary" data-act="book-tab" data-tab="uitleg" data-gl="next">${started?'Verder met leren →':'Start met leren →'}</button>
+      <button type="button" class="btn btn-primary" data-act="book-tab" data-tab="uitleg" data-gl="next">${started?'Verder met leren':'Start de les'} →</button>
     </div>
-    <button type="button" class="gl-fulltoggle" data-act="gl-full">📚 ${state.glFull?'Verberg':'Lees'} de volledige lestekst</button>
+    <button type="button" class="gl-fulltoggle" data-act="gl-full">${state.glFull?'Volledige lestekst verbergen':'Volledige lestekst weergeven'}</button>
     ${state.glFull?`<div class="gl-full">${full}</div>`:''}
   </div>`;
 }
@@ -3772,11 +3778,11 @@ function renderGlLearn(n,g,cards){
   const extra=c.ps.slice(1).map(glPara).join('');
   const ex=c.ex.map(e=>`<div class="ex">
       <div><div class="ar ar-mark" lang="ar">${markAr(e.ar,'plain')}</div>${e.nl?`<div class="nl">${glMix(e.nl)}</div>`:''}</div>
-      <button class="icon-btn" style="width:36px;height:36px;flex-shrink:0" data-act="speak-text" data-text="${esc(e.ar)}" aria-label="Hoor">🔊</button>
+      <button class="icon-btn" data-act="speak-text" data-text="${esc(e.ar)}" aria-label="Afspelen">${GL_ICO_SPK}</button>
     </div>`).join('');
   return `<div class="gl-panel">
     <div class="gl-topline"><span class="gl-kicker">Regel ${i+1} van ${cards.length}${c.sec?' · '+esc(c.sec):''}</span></div>
-    ${glProgress(i,cards.length)}
+    ${glSegs(cards.length,i,'gl-card')}
     <article class="gl-card">
       ${sp.lead?`<div class="gl-lead">${glMix(sp.lead)}</div>`:''}
       ${sp.vocab?glVocab(c.ps[0],true):''}
@@ -3786,10 +3792,9 @@ function renderGlLearn(n,g,cards){
     </article>
     <div class="gl-actions">
       <button type="button" class="btn btn-secondary" data-act="gl-card" data-dir="prev" data-gl="prev">← ${i===0?'Overzicht':'Vorige'}</button>
-      <button type="button" class="btn btn-primary" data-act="gl-card" data-dir="next" data-gl="next">${last?'Begrepen, naar luisteren →':'Begrepen, volgende →'}</button>
+      <button type="button" class="btn btn-primary" data-act="gl-card" data-dir="next" data-gl="next">${last?'Verder naar '+(GL_TAB_LABEL[glNextTab(n,'uitleg')]||'afronden').toLowerCase():'Volgende regel'} →</button>
     </div>
-    ${glDots(cards.length,i,'gl-card')}
-    <p class="gl-hint">Tip: gebruik ← → of Enter op je toetsenbord.</p>
+    <p class="gl-hint"><kbd>←</kbd> <kbd>→</kbd> navigeren</p>
   </div>`;
 }
 
@@ -3802,21 +3807,22 @@ function renderGlListen(n,g){
   const rev=!!state.glRev;
   const last=i>=exs.length-1;
   return `<div class="gl-panel">
-    <div class="gl-topline"><span class="gl-kicker">Voorbeeld ${i+1} van ${exs.length} · luister en probeer te begrijpen</span></div>
-    ${glProgress(i,exs.length)}
+    <div class="gl-topline"><span class="gl-kicker">Voorbeeld ${i+1} van ${exs.length}</span></div>
+    ${glSegs(exs.length,i,'gl-ex')}
     <div class="gl-ex-card">
-      <button type="button" class="btn btn-secondary btn-sm" data-act="speak-text" data-text="${esc(e.ar)}">🔊 Luister</button>
       <div class="ar ar-mark gl-ex-ar" lang="ar">${markAr(e.ar,'plain')}</div>
+      <button type="button" class="btn btn-secondary btn-sm gl-play" data-act="speak-text" data-text="${esc(e.ar)}">${GL_ICO_SPK}<span>Afspelen</span></button>
+      <div class="gl-ex-reveal">
       ${rev
         ? `<div class="gl-ex-tr">${esc(romanizeAr(e.ar))}</div><div class="gl-ex-nl">${glMix(e.nl||'')}</div>`
-        : `<button type="button" class="btn btn-primary" data-act="gl-ex" data-dir="reveal" data-gl="reveal">Toon vertaling</button>`}
+        : `<button type="button" class="gl-reveal" data-act="gl-ex" data-dir="reveal" data-gl="reveal">Vertaling tonen</button>`}
+      </div>
     </div>
     <div class="gl-actions">
-      <button type="button" class="btn btn-secondary" data-act="gl-ex" data-dir="prev" data-gl="prev">← ${i===0?'Terug naar leren':'Vorige'}</button>
-      <button type="button" class="btn ${rev?'btn-primary':'btn-secondary'}" data-act="gl-ex" data-dir="next" data-gl="next">${last?'Klaar, naar oefenen →':'Volgende →'}</button>
+      <button type="button" class="btn btn-secondary" data-act="gl-ex" data-dir="prev" data-gl="prev">← ${i===0?'Leren':'Vorige'}</button>
+      <button type="button" class="btn ${rev?'btn-primary':'btn-secondary'}" data-act="gl-ex" data-dir="next" data-gl="next">${last?'Verder naar '+(GL_TAB_LABEL[glNextTab(n,'voorbeelden')]||'afronden').toLowerCase():'Volgend voorbeeld'} →</button>
     </div>
-    ${glDots(exs.length,i,'gl-ex')}
-    <p class="gl-hint">Eerst luisteren, dan zelf raden, dan pas de vertaling tonen (Spatie).</p>
+    <p class="gl-hint">Luister eerst, probeer de zin te begrijpen en toon dan de vertaling (<kbd>Spatie</kbd>).</p>
   </div>`;
 }
 
@@ -3824,22 +3830,23 @@ function renderGlListen(n,g){
 function renderGramResult(n,exercises,answers,correct){
   const total=exercises.length, pct=Math.round(100*correct/total);
   const wrong=exercises.map((e,i)=>({e,i,a:answers[i]})).filter(x=>x.a&&!x.a.ok);
-  const nextTab=parseTasksFor(n).length?'ontleed':'klaar';
-  const msg=pct>=80?'Sterk gedaan!':pct>=50?'Goed bezig, bijna er!':'Nog even oefenen, je komt er wel.';
+  const nextTab=glNextTab(n,'oefenen');
+  const verdict=pct>=80?'Beheerst':pct>=50?'Voldoende, herhaling aanbevolen':'Herhaling nodig';
   return `<div class="gl-panel gl-result">
     <div class="gl-kicker">Resultaat oefeningen</div>
     <div class="gl-score">${correct}<span>/${total}</span></div>
-    <h2 class="gl-h" style="margin-bottom:4px">${msg}</h2>
-    <p class="gl-body" style="margin-bottom:12px">${pct}% goed${wrong.length?` · ${wrong.length} ${wrong.length===1?'vraag':'vragen'} om te herhalen`:' · alles goed!'}</p>
-    ${wrong.length?`<div class="gl-wrong">${wrong.map(x=>`<button type="button" class="gl-wrong-row" data-act="gram-goto" data-i="${x.i}">
+    <h2 class="gl-h" style="margin-bottom:4px">${verdict}</h2>
+    <p class="gl-body" style="margin-bottom:18px">${pct}% correct${wrong.length?` · ${wrong.length} ${wrong.length===1?'vraag':'vragen'} om te herhalen`:' · geen fouten'}</p>
+    ${wrong.length?`<div class="gl-sub">Te herhalen</div><div class="gl-wrong">${wrong.map(x=>`<button type="button" class="gl-wrong-row" data-act="gram-goto" data-i="${x.i}">
+        <span class="gl-wrong-n">Vraag ${x.i+1}</span>
         <span class="gl-wrong-q">${glFmt(x.e.q)}</span>
         <span class="gl-wrong-e">${glMix(x.e.explain||'')}</span>
       </button>`).join('')}</div>`:''}
     <div class="gl-actions">
-      ${wrong.length?`<button type="button" class="btn btn-secondary" data-act="gram-retry">↺ Herhaal fouten (${wrong.length})</button>`:`<button type="button" class="btn btn-secondary" data-act="gram-goto" data-i="0">Bekijk vragen</button>`}
-      <button type="button" class="btn btn-primary" data-act="book-tab" data-tab="${nextTab}" data-gl="next">${nextTab==='ontleed'?'Verder: zinsontleding →':'Afronden →'}</button>
+      ${wrong.length?`<button type="button" class="btn btn-secondary" data-act="gram-retry">Fouten herhalen (${wrong.length})</button>`:`<button type="button" class="btn btn-secondary" data-act="gram-goto" data-i="0">Vragen bekijken</button>`}
+      <button type="button" class="btn btn-primary" data-act="book-tab" data-tab="${nextTab}" data-gl="next">Verder naar ${(GL_TAB_LABEL[nextTab]||'afronden').toLowerCase()} →</button>
     </div>
-    ${wrong.length?`<button type="button" class="gl-fulltoggle" data-act="book-tab" data-tab="uitleg">📖 Eerst de uitleg nog eens lezen</button>`:''}
+    ${wrong.length?`<button type="button" class="gl-fulltoggle" data-act="book-tab" data-tab="uitleg">Uitleg opnieuw doorlezen</button>`:''}
   </div>`;
 }
 
@@ -3871,33 +3878,30 @@ function renderGramExercise(n){
   }).join('');
   const isLast=gi>=total-1;
   const allDone=answeredCount>=total;
-  const nextLbl=!isLast?(ans?'Volgende vraag →':'Overslaan →'):(allDone?'Bekijk resultaat →':'Naar onbeantwoorde vraag →');
-  const qdots=exercises.map((_,k)=>{
-    const a=answers[k];
-    return `<button type="button" class="gl-dot ${k===gi?'on':''} ${a?(a.ok?'ok':'bad'):''}" data-act="gram-goto" data-i="${k}" aria-label="Vraag ${k+1}"></button>`;
-  }).join('');
+  const nextLbl=!isLast?(ans?'Volgende vraag':'Overslaan'):(allDone?'Resultaat bekijken':'Naar onbeantwoorde vraag');
+  const segCls=exercises.map((_,k)=>{const a=answers[k];return a?(a.ok?'ok':'bad'):''});
+  const segsHtml=glSegs(total,gi,'gram-goto',segCls).replace(/data-act="gram-goto" data-dir="set" data-i="(\d+)" data-iq="\d+"/g,'data-act="gram-goto" data-i="$1"');
   return `<div class="gl-panel">
     <div class="gl-topline">
       <span class="gl-kicker">Vraag ${gi+1} van ${total}</span>
-      <span class="gl-score-mini">✓ ${correctCount}/${answeredCount} goed</span>
+      <span class="gl-score-mini">${correctCount} van ${answeredCount} correct</span>
     </div>
-    ${glProgress(Math.max(0,answeredCount-1),total).replace(/width:\d+%/,'width:'+Math.round(100*answeredCount/total)+'%')}
+    ${segsHtml}
     <div class="gl-q">
       ${pic?`<div class="q-pic gram-pic">${pic}</div>`:''}
       <div class="gl-q-text">
         <span>${glFmt(ex.q)}</span>
-        ${arPart?`<button type="button" class="icon-btn" data-act="speak-text" data-text="${esc(arPart)}" aria-label="Hoor" style="width:36px;height:36px;flex-shrink:0">🔊</button>`:''}
+        ${arPart?`<button type="button" class="icon-btn" data-act="speak-text" data-text="${esc(arPart)}" aria-label="Afspelen">${GL_ICO_SPK}</button>`:''}
       </div>
       <div class="options" style="grid-template-columns:1fr">${optsHtml}</div>
-      ${ans?`<div class="gl-fb ${ans.ok?'ok':'no'}"><b>${ans.ok?'✓ Goed!':'✗ Niet helemaal.'}</b> <span>${glMix(ex.explain||'')}</span>${ans.ok?'':`<button type="button" class="btn btn-ghost btn-sm" data-act="book-tab" data-tab="uitleg">📖 Herlees de uitleg</button>`}</div>`:''}
+      ${ans?`<div class="gl-fb ${ans.ok?'ok':'no'}"><b>${ans.ok?'Correct':'Onjuist'}</b><span>${glMix(ex.explain||'')}</span>${ans.ok?'':`<button type="button" class="gl-link" data-act="book-tab" data-tab="uitleg">Uitleg herlezen</button>`}</div>`:''}
     </div>
     <div class="gl-actions">
       <button type="button" class="btn btn-secondary" data-act="gram-prev" data-gl="prev" ${gi===0?'disabled':''}>← Vorige</button>
-      <button type="button" class="btn btn-primary" data-act="gram-next" data-gl="next">${nextLbl}</button>
+      <button type="button" class="btn btn-primary" data-act="gram-next" data-gl="next">${nextLbl} →</button>
     </div>
-    <div class="gl-dots gl-qdots">${qdots}</div>
-    <div class="gl-toolbar"><span class="blurb">Plaatjes bij vragen</span><button type="button" class="btn btn-sm ${showPics?'btn-primary':'btn-secondary'}" data-act="toggle-pics">${showPics?'Aan':'Uit'}</button></div>
-    <p class="gl-hint">Toetsen 1–4 kiezen een antwoord · Enter gaat verder.</p>
+    <div class="gl-toolbar"><span>Afbeeldingen bij vragen</span><button type="button" class="gl-switch ${showPics?'on':''}" data-act="toggle-pics" role="switch" aria-checked="${showPics?'true':'false'}" aria-label="Afbeeldingen"><i></i></button></div>
+    <p class="gl-hint"><kbd>1</kbd>–<kbd>4</kbd> antwoord kiezen · <kbd>Enter</kbd> volgende</p>
   </div>`;
 }
 
@@ -3908,7 +3912,7 @@ function renderGlParse(n){
     <h2 class="gl-h">Ontleed de zin</h2>
     ${renderParsePane(n)}
     <div class="gl-actions">
-      <button type="button" class="btn btn-secondary" data-act="book-tab" data-tab="oefenen">← Oefenen</button>
+      <button type="button" class="btn btn-secondary" data-act="book-tab" data-tab="${glPrevTab(n,'ontleed')}">← ${GL_TAB_LABEL[glPrevTab(n,'ontleed')]}</button>
       <button type="button" class="btn btn-secondary" data-act="book-tab" data-tab="klaar">Afronden →</button>
     </div>
   </div>`;
@@ -3926,20 +3930,20 @@ function renderGlDone(n,g,cards){
   const nextN=(idx>=0&&idx<nums.length-1)?nums[idx+1]:null;
   const hasParse=parseTasksFor(n).length>0;
   const rows=[
-    cards.length?['uitleg','📘 Regels gelezen',!!st.uitleg,st.uitleg?cards.length+' kaarten':'nog niet afgerond']:null,
-    (g.examples||[]).length?['voorbeelden','👂 Voorbeelden beluisterd',!!st.voorbeelden,st.voorbeelden?(g.examples.length+' voorbeelden'):'nog niet afgerond']:null,
-    total?['oefenen','✍️ Oefeningen',answered>=total,answered>=total?(correct+'/'+total+' goed'):(answered+'/'+total+' beantwoord')]:null,
-    hasParse?['ontleed','🧩 Zinsontleding',!!st.ontleed,st.ontleed?'afgerond':'nog niet afgerond']:null
-  ].filter(Boolean).map(r=>`<button type="button" class="gl-check ${r[2]?'done':''}" data-act="book-tab" data-tab="${r[0]}"><span class="gl-check-ic">${r[2]?'✓':'○'}</span><span class="gl-check-t">${r[1]}</span><span class="gl-check-m">${esc(r[3])}</span></button>`).join('');
+    cards.length?['uitleg','Regels doorgenomen',!!st.uitleg,st.uitleg?cards.length+' kaarten':'nog niet afgerond']:null,
+    (g.examples||[]).length?['voorbeelden','Voorbeelden beluisterd',!!st.voorbeelden,st.voorbeelden?(g.examples.length+' voorbeelden'):'nog niet afgerond']:null,
+    total?['oefenen','Oefeningen',answered>=total,answered>=total?(correct+' van '+total+' correct'):(answered+' van '+total+' beantwoord')]:null,
+    hasParse?['ontleed','Zinsontleding',!!st.ontleed,st.ontleed?'afgerond':'nog niet afgerond']:null
+  ].filter(Boolean).map(r=>`<button type="button" class="gl-check ${r[2]?'done':''}" data-act="book-tab" data-tab="${r[0]}"><span class="gl-check-ic">${r[2]?GL_ICO_OK:''}</span><span class="gl-check-t">${r[1]}</span><span class="gl-check-m">${esc(r[3])}</span></button>`).join('');
   const recap=cards.map(c=>glSplit(c).lead).filter(Boolean).map(t=>`<li>${glMix(t.length>180?t.slice(0,177).trim()+'…':t)}</li>`).join('');
   return `<div class="gl-panel gl-done">
     <div class="gl-kicker">${pct>=100?'Les voltooid':'Voortgang van deze les'}</div>
     <div class="gl-score">${pct}<span>%</span></div>
-    <h2 class="gl-h" style="margin-bottom:12px">${pct>=100?'Mooi, deze les zit erop! 🎉':'Bijna klaar, rond de laatste stappen af.'}</h2>
+    <h2 class="gl-h" style="margin-bottom:16px">${pct>=100?esc(hoofdstuk(n))+' is afgerond':'Nog niet volledig afgerond'}</h2>
     <div class="gl-checks">${rows}</div>
-    ${recap?`<div class="gl-recap"><div class="gl-kicker">Spiekbrief: de kern van ${esc(hoofdstuk(n))}</div><ol>${recap}</ol></div>`:''}
+    ${recap?`<div class="gl-sub">Samenvatting van ${esc(hoofdstuk(n))}</div><ol class="gl-recap">${recap}</ol>`:''}
     <div class="gl-actions">
-      <button type="button" class="btn btn-secondary" data-act="start-learn" data-l="${n}">🗂 Oefen de woorden van H${n}</button>
+      <button type="button" class="btn btn-secondary" data-act="start-learn" data-l="${n}">Woorden oefenen (H${n})</button>
       ${nextN?`<button type="button" class="btn btn-primary" data-act="open-book" data-l="${nextN}" data-tab="start" data-gl="next">Volgende les: ${esc(hoofdstuk(nextN))} →</button>`:`<button type="button" class="btn btn-primary" data-act="book-list" data-gl="next">Alle hoofdstukken</button>`}
     </div>
   </div>`;
@@ -3966,7 +3970,7 @@ function renderBookLesson(){
     <div class="hub-toolbar" style="margin-bottom:8px">
       <button class="back" data-act="book-list" style="margin:0"><span>←</span> Alle hoofdstukken</button>
       <span class="grow"></span>
-      <button class="btn btn-secondary btn-sm" data-act="start-learn" data-l="${n}">🗂 Oefen woorden H${n}</button>
+      <button class="btn btn-secondary btn-sm" data-act="start-learn" data-l="${n}">Woorden oefenen (H${n})</button>
     </div>
     <div class="sh gl-head">
       <div class="sh-main">
@@ -3975,7 +3979,7 @@ function renderBookLesson(){
         <p>${glMix(g.title||'')}</p>
       </div>
       <div class="sh-progress-box">
-        <div class="sh-progress-label">Les-voortgang</div>
+        <div class="sh-progress-label">Lesvoortgang</div>
         <div class="sh-progress-pct">${pct}%</div>
         <div class="sh-progress-bar"><div class="sh-progress-fill" style="width:${pct}%"></div></div>
       </div>
@@ -3986,14 +3990,6 @@ function renderBookLesson(){
     </div>
   </div>`;
 }
-
-
-function glAvail(n){
-  const g=GRAMMAR[n]||{};
-  return GL_STEPS.map(s=>s.k).filter(k=>(k!=='voorbeelden'||(g.examples||[]).length)&&(k!=='oefenen'||(g.exercises||[]).length)&&(k!=='ontleed'||parseTasksFor(n).length));
-}
-function glNextTab(n,tab){const a=glAvail(n);const i=a.indexOf(tab);return a[Math.min(a.length-1,i+1)]||'klaar'}
-function glPrevTab(n,tab){const a=glAvail(n);const i=a.indexOf(tab);return a[Math.max(0,i-1)]||'start'}
 
 function renderConv(){
   const units=Object.entries(CONVERSATIONS);
