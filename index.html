@@ -163,6 +163,11 @@ let state = {
   bookTab: 'uitleg',
   gramIdx: 0,
   gramAnswers: {},
+  gramView: 'q',
+  glCard: 0,
+  glEx: 0,
+  glRev: false,
+  glFull: false,
   searchQ: '',
   convUnit: null,
   convOpen: {}
@@ -250,7 +255,6 @@ function saveD(){try{localStorage.setItem(LS.d,quizDir)}catch(e){}}
 function saveF(){try{localStorage.setItem(LS.f,flashDir)}catch(e){}}
 function saveG(){try{localStorage.setItem(LS.g,JSON.stringify({lessons:gramProgress,last:lastGrammar}))}catch(e){}}
 function getGram(n){if(!gramProgress[n])gramProgress[n]={idx:0,answers:{},done:false};return gramProgress[n]}
-function gramPct(n){const g=GRAMMAR[n];const total=g&&g.exercises?g.exercises.length:0;if(!total)return 0;const ans=getGram(n).answers||{};return Math.round(100*Object.keys(ans).length/total)}
 function gramScore(n){const ans=Object.values((getGram(n).answers)||{});const ok=ans.filter(a=>a&&a.ok).length;return{ok,total:ans.length}}
 
 function getP(id){if(!progress[id])progress[id]={box:0,seen:0,correct:0};return progress[id]}
@@ -3135,8 +3139,8 @@ function renderBook(){
     const n=lastGrammar;
     const title=(LESSON_META[n]||['',''])[0];
     const gp=getGram(n);
-    const tab=gp.tab||'uitleg';
-    const tabLbl={uitleg:'Uitleg',voorbeelden:'Voorbeelden',oefenen:'Oefenen',ontleed:'Ontleden'}[tab]||'Uitleg';
+    const tab=gp.tab||'start';
+    const tabLbl=GL_TAB_LABEL[tab]||'Overzicht';
     cont=`<button type="button" class="resume-row" data-act="open-book" data-l="${n}" data-tab="${tab}">
       <span class="resume-k">Verder lezen</span>
       <span class="resume-t">${esc(hoofdstuk(n))} · ${esc(title)}</span>
@@ -3567,194 +3571,429 @@ function renderParsePane(n){
     ${complete?`<div class="speak-result ${ok?'ok':'bad'}" style="display:block;margin-top:10px">${ok?'✓ Juist ontleed':('✗ Nog niet juist<br>'+why)}</div>`:''}
     <div class="mvp-actions" style="margin-top:12px">
       <button class="btn btn-secondary btn-sm" data-act="parse-reset">Leegmaken</button>
-      ${ok?`<button class="btn btn-primary btn-sm" data-act="parse-next">Volgende zin</button>`:''}
+      ${ok?`<button class="btn btn-primary btn-sm" data-act="parse-next">${state.parseI>=tasks.length-1?'Ontleden afronden ✓':'Volgende zin'}</button>`:''}
     </div>
   `;
 }
 
-function renderBookLesson(){
-  const n=Number(state.bookLesson)||1;
-  const g=GRAMMAR[n];
-  const title=(LESSON_META[n]||[hoofdstuk(n),''])[0];
-  if(!g)return`<div class="desktop-narrow"><div class="empty">Geen uitleg voor dit hoofdstuk.</div></div>`;
-  const tab=state.bookTab||'uitleg';
-  const examples=g.examples||[];
-  const exercises=g.exercises||[];
-  const nums=lessonNums();
-  const idx=nums.indexOf(n);
-  const prevN=idx>0?nums[idx-1]:null;
-  const nextN=(idx>=0&&idx<nums.length-1)?nums[idx+1]:null;
-  const pct=gramPct(n);
+/* ===== GRAMMATICA LEERPAD (stap-voor-stap) ===== */
+const GL_STEPS=[
+  {k:'start',l:'Overzicht'},
+  {k:'uitleg',l:'Leren'},
+  {k:'voorbeelden',l:'Luisteren'},
+  {k:'oefenen',l:'Oefenen'},
+  {k:'ontleed',l:'Ontleden'},
+  {k:'klaar',l:'Afronden'}
+];
+const GL_TAB_LABEL={start:'Overzicht',uitleg:'Leren',voorbeelden:'Luisteren',oefenen:'Oefenen',ontleed:'Ontleden',klaar:'Afronden'};
 
-  const ex=(examples).map(e=>`
-    <div class="ex">
-      <div>
-        <div class="ar ar-mark" lang="ar">${markAr(e.ar,'plain')}</div>
-        <div class="nl">${esc(e.nl)}</div>
-      </div>
-      <button class="icon-btn" style="width:36px;height:36px;flex-shrink:0" data-act="speak-text" data-text="${esc(e.ar)}">🔊</button>
+function glSteps(n){const gp=getGram(n);if(!gp.steps)gp.steps={};return gp.steps}
+
+function gramPct(n){
+  const g=GRAMMAR[n]; if(!g) return 0;
+  const gp=getGram(n), st=gp.steps||{};
+  const parts=[];
+  if(glCards(n).length) parts.push(st.uitleg?1:0);
+  if((g.examples||[]).length) parts.push(st.voorbeelden?1:0);
+  const total=g.exercises?g.exercises.length:0;
+  if(total) parts.push(Math.min(1,Object.keys(gp.answers||{}).length/total));
+  if(parseTasksFor(n).length) parts.push(st.ontleed?1:0);
+  if(!parts.length) return 0;
+  return Math.round(100*parts.reduce((a,b)=>a+b,0)/parts.length);
+}
+
+function glMark(n,k){
+  glSteps(n)[k]=true;
+  getGram(n).done=gramPct(n)>=100;
+  saveG();
+}
+
+function glGoto(tab){
+  const n=state.bookLesson;
+  state.bookTab=tab; state.view='book-lesson';
+  if(tab==='ontleed') state.parseLesson=null;
+  state.glRev=false;
+  if(tab==='oefenen'){
+    const g=GRAMMAR[n]; const t=g&&g.exercises?g.exercises.length:0;
+    state.gramView=(t&&Object.keys(state.gramAnswers||{}).length>=t)?'result':'q';
+  }
+  if(n){const gp=getGram(n);gp.tab=tab;lastGrammar=n;saveG()}
+}
+
+const _glCache={};
+function glCards(n){
+  if(_glCache[n]) return _glCache[n];
+  const g=GRAMMAR[n]; if(!g) return [];
+  const isEx=t=>/^voorbeeld/i.test(t);
+  const cards=[]; let cur=null, sec='';
+  for(const b of (g.fullText||[])){
+    if(b.h){ sec=/^hoofdstuk/i.test(b.h)?'':b.h; continue; }
+    if(b.p){
+      const t=String(b.p);
+      if(cur && glPureAr(t) && !glIsVocab(t)){ cur.ps.push(t); continue; }
+      const needNew=!cur || cur.ex.length>0 || (!isEx(t) && cur.ps.length>0 && !/[:：]\s*$/.test(cur.ps[cur.ps.length-1]));
+      if(needNew){ cur={sec,ps:[t],ex:[]}; cards.push(cur); } else cur.ps.push(t);
+    }else if(b.ar){
+      if(!cur){ cur={sec,ps:[],ex:[]}; cards.push(cur); }
+      cur.ex.push({ar:b.ar,nl:b.nl||''});
+    }
+  }
+  if(!cards.length){
+    (g.points||[]).forEach(p=>cards.push({sec:'',ps:[String(p)],ex:[]}));
+  }
+  _glCache[n]=cards;
+  return cards;
+}
+
+function glIsVocab(t){return (String(t||'').match(/·/g)||[]).length>=4}
+function glSplit(c){
+  const t=c.ps[0]||'';
+  if(glIsVocab(t)){
+    const ix=t.search(/[\u0600-\u06FF]/);
+    const intro=(ix>0?t.slice(0,ix):'').trim().replace(/[:：]\s*$/,'');
+    const nWords=t.split('·').length;
+    return {lead:(intro||'Woordenlijst')+' ('+nWords+' woorden)', rest:'', vocab:true};
+  }
+  const mk=t.match(/^\s*(?:\d+|[a-zA-Z])[.)]\s+/);
+  const pre=mk?mk[0]:'';
+  const body=t.slice(pre.length);
+  const m=body.match(/^[\s\S]*?[.!?؟](?=\s|$)/);
+  const lead=(pre+(m?m[0]:body)).trim();
+  return {lead, rest:t.slice(pre.length+(m?m[0].length:body.length)).trim()};
+}
+/** Woordenlijst "ar nl · ar nl" als aanklikbare chips met audio */
+function glVocab(t,skipIntro){
+  const ix=t.search(/[\u0600-\u06FF]/);
+  const intro=ix>0?t.slice(0,ix).trim():'';
+  const list=(ix>=0?t.slice(ix):t).split('·').map(s=>s.trim()).filter(Boolean);
+  const chips=list.map(it=>{
+    const m=it.match(/^((?:[\u0600-\u06FF\u0750-\u077F]+\s*)+)(\S[\s\S]*)?$/);
+    if(!m) return `<span class="gl-chip"><small>${glMix(it)}</small></span>`;
+    const ar=m[1].trim(), nl=(m[2]||'').trim();
+    return `<button type="button" class="gl-chip" data-act="speak-text" data-text="${esc(ar)}" title="Luister"><span class="ar ar-mark" lang="ar">${markAr(ar,'plain')}</span>${nl?`<small>${glMix(nl)}</small>`:''}</button>`;
+  }).join('');
+  return (!skipIntro&&intro?`<p class="gl-body">${glMix(intro)}</p>`:'')+`<div class="gl-vocab">${chips}</div>`;
+}
+function glPara(p){
+  if(glIsVocab(p)) return glVocab(p,false);
+  if(glPureAr(p)) return `<div class="gl-arlist ar" lang="ar">${esc(p)}</div>`;
+  return `<p class="gl-body">${glMix(p)}</p>`;
+}
+
+/** Veilig HTML maken en Arabische stukken in tekst groter/duidelijker tonen */
+function glMix(s){
+  return esc(String(s||'')).replace(/[\u0600-\u06FF\u0750-\u077F]+(?:[\s،؟]+[\u0600-\u06FF\u0750-\u077F]+)*/g,m=>'<span class="ar gl-ar" lang="ar">'+m+'</span>');
+}
+function glHasAr(s){return /[\u0600-\u06FF]/.test(String(s||''))}
+function glPureAr(s){return glHasAr(s)&&!/[a-zA-Z]{2,}/.test(String(s||''))}
+function glFmt(s){
+  const str=String(s||'');
+  if(glPureAr(str)) return `<span class="ar ar-mark" lang="ar" style="font-size:24px">${markAr(str,'plain')}</span>`;
+  return glMix(str);
+}
+
+function glStepper(n,tab){
+  const g=GRAMMAR[n]||{};
+  const gp=getGram(n), st=gp.steps||{};
+  const total=g.exercises?g.exercises.length:0;
+  const answered=Object.keys(gp.answers||{}).length;
+  const hasEx=(g.examples||[]).length>0;
+  const hasParse=parseTasksFor(n).length>0;
+  const done={
+    start:!!(st.uitleg||st.voorbeelden||answered),
+    uitleg:!!st.uitleg,
+    voorbeelden:!!st.voorbeelden,
+    oefenen:total>0&&answered>=total,
+    ontleed:!!st.ontleed,
+    klaar:gramPct(n)>=100
+  };
+  const list=GL_STEPS.filter(s=>(s.k!=='voorbeelden'||hasEx)&&(s.k!=='oefenen'||total>0)&&(s.k!=='ontleed'||hasParse));
+  return `<nav class="gl-steps" aria-label="Leerstappen">${list.map((s,i)=>`<button type="button" class="gl-step ${tab===s.k?'on':''} ${done[s.k]?'done':''}" data-act="book-tab" data-tab="${s.k}" ${tab===s.k?'aria-current="step"':''}><span class="gl-step-n">${done[s.k]&&tab!==s.k?'✓':(i+1)}</span><span class="gl-step-l">${s.l}</span></button>`).join('')}</nav>`;
+}
+
+function glProgress(i,total){
+  return `<div class="gl-progress"><i style="width:${total?Math.round(100*(i+1)/total):0}%"></i></div>`;
+}
+
+function glDots(total,cur,act,extra){
+  let out='';
+  for(let i=0;i<total;i++) out+=`<button type="button" class="gl-dot ${i===cur?'on':''} ${extra&&extra[i]?extra[i]:''}" data-act="${act}" data-dir="set" data-i="${i}" aria-label="Nummer ${i+1}"></button>`;
+  return `<div class="gl-dots">${out}</div>`;
+}
+
+/* ---------- Stap 0: Overzicht ---------- */
+function renderGlStart(n,g,cards){
+  const gp=getGram(n), st=glSteps(n);
+  const exs=(g.examples||[]).length, total=g.exercises?g.exercises.length:0, parse=parseTasksFor(n).length;
+  const mins=Math.max(3,Math.round(cards.length*0.8+exs*0.3+total*0.4+parse*0.5));
+  const started=!!(st.uitleg||(gp.card|0)>0);
+  const goals=cards.map((c,i)=>{
+    let t=glSplit(c).lead||c.sec||('Voorbeelden '+(i+1));
+    if(t.length>140) t=t.slice(0,137).trim()+'…';
+    return `<li><button type="button" data-act="gl-card" data-dir="set" data-i="${i}"><span class="gl-goal-n">${i+1}</span><span class="gl-goal-t">${glMix(t)}</span></button></li>`;
+  }).join('');
+  const road=[
+    ['📘','Leren',cards.length+' regelkaarten, één regel per scherm'],
+    exs?['👂','Luisteren',exs+' voorbeelden: luister, raad, check']:null,
+    total?['✍️','Oefenen',total+' vragen met uitleg en herhaal-fouten']:null,
+    parse?['🧩','Ontleden',parse+' zinnen ontleden (iʿrāb)']:null
+  ].filter(Boolean).map(r=>`<div class="gl-road-item"><span class="gl-road-ic">${r[0]}</span><div><b>${r[1]}</b><small>${esc(r[2])}</small></div></div>`).join('');
+  const full=(g.fullText||[]).map(b=>{
+    if(b.h) return `<h3 class="gl-full-h">${esc(b.h)}</h3>`;
+    if(b.ar) return `<div class="ex"><div><div class="ar ar-mark" lang="ar">${markAr(b.ar,'plain')}</div><div class="nl">${esc(b.nl||'')}</div></div><button class="icon-btn" data-act="speak-text" data-text="${esc(b.ar)}" style="width:34px;height:34px;flex-shrink:0" aria-label="Hoor">🔊</button></div>`;
+    if(b.p) return glPara(String(b.p));
+    return '';
+  }).join('');
+  return `<div class="gl-panel">
+    <div class="gl-kicker">Zo werkt deze les</div>
+    <h2 class="gl-h">Wat ga je leren?</h2>
+    <div class="gl-meta">
+      <span class="chip">⏱ ± ${mins} min</span>
+      <span class="chip">📘 ${cards.length} regels</span>
+      ${total?`<span class="chip">✍️ ${total} vragen</span>`:''}
+    </div>
+    <ul class="gl-goals">${goals}</ul>
+    <div class="gl-road">${road}</div>
+    <div class="gl-actions">
+      <button type="button" class="btn btn-primary" data-act="book-tab" data-tab="uitleg" data-gl="next">${started?'Verder met leren →':'Start met leren →'}</button>
+    </div>
+    <button type="button" class="gl-fulltoggle" data-act="gl-full">📚 ${state.glFull?'Verberg':'Lees'} de volledige lestekst</button>
+    ${state.glFull?`<div class="gl-full">${full}</div>`:''}
+  </div>`;
+}
+
+/* ---------- Stap 1: Leren (regelkaarten) ---------- */
+function renderGlLearn(n,g,cards){
+  if(!cards.length) return `<div class="gl-panel"><div class="empty">Geen uitleg beschikbaar.</div></div>`;
+  let i=Math.max(0,Math.min(cards.length-1,state.glCard|0));
+  const c=cards[i];
+  const sp=glSplit(c);
+  const last=i>=cards.length-1;
+  const extra=c.ps.slice(1).map(glPara).join('');
+  const ex=c.ex.map(e=>`<div class="ex">
+      <div><div class="ar ar-mark" lang="ar">${markAr(e.ar,'plain')}</div>${e.nl?`<div class="nl">${glMix(e.nl)}</div>`:''}</div>
+      <button class="icon-btn" style="width:36px;height:36px;flex-shrink:0" data-act="speak-text" data-text="${esc(e.ar)}" aria-label="Hoor">🔊</button>
     </div>`).join('');
+  return `<div class="gl-panel">
+    <div class="gl-topline"><span class="gl-kicker">Regel ${i+1} van ${cards.length}${c.sec?' · '+esc(c.sec):''}</span></div>
+    ${glProgress(i,cards.length)}
+    <article class="gl-card">
+      ${sp.lead?`<div class="gl-lead">${glMix(sp.lead)}</div>`:''}
+      ${sp.vocab?glVocab(c.ps[0],true):''}
+      ${sp.rest?`<p class="gl-body">${glMix(sp.rest)}</p>`:''}
+      ${extra}
+      ${ex?`<div class="gl-exlist">${ex}</div>`:''}
+    </article>
+    <div class="gl-actions">
+      <button type="button" class="btn btn-secondary" data-act="gl-card" data-dir="prev" data-gl="prev">← ${i===0?'Overzicht':'Vorige'}</button>
+      <button type="button" class="btn btn-primary" data-act="gl-card" data-dir="next" data-gl="next">${last?'Begrepen, naar luisteren →':'Begrepen, volgende →'}</button>
+    </div>
+    ${glDots(cards.length,i,'gl-card')}
+    <p class="gl-hint">Tip: gebruik ← → of Enter op je toetsenbord.</p>
+  </div>`;
+}
 
-  return`<div class="desktop-narrow">
-  <div class="hub-toolbar" style="margin-bottom:8px">
-    <button class="back" data-act="book-list" style="margin:0"><span>←</span> Alle hoofdstukken</button>
-    <span class="grow"></span>
-    <button class="btn btn-secondary btn-sm" data-act="start-learn" data-l="${n}">🗂 Oefen woorden H${n}</button>
-  </div>
+/* ---------- Stap 2: Luisteren (voorbeelden) ---------- */
+function renderGlListen(n,g){
+  const exs=g.examples||[];
+  if(!exs.length) return `<div class="gl-panel"><div class="empty">Geen voorbeelden.</div></div>`;
+  const i=Math.max(0,Math.min(exs.length-1,state.glEx|0));
+  const e=exs[i];
+  const rev=!!state.glRev;
+  const last=i>=exs.length-1;
+  return `<div class="gl-panel">
+    <div class="gl-topline"><span class="gl-kicker">Voorbeeld ${i+1} van ${exs.length} · luister en probeer te begrijpen</span></div>
+    ${glProgress(i,exs.length)}
+    <div class="gl-ex-card">
+      <button type="button" class="btn btn-secondary btn-sm" data-act="speak-text" data-text="${esc(e.ar)}">🔊 Luister</button>
+      <div class="ar ar-mark gl-ex-ar" lang="ar">${markAr(e.ar,'plain')}</div>
+      ${rev
+        ? `<div class="gl-ex-tr">${esc(romanizeAr(e.ar))}</div><div class="gl-ex-nl">${glMix(e.nl||'')}</div>`
+        : `<button type="button" class="btn btn-primary" data-act="gl-ex" data-dir="reveal" data-gl="reveal">Toon vertaling</button>`}
+    </div>
+    <div class="gl-actions">
+      <button type="button" class="btn btn-secondary" data-act="gl-ex" data-dir="prev" data-gl="prev">← ${i===0?'Terug naar leren':'Vorige'}</button>
+      <button type="button" class="btn ${rev?'btn-primary':'btn-secondary'}" data-act="gl-ex" data-dir="next" data-gl="next">${last?'Klaar, naar oefenen →':'Volgende →'}</button>
+    </div>
+    ${glDots(exs.length,i,'gl-ex')}
+    <p class="gl-hint">Eerst luisteren, dan zelf raden, dan pas de vertaling tonen (Spatie).</p>
+  </div>`;
+}
 
-  <div class="sh" style="margin-bottom:14px;padding-bottom:14px">
-    <div class="sh-main">
-      <div class="sh-eyebrow">Medina-boek Deel 1 · ${esc(hoofdstuk(n))}</div>
-      <h1 style="font-size:clamp(24px,3.5vw,32px)">${esc(title)} — ${esc(g.title||'')}</h1>
-      <p>${esc(g.summary||'')}</p>
+/* ---------- Stap 3: Oefenen ---------- */
+function renderGramResult(n,exercises,answers,correct){
+  const total=exercises.length, pct=Math.round(100*correct/total);
+  const wrong=exercises.map((e,i)=>({e,i,a:answers[i]})).filter(x=>x.a&&!x.a.ok);
+  const nextTab=parseTasksFor(n).length?'ontleed':'klaar';
+  const msg=pct>=80?'Sterk gedaan!':pct>=50?'Goed bezig, bijna er!':'Nog even oefenen, je komt er wel.';
+  return `<div class="gl-panel gl-result">
+    <div class="gl-kicker">Resultaat oefeningen</div>
+    <div class="gl-score">${correct}<span>/${total}</span></div>
+    <h2 class="gl-h" style="margin-bottom:4px">${msg}</h2>
+    <p class="gl-body" style="margin-bottom:12px">${pct}% goed${wrong.length?` · ${wrong.length} ${wrong.length===1?'vraag':'vragen'} om te herhalen`:' · alles goed!'}</p>
+    ${wrong.length?`<div class="gl-wrong">${wrong.map(x=>`<button type="button" class="gl-wrong-row" data-act="gram-goto" data-i="${x.i}">
+        <span class="gl-wrong-q">${glFmt(x.e.q)}</span>
+        <span class="gl-wrong-e">${glMix(x.e.explain||'')}</span>
+      </button>`).join('')}</div>`:''}
+    <div class="gl-actions">
+      ${wrong.length?`<button type="button" class="btn btn-secondary" data-act="gram-retry">↺ Herhaal fouten (${wrong.length})</button>`:`<button type="button" class="btn btn-secondary" data-act="gram-goto" data-i="0">Bekijk vragen</button>`}
+      <button type="button" class="btn btn-primary" data-act="book-tab" data-tab="${nextTab}" data-gl="next">${nextTab==='ontleed'?'Verder: zinsontleding →':'Afronden →'}</button>
     </div>
-    <div class="sh-progress-box">
-      <div class="sh-progress-label">Quiz-score</div>
-      <div class="sh-progress-pct">${pct}%</div>
-      <div class="sh-progress-bar"><div class="sh-progress-fill" style="width:${pct}%"></div></div>
-    </div>
-  </div>
-
-  <div class="lesson-tabs" role="tablist">
-    <button class="lesson-tab ${tab==='uitleg'?'active':''}" data-act="book-tab" data-tab="uitleg" role="tab">
-      Uitleg
-      <span class="tab-count">${(g.points||[]).length} punten</span>
-    </button>
-    <button class="lesson-tab ${tab==='voorbeelden'?'active':''}" data-act="book-tab" data-tab="voorbeelden" role="tab">
-      Voorbeelden
-      <span class="tab-count">${examples.length}</span>
-    </button>
-    <button class="lesson-tab ${tab==='oefenen'?'active':''}" data-act="book-tab" data-tab="oefenen" role="tab">
-      Oefenen
-      <span class="tab-count">${exercises.length}</span>
-    </button>
-    <button class="lesson-tab ${tab==='ontleed'?'active':''}" data-act="book-tab" data-tab="ontleed" role="tab">
-      Ontleed
-      <span class="tab-count">${parseTasksFor(n).length}</span>
-    </button>
-  </div>
-
-  <div class="lesson-pane ${tab==='uitleg'?'active':''}" data-pane="uitleg">
-    <div class="book-intro-card">
-      <div class="book-intro-kicker">Kernpunten van ${esc(hoofdstuk(n))}</div>
-      <ul style="padding-left:18px;margin:4px 0 0;font-size:13.5px;color:var(--ink-soft);line-height:1.55">
-        ${(g.points||[]).map(pt=>`<li style="margin-bottom:4px">${esc(pt)}</li>`).join('')}
-      </ul>
-    </div>
-    <div class="grammar-block book-text" style="background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 18px 10px">
-      ${(g.fullText||[]).map((block,bi)=>{
-        if(block.h) return `<h3 style="font-size:15.5px;font-weight:700;color:var(--forest);margin:${bi===0?'0':'18px'} 0 8px;padding-top:${bi===0?'0':'10px'};border-top:${bi===0?'none':'1px solid var(--line)'}">${esc(block.h)}</h3>`;
-        if(block.ar) return `<div class="ex" style="margin-bottom:8px"><div><div class="ar ar-mark" lang="ar">${markAr(block.ar,'plain')}</div><div class="nl">${esc(block.nl||'')}</div></div><button class="icon-btn" data-act="speak-text" data-text="${esc(block.ar)}" style="width:34px;height:34px;flex-shrink:0" aria-label="Hoor">🔊</button></div>`;
-        if(block.p) return `<p style="font-size:14.5px;line-height:1.65;color:var(--ink-soft);margin-bottom:10px">${esc(block.p)}</p>`;
-        return '';
-      }).join('')}
-    </div>
-    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-      <button class="btn btn-primary" data-act="book-tab" data-tab="voorbeelden" style="flex:1;min-width:140px">Naar voorbeelden (${examples.length}) →</button>
-    </div>
-  </div>
-
-  <div class="lesson-pane ${tab==='voorbeelden'?'active':''}" data-pane="voorbeelden">
-    <div class="grammar-block">
-      <h3 style="margin-bottom:8px">Voorbeelden uit ${esc(hoofdstuk(n))} (tik 🔊 om te beluisteren)</h3>
-      ${ex||'<p style="color:var(--muted);font-size:14px">Geen voorbeelden.</p>'}
-    </div>
-    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-      <button class="btn btn-secondary" data-act="book-tab" data-tab="uitleg" style="flex:1;min-width:120px">← Uitleg</button>
-      <button class="btn btn-primary" data-act="book-tab" data-tab="oefenen" style="flex:1;min-width:120px">Start oefeningen (${exercises.length}) →</button>
-    </div>
-  </div>
-
-  <div class="lesson-pane ${tab==='oefenen'?'active':''}" data-pane="oefenen">
-    ${exercises.length?renderGramExercise(n):`
-      <div class="card" style="background:var(--forest);color:var(--paper);margin-bottom:12px;padding:14px 16px">
-        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.8">Oefenen</div>
-        <div style="font-size:14px;margin-top:4px">Nog geen oefeningen voor dit hoofdstuk.</div>
-      </div>`}
-    <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
-      <button class="btn btn-secondary" data-act="book-tab" data-tab="voorbeelden" style="flex:1;min-width:120px">← Voorbeelden</button>
-      <button class="btn btn-primary" data-act="book-tab" data-tab="ontleed" style="flex:1;min-width:120px">Zinsontleding (Iʿrāb) →</button>
-    </div>
-  </div>
-
-  <div class="lesson-pane ${tab==='ontleed'?'active':''}" data-pane="ontleed">
-    ${renderParsePane(n)}
-    <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
-      <button class="btn btn-secondary" data-act="book-tab" data-tab="oefenen" style="flex:1;min-width:120px">← Oefenen</button>
-      <button class="btn btn-secondary" data-act="book-list" style="flex:1;min-width:120px">Alle hoofdstukken</button>
-    </div>
-  </div>
-
-  <div class="book-chapter-nav">
-    ${prevN?`<button type="button" class="btn btn-secondary btn-sm" data-act="open-book" data-l="${prevN}">← ${esc(hoofdstuk(prevN))}: ${esc((LESSON_META[prevN]||[''])[0])}</button>`:'<span></span>'}
-    ${nextN?`<button type="button" class="btn btn-primary btn-sm" data-act="open-book" data-l="${nextN}">${esc(hoofdstuk(nextN))}: ${esc((LESSON_META[nextN]||[''])[0])} →</button>`:''}
-  </div>
+    ${wrong.length?`<button type="button" class="gl-fulltoggle" data-act="book-tab" data-tab="uitleg">📖 Eerst de uitleg nog eens lezen</button>`:''}
   </div>`;
 }
 
 function renderGramExercise(n){
-  const picBar=`<div class="hub-toolbar" style="margin-bottom:10px"><span class="blurb">Plaatjes bij vragen</span><button type="button" class="btn btn-sm ${showPics?'btn-primary':'btn-secondary'}" data-act="toggle-pics">${showPics?'Aan':'Uit'}</button></div>`;
   const g=GRAMMAR[n];
   const exercises=(g&&g.exercises)||[];
   const total=exercises.length;
-  if(!total)return'';
+  if(!total)return '';
+  const answers=state.gramAnswers||{};
+  const answeredCount=Object.keys(answers).length;
+  const correctCount=Object.values(answers).filter(a=>a.ok).length;
+  if(state.gramView==='result' && answeredCount>=total) return renderGramResult(n,exercises,answers,correctCount);
   if(state.gramIdx==null||state.gramIdx<0)state.gramIdx=0;
   if(state.gramIdx>=total)state.gramIdx=total-1;
   const gi=state.gramIdx;
   const ex=exercises[gi];
-  const ans=(state.gramAnswers||{})[gi];
+  const ans=answers[gi];
   const needPic = ex.type==='pic' || !!ex.emoji;
   const pic = (needPic||showPics) ? (ex.emoji ? picHtml(ex.emoji, true) : picFromText((ex.q||'')+' '+(ex.explain||'')+' '+(ex.options||[]).join(' '), needPic)) : '';
-  const hasAr=s=>/[\u0600-\u06FF]/.test(String(s||''));
-  const pureAr=s=>hasAr(s) && !/[a-zA-Z]{2,}/.test(String(s||''));
-  const formatMixed=s=>{
-    const str=String(s||'');
-    if(pureAr(str)) return `<span class="ar ar-mark" lang="ar" style="font-size:24px">${markAr(str,'plain')}</span>`;
-    return esc(str).replace(/([\u0600-\u06FF\u064B-\u065F\u0670\s؟،]+(?=[\u0600-\u06FF\u064B-\u065F\u0670]))/g, m=>`<span class="ar" lang="ar" style="font-size:1.25em;padding:0 2px">${m}</span>`);
-  };
   const arPart=(String(ex.q||'').match(/[\u0600-\u06FF][\u0600-\u06FF\u064B-\u065F\u0670\s،؟.]*/g)||[]).join(' ').trim();
   const optsHtml=ex.options.map((o,j)=>{
     const isAnswer=j===ex.answer;
     const isPicked=ans&&j===ans.oi;
-    const isOptAr=pureAr(o);
+    const isOptAr=glPureAr(o);
     let cls='opt'+(isOptAr?'':' opt-nl');
     if(ans){if(isAnswer)cls+=' correct';else if(isPicked)cls+=' wrong'}
-    const inner=isOptAr?`<span class="ar-mark">${markAr(o,'plain')}</span>`:formatMixed(o);
+    const inner=isOptAr?`<span class="ar-mark">${markAr(o,'plain')}</span>`:glFmt(o);
     return `<button class="${cls}" data-act="gram-answer" data-qi="${gi}" data-oi="${j}" data-ok="${isAnswer}" ${ans?'disabled':''}><span class="opt-key">${j+1}</span>${inner}</button>`;
   }).join('');
-  const answeredCount=Object.keys(state.gramAnswers||{}).length;
-  const correctCount=Object.values(state.gramAnswers||{}).filter(a=>a.ok).length;
   const isLast=gi>=total-1;
-
-  return picBar+`
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-      <span style="font-size:12px;font-weight:700;color:var(--muted)">Vraag ${gi+1} van ${total}</span>
-      <span style="font-size:12px;font-weight:700;color:var(--forest)">${correctCount}/${answeredCount} goed</span>
+  const allDone=answeredCount>=total;
+  const nextLbl=!isLast?(ans?'Volgende vraag →':'Overslaan →'):(allDone?'Bekijk resultaat →':'Naar onbeantwoorde vraag →');
+  const qdots=exercises.map((_,k)=>{
+    const a=answers[k];
+    return `<button type="button" class="gl-dot ${k===gi?'on':''} ${a?(a.ok?'ok':'bad'):''}" data-act="gram-goto" data-i="${k}" aria-label="Vraag ${k+1}"></button>`;
+  }).join('');
+  return `<div class="gl-panel">
+    <div class="gl-topline">
+      <span class="gl-kicker">Vraag ${gi+1} van ${total}</span>
+      <span class="gl-score-mini">✓ ${correctCount}/${answeredCount} goed</span>
     </div>
-    <div class="progress" style="margin-bottom:14px"><i style="width:${Math.round(100*(gi+(ans?1:0))/total)}%"></i></div>
-    <div class="card" id="gq-${gi}">
-      <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px">${needPic?'Kijk naar de foto':'Vraag '+(gi+1)}</div>
+    ${glProgress(Math.max(0,answeredCount-1),total).replace(/width:\d+%/,'width:'+Math.round(100*answeredCount/total)+'%')}
+    <div class="gl-q">
       ${pic?`<div class="q-pic gram-pic">${pic}</div>`:''}
-      <div style="font-size:17px;font-weight:700;text-align:center;margin-bottom:10px;line-height:1.5;display:flex;align-items:center;justify-content:center;gap:8px">
-        <span>${formatMixed(ex.q)}</span>
+      <div class="gl-q-text">
+        <span>${glFmt(ex.q)}</span>
         ${arPart?`<button type="button" class="icon-btn" data-act="speak-text" data-text="${esc(arPart)}" aria-label="Hoor" style="width:36px;height:36px;flex-shrink:0">🔊</button>`:''}
       </div>
       <div class="options" style="grid-template-columns:1fr">${optsHtml}</div>
-      ${ans?`<div style="margin-top:10px;font-size:13px;font-weight:600;color:${ans.ok?'var(--ok)':'var(--clay)'}">${ans.ok?'✓ Goed! ':'✗ '}${esc(ex.explain||'')}</div>`:''}
+      ${ans?`<div class="gl-fb ${ans.ok?'ok':'no'}"><b>${ans.ok?'✓ Goed!':'✗ Niet helemaal.'}</b> <span>${glMix(ex.explain||'')}</span>${ans.ok?'':`<button type="button" class="btn btn-ghost btn-sm" data-act="book-tab" data-tab="uitleg">📖 Herlees de uitleg</button>`}</div>`:''}
     </div>
-    <div class="flash-controls" style="margin-top:16px">
-      <button class="icon-btn" data-act="gram-prev" ${gi===0?'disabled':''} aria-label="Vorige vraag">←</button>
-      ${isLast
-        ?`<button class="btn btn-primary" data-act="book-list">Klaar — alle lessen</button>`
-        :`<button class="btn btn-primary" data-act="gram-next">Volgende</button>`}
-      <button class="icon-btn" data-act="gram-next" ${isLast?'disabled':''} aria-label="Volgende vraag">→</button>
+    <div class="gl-actions">
+      <button type="button" class="btn btn-secondary" data-act="gram-prev" data-gl="prev" ${gi===0?'disabled':''}>← Vorige</button>
+      <button type="button" class="btn btn-primary" data-act="gram-next" data-gl="next">${nextLbl}</button>
     </div>
-    <p class="swipe-hint">👉 swipe naar links/rechts om verder te gaan</p>`;
+    <div class="gl-dots gl-qdots">${qdots}</div>
+    <div class="gl-toolbar"><span class="blurb">Plaatjes bij vragen</span><button type="button" class="btn btn-sm ${showPics?'btn-primary':'btn-secondary'}" data-act="toggle-pics">${showPics?'Aan':'Uit'}</button></div>
+    <p class="gl-hint">Toetsen 1–4 kiezen een antwoord · Enter gaat verder.</p>
+  </div>`;
+}
+
+/* ---------- Stap 4: Ontleden ---------- */
+function renderGlParse(n){
+  return `<div class="gl-panel">
+    <div class="gl-kicker">Zinsontleding (iʿrāb)</div>
+    <h2 class="gl-h">Ontleed de zin</h2>
+    ${renderParsePane(n)}
+    <div class="gl-actions">
+      <button type="button" class="btn btn-secondary" data-act="book-tab" data-tab="oefenen">← Oefenen</button>
+      <button type="button" class="btn btn-secondary" data-act="book-tab" data-tab="klaar">Afronden →</button>
+    </div>
+  </div>`;
+}
+
+/* ---------- Stap 5: Afronden ---------- */
+function renderGlDone(n,g,cards){
+  const gp=getGram(n), st=glSteps(n);
+  const pct=gramPct(n);
+  const total=g.exercises?g.exercises.length:0;
+  const answers=gp.answers||{};
+  const answered=Object.keys(answers).length;
+  const correct=Object.values(answers).filter(a=>a.ok).length;
+  const nums=lessonNums(); const idx=nums.indexOf(Number(n));
+  const nextN=(idx>=0&&idx<nums.length-1)?nums[idx+1]:null;
+  const hasParse=parseTasksFor(n).length>0;
+  const rows=[
+    cards.length?['uitleg','📘 Regels gelezen',!!st.uitleg,st.uitleg?cards.length+' kaarten':'nog niet afgerond']:null,
+    (g.examples||[]).length?['voorbeelden','👂 Voorbeelden beluisterd',!!st.voorbeelden,st.voorbeelden?(g.examples.length+' voorbeelden'):'nog niet afgerond']:null,
+    total?['oefenen','✍️ Oefeningen',answered>=total,answered>=total?(correct+'/'+total+' goed'):(answered+'/'+total+' beantwoord')]:null,
+    hasParse?['ontleed','🧩 Zinsontleding',!!st.ontleed,st.ontleed?'afgerond':'nog niet afgerond']:null
+  ].filter(Boolean).map(r=>`<button type="button" class="gl-check ${r[2]?'done':''}" data-act="book-tab" data-tab="${r[0]}"><span class="gl-check-ic">${r[2]?'✓':'○'}</span><span class="gl-check-t">${r[1]}</span><span class="gl-check-m">${esc(r[3])}</span></button>`).join('');
+  const recap=cards.map(c=>glSplit(c).lead).filter(Boolean).map(t=>`<li>${glMix(t.length>180?t.slice(0,177).trim()+'…':t)}</li>`).join('');
+  return `<div class="gl-panel gl-done">
+    <div class="gl-kicker">${pct>=100?'Les voltooid':'Voortgang van deze les'}</div>
+    <div class="gl-score">${pct}<span>%</span></div>
+    <h2 class="gl-h" style="margin-bottom:12px">${pct>=100?'Mooi, deze les zit erop! 🎉':'Bijna klaar, rond de laatste stappen af.'}</h2>
+    <div class="gl-checks">${rows}</div>
+    ${recap?`<div class="gl-recap"><div class="gl-kicker">Spiekbrief: de kern van ${esc(hoofdstuk(n))}</div><ol>${recap}</ol></div>`:''}
+    <div class="gl-actions">
+      <button type="button" class="btn btn-secondary" data-act="start-learn" data-l="${n}">🗂 Oefen de woorden van H${n}</button>
+      ${nextN?`<button type="button" class="btn btn-primary" data-act="open-book" data-l="${nextN}" data-tab="start" data-gl="next">Volgende les: ${esc(hoofdstuk(nextN))} →</button>`:`<button type="button" class="btn btn-primary" data-act="book-list" data-gl="next">Alle hoofdstukken</button>`}
+    </div>
+  </div>`;
+}
+
+/* ---------- Pagina ---------- */
+function renderBookLesson(){
+  const n=Number(state.bookLesson)||1;
+  const g=GRAMMAR[n];
+  if(!g)return `<div class="desktop-narrow"><div class="empty">Geen uitleg voor dit hoofdstuk.</div></div>`;
+  const title=(LESSON_META[n]||[hoofdstuk(n),''])[0];
+  const cards=glCards(n);
+  let tab=state.bookTab||'start';
+  if(!GL_STEPS.some(s=>s.k===tab)) tab='start';
+  const pct=gramPct(n);
+  let panel='';
+  if(tab==='start') panel=renderGlStart(n,g,cards);
+  else if(tab==='uitleg') panel=renderGlLearn(n,g,cards);
+  else if(tab==='voorbeelden') panel=renderGlListen(n,g);
+  else if(tab==='oefenen') panel=(g.exercises&&g.exercises.length)?renderGramExercise(n):`<div class="gl-panel"><div class="empty">Nog geen oefeningen voor dit hoofdstuk.</div></div>`;
+  else if(tab==='ontleed') panel=renderGlParse(n);
+  else panel=renderGlDone(n,g,cards);
+  return `<div class="desktop-page gl-page">
+    <div class="hub-toolbar" style="margin-bottom:8px">
+      <button class="back" data-act="book-list" style="margin:0"><span>←</span> Alle hoofdstukken</button>
+      <span class="grow"></span>
+      <button class="btn btn-secondary btn-sm" data-act="start-learn" data-l="${n}">🗂 Oefen woorden H${n}</button>
+    </div>
+    <div class="sh gl-head">
+      <div class="sh-main">
+        <div class="sh-eyebrow">Medina-boek Deel 1 · ${esc(hoofdstuk(n))}</div>
+        <h1>${esc(title)}</h1>
+        <p>${glMix(g.title||'')}</p>
+      </div>
+      <div class="sh-progress-box">
+        <div class="sh-progress-label">Les-voortgang</div>
+        <div class="sh-progress-pct">${pct}%</div>
+        <div class="sh-progress-bar"><div class="sh-progress-fill" style="width:${pct}%"></div></div>
+      </div>
+    </div>
+    <div class="gl-wrap">
+      ${glStepper(n,tab)}
+      <div class="gl-main">${panel}</div>
+    </div>
+  </div>`;
 }
 
 
-
-
+function glAvail(n){
+  const g=GRAMMAR[n]||{};
+  return GL_STEPS.map(s=>s.k).filter(k=>(k!=='voorbeelden'||(g.examples||[]).length)&&(k!=='oefenen'||(g.exercises||[]).length)&&(k!=='ontleed'||parseTasksFor(n).length));
+}
+function glNextTab(n,tab){const a=glAvail(n);const i=a.indexOf(tab);return a[Math.min(a.length-1,i+1)]||'klaar'}
+function glPrevTab(n,tab){const a=glAvail(n);const i=a.indexOf(tab);return a[Math.max(0,i-1)]||'start'}
 
 function renderConv(){
   const units=Object.entries(CONVERSATIONS);
@@ -4298,11 +4537,12 @@ document.addEventListener('click',e=>{
     lastGrammar=n;saveG();
     const gp=getGram(n);
     // restore where user left off
-    const tab=btn.dataset.tab||gp.tab||'uitleg';
-    state.bookTab=tab; if(tab==='ontleed'){state.parseLesson=null;}
+    const tab0=btn.dataset.tab||gp.tab||'start';
     state.gramIdx=gp.idx||0;
     state.gramAnswers=Object.assign({},gp.answers||{});
+    state.glCard=gp.card|0; state.glEx=0; state.glRev=false; state.glFull=false;
     state.view='book-lesson';
+    glGoto(tab0);
     render();(document.getElementById("app")||window).scrollTop=0;
   }
   else if(act==='parse-sent'){state.parseShowSent=!state.parseShowSent;render();}
@@ -4335,6 +4575,7 @@ document.addEventListener('click',e=>{
   }
   else if(act==='parse-next'){
     state.parseI=(state.parseI||0)+1;
+    if(state.parseI>=parseTasksFor(state.bookLesson).length && state.bookLesson) glMark(state.bookLesson,'ontleed');
     state.parseMap={};state.parsePick=null;state.parseShowSent=false;state.parseInfo=null;
     const n=state.bookLesson;
     if(state.parseI>=parseTasksFor(n).length) state.parseI=0;
@@ -4342,9 +4583,7 @@ document.addEventListener('click',e=>{
   }
   else if(act==='book-tab'){
     const tab=btn.getAttribute('data-tab')||btn.dataset.tab||'uitleg';
-    state.bookTab=tab; if(tab==='ontleed'){state.parseLesson=null;}
-    state.view='book-lesson';
-    if(state.bookLesson){const gp=getGram(state.bookLesson);gp.tab=tab;lastGrammar=state.bookLesson;saveG()}
+    glGoto(tab);
     render();
     (document.getElementById("app")||window).scrollTop=0;
   }
@@ -4359,22 +4598,77 @@ document.addEventListener('click',e=>{
     gp.answers=Object.assign({},state.gramAnswers);
     gp.idx=state.gramIdx||0;
     const total=g.exercises.length;
-    gp.done=Object.keys(gp.answers).length>=total;
+    if(Object.keys(gp.answers).length>=total) glSteps(state.bookLesson).oefenen=true;
+    gp.done=gramPct(state.bookLesson)>=100;
     lastGrammar=state.bookLesson;saveG();
     if(ok)playOk(); else playNo();
     render();
   }
   else if(act==='gram-prev'){
-    state.gramIdx=Math.max(0,(state.gramIdx||0)-1);
+    state.gramIdx=Math.max(0,(state.gramIdx||0)-1); state.gramView='q';
     const gp=getGram(state.bookLesson);gp.idx=state.gramIdx;gp.tab='oefenen';saveG();
     render();(document.getElementById("app")||window).scrollTop=0;
   }
   else if(act==='gram-next'){
-    const g=GRAMMAR[state.bookLesson];const total=g&&g.exercises?g.exercises.length:0;
-    state.gramIdx=Math.min(Math.max(0,total-1),(state.gramIdx||0)+1);
-    const gp=getGram(state.bookLesson);gp.idx=state.gramIdx;gp.tab='oefenen';lastGrammar=state.bookLesson;saveG();
+    const n=state.bookLesson;
+    const g=GRAMMAR[n];const total=g&&g.exercises?g.exercises.length:0;
+    const gp=getGram(n);
+    let gi=state.gramIdx||0;
+    if(gi<total-1) gi++;
+    else{
+      const ans=state.gramAnswers||{};
+      let first=-1; for(let k=0;k<total;k++){ if(!ans[k]){first=k;break} }
+      if(first>=0) gi=first;
+      else{ state.gramIdx=gi; state.gramView='result'; glMark(n,'oefenen'); render();(document.getElementById("app")||window).scrollTop=0; return; }
+    }
+    state.gramIdx=gi; state.gramView='q'; gp.idx=gi; gp.tab='oefenen'; lastGrammar=n; saveG();
     render();(document.getElementById("app")||window).scrollTop=0;
   }
+  else if(act==='gram-goto'){
+    const gp=getGram(state.bookLesson);
+    state.gramIdx=+btn.dataset.i||0; state.gramView='q'; gp.idx=state.gramIdx; gp.tab='oefenen'; saveG();
+    render();(document.getElementById("app")||window).scrollTop=0;
+  }
+  else if(act==='gram-retry'){
+    const n=state.bookLesson, gp=getGram(n);
+    const ans=state.gramAnswers||{};
+    let first=-1;
+    Object.keys(ans).map(Number).sort((x,y)=>x-y).forEach(k=>{ if(!ans[k].ok){ if(first<0) first=k; delete ans[k]; } });
+    state.gramAnswers=ans; gp.answers=Object.assign({},ans);
+    if(gp.steps) delete gp.steps.oefenen;
+    gp.done=false;
+    state.gramIdx=first<0?0:first; state.gramView='q'; gp.idx=state.gramIdx; saveG();
+    render();(document.getElementById("app")||window).scrollTop=0;
+  }
+  else if(act==='gl-card'){
+    const n=state.bookLesson; const cards=glCards(n); const dir=btn.dataset.dir;
+    let i=state.glCard|0;
+    if(dir==='set') i=Math.max(0,Math.min(cards.length-1,+btn.dataset.i||0));
+    else if(dir==='next'){
+      if(i>=cards.length-1){ glMark(n,'uitleg'); state.glEx=0; glGoto(glNextTab(n,'uitleg')); render();(document.getElementById("app")||window).scrollTop=0; return; }
+      i++;
+    }else{
+      if(i<=0){ glGoto('start'); render();(document.getElementById("app")||window).scrollTop=0; return; }
+      i--;
+    }
+    state.glCard=i; getGram(n).card=i;
+    glGoto('uitleg'); render();(document.getElementById("app")||window).scrollTop=0;
+  }
+  else if(act==='gl-ex'){
+    const n=state.bookLesson; const exs=(GRAMMAR[n]&&GRAMMAR[n].examples)||[]; const dir=btn.dataset.dir;
+    let i=state.glEx|0;
+    if(dir==='reveal'){ state.glRev=true; render(); return; }
+    if(dir==='set') i=Math.max(0,Math.min(exs.length-1,+btn.dataset.i||0));
+    else if(dir==='next'){
+      if(i>=exs.length-1){ glMark(n,'voorbeelden'); glGoto(glNextTab(n,'voorbeelden')); render();(document.getElementById("app")||window).scrollTop=0; return; }
+      i++;
+    }else{
+      if(i<=0){ glGoto('uitleg'); render();(document.getElementById("app")||window).scrollTop=0; return; }
+      i--;
+    }
+    state.glEx=i; state.glRev=false; render();
+  }
+  else if(act==='gl-full'){ state.glFull=!state.glFull; render(); }
   else if(act==='add-word'){
     const ar=document.getElementById('f-ar').value.trim();
     const nl=document.getElementById('f-nl').value.trim();
@@ -4438,6 +4732,15 @@ document.addEventListener('keydown',e=>{
       if(prevBtn){e.preventDefault();prevBtn.click();return}
     }
   }
+  if(state.view==='book-lesson'){
+    const onBtn=e.target&&e.target.closest&&e.target.closest('button');
+    if(!(onBtn&&(e.key==='Enter'||e.key===' '))){
+      const q=sel=>document.querySelector(sel);
+      if(e.key==='ArrowRight'||e.key==='Enter'){const nb=q('.gl-panel [data-gl="next"]:not(:disabled)');if(nb){e.preventDefault();nb.click();return}}
+      if(e.key==='ArrowLeft'){const pb=q('.gl-panel [data-gl="prev"]:not(:disabled)');if(pb){e.preventDefault();pb.click();return}}
+      if(e.key===' '&&state.bookTab==='voorbeelden'){const rb=q('[data-gl="reveal"]');if(rb){e.preventDefault();rb.click();return}}
+    }
+  }
 });
 
 /* ===== SWIPE NAVIGATION (mobiel) ===== */
@@ -4458,13 +4761,9 @@ function onSwipe(dir){
       if(!total)return;
       if(dir==='left'){if((state.gramIdx||0)<total-1){state.gramIdx=(state.gramIdx||0)+1;render()}}
       else{if((state.gramIdx||0)>0){state.gramIdx=(state.gramIdx||0)-1;render()}}
-    }else if(state.bookTab==='uitleg'){
-      if(dir==='left'){state.bookTab='voorbeelden';render();(document.getElementById("app")||window).scrollTop=0}
-    }else if(state.bookTab==='voorbeelden'){
-      if(dir==='left'){state.bookTab='oefenen';render();(document.getElementById("app")||window).scrollTop=0}
-      else{state.bookTab='uitleg';render();(document.getElementById("app")||window).scrollTop=0}
-    }else if(state.bookTab==='ontleed'){
-      if(dir==='right'){state.bookTab='oefenen';render();(document.getElementById("app")||window).scrollTop=0}
+    }else if(state.bookTab==='uitleg'||state.bookTab==='voorbeelden'){
+      const sb=document.querySelector('.gl-panel [data-gl="'+(dir==='left'?'next':'prev')+'"]');
+      if(sb) sb.click();
     }
   }
 }
