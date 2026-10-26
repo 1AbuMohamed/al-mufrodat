@@ -3571,7 +3571,7 @@ function renderParsePane(n){
     ${complete?`<div class="speak-result ${ok?'ok':'bad'}" style="display:block;margin-top:10px">${ok?'<b>Correct ontleed</b>':('<b>Nog niet juist</b><br>'+why)}</div>`:''}
     <div class="mvp-actions" style="margin-top:12px">
       <button class="btn btn-secondary btn-sm" data-act="parse-reset">Leegmaken</button>
-      ${ok?`<button class="btn btn-primary btn-sm" data-act="parse-next">${state.parseI>=tasks.length-1?'Ontleden afronden ✓':'Volgende zin'}</button>`:''}
+      ${ok?`<button class="btn btn-primary btn-sm" data-act="parse-next">${state.parseI>=tasks.length-1?'Ontleden afronden':'Volgende zin'}</button>`:''}
     </div>
   `;
 }
