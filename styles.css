@@ -1088,6 +1088,7 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
   .gl-road-item:last-child{border-right:0!important}
 }
 
+
 /* ===== MEDINA TABELLEN, KLINKERTEKENS & 4-FASEN WOORDENSCHAT ===== */
 .intro-banner{padding:20px 22px;border:1px solid var(--line-strong);background:var(--surface)}
 .intro-banner-head{display:flex;align-items:center;justify-content:space-between;gap:14px}
