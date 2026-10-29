@@ -129,7 +129,72 @@ window.G2_LESSONS = {
       }
     ],
     "vocab": [],
-    "bookExercises": []
+    "bookExercises": [
+      {
+        "instr": "Boekoefening blz. 11: Identificeer de juiste grammaticale term en klinkerteken",
+        "page": 11,
+        "items": [
+          {
+            "type": "mc",
+            "q": "Welk klinkerteken duidt de korte 'a'-klank aan?",
+            "options": [
+              "Fathah ( َ )",
+              "Kasrah ( ِ )",
+              "Dammah ( ُ )",
+              "Soekoen ( ْ )"
+            ],
+            "answer": 0,
+            "explain": "Fathah ( َ ) staat boven de letter voor de korte 'a'."
+          },
+          {
+            "type": "mc",
+            "q": "Welk klinkerteken duidt de korte 'ie'-klank aan?",
+            "options": [
+              "Kasrah ( ِ )",
+              "Fathah ( َ )",
+              "Dammah ( ُ )",
+              "Shaddah ( ّ )"
+            ],
+            "answer": 0,
+            "explain": "Kasrah ( ِ ) staat onder de letter voor de korte 'ie'."
+          },
+          {
+            "type": "mc",
+            "q": "Welk klinkerteken duidt de korte 'oe'-klank aan?",
+            "options": [
+              "Dammah ( ُ )",
+              "Fathah ( َ )",
+              "Kasrah ( ِ )",
+              "Soekoen ( ْ )"
+            ],
+            "answer": 0,
+            "explain": "Dammah ( ُ ) staat boven de letter voor de korte 'oe'."
+          },
+          {
+            "type": "mc",
+            "q": "Wat duidt het teken Soekoen ( ْ ) aan?",
+            "options": [
+              "De afwezigheid van een klinker (rustteken)",
+              "Verdubbeling van de letter",
+              "Een lange klinker"
+            ],
+            "answer": 0,
+            "explain": "Soekoen betekent 'rust' en geeft aan dat de letter klinkerloos is."
+          },
+          {
+            "type": "mc",
+            "q": "Wat duidt het teken Shaddah ( ّ ) aan?",
+            "options": [
+              "De verdubbeling van een letter (tashdīd)",
+              "Een korte klinker",
+              "De afwezigheid van klinkers"
+            ],
+            "answer": 0,
+            "explain": "Shaddah ( ّ ) verdubbelt de letter (zoals mm in Muhammad)."
+          }
+        ]
+      }
+    ]
   },
   "1": {
     "n": 1,
@@ -351,6 +416,18 @@ window.G2_LESSONS = {
             "answer": 1,
             "nl": "Is dit een huis?",
             "explain": "«أَ» aan het begin van de zin = vraag."
+          },
+          {
+            "type": "parse",
+            "sentence": "هَذَا مَسْجِدٌ",
+            "target": "مَسْجِدٌ",
+            "options": [
+              "خَبَر مَرْفُوع (Gezegde van de nominale zin)",
+              "مُبْتَدَأ (Onderwerp)",
+              "فَاعِل (Dader van werkwoord)"
+            ],
+            "answer": 0,
+            "explain": "In de nominale zin «هَذَا مَسْجِدٌ» is هَذَا het onderwerp (Mubtada') en مَسْجِدٌ het gezegde (Khabar Marfū' met Tanwīn Dammah)."
           }
         ]
       }
@@ -479,7 +556,48 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 14: Beantwoord de vragen met نَعَمْ of لَا",
+        "instr": "Boekoefening 1 (blz. 14): Lees en schrijf met de juiste klinkers (Iqra' waktub)",
+        "page": 14,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "هَذَا مَسْجِد_ وَهَذَا مَكْتَب_.",
+            "options": [
+              "ٌ / ٌ",
+              "ُ / ُ",
+              "ٍ / ٍ"
+            ],
+            "answer": 0,
+            "nl": "Dit is een moskee en dit is een bureau.",
+            "explain": "Onbepaalde naamwoorden eindigen op Tanwien (-un)."
+          },
+          {
+            "type": "fill",
+            "ar": "هَذَا قَلَم_ وَهَذَا سَرِير_.",
+            "options": [
+              "ٌ / ٌ",
+              "َ / َ",
+              "ُ / ُ"
+            ],
+            "answer": 0,
+            "nl": "Dit is een pen en dit is een bed.",
+            "explain": "قَلَمٌ en سَرِيرٌ hebben Tanwien Dammah."
+          },
+          {
+            "type": "order",
+            "nl": "Dit is een stoel en dit is een huis.",
+            "words": [
+              "هَذَا",
+              "كُرْسِيٌّ",
+              "وَهَذَا",
+              "بَيْتٌ."
+            ],
+            "explain": "هَذَا כُرْسِيٌّ وَهَذَا بَيْتٌ."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 14): Beantwoord de vragen met behulp van de afbeeldingen",
         "page": 14,
         "items": [
           {
@@ -487,20 +605,85 @@ window.G2_LESSONS = {
             "q": "أَهَذَا بَيْتٌ؟ (Kijkend naar een moskee)",
             "options": [
               "لَا، هَذَا مَسْجِدٌ.",
-              "نَعَمْ، هَذَا بَيْتٌ."
+              "نَعَمْ، هَذَا بَيْتٌ.",
+              "مَا هَذَا؟"
             ],
             "answer": 0,
-            "explain": "Bij een ontkennend antwoord: لَا، هَذَا مَسْجِدٌ."
+            "explain": "Ontkennend antwoord: لَا، هَذَا مَسْجِدٌ."
           },
           {
             "type": "mc",
             "q": "أَهَذَا مِفْتَاحٌ؟ (Kijkend naar een pen)",
             "options": [
               "لَا، هَذَا قَلَمٌ.",
-              "نَعَمْ، هَذَا مِفْتَاحٌ."
+              "نَعَمْ، هَذَا مِفْتَاحٌ.",
+              "هَذَا كِتَابٌ."
             ],
             "answer": 0,
             "explain": "قَلَمٌ = een pen."
+          },
+          {
+            "type": "mc",
+            "q": "أَهَذَا قَمِيصٌ؟ (Kijkend naar een hemd)",
+            "options": [
+              "نَعَمْ، هَذَا قَمِيصٌ.",
+              "لَا، هَذَا بَيْتٌ.",
+              "لَا، هَذَا مِنْدِيلٌ."
+            ],
+            "answer": 0,
+            "explain": "Bevestigend antwoord: نَعَمْ، هَذَا قَمِيصٌ."
+          },
+          {
+            "type": "mc",
+            "q": "أَهَذَا نَجْمٌ؟ (Kijkend naar een ster)",
+            "options": [
+              "نَعَمْ، هَذَا نَجْمٌ.",
+              "لَا، هَذَا قَمَرٌ.",
+              "مَا هَذَا؟"
+            ],
+            "answer": 0,
+            "explain": "نَعَمْ، هَذَا نَجْمٌ (Ja, dit is een ster)."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 3 (blz. 14): Vragen met مَا (wat) en مَنْ (wie)",
+        "page": 14,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "_ هَذَا؟ هَذَا طَبِيبٌ.",
+            "options": [
+              "مَنْ",
+              "مَا",
+              "أَ"
+            ],
+            "answer": 0,
+            "nl": "Wie is dit? Dit is een dokter.",
+            "explain": "Voor verstandhebbende personen gebruik je مَنْ (wie?)."
+          },
+          {
+            "type": "fill",
+            "ar": "_ هَذَا؟ هَذَا مَسْجِدٌ.",
+            "options": [
+              "مَا",
+              "مَنْ",
+              "أَيْنَ"
+            ],
+            "answer": 0,
+            "nl": "Wat is dit? Dit is een moskee.",
+            "explain": "Voor voorwerpen gebruik je مَا (wat?)."
+          },
+          {
+            "type": "order",
+            "nl": "Wie is dit? Dit is een handelaar.",
+            "words": [
+              "مَنْ",
+              "هَذَا؟",
+              "هَذَا",
+              "تَاجِرٌ."
+            ],
+            "explain": "مَنْ هَذَا؟ هَذَا تَاجِرٌ."
           }
         ]
       }
@@ -630,32 +813,72 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 16: Lees en vul het juiste aanwijzend voornaamwoord in",
+        "instr": "Boekoefening 1 (blz. 16): Lees en schrijf met de juiste klinkers",
         "page": 16,
         "items": [
           {
             "type": "fill",
-            "ar": "هَذَا مَسْجِدٌ وَ_ بَيْتٌ.",
+            "ar": "هَذَا سُكَّر_ وَذَلِكَ لَبَن_.",
             "options": [
-              "ذَلِكَ",
-              "مَا",
-              "مَنْ"
+              "ٌ / ٌ",
+              "ُ / ُ",
+              "ٍ / ٍ"
+            ],
+            "answer": 0,
+            "nl": "Dit is suiker en dat is melk.",
+            "explain": "سُكَّرٌ en لَبَنٌ krijgen Tanwien Dammah."
+          },
+          {
+            "type": "order",
+            "nl": "Dit is een handelaar en dat is een imam.",
+            "words": [
+              "هَذَا",
+              "تَاجِرٌ",
+              "وَذَلِكَ",
+              "إِمَامٌ."
+            ],
+            "explain": "هَذَا تَاجِرٌ وَذَلِكَ إِمَامٌ."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 16): Kies tussen هَذَا (dichtbij) en ذَلِكَ (ver weg)",
+        "page": 16,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "_ مَسْجِدٌ (dichtbij) وَ_ بَيْتٌ (ver weg).",
+            "options": [
+              "هَذَا / ذَلِكَ",
+              "ذَلِكَ / هَذَا",
+              "هَذَا / هَذَا"
             ],
             "answer": 0,
             "nl": "Dit is een moskee en dat is een huis.",
-            "explain": "ذَلِكَ = dat (voor mannelijk ver weg)."
+            "explain": "هَذَا voor dichtbij, ذَلِكَ voor ver weg."
           },
           {
             "type": "fill",
             "ar": "مَا ذَلِكَ؟ ذَلِكَ _.",
             "options": [
               "نَجْمٌ",
-              "قَلَمًا",
-              "الْبَيْتِ"
+              "نَجْمًا",
+              "النَّجْمِ"
             ],
             "answer": 0,
             "nl": "Wat is dat? Dat is een ster.",
             "explain": "نَجْمٌ = een ster (met Tanwien)."
+          },
+          {
+            "type": "mc",
+            "q": "Wat is het verschil tussen هَذَا en ذَلِكَ?",
+            "options": [
+              "هَذَا is voor dichtbij (dit/deze), ذَلِكَ is voor verder weg (dat/die)",
+              "هَذَا is vrouwelijk en ذَلِكَ mannelijk",
+              "Er is geen betekenisverschil"
+            ],
+            "answer": 0,
+            "explain": "هَذَا = dichtbij, ذَلِكَ = ver weg."
           }
         ]
       }
@@ -996,6 +1219,18 @@ window.G2_LESSONS = {
               "مَفْتُوحٌ."
             ],
             "explain": "الْبَابُ = het onderwerp, مَفْتُوحٌ = het gezegde."
+          },
+          {
+            "type": "parse",
+            "sentence": "الْقَمَرُ جَمِيلٌ",
+            "target": "الْقَمَرُ",
+            "options": [
+              "مُبْتَدَأ مَرْفُوع بِالضَّمَّةِ (Onderwerp met Dammah)",
+              "خَبَر مَرْفُوع",
+              "مَفْعُول بِهِ"
+            ],
+            "answer": 0,
+            "explain": "الْقَمَرُ is het bepaalde onderwerp (Mubtada') van de nominale zin en staat in de nominatief (Marfū' op Dammah)."
           }
         ]
       }
@@ -1129,7 +1364,7 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Oefening blz. 17: Lees en schrijf met de juiste eindklinkers",
+        "instr": "Boekoefening 1 (blz. 17): Lees en schrijf met of zonder Tanwien",
         "page": 17,
         "items": [
           {
@@ -1142,7 +1377,7 @@ window.G2_LESSONS = {
             ],
             "answer": 0,
             "nl": "een moskee en de moskee",
-            "explain": "Zonder al: Tanwien (-un). Met al: enkele Dammah (-u)."
+            "explain": "Zonder al- = Tanwien (-un). Met al- = enkele Dammah (-u)."
           },
           {
             "type": "fill",
@@ -1154,7 +1389,131 @@ window.G2_LESSONS = {
             ],
             "answer": 0,
             "nl": "water en het water",
-            "explain": "الْمَاءُ heeft geen Tanwien."
+            "explain": "الْمَاءُ heeft géén Tanwien."
+          },
+          {
+            "type": "fill",
+            "ar": "بَاب_ وَالْبَاب_.",
+            "options": [
+              "ٌ / ُ",
+              "ُ / ٌ",
+              "ٍ / ِ"
+            ],
+            "answer": 0,
+            "nl": "een deur en de deur",
+            "explain": "بَابٌ vs الْبَابُ."
+          },
+          {
+            "type": "fill",
+            "ar": "قَلَم_ وَالْقَلَم_.",
+            "options": [
+              "ٌ / ُ",
+              "ُ / ٌ",
+              "ٍ / ِ"
+            ],
+            "answer": 0,
+            "nl": "een pen en de pen",
+            "explain": "قَلَمٌ vs الْقَلَمُ."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 18): Vul de open plekken aan met een passend woord",
+        "page": 18,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "الْحَجَرُ _.",
+            "options": [
+              "ثَقِيلٌ",
+              "خَفِيفٌ",
+              "مَفْتُوحٌ"
+            ],
+            "answer": 0,
+            "nl": "De steen is zwaar.",
+            "explain": "ثَقِيلٌ = zwaar."
+          },
+          {
+            "type": "fill",
+            "ar": "الْقَمَرُ _.",
+            "options": [
+              "جَمِيلٌ",
+              "مَكْسُورٌ",
+              "حَارٌّ"
+            ],
+            "answer": 0,
+            "nl": "De maan is mooi.",
+            "explain": "جَمِيلٌ = mooi."
+          },
+          {
+            "type": "fill",
+            "ar": "الْوَرَقُ _.",
+            "options": [
+              "خَفِيفٌ",
+              "ثَقِيلٌ",
+              "حَارٌّ"
+            ],
+            "answer": 0,
+            "nl": "Het papier is licht.",
+            "explain": "خَفِيفٌ = licht in gewicht."
+          },
+          {
+            "type": "fill",
+            "ar": "الْمِنْدِيلُ _.",
+            "options": [
+              "نَظِيفٌ",
+              "مَكْسُورٌ",
+              "مَفْتُوحٌ"
+            ],
+            "answer": 0,
+            "nl": "De zakdoek is schoon.",
+            "explain": "نَظِيفٌ = schoon."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 3 (blz. 20): Bepaal of de letter een zonneletter of maanletter is",
+        "page": 20,
+        "items": [
+          {
+            "type": "mc",
+            "q": "Is de letter د (in الدِّيكُ) een zonneletter of maanletter?",
+            "options": [
+              "Zonneletter (حَرْف شَمْسِيّ)",
+              "Maanletter (حَرْف قَمَرِيّ)"
+            ],
+            "answer": 0,
+            "explain": "د is een zonneletter: ad-diyku (met Shaddah)."
+          },
+          {
+            "type": "mc",
+            "q": "Is de letter خ (in الْخُبْزُ) een zonneletter of maanletter?",
+            "options": [
+              "Maanletter (حَرْف قَمَرِيّ)",
+              "Zonneletter (حَرْف شَمْسِيّ)"
+            ],
+            "answer": 0,
+            "explain": "خ is een maanletter: al-khubzu (met hoorbare l)."
+          },
+          {
+            "type": "mc",
+            "q": "Is de letter ث (in الثَّوْبُ) een zonneletter of maanletter?",
+            "options": [
+              "Zonneletter (حَرْف شَمْسِيّ)",
+              "Maanletter (حَرْف قَمَرِيّ)"
+            ],
+            "answer": 0,
+            "explain": "ث is een zonneletter: ath-thawbu (met Shaddah)."
+          },
+          {
+            "type": "mc",
+            "q": "Is de letter ع (in الْعَيْنُ) een zonneletter of maanletter?",
+            "options": [
+              "Maanletter (حَرْف قَمَرِيّ)",
+              "Zonneletter (حَرْف شَمْسِيّ)"
+            ],
+            "answer": 0,
+            "explain": "ع is een maanletter: al-'aynu (met hoorbare l)."
           }
         ]
       }
@@ -1393,6 +1752,30 @@ window.G2_LESSONS = {
             "answer": 0,
             "nl": "De student ging naar de school.",
             "explain": "Na het voorzetsel إِلَى krijgt het woord een Kasrah (-i)."
+          },
+          {
+            "type": "parse",
+            "sentence": "خَرَجَ الْمُدَرِّسُ مِنَ الْفَصْلِ",
+            "target": "الْمُدَرِّسُ",
+            "options": [
+              "فَاعِل مَرْفُوع بِالضَّمَّةِ (Dader / Onderwerp)",
+              "مَفْعُول بِهِ (Lijdend voorwerp)",
+              "مُبْتَدَأ"
+            ],
+            "answer": 0,
+            "explain": "الْمُدَرِّسُ is de Fā'il (dader) van het werkwoord خَرَجَ en staat in de nominatief (Marfū' met Dammah)."
+          },
+          {
+            "type": "parse",
+            "sentence": "خَرَجَ الْمُدَرِّسُ مِنَ الْفَصْلِ",
+            "target": "الْفَصْلِ",
+            "options": [
+              "اِسْم مَجْرُور بِالْكَسْرَةِ (Zelfstandig naamwoord na voorzetsel)",
+              "مَفْعُول بِهِ",
+              "خَبَر"
+            ],
+            "answer": 0,
+            "explain": "الْفَصْلِ staat na het voorzetsel مِنَ en is daarom Madjrūr met een Kasrah."
           }
         ]
       }
@@ -1476,12 +1859,12 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 22: Beantwoord de vragen met behulp van de tekst",
+        "instr": "Boekoefening 1 (blz. 22): Beantwoord de begripsvragen uit de lestekst",
         "page": 22,
         "items": [
           {
             "type": "mc",
-            "q": "أَيْنَ الْكِتَابُ؟ (Waar is het boek volgens blz. 21?)",
+            "q": "أَيْنَ الْكِتَابُ؟",
             "options": [
               "هُوَ عَلَى الْمَكْتَبِ.",
               "هُوَ فِي الْغُرْفَةِ.",
@@ -1492,7 +1875,7 @@ window.G2_LESSONS = {
           },
           {
             "type": "mc",
-            "q": "أَيْنَ آمِنَةُ؟ (Waar is Aminah?)",
+            "q": "أَيْنَ آمِنَةُ؟",
             "options": [
               "هِيَ فِي الْمَطْبَخِ.",
               "هِيَ فِي الْفَصْلِ.",
@@ -1500,6 +1883,102 @@ window.G2_LESSONS = {
             ],
             "answer": 0,
             "explain": "In de lestekst staat: هِيَ فِي الْمَطْبَخِ."
+          },
+          {
+            "type": "mc",
+            "q": "أَآمِنَةُ فِي الْغُرْفَةِ؟",
+            "options": [
+              "لَا، هِيَ فِي الْمَطْبَخِ.",
+              "نَعَمْ، هِيَ فِي الْغُرْفَةِ.",
+              "لَا، هُوَ فِي الْمَطْبَخِ."
+            ],
+            "answer": 0,
+            "explain": "Zij is in de keuken: لَا، هِيَ فِي الْمَطْبَخِ."
+          },
+          {
+            "type": "mc",
+            "q": "أَيْنَ يَاسِرٌ؟",
+            "options": [
+              "هُوَ فِي الْحَمَّامِ.",
+              "هُوَ فِي الْمَطْبَخِ.",
+              "هِيَ فِي الْحَمَّامِ."
+            ],
+            "answer": 0,
+            "explain": "In de lestekst staat: يَاسِرٌ فِي الْحَمَّامِ."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 23): Lees en spreek uit met de juiste eindklinkers (مَرْفُوع of مَجْرُور)",
+        "page": 23,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "الْمَسْجِد_، فِي الْمَسْجِد_.",
+            "options": [
+              "ُ / ِ",
+              "ِ / ُ",
+              "ٌ / ٍ"
+            ],
+            "answer": 0,
+            "nl": "de moskee, in de moskee",
+            "explain": "Zonder voorzetsel = Dammah (-u). Ná فِي = Kasrah (-i)."
+          },
+          {
+            "type": "fill",
+            "ar": "الْمَكْتَب_، عَلَى الْمَكْتَب_.",
+            "options": [
+              "ُ / ِ",
+              "ِ / ُ",
+              "ٌ / ٍ"
+            ],
+            "answer": 0,
+            "nl": "het bureau, op het bureau",
+            "explain": "الْمَكْتَبُ vs عَلَى الْمَكْتَبِ."
+          },
+          {
+            "type": "fill",
+            "ar": "عَلَى الْكُرْسِي_.",
+            "options": [
+              "ِّ",
+              "ُّ",
+              "َّ"
+            ],
+            "answer": 0,
+            "nl": "op de stoel",
+            "explain": "Ná عَلَى staat het woord in de genitief (-i)."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 3 (blz. 26): Vragen met مِنْ en إِلَى",
+        "page": 26,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "مِنْ أَيْنَ أَنْتَ؟ أَنَا مِ_ الْيَابَانِ.",
+            "options": [
+              "نَ",
+              "نْ",
+              "نِ"
+            ],
+            "answer": 0,
+            "nl": "Waar kom je vandaan? Ik kom uit Japan.",
+            "explain": "مِنْ verandert in مِنَ vóór الْـ."
+          },
+          {
+            "type": "order",
+            "nl": "De leraar ging het klaslokaal uit en ging naar de directeur.",
+            "words": [
+              "خَرَجَ",
+              "الْمُدَرِّسُ",
+              "مِنَ",
+              "الْفَصْلِ",
+              "وَذَهَبَ",
+              "إِلَى",
+              "الْمُدِيرِ."
+            ],
+            "explain": "خَرَجَ مِنَ الْفَصْلِ وَذَهَبَ إِلَى الْمُدِيرِ."
           }
         ]
       }
@@ -1761,6 +2240,18 @@ window.G2_LESSONS = {
               "سَعِيدٌ."
             ],
             "explain": "اِسْمُ الْمُدَرِّسِ = idafah, سَعِيدٌ = gezegde."
+          },
+          {
+            "type": "parse",
+            "sentence": "كِتَابُ مُحَمَّدٍ عَلَى الْمَكْتَبِ",
+            "target": "مُحَمَّدٍ",
+            "options": [
+              "مُضَاف إِلَيْهِ مَجْرُور بِالْكَسْرَةِ (Bezitsterm in genitief)",
+              "نَعْت (Bijvoeglijk naamwoord)",
+              "خَبَر"
+            ],
+            "answer": 0,
+            "explain": "مُحَمَّدٍ is de Mudāf Ilayh (de bezitter) in de Idāfah en staat in de genitief met Kasratayn."
           }
         ]
       }
@@ -1834,32 +2325,125 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 28: Voeg de twee woorden samen tot een bezitsconstructie (Idāfah)",
+        "instr": "Boekoefening 1 (blz. 28): Vorm de Idāfah (bezitsconstructie)",
         "page": 28,
         "items": [
           {
             "type": "transform",
-            "prompt": "Maak een Idāfah van: قَلَمٌ + حَامِدٌ",
-            "from": "قَلَمٌ + حَامِدٌ",
+            "prompt": "Maak een Idāfah van: كِتَابٌ + عَلِيٌّ",
+            "from": "كِتَابٌ + عَلِيٌّ",
             "options": [
-              "قَلَمُ حَامِدٍ",
-              "الْقَلَمُ حَامِدٍ",
-              "قَلَمٌ حَامِدُ"
+              "كِتَابُ عَلِيٍّ",
+              "الْكِتَابُ عَلِيٍّ",
+              "كِتَابٌ عَلِيُّ"
             ],
             "answer": 0,
-            "explain": "Eerste lid verliest tanwien, tweede lid wordt majroer: قَلَمُ حَامِدٍ."
+            "explain": "كِتَابُ verliest de Tanwien en عَلِيٍّ krijgt Kasrah."
           },
           {
             "type": "transform",
-            "prompt": "Maak een Idāfah van: مِفْتَاحٌ + الْبَيْتُ",
-            "from": "مِفْتَاحٌ + الْبَيْتُ",
+            "prompt": "Maak een Idāfah van: مَكْتَبٌ + الْمُدَرِّسُ",
+            "from": "مَكْتَبٌ + الْمُدَرِّسُ",
             "options": [
-              "مِفْتَاحُ الْبَيْتِ",
-              "مِفْتَاحٌ الْبَيْتِ",
-              "الْمِفْتَاحُ الْبَيْتُ"
+              "مَكْتَبُ الْمُدَرِّسِ",
+              "الْمَكْتَبُ الْمُدَرِّسِ",
+              "مَكْتَبٌ الْمُدَرِّسِ"
             ],
             "answer": 0,
-            "explain": "مِفْتَاحُ الْبَيْتِ (de sleutel van het huis)."
+            "explain": "مَكْتَبُ الْمُدَرِّسِ (het bureau van de leraar)."
+          },
+          {
+            "type": "transform",
+            "prompt": "Maak een Idāfah van: بَيْتٌ + عَمَّارٌ",
+            "from": "بَيْتٌ + عَمَّارٌ",
+            "options": [
+              "بَيْتُ عَمَّارٍ",
+              "بَيْتٌ عَمَّارٍ",
+              "الْبَيْتُ عَمَّارٍ"
+            ],
+            "answer": 0,
+            "explain": "بَيْتُ عَمَّارٍ (het huis van Ammaar)."
+          },
+          {
+            "type": "transform",
+            "prompt": "Maak een Idāfah van: سَيَّارَةٌ + الْمُدِيرُ",
+            "from": "سَيَّارَةٌ + الْمُدِيرُ",
+            "options": [
+              "سَيَّارَةُ الْمُدِيرِ",
+              "السَّيَّارَةُ الْمُدِيرِ",
+              "سَيَّارَةٌ الْمُدِيرِ"
+            ],
+            "answer": 0,
+            "explain": "سَيَّارَةُ الْمُدِيرِ (de auto van de directeur)."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 28): De roepvorm met يَا (O...)",
+        "page": 28,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "يَا عَبَّاس_.",
+            "options": [
+              "ُ",
+              "ٌ",
+              "ِ"
+            ],
+            "answer": 0,
+            "nl": "O Abbas",
+            "explain": "Ná يَا valt de Tanwien weg: يَا عَبَّاسُ."
+          },
+          {
+            "type": "fill",
+            "ar": "يَا وَلَد_.",
+            "options": [
+              "ُ",
+              "ٌ",
+              "َ"
+            ],
+            "answer": 0,
+            "nl": "O jongen",
+            "explain": "يَا وَلَدُ (zonder Tanwien)."
+          },
+          {
+            "type": "fill",
+            "ar": "يَا شَيْخ_.",
+            "options": [
+              "ُ",
+              "ٌ",
+              "ِ"
+            ],
+            "answer": 0,
+            "nl": "O sjeik",
+            "explain": "يَا شَيْخُ (zonder Tanwien)."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 3 (blz. 29): Hamzatoel Wasl bij اِسْمٌ en اِبْنٌ",
+        "page": 29,
+        "items": [
+          {
+            "type": "mc",
+            "q": "Hoe spreek je «وَابْنُ السَّبِيلِ» uit?",
+            "options": [
+              "wab-nus-sabeeli (de i valt weg)",
+              "wa-ib-nus-sabeeli",
+              "wa-ab-nus-sabeeli"
+            ],
+            "answer": 0,
+            "explain": "De Alif van ibn is Hamzatul Wasl: wab-nu."
+          },
+          {
+            "type": "order",
+            "nl": "Waar is de zoon van de leraar?",
+            "words": [
+              "أَيْنَ",
+              "ابْنُ",
+              "الْمُدَرِّسِ؟"
+            ],
+            "explain": "أَيْنَ ابْنُ الْمُدَرِّسِ؟"
           }
         ]
       }
@@ -2343,32 +2927,96 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 32: Wijs aan met هَذَا (mannelijk) of هَذِهِ (vrouwelijk)",
+        "instr": "Boekoefening 1 (blz. 32): Wijs aan met هَذَا (mannelijk) of هَذِهِ (vrouwelijk)",
         "page": 32,
         "items": [
           {
             "type": "fill",
-            "ar": "_ أَنْفٌ وَ_ أُذُنٌ.",
+            "ar": "_ أَنْفٌ وَ_ فَمٌ.",
             "options": [
-              "هَذَا / هَذِهِ",
-              "هَذِهِ / هَذَا",
-              "هَذَا / هَذَا"
+              "هَذَا / هَذَا",
+              "هَذِهِ / هَذِهِ",
+              "هَذَا / هَذِهِ"
             ],
             "answer": 0,
-            "nl": "Dit is een neus (m.) en dit is een oor (v.).",
-            "explain": "Enkelvoudige lichaamsdelen zijn mannelijk (هَذَا أَنْفٌ), gepaarde lichaamsdelen vrouwelijk (هَذِهِ أُذُنٌ)."
+            "nl": "Dit is een neus en dit is een mond.",
+            "explain": "Enkelvoudige lichaamsdelen zijn mannelijk: هَذَا أَنْفٌ وَهَذَا فَمٌ."
           },
           {
             "type": "fill",
-            "ar": "_ عَيْنٌ وَ_ يَدٌ.",
+            "ar": "_ أُذُنٌ وَ_ عَيْنٌ.",
             "options": [
               "هَذِهِ / هَذِهِ",
               "هَذَا / هَذِهِ",
               "هَذِهِ / هَذَا"
             ],
             "answer": 0,
-            "nl": "Dit is een oog en dit is een hand.",
-            "explain": "Gepaarde lichaamsdelen zijn vrouwelijk: هَذِهِ عَيْنٌ وَهَذِهِ يَدٌ."
+            "nl": "Dit is een oor en dit is een oog.",
+            "explain": "Gepaarde lichaamsdelen zijn vrouwelijk: هَذِهِ أُذُنٌ وَهَذِهِ عَيْنٌ."
+          },
+          {
+            "type": "fill",
+            "ar": "_ يَدٌ وَ_ رِجْلٌ.",
+            "options": [
+              "هَذِهِ / هَذِهِ",
+              "هَذَا / هَذَا",
+              "هَذَا / هَذِهِ"
+            ],
+            "answer": 0,
+            "nl": "Dit is een hand en dit is een voet.",
+            "explain": "Handen en voeten zijn gepaard en dus vrouwelijk: هَذِهِ يَدٌ وَهَذِهِ رِجْلٌ."
+          },
+          {
+            "type": "fill",
+            "ar": "_ قِدْرٌ وَ_ مِلْعَقَةٌ.",
+            "options": [
+              "هَذِهِ / هَذِهِ",
+              "هَذَا / هَذِهِ",
+              "هَذَا / هَذَا"
+            ],
+            "answer": 0,
+            "nl": "Dit is een kookpan en dit is een lepel.",
+            "explain": "قِدْرٌ is vrouwelijk naar gebruik en مِلْعَقَةٌ heeft Taa' Marboetah."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 33): Het voorzetsel لِـ (behorend aan) en لِمَنْ (van wie?)",
+        "page": 33,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "لِمَنْ هَذَا الْقَلَمُ؟ هُوَ لِـ_.",
+            "options": [
+              "مُحَمَّدٍ",
+              "مُحَمَّدٌ",
+              "مُحَمَّدًا"
+            ],
+            "answer": 0,
+            "nl": "Van wie is deze pen? Hij is van Muhammad.",
+            "explain": "Ná het voorzetsel لِـ staat het woord in de genitief (kasrah -in)."
+          },
+          {
+            "type": "order",
+            "nl": "Aan Allah behoort het oosten en het westen.",
+            "words": [
+              "لِلَّهِ",
+              "الْمَشْرِقُ",
+              "وَالْمَغْرِبُ."
+            ],
+            "explain": "لِلَّهِ الْمَشْرِقُ وَالْمَغْرِبُ (Koranvers geciteerd op blz. 33)."
+          },
+          {
+            "type": "fill",
+            "ar": "الْحَمْدُ _.",
+            "options": [
+              "لِلَّهِ",
+              "لَلَّهِ",
+              "الِلهِ"
+            ],
+            "answer": 0,
+            "nl": "Alle lof zij aan Allah.",
+            "explain": "لِـ + اللَّهُ = لِلَّهِ."
           }
         ]
       }
@@ -2523,7 +3171,7 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 35: Plaats in de open plek het juiste aanwijzende voornaamwoord (ذَلِكَ of تِلْكَ)",
+        "instr": "Boekoefening 1 (blz. 35): Plaats het juiste aanwijzend voornaamwoord (ذَلِكَ of تِلْكَ)",
         "page": 35,
         "items": [
           {
@@ -2531,22 +3179,76 @@ window.G2_LESSONS = {
             "ar": "_ نَاقَةُ اللَّهِ.",
             "options": [
               "تِلْكَ",
-              "ذَلِكَ"
+              "ذَلِكَ",
+              "هَذَا"
             ],
             "answer": 0,
             "nl": "Dat is de kamelin van Allah.",
-            "explain": "نَاقَةُ is vrouwelijk, dus تِلْكَ."
+            "explain": "نَاقَةٌ is vrouwelijk, dus تِلْكَ."
           },
           {
             "type": "fill",
-            "ar": "_ أُسْتَاذٌ جَدِيدٌ.",
+            "ar": "_ بَيْضَةُ الدَّجَاجَةِ.",
             "options": [
+              "تِلْكَ",
               "ذَلِكَ",
-              "تِلْكَ"
+              "هَذَا"
             ],
             "answer": 0,
-            "nl": "Dat is een nieuwe leraar.",
-            "explain": "أُسْتَاذٌ is mannelijk, dus ذَلِكَ."
+            "nl": "Dat is het ei van de kip.",
+            "explain": "بَيْضَةٌ is vrouwelijk, dus تِلْكَ."
+          },
+          {
+            "type": "fill",
+            "ar": "_ حِمَارُ الْفَلَّاحِ.",
+            "options": [
+              "ذَلِكَ",
+              "تِلْكَ",
+              "هَذِهِ"
+            ],
+            "answer": 0,
+            "nl": "Dat is de ezel van de boer.",
+            "explain": "حِمَارٌ is mannelijk, dus ذَلِكَ."
+          },
+          {
+            "type": "fill",
+            "ar": "_ مَسْجِدُ الْمَدِينَةِ.",
+            "options": [
+              "ذَلِكَ",
+              "تِلْكَ",
+              "هَذِهِ"
+            ],
+            "answer": 0,
+            "nl": "Dat is de moskee van de stad.",
+            "explain": "مَسْجِدٌ is mannelijk, dus ذَلِكَ."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 35): Onderscheid tussen de 4 aanwijzers",
+        "page": 35,
+        "items": [
+          {
+            "type": "order",
+            "nl": "Dit is een dokter en dat is een verpleegster.",
+            "words": [
+              "هَذَا",
+              "طَبِيبٌ",
+              "وَتِلْكَ",
+              "مُمَرِّضَةٌ."
+            ],
+            "explain": "هَذَا (mannelijk dichtbij) + تِلْكَ (vrouwelijk ver)."
+          },
+          {
+            "type": "order",
+            "nl": "Dit is een haan en dat is een kip.",
+            "words": [
+              "هَذَا",
+              "دِيكٌ",
+              "وَتِلْكَ",
+              "دَجَاجَةٌ."
+            ],
+            "explain": "هَذَا دِيكٌ وَتِلْكَ دَجَاجَةٌ."
           }
         ]
       }
@@ -2723,6 +3425,18 @@ window.G2_LESSONS = {
               "الْبَيْتِ."
             ],
             "explain": "السَّيَّارَةُ (onderwerp) + أَمَامَ الْبَيْتِ (plaatsbepaling)."
+          },
+          {
+            "type": "parse",
+            "sentence": "هَذَا الرَّجُلُ تَاجِرٌ",
+            "target": "الرَّجُلُ",
+            "options": [
+              "بَدَل مَرْفُوع (Bijstelling / Badal)",
+              "خَبَر مَرْفُوع",
+              "نَعْت"
+            ],
+            "answer": 0,
+            "explain": "الرَّجُلُ is de Badal (bijstelling) die volgt op de aanwijzer هَذَا en volgt de naamval."
           }
         ]
       }
@@ -2771,32 +3485,75 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 37: Lees de zinnen en let op de uitgangen",
+        "instr": "Boekoefening 1 (blz. 37): Vorm zinnen met Badal (هَذَا الْكِتَابُ...)",
         "page": 37,
         "items": [
           {
-            "type": "fill",
-            "ar": "هَذَا الْوَلَدُ خَالِد_ وَذَلِكَ الْوَلَدُ مُحَمَّد_.",
+            "type": "transform",
+            "prompt": "Maak van 'Dit is een auto' de woordgroep 'Deze auto is nieuw'",
+            "from": "هَذِهِ سَيَّارَةٌ",
             "options": [
-              "ٌ / ٌ",
-              "ُ / ُ",
-              "ِ / ِ"
+              "هَذِهِ السَّيَّارَةُ جَدِيدَةٌ",
+              "هَذِهِ سَيَّارَةٌ جَدِيدَةٌ",
+              "السَّيَّارَةُ هَذِهِ جَدِيدَةٌ"
             ],
             "answer": 0,
-            "nl": "Deze jongen is Khalid en die jongen is Muhammad.",
-            "explain": "خَالِدٌ en مُحَمَّدٌ zijn het gezegde (khabar) met Tanwien."
+            "explain": "Met al- op het zelfstandig naamwoord wordt het een badal: هَذِهِ السَّيَّارَةُ جَدِيدَةٌ."
           },
           {
+            "type": "transform",
+            "prompt": "Maak van 'Dat is een man' de zin 'Die man is een leraar'",
+            "from": "ذَلِكَ رَجُلٌ",
+            "options": [
+              "ذَلِكَ الرَّجُلُ مُدَرِّسٌ",
+              "ذَلِكَ رَجُلٌ مُدَرِّسٌ",
+              "الرَّجُلُ ذَلِكَ مُدَرِّسٌ"
+            ],
+            "answer": 0,
+            "explain": "ذَلِكَ الرَّجُلُ مُدَرِّسٌ."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 38): Plaatsaanduidingen أَمَامَ en خَلْفَ",
+        "page": 38,
+        "items": [
+          {
             "type": "fill",
-            "ar": "هَذِهِ السَّيَّارَةُ لِلطَّبِيب_.",
+            "ar": "بَيْتُ الْمُدَرِّسِ خَلْفَ الْمَسْجِد_.",
             "options": [
               "ِ",
               "ُ",
               "َ"
             ],
             "answer": 0,
-            "nl": "Deze auto is van de arts.",
-            "explain": "Ná het voorzetsel لِـ krijgt het woord een Kasrah (-i)."
+            "nl": "Het huis van de leraar is achter de moskee.",
+            "explain": "Ná خَلْفَ volgt de genitief (kasrah -i)."
+          },
+          {
+            "type": "fill",
+            "ar": "سَيَّارَةُ الْمُدِيرِ أَمَامَ الْمَدْرَسَت_.",
+            "options": [
+              "ِ",
+              "ُ",
+              "َ"
+            ],
+            "answer": 0,
+            "nl": "De auto van de directeur staat voor de school.",
+            "explain": "Ná أَمَامَ volgt de genitief (-i)."
+          },
+          {
+            "type": "order",
+            "nl": "Waar zit Ammar? Hij zit achter Mahmud.",
+            "words": [
+              "أَيْنَ",
+              "جَلَسَ",
+              "عَمَّارٌ؟",
+              "جَلَسَ",
+              "خَلْفَ",
+              "مَحْمُودٍ."
+            ],
+            "explain": "جَلَسَ خَلْفَ مَحْمُودٍ."
           }
         ]
       }
@@ -3079,6 +3836,18 @@ window.G2_LESSONS = {
             "answer": 0,
             "nl": "bij de leraar",
             "explain": "Ná عِنْدَ is het woord muḍāf ilayh en dus majroer (-i)."
+          },
+          {
+            "type": "parse",
+            "sentence": "خَدِيجَةُ طَالِبَةٌ جَدِيدَةٌ",
+            "target": "جَدِيدَةٌ",
+            "options": [
+              "نَعْت مَرْفُوع (Bijvoeglijk naamwoord)",
+              "خَبَر",
+              "مُضَاف إِلَيْهِ"
+            ],
+            "answer": 0,
+            "explain": "جَدِيدَةٌ is de Na't (het bijvoeglijk naamwoord) dat volgt op het vrouwelijke woord طَالِبَةٌ."
           }
         ]
       }
@@ -3177,7 +3946,7 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 40: Vul de open plekken aan met een passend bijvoeglijk naamwoord",
+        "instr": "Boekoefening 1 (blz. 40): Vul de open plek aan met een passend bijvoeglijk naamwoord (Na't)",
         "page": 40,
         "items": [
           {
@@ -3203,6 +3972,78 @@ window.G2_LESSONS = {
             "answer": 0,
             "nl": "Het Arabisch is een makkelijke taal.",
             "explain": "لُغَةٌ is vrouwelijk, dus سَهْلَةٌ."
+          },
+          {
+            "type": "fill",
+            "ar": "الْعُصْفُورُ طَائِرٌ _.",
+            "options": [
+              "صَغِيرٌ",
+              "صَغِيرَةٌ",
+              "الصَّغِيرُ"
+            ],
+            "answer": 0,
+            "nl": "De mus is een kleine vogel.",
+            "explain": "طَائِرٌ is mannelijk onbepaald, dus صَغِيرٌ."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 41): Adjectieven op ـَانُ (Diptoten)",
+        "page": 41,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "الْفَلَّاحُ تَعْبَان_.",
+            "options": [
+              "ُ",
+              "ٌ",
+              "َ"
+            ],
+            "answer": 0,
+            "nl": "De boer is moe.",
+            "explain": "Adjectieven op -aanu krijgen géén Tanwien."
+          },
+          {
+            "type": "fill",
+            "ar": "الْإِنَاءُ مَلْآن_.",
+            "options": [
+              "ُ",
+              "ٌ",
+              "ِ"
+            ],
+            "answer": 0,
+            "nl": "Het vat is vol.",
+            "explain": "مَلْآنُ is diptoot: enkele Dammah."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 3 (blz. 44): Het betrekkelijk voornaamwoord الَّذِي",
+        "page": 44,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "الطَّالِبُ _ خَرَجَ مِنَ الْفَصْلِ الْآنَ مِنْ إِنْدُونِيسِيَا.",
+            "options": [
+              "الَّذِي",
+              "الَّتِي",
+              "هَذَا"
+            ],
+            "answer": 0,
+            "nl": "De student die zojuist de klas verliet...",
+            "explain": "الطَّالِبُ is mannelijk enkelvoud, dus الَّذِي."
+          },
+          {
+            "type": "order",
+            "nl": "Het boek dat op het bureau ligt, is van de leraar.",
+            "words": [
+              "الْكِتَابُ",
+              "الَّذِي",
+              "عَلَى",
+              "الْمَكْتَبِ",
+              "لِلْمُدَرِّسِ."
+            ],
+            "explain": "الْكِتَابُ الَّذِي عَلَى الْمَكْتَبِ لِلْمُدَرِّسِ."
           }
         ]
       }
@@ -3499,31 +4340,102 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 46: Beantwoord de vragen over jezelf",
+        "instr": "Boekoefening 1 (blz. 46): Beheersing van gehechte voornaamwoorden (-hu, -ha, -ka, -i)",
         "page": 46,
         "items": [
           {
             "type": "fill",
-            "ar": "مَا لُغَتُكَ؟ لُغَتِي هِيَ الْ_.",
+            "ar": "هَذَا بَيْتِي، وَ_ بَيْتُهُ (en dat is zijn huis).",
             "options": [
-              "عَرَبِيَّةُ",
-              "عَرَبِيِّ",
-              "عَرَبِيَّةَ"
+              "ذَلِكَ",
+              "هَذِهِ",
+              "تِلْكَ"
             ],
             "answer": 0,
-            "nl": "Wat is jouw taal? Mijn taal is het Arabisch.",
-            "explain": "الْعَرَبِيَّةُ is het gezegde (khabar)."
+            "nl": "Dit is mijn huis en dat is zijn huis.",
+            "explain": "بَيْتٌ is mannelijk, dus ذَلِكَ بَيْتُهُ."
+          },
+          {
+            "type": "fill",
+            "ar": "فَاطِمَةُ طَالِبَةٌ، زَوْجُ_ مُهَنْدِسٌ.",
+            "options": [
+              "هَا",
+              "هُ",
+              "كِ"
+            ],
+            "answer": 0,
+            "nl": "Fatimah is studente, haar echtgenoot is ingenieur.",
+            "explain": "ـهَا = haar (vrouwelijk enkelvoud)."
+          },
+          {
+            "type": "fill",
+            "ar": "مَا اسْمُ_ يَا أُخْتِي؟",
+            "options": [
+              "كِ",
+              "كَ",
+              "هُ"
+            ],
+            "answer": 0,
+            "nl": "Wat is jouw naam, o mijn zuster?",
+            "explain": "ـكِ = jouw (vrouwelijk enkelvoud)."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 48): Onderscheid tussen عِنْدِي en لِي",
+        "page": 48,
+        "items": [
+          {
+            "type": "mc",
+            "q": "Kies de juiste zin voor: 'Ik heb twee broers'",
+            "options": [
+              "لِي أَخَوَانِ",
+              "عِنْدِي أَخَوَانِ",
+              "مَعِي أَخَوَانِ"
+            ],
+            "answer": 0,
+            "explain": "Voor familieleden en relaties gebruik je لِي (niet 'indi)."
           },
           {
             "type": "mc",
-            "q": "Wat antwoord je op: «أَمَعَكَ قَلَمٌ؟» (Heb je een pen bij je?)",
+            "q": "Kies de juiste zin voor: 'Ik heb een snelle auto'",
             "options": [
-              "نَعَمْ، مَعِي قَلَمٌ.",
-              "نَعَمْ، لِي قَلَمٌ.",
-              "نَعَمْ، هُوَ قَلَمٌ."
+              "عِنْدِي سَيَّارَةٌ سَرِيعَةٌ",
+              "لِي سَيَّارَةٌ سَرِيعَةٌ",
+              "فِيَّ سَيَّارَةٌ"
             ],
             "answer": 0,
-            "explain": "Bij مَعَكَ antwoord je met مَعِي (bij mij)."
+            "explain": "Voor tastbare voorwerpen gebruik je عِنْدِي."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 3 (blz. 49): Werkwoorden ذَهَبْتَ en ذَهَبْتُ",
+        "page": 49,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "أَ_ إِلَى السُّوقِ يَا عَلِيُّ؟ نَعَمْ، ذَهَبْتُ.",
+            "options": [
+              "ذَهَبْتَ",
+              "ذَهَبْتُ",
+              "ذَهَبَ"
+            ],
+            "answer": 0,
+            "nl": "Ging jij naar de markt, o Ali? Ja, ik ging.",
+            "explain": "ذَهَبْتَ = jij ging (mannelijk)."
+          },
+          {
+            "type": "order",
+            "nl": "Ik ging met mijn vriend naar de universiteit.",
+            "words": [
+              "ذَهَبْتُ",
+              "مَعَ",
+              "زَمِيلِي",
+              "إِلَى",
+              "الْجَامِعَةِ."
+            ],
+            "explain": "ذَهَبْتُ مَعَ زَمِيلِي إِلَى الْجَامِعَةِ."
           }
         ]
       }
@@ -3754,6 +4666,18 @@ window.G2_LESSONS = {
             "answer": 1,
             "nl": "Waar houd je van?",
             "explain": "«تُحِبُّ» = jij houdt van (mannelijk enkelvoud)."
+          },
+          {
+            "type": "parse",
+            "sentence": "أُحِبُّ اللَّهَ وَرَسُولَهُ",
+            "target": "اللَّهَ",
+            "options": [
+              "مَفْعُول بِهِ مَنْصُوب بِالْفَتْحَةِ (Lijdend voorwerp)",
+              "فَاعِل مَرْفُوع",
+              "مُضَاف إِلَيْهِ"
+            ],
+            "answer": 0,
+            "explain": "«اللَّهَ» is het lijdend voorwerp (Maf'ūl bihi) van het werkwoord أُحِبُّ en staat in de accusatief (Mansūb met Fathah)."
           }
         ]
       }
@@ -3787,32 +4711,121 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 51: Lees en kies de juiste vorm van het voorzetsel",
+        "instr": "Boekoefening 1 (blz. 50): Gebruik van فِيهِ (erin, m.) en فِيهَا (erin, v.)",
+        "page": 50,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "مَنْ فِي الْبَيْتِ؟ _ أَبِي وَأُمِّي.",
+            "options": [
+              "فِيهِ",
+              "فِيهَا",
+              "عِنْدَهُ"
+            ],
+            "answer": 0,
+            "nl": "Wie is er in het huis? Mijn vader en mijn moeder zijn erin.",
+            "explain": "الْبَيْتُ is mannelijk, dus gebruik je فِيهِ (blz. 50)."
+          },
+          {
+            "type": "fill",
+            "ar": "مَنْ فِي الْغُرْفَةِ؟ _ أَخِي.",
+            "options": [
+              "فِيهَا",
+              "فِيهِ",
+              "عِنْدَهَا"
+            ],
+            "answer": 0,
+            "nl": "Wie is er in de kamer? Mijn broer is erin.",
+            "explain": "الْغُرْفَةُ is vrouwelijk, dus gebruik je فِيهَا (blz. 50)."
+          },
+          {
+            "type": "fill",
+            "ar": "مَاذَا فِي الْحَقِيبَةِ؟ _ كِتَابِي وَقَلَمِي وَدَفْتَرِي.",
+            "options": [
+              "فِيهَا",
+              "فِيهِ",
+              "مَعَهُ"
+            ],
+            "answer": 0,
+            "nl": "Wat zit er in de tas? Mijn boek, pen en schrift zitten erin.",
+            "explain": "الْحَقِيبَةُ is vrouwelijk, dus فِيهَا."
+          },
+          {
+            "type": "order",
+            "nl": "Wie is er in dit huis? Haamid is erin.",
+            "words": [
+              "مَنْ",
+              "فِي",
+              "هَذَا",
+              "الْبَيْتِ؟",
+              "فِيهِ",
+              "حَامِدٌ."
+            ],
+            "explain": "مَنْ فِي هَذَا الْبَيْتِ؟ فِيهِ حَامِدٌ."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 50-51): Lijdend voorwerp (Mansoeb op -a) na أُحِبُّ (ik houd van)",
         "page": 51,
         "items": [
           {
             "type": "fill",
-            "ar": "الْبَيْتُ جَمِيلٌ، فِي_ حَدِيقَةٌ.",
+            "ar": "أُحِبُّ اللَّه_َ وَأُحِبُّ الرَّسُول_َ.",
             "options": [
-              "هِ",
-              "هَا",
-              "كَ"
+              "َ / َ",
+              "ُ / ُ",
+              "ِ / ِ"
             ],
             "answer": 0,
-            "nl": "Het huis is mooi, erin is een tuin.",
-            "explain": "الْبَيْتُ is mannelijk, dus فِيهِ."
+            "nl": "Ik houd van Allah en ik houd van de Boodschapper.",
+            "explain": "Het lijdend voorwerp (Maf'ool bihi) is Mansoeb en eindigt op Fathah (-a)."
           },
           {
             "type": "fill",
-            "ar": "الْغُرْفَةُ وَاسِعَةٌ، فِي_ نَافِذَةٌ كَبِيرَةٌ.",
+            "ar": "أُحِبُّ اللُّغَة_َ الْعَرَبِيَّة_َ.",
             "options": [
-              "هَا",
-              "هِ",
-              "كَ"
+              "َ / َ",
+              "ُ / ُ",
+              "ِ / ِ"
             ],
             "answer": 0,
-            "nl": "De kamer is ruim, erin is een groot raam.",
-            "explain": "الْغُرْفَةُ is vrouwelijk, dus فِيهَا."
+            "nl": "Ik houd van de Arabische taal.",
+            "explain": "Beide woorden krijgen Fathah (-a) omdat الْعَرَبِيَّةَ de Na't is."
+          },
+          {
+            "type": "mc",
+            "q": "Waarom heeft أَبِي in «أُحِبُّ أَبِي» geen zichtbare Fathah?",
+            "options": [
+              "Omdat vóór het achtervoegsel ـِي («mijn») de uitgang niet zichtbaar is",
+              "Omdat أَبِي geen lijdend voorwerp is",
+              "Omdat het meervoud is"
+            ],
+            "answer": 0,
+            "explain": "Bij het bezittelijk achtervoegsel ـِي blijft de Kasrah van de Yaa behouden (blz. 50)."
+          },
+          {
+            "type": "order",
+            "nl": "Ik houd van mijn vader, moeder, broer en zus.",
+            "words": [
+              "أُحِبُّ",
+              "أَبِي",
+              "وَأُمِّي",
+              "وَأَخِي",
+              "وَأُخْتِي."
+            ],
+            "explain": "أُحِبُّ أَبِي وَأُمِّي وَأَخِي وَأُخْتِي."
+          },
+          {
+            "type": "order",
+            "nl": "Houd jij van jouw taal, o mijn broeder?",
+            "words": [
+              "أَتُحِبُّ",
+              "لُغَتَكَ",
+              "يَا",
+              "أَخِي؟"
+            ],
+            "explain": "أَتُحِبُّ لُغَتَكَ يَا أَخِي؟"
           }
         ]
       }
@@ -4221,32 +5234,138 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 53: Kies het juiste betrekkelijk voornaamwoord (الَّذِي of الَّتِي)",
+        "instr": "Boekoefening 1 (blz. 52): Aanspreken van een vrouw met أَنْتِ en ـكِ",
+        "page": 52,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "مِنْ أَيْنَ _ يَا آمِنَةُ؟",
+            "options": [
+              "أَنْتِ",
+              "أَنْتَ",
+              "أَنْتُمْ"
+            ],
+            "answer": 0,
+            "nl": "Waar kom jij vandaan, o Aaminah?",
+            "explain": "Voor vrouwelijk enkelvoud is «jij» أَنْتِ (met kasrah)."
+          },
+          {
+            "type": "fill",
+            "ar": "كَيْفَ حَالُ_ يَا أُمِّي؟",
+            "options": [
+              "كِ",
+              "كَ",
+              "هُ"
+            ],
+            "answer": 0,
+            "nl": "Hoe gaat het met u, o mijn moeder?",
+            "explain": "Voor vrouwelijk enkelvoud is het achtervoegsel ـكِ (met kasrah)."
+          },
+          {
+            "type": "fill",
+            "ar": "أَيْنَ بَيْتُ_ يَا مَرْيَمُ؟",
+            "options": [
+              "كِ",
+              "كَ",
+              "هَا"
+            ],
+            "answer": 0,
+            "nl": "Waar is jouw huis, o Maryam?",
+            "explain": "ـكِ voor aangesproken vrouw."
+          },
+          {
+            "type": "order",
+            "nl": "Het gaat goed met mij, alle lof zij aan Allah.",
+            "words": [
+              "أَنَا",
+              "بِخَيْرٍ",
+              "وَالْحَمْدُ",
+              "لِلَّهِ."
+            ],
+            "explain": "أَنَا بِخَيْرٍ وَالْحَمْدُ لِلَّهِ."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 53): Werkwoord ذَهَبَتْ en de Kasrah bij Wasl",
         "page": 53,
         "items": [
           {
             "type": "fill",
-            "ar": "السَّيَّارَةُ _ خَرَجَتْ مِنَ الْمُسْتَشْفَى لِلطَّبِيبِ.",
+            "ar": "أَيْنَ آمِنَةُ؟ _ إِلَى الْجَامِعَةِ.",
+            "options": [
+              "ذَهَبَتْ",
+              "ذَهَبَ",
+              "ذَهَبُوا"
+            ],
+            "answer": 0,
+            "nl": "Waar is Aaminah? Zij ging naar de universiteit.",
+            "explain": "ذَهَبَتْ = zij ging."
+          },
+          {
+            "type": "mc",
+            "q": "Hoe spreek je «ذَهَبَتْ» uit wanneer het bepaald lidwoord «الْبِنْتُ» erop volgt?",
+            "options": [
+              "dhahabati l-bintoe (de soekoen wordt een kasrah)",
+              "dhahabat al-bintoe (met duidelijke soekoen)",
+              "dhahabatu l-bintoe"
+            ],
+            "answer": 0,
+            "explain": "Wanneer een woord op تْ gevolgd wordt door الْـ verandert de soekoen in kasrah (blz. 53)."
+          },
+          {
+            "type": "fill",
+            "ar": "خَرَجَتِ الطَّالِبَ_ مِنَ الْمَدْرَسَةِ.",
+            "options": [
+              "ةُ",
+              "ةِ",
+              "ةَ"
+            ],
+            "answer": 0,
+            "nl": "De studente ging de school uit.",
+            "explain": "الطَّالِبَةُ is het onderwerp (Fā'il) en eindigt op Dammah (-u)."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 3 (blz. 53): Betrekkelijk voornaamwoord الَّتِي en benadrukking",
+        "page": 53,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "الطَّالِبَةُ _ جَلَسَتْ أَمَامَ الْمُدَرِّسَةِ مِنْ أَلْمَانِيَا.",
             "options": [
               "الَّتِي",
               "الَّذِي",
               "هَذِهِ"
             ],
             "answer": 0,
-            "nl": "De auto die uit het ziekenhuis kwam, is van de arts.",
-            "explain": "السَّيَّارَةُ is vrouwelijk, dus الَّتِي."
+            "nl": "De studente die vóór de lerares zat...",
+            "explain": "الطَّالِبَةُ is vrouwelijk enkelvoud, dus الَّتِي."
           },
           {
-            "type": "fill",
-            "ar": "الْفَتَى _ فِي الْمَسْجِدِ ابْنُ عَلِيٍّ.",
+            "type": "transform",
+            "prompt": "Voeg nadruk toe aan: هَذَا كِتَابُكَ (Dit is jóúw boek)",
+            "from": "هَذَا كِتَابُكَ",
             "options": [
-              "الَّذِي",
-              "الَّتِي",
-              "هَذَا"
+              "هَذَا كِتَابُكَ أَنْتَ",
+              "هَذَا كِتَابِي أَنَا",
+              "هَذَا كِتَابُهُ هُوَ"
             ],
             "answer": 0,
-            "nl": "De jongeman die in de moskee is, is de zoon van Ali.",
-            "explain": "الْفَتَى is mannelijk, dus الَّذِي."
+            "explain": "Voor nadruk voeg je het losse voornaamwoord أَنْتَ toe na het achtervoegsel (blz. 53)."
+          },
+          {
+            "type": "order",
+            "nl": "Het horloge dat op het bureau ligt, is van de leraar.",
+            "words": [
+              "السَّاعَةُ",
+              "الَّتِي",
+              "عَلَى",
+              "الْمَكْتَبِ",
+              "لِلْمُدَرِّسِ."
+            ],
+            "explain": "السَّاعَةُ الَّتِي عَلَى الْمَكْتَبِ لِلْمُدَرِّسِ."
           }
         ]
       }
@@ -4465,6 +5584,18 @@ window.G2_LESSONS = {
             "answer": 0,
             "nl": "Die mannen zijn pelgrims uit Turkije.",
             "explain": "أُولَئِكَ الرِّجَالُ = die mannen."
+          },
+          {
+            "type": "parse",
+            "sentence": "هَؤُلَاءِ طُلَّابٌ ذَهَبُوا إِلَى الْمَلْعَبِ",
+            "target": "طُلَّابٌ",
+            "options": [
+              "خَبَر مَرْفُوع بِالضَّمَّةِ (Gezegde)",
+              "مُبْتَدَأ",
+              "مَفْعُول بِهِ"
+            ],
+            "answer": 0,
+            "explain": "طُلَّابٌ is het meervoudige gezegde (Khabar) na het meervoudige aanwijzend voornaamwoord هَؤُلَاءِ."
           }
         ]
       }
@@ -4528,32 +5659,138 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 58: Zet de zinnen om van enkelvoud naar meervoud",
-        "page": 58,
+        "instr": "Boekoefening 1 (blz. 55-57): Meervoud van verstandhebbende mannen (هَؤُلَاءِ en هُمْ)",
+        "page": 55,
         "items": [
           {
             "type": "transform",
-            "prompt": "Maak meervoud: هَذَا تَاجِرٌ كَبِيرٌ",
-            "from": "هَذَا تَاجِرٌ كَبِيرٌ",
+            "prompt": "Zet om naar meervoud: «هَذَا طَالِبٌ»",
+            "from": "هَذَا طَالِبٌ",
             "options": [
-              "هَؤُلَاءِ تُجَّارٌ كِبَارٌ",
-              "هَذِهِ تُجَّارٌ كِبَارٌ",
-              "هُمْ تَاجِرُونَ كِبَارٌ"
+              "هَؤُلَاءِ طُلَّابٌ",
+              "هَذِهِ طُلَّابٌ",
+              "أُولَئِكَ طَالِبُونَ"
             ],
             "answer": 0,
-            "explain": "هَؤُلَاءِ تُجَّارٌ كِبَارٌ (kibaarun is mv. van kabierun)."
+            "explain": "هَذَا wordt هَؤُلَاءِ en طَالِبٌ wordt طُلَّابٌ (patroon فُعَّالٌ)."
           },
           {
             "type": "transform",
-            "prompt": "Maak meervoud: هَذَا رَجُلٌ غَنِيٌّ",
-            "from": "هَذَا رَجُلٌ غَنِيٌّ",
+            "prompt": "Zet om naar meervoud: «هَذَا تَاجِرٌ»",
+            "from": "هَذَا تَاجِرٌ",
             "options": [
-              "هَؤُلَاءِ رِجَالٌ أَغْنِيَاءُ",
-              "هَؤُلَاءِ رِجَالٌ غَنِيُّونَ",
-              "هَذِهِ رِجَالٌ أَغْنِيَاءُ"
+              "هَؤُلَاءِ تُجَّارٌ",
+              "هَؤُلَاءِ تَاجِرَاتٌ",
+              "هَذِهِ تُجَّارٌ"
             ],
             "answer": 0,
-            "explain": "أَغْنِيَاءُ is het meervoud van غَنِيٌّ."
+            "explain": "تَاجِرٌ heeft gebroken meervoud تُجَّارٌ."
+          },
+          {
+            "type": "fill",
+            "ar": "مَنْ هَؤُلَاءِ الرِّجَالُ؟ _ حُجَّاجٌ مِنَ التُّرْكِيَا.",
+            "options": [
+              "هُمْ",
+              "هُنَّ",
+              "أَنْتُمْ"
+            ],
+            "answer": 0,
+            "nl": "Wie zijn deze mannen? Zij zijn bedevaartgangers uit Turkije.",
+            "explain": "هُمْ = zij (mannelijk meervoud)."
+          },
+          {
+            "type": "order",
+            "nl": "Deze mannen zijn mijn broers en zij zijn studenten aan de universiteit.",
+            "words": [
+              "هَؤُلَاءِ",
+              "إِخْوَتِي",
+              "وَهُمْ",
+              "طُلَّابٌ",
+              "فِي",
+              "الْجَامِعَةِ."
+            ],
+            "explain": "هَؤُلَاءِ إِخْوَتِي وَهُمْ طُلَّابٌ فِي الْجَامِعَةِ."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 56): Werkwoord meervoud ذَهَبُوا",
+        "page": 56,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "أَيْنَ الطُّلَّابُ؟ _ إِلَى الْمَلْعَبِ.",
+            "options": [
+              "ذَهَبُوا",
+              "ذَهَبَ",
+              "ذَهَبْنَ"
+            ],
+            "answer": 0,
+            "nl": "Waar zijn de studenten? Zij gingen naar het speelveld.",
+            "explain": "Bij mannelijk meervoud gebruik je ذَهَبُوا (met stille Alif)."
+          },
+          {
+            "type": "mc",
+            "q": "Welke letter staat aan het eind van ذَهَبُوا die je wél schrijft maar niet uitspreekt?",
+            "options": [
+              "De stille Alif (Alif al-wiqāyah)",
+              "De Waw",
+              "De Dammah"
+            ],
+            "answer": 0,
+            "explain": "De Alif aan het eind van ذَهَبُوا is orthografisch en wordt niet uitgesproken (blz. 56)."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 3 (blz. 61-63): Vrouwelijk meervoud (طَالِبَاتٌ en هُنَّ) en أُولَئِكَ",
+        "page": 61,
+        "items": [
+          {
+            "type": "transform",
+            "prompt": "Zet om naar vrouwelijk meervoud: «هَذِهِ طَالِبَةٌ»",
+            "from": "هَذِهِ طَالِبَةٌ",
+            "options": [
+              "هَؤُلَاءِ طَالِبَاتٌ",
+              "هَذِهِ طَالِبَاتٌ",
+              "أُولَئِكَ طُلَّابٌ"
+            ],
+            "answer": 0,
+            "explain": "Ongebroken vrouwelijk meervoud eindigt op -aatun: طَالِبَاتٌ."
+          },
+          {
+            "type": "transform",
+            "prompt": "Zet om naar vrouwelijk meervoud: «هَذِهِ فَتَاةٌ»",
+            "from": "هَذِهِ فَتَاةٌ",
+            "options": [
+              "هَؤُلَاءِ فَتَيَاتٌ",
+              "هَذِهِ فَتَيَاتٌ",
+              "أُولَئِكَ فِتْيَةٌ"
+            ],
+            "answer": 0,
+            "explain": "فَتَاةٌ (jongedame) heeft meervoud فَتَيَاتٌ."
+          },
+          {
+            "type": "fill",
+            "ar": "أَيْنَ الطَّالِبَاتُ؟ _ ذَهَبْنَ إِلَى الْمَكْتَبَةِ.",
+            "options": [
+              "هُنَّ",
+              "هُمْ",
+              "هِيَ"
+            ],
+            "answer": 0,
+            "nl": "Waar zijn de studentes? Zij gingen naar de bibliotheek.",
+            "explain": "هُنَّ = zij (vrouwelijk meervoud)."
+          },
+          {
+            "type": "order",
+            "nl": "Die vrouwen zijn moslima's.",
+            "words": [
+              "أُولَئِكَ",
+              "نِسَاءٌ",
+              "مُسْلِمَاتٌ."
+            ],
+            "explain": "أُولَئِكَ نِسَاءٌ مُسْلِمَاتٌ."
           }
         ]
       }
@@ -4787,32 +6024,117 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 67: Beantwoord de vragen over jullie groep",
-        "page": 67,
+        "instr": "Boekoefening 1 (blz. 65-66): Meervoud 2e en 1e persoon (أَنْتُمْ en نَحْنُ)",
+        "page": 65,
         "items": [
           {
             "type": "fill",
-            "ar": "مَنْ رَبُّكُمْ؟ اللَّهُ رَبُّ_.",
+            "ar": "مَنْ _ يَا إِخْوَانُ؟ نَحْنُ طُلَّابٌ.",
             "options": [
-              "نَا",
-              "كُمْ",
-              "هُ"
-            ],
-            "answer": 0,
-            "nl": "Wie is jullie Heer? Allah is onze Heer.",
-            "explain": "Bij een vraag met -kum antwoord je met -naa (ons/onze)."
-          },
-          {
-            "type": "fill",
-            "ar": "مَا لُغَتُكُمْ؟ لُغَتُ_ الْعَرَبِيَّةُ.",
-            "options": [
-              "نَا",
-              "كُمْ",
+              "أَنْتُمْ",
+              "أَنْتَ",
               "هُمْ"
             ],
             "answer": 0,
-            "nl": "Wat is jullie taal? Onze taal is het Arabisch.",
-            "explain": "لُغَتُنَا = onze taal."
+            "nl": "Wie zijn jullie, o broeders? Wij zijn studenten.",
+            "explain": "أَنْتُمْ = jullie (mannelijk meervoud)."
+          },
+          {
+            "type": "fill",
+            "ar": "أَيْنَ بَيْتُ_ يَا شَبَابُ؟ بَيْتُنَا قَرِيبٌ.",
+            "options": [
+              "كُمْ",
+              "كَ",
+              "نَا"
+            ],
+            "answer": 0,
+            "nl": "Waar is jullie huis, o jongemannen? Ons huis is dichtbij.",
+            "explain": "ـكُمْ = jullie, ـنَا = ons/onze."
+          },
+          {
+            "type": "order",
+            "nl": "Wij zijn moslims, Allah is onze Heer en de Islam is onze religie.",
+            "words": [
+              "نَحْنُ",
+              "مُسْلِمُونَ",
+              "وَاللَّهُ",
+              "رَبُّنَا",
+              "وَالْإِسْلَامُ",
+              "دِينُنَا."
+            ],
+            "explain": "نَحْنُ مُسْلِمُونَ وَاللَّهُ رَبُّنَا وَالْإِسْلَامُ دِينُنَا."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 66-67): Werkwoorden ذَهَبْتُمْ en ذَهَبْنَا",
+        "page": 66,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "أَيْنَ _ يَا إِخْوَانُ؟ ذَهَبْنَا إِلَى الْمَسْجِدِ.",
+            "options": [
+              "ذَهَبْتُمْ",
+              "ذَهَبْتَ",
+              "ذَهَبُوا"
+            ],
+            "answer": 0,
+            "nl": "Waar gingen jullie heen, o broeders? Wij gingen naar de moskee.",
+            "explain": "ذَهَبْتُمْ = jullie gingen."
+          },
+          {
+            "type": "fill",
+            "ar": "أَذَهَبْتُمْ إِلَى السُّوقِ؟ نَعَمْ، _ إِلَى السُّوقِ.",
+            "options": [
+              "ذَهَبْنَا",
+              "ذَهَبْتُمْ",
+              "ذَهَبْتُ"
+            ],
+            "answer": 0,
+            "nl": "Gingen jullie naar de markt? Ja, wij gingen naar de markt.",
+            "explain": "ذَهَبْنَا = wij gingen."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 3 (blz. 68): Vragen met أَيُّ (welk/welke?)",
+        "page": 68,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "أَيُّ يَوْمٍ هَذَا؟ هَذَا يَوْمُ _.",
+            "options": [
+              "السَّبْتِ",
+              "السَّبْتُ",
+              "السَّبْتَ"
+            ],
+            "answer": 0,
+            "nl": "Welke dag is dit? Dit is zaterdag.",
+            "explain": "Het woord na يَوْمُ is Mudāf Ilayh en staat in de genitief (-i)."
+          },
+          {
+            "type": "fill",
+            "ar": "أَيُّ شَهْرٍ هَذَا؟ هَذَا شَهْرُ _.",
+            "options": [
+              "رَجَبٍ",
+              "رَجَبٌ",
+              "رَجَبًا"
+            ],
+            "answer": 0,
+            "nl": "Welke maand is dit? Dit is de maand Radjab.",
+            "explain": "رَجَبٍ staat in de genitief met kasratayn."
+          },
+          {
+            "type": "order",
+            "nl": "Welk boek lees jij, o Haamid?",
+            "words": [
+              "أَيَّ",
+              "كِتَابٍ",
+              "تَقْرَأُ",
+              "يَا",
+              "حَامِدُ؟"
+            ],
+            "explain": "أَيَّ كِتَابٍ تَقْرَأُ يَا حَامِدُ؟"
           }
         ]
       }
@@ -4985,32 +6307,105 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 71: Vul in met het juiste werkwoord (ذَهَبْتُمْ of ذَهَبْتُنَّ)",
+        "instr": "Boekoefening 1 (blz. 69-70): Vrouwelijk aanspreekvorm meervoud (أَنْتُنَّ en ـكُنَّ)",
+        "page": 69,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "مَنْ _ يَا أَخَوَاتُ؟ نَحْنُ بَنَاتُ الْمُدَرِّسِ.",
+            "options": [
+              "أَنْتُنَّ",
+              "أَنْتُمْ",
+              "أَنْتِ"
+            ],
+            "answer": 0,
+            "nl": "Wie zijn jullie, o zusters? Wij zijn de dochters van de leraar.",
+            "explain": "أَنْتُنَّ = jullie (vrouwelijk meervoud)."
+          },
+          {
+            "type": "fill",
+            "ar": "أَيْنَ بَيْتُ_ يَا أَخَوَاتُ؟ بَيْتُنَا قَرِيبٌ مِنَ الْمَدْرَسَةِ.",
+            "options": [
+              "كُنَّ",
+              "كُمْ",
+              "كِ"
+            ],
+            "answer": 0,
+            "nl": "Waar is jullie huis, o zusters? Ons huis is dichtbij.",
+            "explain": "ـكُنَّ = jullie (vrouwelijk bezittelijk achtervoegsel)."
+          },
+          {
+            "type": "fill",
+            "ar": "أَيْنَ مَدْرَسَتُ_ يَا بَنَاتُ؟ مَدْرَسَتُنَا أَمَامَ الْمَسْجِدِ.",
+            "options": [
+              "كُنَّ",
+              "كُمْ",
+              "هَا"
+            ],
+            "answer": 0,
+            "nl": "Waar is jullie school, o meisjes? Onze school is voor de moskee.",
+            "explain": "ـكُنَّ voor vrouwelijk meervoud."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 70-71): Werkwoordvorm ذَهَبْتُنَّ",
+        "page": 70,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "أَيْنَ _ يَا أَخَوَاتُ؟ ذَهَبْنَا إِلَى الْمُسْتَشْفَى.",
+            "options": [
+              "ذَهَبْتُنَّ",
+              "ذَهَبْتُمْ",
+              "ذَهَبْتِ"
+            ],
+            "answer": 0,
+            "nl": "Waar gingen jullie heen, o zusters? Wij gingen naar het ziekenhuis.",
+            "explain": "ذَهَبْتُنَّ = jullie gingen (vrouwelijk)."
+          },
+          {
+            "type": "transform",
+            "prompt": "Zet om naar meervoud vrouwelijk: «أَيْنَ ذَهَبْتَ يَا أَخِي؟»",
+            "from": "أَيْنَ ذَهَبْتَ يَا أَخِي؟",
+            "options": [
+              "أَيْنَ ذَهَبْتُنَّ يَا أَخَوَاتِي؟",
+              "أَيْنَ ذَهَبْتُمْ يَا إِخْوَانِي؟",
+              "أَيْنَ ذَهَبْنَ يَا أَخَوَاتِي؟"
+            ],
+            "answer": 0,
+            "explain": "أَيْنَ ذَهَبْتُنَّ يَا أَخَوَاتِي؟"
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 3 (blz. 71-72): Bepaling van tijd met قَبْلَ en بَعْدَ",
         "page": 71,
         "items": [
           {
             "type": "fill",
-            "ar": "أَ_ إِلَى الْمُسْتَشْفَى يَا أَخَوَاتُ؟",
+            "ar": "خَرَجَ الْمُدَرِّسُ قَبْلَ _.",
             "options": [
-              "ذَهَبْتُنَّ",
-              "ذَهَبْتُمْ",
-              "ذَهَبْنَ"
+              "الْأَذَانِ",
+              "الْأَذَانُ",
+              "الْأَذَانَ"
             ],
             "answer": 0,
-            "nl": "Gingen jullie naar het ziekenhuis, o zusters?",
-            "explain": "ذَهَبْتُنَّ is voor de 2e persoon vrouwelijk meervoud."
+            "nl": "De leraar ging naar buiten vóór de oproep tot het gebed.",
+            "explain": "Ná قَبْلَ volgt een genitief (kasrah -i)."
           },
           {
-            "type": "fill",
-            "ar": "أَ_ إِلَى الْمَلْعَبِ يَا إِخْوَانُ؟",
-            "options": [
-              "ذَهَبْتُمْ",
-              "ذَهَبْتُنَّ",
-              "ذَهَبُوا"
+            "type": "order",
+            "nl": "Mijn vader keerde na het gebed terug uit de moskee.",
+            "words": [
+              "رَجَعَ",
+              "أَبِي",
+              "مِنَ",
+              "الْمَسْجِدِ",
+              "بَعْدَ",
+              "الصَّلَاةِ."
             ],
-            "answer": 0,
-            "nl": "Gingen jullie naar het speelveld, o broeders?",
-            "explain": "ذَهَبْتُمْ is voor de 2e persoon mannelijk meervoud."
+            "explain": "رَجَعَ أَبِي مِنَ الْمَسْجِدِ بَعْدَ الصَّلَاةِ."
           }
         ]
       }
@@ -5290,6 +6685,18 @@ window.G2_LESSONS = {
             ],
             "answer": 1,
             "explain": "Dit patroon krijgt geen Tanwien."
+          },
+          {
+            "type": "parse",
+            "sentence": "أَبْوَابُ الْمَسْجِدِ مَفْتُوحَةٌ",
+            "target": "مَفْتُوحَةٌ",
+            "options": [
+              "خَبَر مَرْفُوع (Vrouwelijk enkelvoud voor zaakmeervoud)",
+              "نَعْت",
+              "مُضَاف إِلَيْهِ"
+            ],
+            "answer": 0,
+            "explain": "مَفْتُوحَةٌ is het gezegde (Khabar) in het vrouwelijk enkelvoud omdat أَبْوَابُ een meervoud van levenloze zaken is."
           }
         ]
       }
@@ -5318,32 +6725,96 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 74: Behandel niet-menselijk meervoud als vrouwelijk enkelvoud",
+        "instr": "Boekoefening 1 (blz. 73-74): Meervoud van niet-verstandhebbenden (Ghayr 'Āqil = Vrouwelijk Enkelvoud)",
+        "page": 73,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "_ أَقْلَامٌ جَدِيدَةٌ.",
+            "options": [
+              "هَذِهِ",
+              "هَؤُلَاءِ",
+              "هَذَا"
+            ],
+            "answer": 0,
+            "nl": "Dit zijn nieuwe pennen.",
+            "explain": "Meervoud van levenloze zaken wordt behandeld als vrouwelijk enkelvoud: هَذِهِ."
+          },
+          {
+            "type": "fill",
+            "ar": "_ كُتُبٌ قَدِيمَةٌ.",
+            "options": [
+              "تِلْكَ",
+              "أُولَئِكَ",
+              "ذَلِكَ"
+            ],
+            "answer": 0,
+            "nl": "Dat zijn oude boeken.",
+            "explain": "تِلْكَ = dat / die (voor vrouwelijk enkelvoud en zaakmeervouden)."
+          },
+          {
+            "type": "fill",
+            "ar": "أَيْنَ الْكُتُبُ؟ _ عَلَى الْمَكْتَبِ.",
+            "options": [
+              "هِيَ",
+              "هُمْ",
+              "هُنَّ"
+            ],
+            "answer": 0,
+            "nl": "Waar zijn de boeken? Ze liggen op het bureau.",
+            "explain": "Persoonlijk voornaamwoord voor zaakmeervoud is هِيَ."
+          },
+          {
+            "type": "order",
+            "nl": "Dit zijn heel mooie huizen.",
+            "words": [
+              "هَذِهِ",
+              "بُيُوتٌ",
+              "جَمِيلَةٌ",
+              "جِدًّا."
+            ],
+            "explain": "هَذِهِ بُيُوتٌ جَمِيلَةٌ جِدًّا."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 74-75): Bijvoeglijke naamwoorden bij niet-menselijk meervoud",
         "page": 74,
         "items": [
           {
             "type": "fill",
-            "ar": "هَذِهِ كُتُبٌ _.",
+            "ar": "أَبْوَابُ الْمَسْجِدِ _.",
             "options": [
-              "جَدِيدَةٌ",
-              "جُدُدٌ",
-              "جَدِيدَانِ"
+              "مَفْتُوحَةٌ",
+              "مَفْتُوحُونَ",
+              "مَفْتُوحَاتٌ"
             ],
             "answer": 0,
-            "nl": "Dit zijn nieuwe boeken.",
-            "explain": "كُتُبٌ is niet-menselijk meervoud, dus het bijvoeglijk naamwoord is vrouwelijk enkelvoud (جَدِيدَةٌ)."
+            "nl": "De deuren van de moskee zijn geopend.",
+            "explain": "Het bijvoeglijk naamwoord staat in het vrouwelijk enkelvoud: مَفْتُوحَةٌ."
           },
           {
             "type": "fill",
-            "ar": "_ كِلَابٌ صَغِيرَةٌ.",
+            "ar": "السَّيَّارَاتُ الْجَدِيدَةُ _.",
             "options": [
-              "هَذِهِ",
-              "هَؤُلَاءِ",
-              "أُولَئِكَ"
+              "سَرِيعَةٌ",
+              "سَرِيعَاتٌ",
+              "سَرِيعُونَ"
             ],
             "answer": 0,
-            "nl": "Dit zijn kleine honden.",
-            "explain": "Niet-menselijk meervoud krijgt هَذِهِ."
+            "nl": "De nieuwe auto's zijn snel.",
+            "explain": "سَرِيعَةٌ = snel (vrouwelijk enkelvoud)."
+          },
+          {
+            "type": "order",
+            "nl": "Dit zijn goedkope Japanse horloges.",
+            "words": [
+              "هَذِهِ",
+              "سَاعَاتٌ",
+              "يَابَانِيَّةٌ",
+              "رَخِيصَةٌ."
+            ],
+            "explain": "هَذِهِ سَاعَاتٌ يَابَانِيَّةٌ رَخِيصَةٌ."
           }
         ]
       }
@@ -5444,20 +6915,87 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 77: Lees en beantwoord met betrekking tot meervouden",
+        "instr": "Boekoefening 1 (blz. 76-77): Transformatie naar het meervoud (Ghayr 'Āqil)",
+        "page": 76,
+        "items": [
+          {
+            "type": "transform",
+            "prompt": "Zet om naar meervoud: «هَذَا قَمِيصٌ رَخِيصٌ»",
+            "from": "هَذَا قَمِيصٌ رَخِيصٌ",
+            "options": [
+              "هَذِهِ قُمْصَانٌ رَخِيصَةٌ",
+              "هَؤُلَاءِ قُمْصَانٌ رَخِيصُونَ",
+              "هَذَا قُمْصَانٌ رَخِيصَةٌ"
+            ],
+            "answer": 0,
+            "explain": "قَمِيصٌ wordt قُمْصَانٌ en krijgt هَذِهِ en رَخِيصَةٌ."
+          },
+          {
+            "type": "transform",
+            "prompt": "Zet om naar meervoud: «ذَلِكَ نَجْمٌ بَعِيدٌ»",
+            "from": "ذَلِكَ نَجْمٌ بَعِيدٌ",
+            "options": [
+              "تِلْكَ نُجُومٌ بَعِيدَةٌ",
+              "أُولَئِكَ نُجُومٌ بَعِيدُونَ",
+              "تِلْكَ نُجُومٌ بَعِيدَاتٌ"
+            ],
+            "answer": 0,
+            "explain": "ذَلِكَ wordt تِلْكَ en نَجْمٌ wordt نُجُومٌ بَعِيدَةٌ."
+          },
+          {
+            "type": "fill",
+            "ar": "هَذِهِ حُمُرٌ _.",
+            "options": [
+              "سَرِيعَةٌ",
+              "سَرِيعُونَ",
+              "سَرِيعَاتٌ"
+            ],
+            "answer": 0,
+            "nl": "Dit zijn snelle ezels.",
+            "explain": "حُمُرٌ (meervoud van حِمَارٌ) krijgt een vrouwelijk enkelvoudig bijvoeglijk naamwoord."
+          },
+          {
+            "type": "order",
+            "nl": "In dit dorp staan kleine huizen.",
+            "words": [
+              "فِي",
+              "هَذِهِ",
+              "الْقَرْيَةِ",
+              "بُيُوتٌ",
+              "صَغِيرَةٌ."
+            ],
+            "explain": "فِي هَذِهِ الْقَرْيَةِ بُيُوتٌ صَغِيرَةٌ."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 77-78): Idāfah met meervoud en bijvoeglijke naamwoorden",
         "page": 77,
         "items": [
           {
             "type": "fill",
-            "ar": "أَبْوَابُ الْمَسْجِدِ _ الْآنَ.",
+            "ar": "الشَّرِكَةُ الْيَابَانِيَّةُ _.",
             "options": [
-              "مَفْتُوحَةٌ",
-              "مَفْتُوحُونَ",
-              "مَفْتُوحَاتٌ"
+              "كَبِيرَةٌ",
+              "كَبِيرُونَ",
+              "كَبِيرَاتٌ"
             ],
             "answer": 0,
-            "nl": "De deuren van de moskee zijn nu open.",
-            "explain": "أَبْوَابُ is niet-menselijk meervoud: gezegde is vrouwelijk enkelvoud مَفْتُوحَةٌ."
+            "nl": "Het Japanse bedrijf is groot.",
+            "explain": "الشَّرِكَةُ is vrouwelijk enkelvoud."
+          },
+          {
+            "type": "order",
+            "nl": "Waar zijn de schriften van de studenten? Ze liggen in het lokaal.",
+            "words": [
+              "أَيْنَ",
+              "دَفَاتِرُ",
+              "الطُّلَّابِ؟",
+              "هِيَ",
+              "فِي",
+              "الْفَصْلِ."
+            ],
+            "explain": "أَيْنَ دَفَاتِرُ الطُّلَّابِ؟ هِيَ فِي الْفَصْلِ."
           }
         ]
       }
@@ -5645,6 +7183,18 @@ window.G2_LESSONS = {
             ],
             "answer": 0,
             "explain": "Ná كَمْ is het woord altijd enkelvoud en mansoeb (bijv. كَمْ طَالِبًا)."
+          },
+          {
+            "type": "parse",
+            "sentence": "فِي الْفَصْلِ قَلَمَانِ",
+            "target": "قَلَمَانِ",
+            "options": [
+              "مُبْتَدَأ مُؤَخَّر مَرْفُوع بِالأَلِفِ (Tweevoud nominatief)",
+              "فَاعِل",
+              "خَبَر"
+            ],
+            "answer": 0,
+            "explain": "قَلَمَانِ is het uitgestelde onderwerp (Mubtada' Mu'akhkhar) en heeft de uitgang -āni (Marfū' met Alif)."
           }
         ]
       }
@@ -5693,32 +7243,112 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 79: Beantwoord de vragen met behulp van het tweevoud",
+        "instr": "Boekoefening 1 (blz. 79-80): Het Tweevoud (الْمُثَنَّى) op ـَانِ",
         "page": 79,
         "items": [
           {
-            "type": "fill",
-            "ar": "كَمْ عَجَلَةً لِلدَّرَّاجَةِ؟ لَهَا عَجَلَت_.",
+            "type": "transform",
+            "prompt": "Vorm het tweevoud van: «كِتَابٌ»",
+            "from": "كِتَابٌ",
             "options": [
-              "َانِ",
-              "َاتٌ",
-              "َيْنِ"
+              "كِتَابَانِ",
+              "كِتَابَيْنِ",
+              "كُتُبٌ"
             ],
             "answer": 0,
-            "nl": "Hoeveel wielen heeft een fiets? Zij heeft twee wielen.",
-            "explain": "عَجَلَتَانِ = twee wielen (tweevoud)."
+            "explain": "Het tweevoud nominatief eindigt op -aani: كِتَابَانِ."
+          },
+          {
+            "type": "transform",
+            "prompt": "Vorm het tweevoud van: «مَدْرَسَةٌ»",
+            "from": "مَدْرَسَةٌ",
+            "options": [
+              "مَدْرَسَتَانِ",
+              "مَدْرَسَتَيْنِ",
+              "مَدَارِسُ"
+            ],
+            "answer": 0,
+            "explain": "مَدْرَسَةٌ wordt مَدْرَسَتَانِ (de Taa' Marboetah opent naar een gewone Taa')."
           },
           {
             "type": "fill",
-            "ar": "كَمْ رَكْعَةً فِي صَلَاةِ الْفَجْرِ؟ فِيهَا رَكْعَت_.",
+            "ar": "هَذَانِ _ جَدِيدَانِ.",
             "options": [
-              "َانِ",
-              "َاتٌ",
-              "َيْنِ"
+              "قَلَمَانِ",
+              "قَلَمَيْنِ",
+              "أَقْلَامٌ"
             ],
             "answer": 0,
-            "nl": "Hoeveel rak'ahs zijn er in het Fadjr-gebed? Daarin zijn twee rak'ahs.",
-            "explain": "رَكْعَتَانِ = twee rak'ahs."
+            "nl": "Deze twee pennen zijn nieuw.",
+            "explain": "هَذَانِ en جَدِيدَانِ vereisen het tweevoud nominatief: قَلَمَانِ."
+          },
+          {
+            "type": "fill",
+            "ar": "هَاتَانِ _ كَبِيرَتَانِ.",
+            "options": [
+              "مَدْرَسَتَانِ",
+              "مَدْرَسَتَيْنِ",
+              "مَدَارِسُ"
+            ],
+            "answer": 0,
+            "nl": "Deze twee scholen zijn groot.",
+            "explain": "Vrouwelijk tweevoud aanwijzer هَاتَانِ vereist مَدْرَسَتَانِ."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 80-81): Vragen met كَمْ (Hoeveel?) met enkelvoud Mansoeb",
+        "page": 80,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "كَمْ _ عِنْدَكَ يَا حَامِدُ؟",
+            "options": [
+              "قَلَمًا",
+              "قَلَمٌ",
+              "قَلَمٍ"
+            ],
+            "answer": 0,
+            "nl": "Hoeveel pennen heb jij, o Haamid?",
+            "explain": "Na كَمْ is het getelde woord enkelvoud en Mansoeb op -an (Tamyīz)."
+          },
+          {
+            "type": "fill",
+            "ar": "كَمْ _ لِلسَّيَّارَةِ؟",
+            "options": [
+              "عَجَلَةً",
+              "عَجَلَةٌ",
+              "عَجَلَاتٍ"
+            ],
+            "answer": 0,
+            "nl": "Hoeveel wielen heeft de auto?",
+            "explain": "عَجَلَةً met Fathatayn na كَمْ."
+          },
+          {
+            "type": "mc",
+            "q": "Hoeveel wielen heeft een auto volgens het boek?",
+            "options": [
+              "لَهَا أَرْبَعُ عَجَلَاتٍ.",
+              "لَهَا عَجَلَتَانِ.",
+              "لَهَا ثَلَاثُ عَجَلَاتٍ."
+            ],
+            "answer": 0,
+            "explain": "De auto heeft vier wielen: أَرْبَعُ عَجَلَاتٍ."
+          },
+          {
+            "type": "order",
+            "nl": "Hoeveel dagen zitten er in een week? Er zitten zeven dagen in een week.",
+            "words": [
+              "كَمْ",
+              "يَوْمًا",
+              "فِي",
+              "الْأُسْبُوعِ؟",
+              "فِي",
+              "الْأُسْبُوعِ",
+              "سَبْعَةُ",
+              "أَيَّامٍ."
+            ],
+            "explain": "كَمْ يَوْمًا فِي الْأُسْبُوعِ؟ فِي الْأُسْبُوعِ سَبْعَةُ أَيَّامٍ."
           }
         ]
       }
@@ -5835,6 +7465,18 @@ window.G2_LESSONS = {
               "رِجَالٍ."
             ],
             "explain": "أَرْبَعَةُ رِجَالٍ = vier mannen."
+          },
+          {
+            "type": "parse",
+            "sentence": "فِي الْحَافِلَةِ عَشَرَةُ رُكَّابٍ",
+            "target": "عَشَرَةُ",
+            "options": [
+              "مُبْتَدَأ مُؤَخَّر مَرْفُوع بِالضَّمَّةِ (Onderwerp / Getal)",
+              "مُضَاف إِلَيْهِ",
+              "نَعْت"
+            ],
+            "answer": 0,
+            "explain": "عَشَرَةُ is het getal (Mudāf) en fungeert als het uitgestelde onderwerp."
           }
         ]
       }
@@ -5898,32 +7540,85 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 82: Lees en schrijf met de juiste klinkers",
+        "instr": "Boekoefening 1 (blz. 82-83): Getallen 3 t/m 10 bij mannelijke woorden",
         "page": 82,
         "items": [
           {
             "type": "fill",
-            "ar": "لِي سِتَّةُ إِخْوَة_.",
+            "ar": "عِنْدِي _ كُتُبٍ (3 boeken).",
             "options": [
-              "ٍ",
-              "ٌ",
-              "َ"
+              "ثَلَاثَةُ",
+              "ثَلَاثُ",
+              "ثَلَاثٍ"
             ],
             "answer": 0,
-            "nl": "Ik heb zes broers.",
-            "explain": "إِخْوَةٍ staat in de genitief (majroer met Kasrah)."
+            "nl": "Ik heb 3 boeken.",
+            "explain": "كِتَابٌ is mannelijk, dus krijgt het getal Taa' Marboetah: ثَلَاثَةُ."
           },
           {
             "type": "fill",
-            "ar": "فِي هَذَا الشَّارِعِ عَشَرَةُ فَنَادِق_.",
+            "ar": "فِي الْفَصْلِ _ طُلَّابٍ (5 studenten).",
             "options": [
-              "َ",
-              "ٍ",
-              "ُ"
+              "خَمْسَةُ",
+              "خَمْسُ",
+              "خَمْسِ"
             ],
             "answer": 0,
-            "nl": "In deze straat zijn tien hotels (fanaadiqa is diptoot).",
-            "explain": "فَنَادِيقُ is een diptoot en krijgt daarom een Fathah (-a) in plaats van Kasrah."
+            "nl": "In de klas zitten 5 studenten.",
+            "explain": "طَالِبٌ is mannelijk, dus خَمْسَةُ طُلَّابٍ."
+          },
+          {
+            "type": "fill",
+            "ar": "لِي _ إِخْوَةٍ (4 broers).",
+            "options": [
+              "أَرْبَعَةُ",
+              "أَرْبَعُ",
+              "أَرْبَعِ"
+            ],
+            "answer": 0,
+            "nl": "Ik heb 4 broers.",
+            "explain": "أَخٌ is mannelijk, dus أَرْبَعَةُ إِخْوَةٍ."
+          },
+          {
+            "type": "fill",
+            "ar": "اشْتَرَيْتُ هَذَا الْقَلَمَ بِـ_ رِيَالَاتٍ (7 riyals).",
+            "options": [
+              "سَبْعَةِ",
+              "سَبْعَةُ",
+              "سَبْعِ"
+            ],
+            "answer": 0,
+            "nl": "Ik kocht deze pen voor 7 riyals.",
+            "explain": "Door het voorzetsel بِـ krijgt het getal Kasrah: بِسَبْعَةِ."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 83-84): Gebruik van كُلٌّ (iedereen/allemaal)",
+        "page": 83,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "نَحْنُ طُلَّابٌ، _ مِنْ بَلَدٍ مُخْتَلِفٍ.",
+            "options": [
+              "كُلُّنَا",
+              "كُلُّهُمْ",
+              "كُلُّكُمْ"
+            ],
+            "answer": 0,
+            "nl": "Wij zijn studenten, wij allemaal komen uit verschillende landen.",
+            "explain": "كُلُّنَا = wij allemaal."
+          },
+          {
+            "type": "order",
+            "nl": "In de bus zitten tien passagiers.",
+            "words": [
+              "فِي",
+              "الْحَافِلَةِ",
+              "عَشَرَةُ",
+              "رُكَّابٍ."
+            ],
+            "explain": "فِي الْحَافِلَةِ عَشَرَةُ رُكَّابٍ."
           }
         ]
       }
@@ -6087,32 +7782,85 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 85: Lees en schrijf met de juiste getalvormen",
+        "instr": "Boekoefening 1 (blz. 85-86): Getallen 3 t/m 10 bij vrouwelijke woorden",
         "page": 85,
         "items": [
           {
             "type": "fill",
-            "ar": "فِي قَرْيَتِنَا ثَمَانِي مَدَارِس_.",
+            "ar": "عِنْدِي _ مَجَلَّاتٍ (3 tijdschriften).",
             "options": [
-              "َ",
-              "ٍ",
-              "ُ"
+              "ثَلَاثُ",
+              "ثَلَاثَةُ",
+              "ثَلَاثٍ"
             ],
             "answer": 0,
-            "nl": "In ons dorp zijn acht scholen (madaarisa is diptoot).",
-            "explain": "مَدَارِسُ is mamnoe' min as-sarf en krijgt fathah (-a)."
+            "nl": "Ik heb 3 tijdschriften.",
+            "explain": "مَجَلَّةٌ is vrouwelijk, dus heeft het getal géén Taa' Marboetah: ثَلَاثُ."
           },
           {
             "type": "fill",
-            "ar": "عِنْدِي _ رِيَالَاتٍ وَ _ قُرُوشٍ.",
+            "ar": "فِي بَيْتِنَا _ غُرَفٍ (5 kamers).",
             "options": [
-              "خَمْسَةُ / ثَلَاثَةُ",
-              "خَمْسُ / ثَلَاثُ",
-              "خَمْسَةُ / ثَلَاثُ"
+              "خَمْسُ",
+              "خَمْسَةُ",
+              "خَمْسِ"
             ],
             "answer": 0,
-            "nl": "Ik heb vijf riyals en drie piasters.",
-            "explain": "رِيَالٌ en قِرْشٌ zijn beide mannelijk, dus خَمْسَةُ en ثَلَاثَةُ."
+            "nl": "In ons huis zijn 5 kamers.",
+            "explain": "غُرْفَةٌ is vrouwelijk, dus خَمْسُ غُرَفٍ."
+          },
+          {
+            "type": "fill",
+            "ar": "لِي _ أَخَوَاتٍ (4 zussen).",
+            "options": [
+              "أَرْبَعُ",
+              "أَرْبَعَةُ",
+              "أَرْبَعِ"
+            ],
+            "answer": 0,
+            "nl": "Ik heb 4 zussen.",
+            "explain": "أُخْتٌ is vrouwelijk, dus أَرْبَعُ أَخَوَاتٍ."
+          },
+          {
+            "type": "fill",
+            "ar": "فِي الْأُسْبُوعِ _ لَيَالٍ (7 nachten).",
+            "options": [
+              "سَبْعُ",
+              "سَبْعَةُ",
+              "سَبْعِ"
+            ],
+            "answer": 0,
+            "nl": "In de week zitten 7 nachten.",
+            "explain": "لَيْلَةٌ is vrouwelijk, dus سَبْعُ لَيَالٍ."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 86): Mannelijk versus vrouwelijk geteld",
+        "page": 86,
+        "items": [
+          {
+            "type": "order",
+            "nl": "Ik heb drie broers en vier zussen.",
+            "words": [
+              "لِي",
+              "ثَلَاثَةُ",
+              "إِخْوَةٍ",
+              "وَأَرْبَعُ",
+              "أَخَوَاتٍ."
+            ],
+            "explain": "لِي ثَلَاثَةُ إِخْوَةٍ (m) وَأَرْبَعُ أَخَوَاتٍ (v)."
+          },
+          {
+            "type": "mc",
+            "q": "Wat is het meervoud van غُرْفَةٌ (kamer)?",
+            "options": [
+              "غُرَفٌ",
+              "غُرُفَاتٌ",
+              "غَرْفَاتٌ"
+            ],
+            "answer": 0,
+            "explain": "غُرْفَةٌ heeft gebroken meervoud غُرَفٌ (patroon فُعَلٌ)."
           }
         ]
       }
@@ -6222,30 +7970,54 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 88: Beantwoord de vragen over de tekst van Les 21",
-        "page": 88,
+        "instr": "Boekoefening 1 (blz. 87-88): Tekstbegrip en details van «مَدْرَسَتِي» (Mijn School)",
+        "page": 87,
         "items": [
           {
             "type": "mc",
-            "q": "كَمْ بَابًا لِلْمَدْرَسَةِ؟ (Hoeveel deuren heeft de school?)",
+            "q": "Hoeveel klaslokalen telt de school in de lestekst?",
             "options": [
-              "لَهَا ثَلَاثَةُ أَبْوَابٍ.",
-              "لَهَا أَرْبَعَةُ أَبْوَابٍ.",
-              "لَهَا بَابَانِ."
+              "فِيهَا تِسْعَةُ فُصُولٍ.",
+              "فِيهَا عَشَرَةُ فُصُولٍ.",
+              "فِيهَا سَبْعَةُ فُصُولٍ."
             ],
             "answer": 0,
-            "explain": "In de tekst staat: لَهَا ثَلَاثَةُ أَبْوَابٍ."
+            "explain": "In de tekst staat: فِيهَا تِسْعَةُ فُصُولٍ (negen lokalen)."
           },
           {
             "type": "mc",
-            "q": "أَيْنَ مَدْرَسَتُكَ؟ (Waar is de school volgens de tekst?)",
+            "q": "Waar ligt de school volgens de lestekst?",
             "options": [
               "هِيَ قَرِيبَةٌ مِنَ الْمَسْجِدِ.",
-              "هِيَ أَمَامَ الْمَسْجِدِ.",
-              "هِيَ فِي السُّوقِ."
+              "هِيَ بَعِيدَةٌ عَنِ الْمَدِينَةِ.",
+              "هِيَ أَمَامَ الْمُسْتَشْفَى."
             ],
             "answer": 0,
             "explain": "In de tekst staat: هِيَ قَرِيبَةٌ مِنَ الْمَسْجِدِ."
+          },
+          {
+            "type": "fill",
+            "ar": "فِي مَدْرَسَتِنَا _ مُدَرِّسِينَ (10 leraren).",
+            "options": [
+              "عَشَرَةُ",
+              "عَشْرُ",
+              "عَشْرَةِ"
+            ],
+            "answer": 0,
+            "nl": "In onze school werken 10 leraren.",
+            "explain": "مُدَرِّسٌ is mannelijk, dus عَشَرَةُ."
+          },
+          {
+            "type": "order",
+            "nl": "Wij houden van onze school en wij houden van onze leraren.",
+            "words": [
+              "نَحْنُ",
+              "نُحِبُّ",
+              "مَدْرَسَتَنَا",
+              "وَنُحِبُّ",
+              "مُدَرِّسِينَا."
+            ],
+            "explain": "نَحْنُ نُحِبُّ مَدْرَسَتَنَا وَنُحِبُّ مُدَرِّسِينَا."
           }
         ]
       }
@@ -6455,32 +8227,96 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 91: Lees en spreek uit met de juiste klinker aan het eind",
-        "page": 91,
+        "instr": "Boekoefening 1 (blz. 89-90): Herkennen van Diptoten (الْمَمْنُوعُ مِنَ الصَّرْفِ)",
+        "page": 89,
         "items": [
           {
             "type": "fill",
-            "ar": "مُحَمَّد_ وَأَحْمَد_.",
+            "ar": "هَذَا كِتَابُ زَيْنَب_.",
             "options": [
-              "ٌ / ُ",
-              "ُ / ٌ",
-              "ٌ / ٌ"
+              "َ",
+              "ُ",
+              "ِ"
             ],
             "answer": 0,
-            "nl": "Muhammad (met tanwien) en Ahmad (diptoot zonder tanwien).",
-            "explain": "مُحَمَّدٌ heeft Tanwien, أَحْمَدُ is diptoot zonder Tanwien."
+            "nl": "Dit is het boek van Zaynab.",
+            "explain": "زَيْنَبُ is een diptoot en krijgt Fathah (-a) in de genitief."
           },
           {
             "type": "fill",
-            "ar": "فَاطِمَة_ وَعَائِشَة_.",
+            "ar": "رَأَيْتُ عُثْمَان_.",
             "options": [
-              "ُ / ُ",
-              "ٌ / ٌ",
-              "ِ / ِ"
+              "َ",
+              "ً",
+              "ُ"
             ],
             "answer": 0,
-            "nl": "Fatimah en Aishah.",
-            "explain": "Vrouwelijke eigennamen zijn diptoten: enkele Dammah."
+            "nl": "Ik zag Uthmaan.",
+            "explain": "عُثْمَانُ krijgt géén Tanwien, enkel Fathah."
+          },
+          {
+            "type": "mc",
+            "q": "Welk van de volgende woorden is GEEN diptoot (krijgt wél gewoon Tanwien)?",
+            "options": [
+              "مُحَمَّدٌ",
+              "فَاطِمَةُ",
+              "أَحْمَدُ",
+              "مَسَاجِدُ"
+            ],
+            "answer": 0,
+            "explain": "مُحَمَّدٌ is triptoot (krijgt Tanwien: مُحَمَّدٌ / مُحَمَّدًا / مُحَمَّدٍ)."
+          },
+          {
+            "type": "order",
+            "nl": "Dit zijn veel moskeeën in de stad.",
+            "words": [
+              "هَذِهِ",
+              "مَسَاجِدُ",
+              "كَثِيرَةٌ",
+              "فِي",
+              "الْمَدِينَةِ."
+            ],
+            "explain": "هَذِهِ مَسَاجِدُ كَثِيرَةٌ فِي الْمَدِينَةِ."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 90-91): Patronen van Diptoten",
+        "page": 90,
+        "items": [
+          {
+            "type": "mc",
+            "q": "Op welk diptotisch meervoudspatroon staat «مَفَاتِيحُ» (sleutels)?",
+            "options": [
+              "مَفَاعِيلُ",
+              "مَفَاعِلُ",
+              "أَفْعِلَاءُ"
+            ],
+            "answer": 0,
+            "explain": "مَفَاتِيحُ staat op het patroon مَفَاعِيلُ."
+          },
+          {
+            "type": "mc",
+            "q": "Op welk diptotisch patroon staat «أَحْمَرُ» (rood)?",
+            "options": [
+              "أَفْعَلُ",
+              "فَعْلَانُ",
+              "فُعَلَاءُ"
+            ],
+            "answer": 0,
+            "explain": "Kleuren en lichaamskenmerken staan op أَفْعَلُ (vrouwelijk فَعْلَاءُ)."
+          },
+          {
+            "type": "fill",
+            "ar": "السَّيَّارَةُ لَوْنُهَا _ (rood).",
+            "options": [
+              "حَمْرَاءُ",
+              "أَحْمَرُ",
+              "حَمْرَاءٌ"
+            ],
+            "answer": 0,
+            "nl": "De auto is rood van kleur.",
+            "explain": "السَّيَّارَةُ is vrouwelijk, dus de vrouwelijke kleurvorm حَمْرَاءُ."
           }
         ]
       }
@@ -6610,6 +8446,18 @@ window.G2_LESSONS = {
             "answer": 0,
             "nl": "Ik bad in de moskeeën.",
             "explain": "Met het lidwoord al- krijgt het woord een gewone Kasrah."
+          },
+          {
+            "type": "parse",
+            "sentence": "صَلَّيْتُ فِي مَسَاجِدَ كَثِيرَةٍ",
+            "target": "مَسَاجِدَ",
+            "options": [
+              "اِسْم مَجْرُور بِالْفَتْحَةِ (Diptoot in genitief met Fathah)",
+              "مَفْعُول بِهِ مَنْصُوب",
+              "مُبْتَدَأ"
+            ],
+            "answer": 0,
+            "explain": "مَسَاجِدَ staat na het voorzetsel فِي, maar omdat het een diptoot (Mamnoo' min al-Sarf) is, krijgt het een Fathah in plaats van een Kasrah."
           }
         ]
       }
@@ -6648,32 +8496,73 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening blz. 93: Lees en geef de juiste klinker aan de onderstreepte diptoten",
-        "page": 93,
+        "instr": "Boekoefening 1 (blz. 92-93): Diptoten in de Genitief met Fathah ipv Kasrah",
+        "page": 92,
         "items": [
           {
             "type": "fill",
-            "ar": "ذَهَبْتُ إِلَى مَسَاجِد_ كَثِيرَةٍ.",
+            "ar": "صَلَّيْتُ فِي مَسَاجِد_َ كَثِيرَةٍ.",
             "options": [
               "َ",
               "ِ",
-              "ُ"
+              "ٍ"
             ],
             "answer": 0,
-            "nl": "Ik ging naar vele moskeeën.",
-            "explain": "مَسَاجِدَ is onbepaald en krijgt Fathah."
+            "nl": "Ik bad in veel moskeeën.",
+            "explain": "مَسَاجِدُ is diptoot: na فِي krijgt het Fathah (-a): مَسَاجِدَ."
           },
           {
             "type": "fill",
-            "ar": "ذَهَبْتُ إِلَى الْمَسَاجِد_.",
+            "ar": "ذَهَبَ أَحْمَدُ إِلَى مَكَّ_َ.",
             "options": [
-              "ِ",
-              "َ",
-              "ُ"
+              "ةَ",
+              "ةِ",
+              "ةٍ"
             ],
             "answer": 0,
-            "nl": "Ik ging naar de moskeeën.",
-            "explain": "Met al- krijgt het een Kasrah."
+            "nl": "Ahmad ging naar Mekka.",
+            "explain": "مَكَّةُ is een vrouwelijke plaatsnaam en diptoot: إِلَى مَكَّةَ."
+          },
+          {
+            "type": "fill",
+            "ar": "هَذَا قَلَمُ أَحْمَد_.",
+            "options": [
+              "َ",
+              "ِ",
+              "ٍ"
+            ],
+            "answer": 0,
+            "nl": "Dit is de pen van Ahmad.",
+            "explain": "أَحْمَدُ als Mudāf Ilayh krijgt Fathah (-a): أَحْمَدَ."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (blz. 93): Uitzondering: wanneer krijgt een diptoot tóch Kasrah?",
+        "page": 93,
+        "items": [
+          {
+            "type": "mc",
+            "q": "Wanneer krijgt een diptoot wél een gewone Kasrah (-i) in de genitief?",
+            "options": [
+              "Wanneer het woord bepaald is met الْـ of als eerste deel van Idāfah (Mudāf) optreedt",
+              "Wanneer het woord aan het eind van de zin staat",
+              "Nooit"
+            ],
+            "answer": 0,
+            "explain": "Met الْـ of als Mudāf vervalt het diptotische kenmerk en krijgt het een normale Kasrah (blz. 93)."
+          },
+          {
+            "type": "fill",
+            "ar": "صَلَّيْتُ فِي _ الْمَدِينَةِ.",
+            "options": [
+              "مَسَاجِدِ",
+              "مَسَاجِدَ",
+              "مَسَاجِدٌ"
+            ],
+            "answer": 0,
+            "nl": "Ik bad in de moskeeën van de stad.",
+            "explain": "Omdat مَسَاجِدُ hier Mudāf is naar الْمَدِينَةِ, krijgt het een Kasrah: مَسَاجِدِ."
           }
         ]
       }
@@ -7024,6 +8913,30 @@ window.G2_LESSONS = {
             "answer": 0,
             "nl": "Aan Allah behoort het bevel voorheen en daarna.",
             "explain": "مِنْ قَبْلُ وَمِنْ بَعْدُ (beide mabnie op Dammah)."
+          },
+          {
+            "type": "parse",
+            "sentence": "وَصَلَ الحُسَيْنُ أَمْسِ",
+            "target": "أَمْسِ",
+            "options": [
+              "ظَرْف زَمَان مَبْنِيّ عَلَى الْكَسْر فِي مَحَلّ نَصْب",
+              "حَرْف جَرّ",
+              "فَاعِل"
+            ],
+            "answer": 0,
+            "explain": "أَمْسِ is een onveranderlijk tijdsbijwoord (Zarf Zamān) gebouwd op Kasrah in de positie van accusatief (Nasb)."
+          },
+          {
+            "type": "parse",
+            "sentence": "جَلَسْتُ تَحْتَ الشَّجَرَةِ",
+            "target": "تَحْتَ",
+            "options": [
+              "ظَرْف مَكَان مَنْصُوب بِالْفَتْحَةِ (Plaatsbijwoord, accusatief)",
+              "ظَرْف زَمَان",
+              "حَرْف جَرّ"
+            ],
+            "answer": 0,
+            "explain": "تَحْتَ is het bijwoord van plaats (Zarf Makān) in de accusatief met Fathah."
           }
         ]
       }
@@ -7137,12 +9050,90 @@ window.G2_LESSONS = {
     ],
     "bookExercises": [
       {
-        "instr": "Boekoefening Reader 8 blz. 9: Herschrijf de zinnen met لَوْ (als / indien)",
+        "instr": "Boekoefening 1 (Reader 8 blz. 4-5): Begripsvragen en Tijdsbijwoorden (أَجِبْ عَنِ الأَسْئِلَةِ)",
+        "page": 4,
+        "items": [
+          {
+            "type": "mc",
+            "q": "مَتَى وَصَلَ الحُسَيْنُ؟ (Wanneer kwam al-Husayn aan volgens de lestekst?)",
+            "options": [
+              "وَصَلَ الحُسَيْنُ أَمْسِ.",
+              "وَصَلَ الحُسَيْنُ غَدًا.",
+              "وَصَلَ الحُسَيْنُ قَبْلَ أُسْبُوعٍ."
+            ],
+            "answer": 0,
+            "explain": "In de dialoog staat: وَصَلَ أَمْسِ (أَمْسِ is zarf zamān mabnî op kasrah)."
+          },
+          {
+            "type": "mc",
+            "q": "كَمْ يَوْمًا بَقِيَ عَلِيٌّ فِي مَكَّةَ؟",
+            "options": [
+              "بَقِيَ عَلِيٌّ فِي مَكَّةَ ثَلَاثَةَ أَيَّامٍ.",
+              "بَقِيَ أَرْبَعَةَ أَيَّامٍ.",
+              "بَقِيَ يَوْمَيْنِ."
+            ],
+            "answer": 0,
+            "explain": "بَقِيَ ثَلَاثَةَ أَيَّامٍ (ثَلَاثَةَ fungeert als zarf / nā'ib 'an al-zarf)."
+          },
+          {
+            "type": "mc",
+            "q": "أَيْنَ سَافَرَ الْمُدَرِّسُ فِي عُطْلَةِ الصَّيْفِ؟",
+            "options": [
+              "سَافَرَ الْمُدَرِّسُ إِلَى الفِلِبِّينِ.",
+              "سَافَرَ إِلَى مَالِيزِيَا.",
+              "سَافَرَ إِلَى مَكَّةَ."
+            ],
+            "answer": 0,
+            "explain": "In de lestekst reisde de leraar naar de Filipijnen."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 2 (Reader 8 blz. 6-8): Onderscheid tussen ظَرْفُ زَمَانٍ en ظَرْفُ مَكَانٍ",
+        "page": 6,
+        "items": [
+          {
+            "type": "mc",
+            "q": "Wat voor soort bijwoord is «لَحْظَةً» in «اِنْتَظِرْ لَحْظَةً» (Wacht een ogenblik)?",
+            "options": [
+              "ظَرْفُ زَمَانٍ مَنْصُوبٌ (bijwoord van tijd)",
+              "ظَرْفُ مَكَانٍ مَنْصُوبٌ (bijwoord van plaats)",
+              "حَرْفُ جَرٍّ"
+            ],
+            "answer": 0,
+            "explain": "لَحْظَةً duidt de tijdsduur aan en is dus ظَرْفُ زَمَانٍ."
+          },
+          {
+            "type": "mc",
+            "q": "Wat voor soort bijwoord is «تَحْتَ» in «جَلَسْتُ تَحْتَ الشَّجَرَةِ» (Ik zat onder de boom)?",
+            "options": [
+              "ظَرْفُ مَكَانٍ مَنْصُوبٌ (bijwoord van plaats)",
+              "ظَرْفُ زَمَانٍ مَنْصُوبٌ (bijwoord van tijd)",
+              "مَفْعُولٌ بِهِ"
+            ],
+            "answer": 0,
+            "explain": "تَحْتَ duidt de plaats aan en is dus ظَرْفُ مَكَانٍ."
+          },
+          {
+            "type": "mc",
+            "q": "Wat is de grammaticale ontleding (I'rāb) van «حَيْثُ» in «اِجْلِسْ حَيْثُ جَلَسَ الْمُدِيرُ»?",
+            "options": [
+              "ظَرْفُ مَكَانٍ مَبْنِيٌّ عَلَى الضَّمِّ فِي مَحَلِّ نَصْبٍ",
+              "ظَرْفُ زَمَانٍ مَنْصُوبٌ بِالْفَتْحَةِ",
+              "حَرْفُ جَرٍّ مَبْنِيٌّ"
+            ],
+            "answer": 0,
+            "explain": "حَيْثُ is een onveranderlijk plaatsbijwoord gebouwd op dammah (blz. 7)."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 3 (Reader 8 blz. 9-10): Toepassing van de voorwaardelijke partikel «لَوْ»",
         "page": 9,
         "items": [
           {
             "type": "transform",
-            "prompt": "Voeg لَوْ toe aan: ضَرَبَنِي ذَاكَ الْوَلَدُ / ضَرَبْتُهُ",
+            "prompt": "Voeg لَوْ toe aan: «ضَرَبَنِي ذَاكَ الْوَلَدُ / ضَرَبْتُهُ»",
             "from": "ضَرَبَنِي ذَاكَ الْوَلَدُ / ضَرَبْتُهُ",
             "options": [
               "لَوْ ضَرَبَنِي ذَاكَ الْوَلَدُ لَضَرَبْتُهُ.",
@@ -7150,11 +9141,11 @@ window.G2_LESSONS = {
               "لَوْ ضَرَبَنِي ذَاكَ الْوَلَدُ ضَرَبْتُهُ."
             ],
             "answer": 0,
-            "explain": "De bevestigende جواب krijgt لَـ: لَضَرَبْتُهُ."
+            "explain": "Bij een bevestigende جواب (hoofdzin) van لَوْ wordt de lâm van bevestiging toegevoegd: لَضَرَبْتُهُ."
           },
           {
             "type": "transform",
-            "prompt": "Voeg لَوْ toe aan: تَأَخَّرْتُ دَقِيقَتَيْنِ / فَاتَتْنِي الطَّائِرَةُ",
+            "prompt": "Voeg لَوْ toe aan: «تَأَخَّرْتُ دَقِيقَتَيْنِ / فَاتَتْنِي الطَّائِرَةُ»",
             "from": "تَأَخَّرْتُ دَقِيقَتَيْنِ / فَاتَتْنِي الطَّائِرَةُ",
             "options": [
               "لَوْ تَأَخَّرْتُ دَقِيقَتَيْنِ لَفَاتَتْنِي الطَّائِرَةُ.",
@@ -7162,7 +9153,48 @@ window.G2_LESSONS = {
               "لَوْ تَأَخَّرْتُ دَقِيقَتَيْنِ فَاتَتْنِي الطَّائِرَةُ."
             ],
             "answer": 0,
-            "explain": "لَوْ تَأَخَّرْتُ دَقِيقَتَيْنِ لَفَاتَتْنِي الطَّائِرَةُ (Had ik twee minuten vertraging gehad, dan had ik het vliegtuig gemist)."
+            "explain": "«Had ik twee minuten vertraging gehad, dan had ik het vliegtuig gemist»."
+          },
+          {
+            "type": "mc",
+            "q": "Wat betekent «لَوْ» in de Arabische grammatica?",
+            "options": [
+              "حَرْفُ امْتِنَاعٍ لِامْتِنَاعٍ (onmogelijke voorwaarde in het verleden: het een gebeurde niet omdat het ander niet gebeurde)",
+              "حَرْفُ نَفْيٍ (ontkenning)",
+              "حَرْفُ اسْتِفْهَامٍ (vraagwoord)"
+            ],
+            "answer": 0,
+            "explain": "لَوْ is een conditiewoord voor niet-gerealiseerde voorwaarden in het verleden (blz. 9)."
+          }
+        ]
+      },
+      {
+        "instr": "Boekoefening 4 (Reader 8 blz. 10, 14): Regels van قَبْلُ en بَعْدُ (Mabnî op Dammah)",
+        "page": 10,
+        "items": [
+          {
+            "type": "fill",
+            "ar": "لِلَّهِ الْأَمْرُ مِنْ _ وَمِنْ بَعْدُ (Koran 30:4).",
+            "options": [
+              "قَبْلُ",
+              "قَبْلِ",
+              "قَبْلَ"
+            ],
+            "answer": 0,
+            "nl": "Aan Allah behoort het gebod, van vóór en van na.",
+            "explain": "Wanneer de Mudāf Ilayh weggelaten maar bedoeld is, worden قَبْلُ en بَعْدُ gebouwd op Dammah (mabnî 'alâ al-damm)."
+          },
+          {
+            "type": "fill",
+            "ar": "جِئْتُ _ الْعَصْرِ.",
+            "options": [
+              "قَبْلَ",
+              "قَبْلُ",
+              "قَبْلِ"
+            ],
+            "answer": 0,
+            "nl": "Ik kwam vóór het Asr-gebed.",
+            "explain": "Wanneer de Mudāf Ilayh (الْعَصْرِ) wél genoemd is, is قَبْلَ gewoon Mansoeb met Fathah."
           }
         ]
       }

@@ -154,6 +154,22 @@ function head(n, sub){
   </div>`;
 }
 
+const PILLARS = [
+  { id: 'p1', name: 'Basiszinnen & Aanwijzers', lessons: [0, 1, 2, 3], desc: 'Klinkers · هَذَا · ذَلِكَ · اَلْمَعْرِفَة' },
+  { id: 'p2', name: 'Voorzetsels & Plaats', lessons: [4, 8], desc: 'فِي · عَلَى · مِنْ · إِلَى · أَمَامَ · خَلْفَ' },
+  { id: 'p3', name: 'Idāfah (Bezit) & Pronouns', lessons: [5, 10], desc: 'مُضَاف · مُضَاف إِلَيْهِ · الضَّمَائِر' },
+  { id: 'p4', name: 'Vrouwelijk & Na\'t', lessons: [6, 7, 9, 12], desc: 'هَذِهِ · تِلْكَ · نَعْت وَمَنْعُوت · أَنْتِ' },
+  { id: 'p5', name: 'Meervoud & Tweevoud', lessons: [13, 14, 15, 16, 17, 18], desc: 'جَمْع مُذَكَّر/مُؤَنَّث/تَكْسِير · مُثَنَّى' },
+  { id: 'p6', name: 'Getallen 3–10', lessons: [19, 20], desc: 'تَمْيِيز الْعَدَد (mannelijk & vrouwelijk)' },
+  { id: 'p7', name: 'Diptoten (Zonder Tanwīn)', lessons: [22, 23], desc: 'مَمْنُوع مِنَ الصَّرْف (Fathah i.p.v. Kasrah)' },
+  { id: 'p8', name: 'Madinah Reader 8', lessons: [24], desc: 'الْمَفْعُولُ فِيهِ · لَوْ الشَّرْطِيَّةُ · قَبْلُ' }
+];
+
+function pillarPct(p){
+  const sum = p.lessons.reduce((acc, n) => acc + lessonPct(n), 0);
+  return Math.round(sum / p.lessons.length);
+}
+
 function renderHub(){
   const done=KEYS.filter(lessonPassed).length;
   const pct=KEYS.length?Math.round(100*done/KEYS.length):0;
@@ -181,6 +197,26 @@ function renderHub(){
       <div class="g2-hero-stat"><b>${done}</b><span>/ ${KEYS.length} lessen</span><div class="g2-lbar"><i style="width:${pct}%"></i></div></div>
     </div>
     ${nextN!==undefined?`<button type="button" class="g2-resume" data-act="g2-open" data-l="${nextN}"><span>Ga verder</span><b>${nextN===0?'Inleiding':'Les '+nextN} · ${E(L[nextN].title)}</b><span>→</span></button>`:''}
+    <div class="g2-pillars">
+      <div class="g2-pillar-head">
+        <h3>Voortgang per grammaticale pijler</h3>
+        <span>${PILLARS.filter(p => pillarPct(p) === 100).length} / 8 pijlers beheerst</span>
+      </div>
+      <div class="g2-pillar-grid">
+        ${PILLARS.map(p => {
+          const pct = pillarPct(p);
+          const isDone = pct === 100;
+          return `<div class="g2-pillar-card ${isDone ? 'done' : pct > 0 ? 'busy' : ''}">
+            <div class="g2-pillar-top">
+              <span class="g2-pillar-name">${E(p.name)}</span>
+              <span class="g2-pillar-pct">${isDone ? ICO.check : pct + '%'}</span>
+            </div>
+            <div class="g2-pillar-desc">${E(p.desc)}</div>
+            <div class="g2-lbar"><i style="width:${pct}%"></i></div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
     <div class="g2-list">${items}</div>
     <label class="g2-unlock"><input type="checkbox" data-act="g2-unlock" ${P.unlockAll?'checked':''}> Alle lessen en stappen vrij openen (zonder volgorde)</label>
   </div>`;
@@ -290,6 +326,21 @@ function renderDrill(s, kicker){
       prompt=`<div class="g2-fill ar" lang="ar" dir="rtl">${arHtml(parts[0]||'')}<span class="g2-gap">${answered?arHtml(d.options[d.answer]):'&nbsp;؟&nbsp;'}</span>${arHtml(parts.slice(1).join('_'))}</div>${d.nl?`<div class="g2-sub">${mix(d.nl)}</div>`:''}<div class="g2-q">Kies wat op de open plek hoort</div>`;
     }else if(d.type==='transform'){
       prompt=`<div class="g2-q">${mix(d.prompt||'')}</div><div class="g2-from ar" lang="ar">${arHtml(d.from||'')} ${spk(d.from||'')}</div>`;
+    }else if(d.type==='parse'){
+      const target=d.target||'';
+      const sent=d.sentence||'';
+      let sentHtml='';
+      if(target && sent.includes(target)){
+        const idx=sent.indexOf(target);
+        sentHtml=`${arHtml(sent.slice(0,idx))}<mark class="g2-parse-target ar" lang="ar">${arHtml(target)}</mark>${arHtml(sent.slice(idx+target.length))}`;
+      }else{
+        sentHtml=arHtml(sent);
+      }
+      prompt=`<div class="g2-parse-badge">${ICO.check} Zinsontleding · I'rāb Coach</div>
+        <div class="g2-parse-box">
+          <div class="g2-parse-sent ar" lang="ar" dir="rtl">${sentHtml} ${spk(sent)}</div>
+          <div class="g2-sub">Wat is de grammaticale rol (إعراب) van <b class="ar" lang="ar">«${arHtml(target)}»</b> in deze zin?</div>
+        </div>`;
     }else{
       prompt=`<div class="g2-q">${mix(d.q||'')}</div>`;
     }
