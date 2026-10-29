@@ -29,8 +29,8 @@ function isAr(s){ s=String(s||''); return AR_RE.test(s) && !/[a-zA-Z]{2,}/.test(
 function isSpeakable(s){
   if(!s) return false;
   const str=String(s).trim();
-  const lettersOnly=str.replace(/[\u064B-\u065F\u0670\u0640\s_ـ«»()[\]{}.,،؟:!]/g,'');
-  return lettersOnly.length>=1;
+  const arabicLetters=str.match(/[\u0621-\u063A\u0641-\u064A\u0671-\u06D3]/g);
+  return !!arabicLetters && arabicLetters.length>=1;
 }
 function arHtml(s){ return (typeof markAr==='function') ? markAr(String(s),'plain') : E(s); }
 function mix(s){ return (typeof glMix==='function') ? glMix(String(s||'')) : E(s); }

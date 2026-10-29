@@ -14,17 +14,34 @@
 }
 
 [data-theme="dark"]{
-  --paper:#0B1416; --paper-deep:#122023; --surface:#152528;
-  --ink:#ECF3F2; --ink-soft:#B8C9CA; --muted:#849B9D;
-  --line:#23373A; --line-strong:#324C50;
-  --forest:#7BB3B8; --forest-dark:#9AD0D5; --forest-soft:#1B2E31;
-  --on-forest:#0B1416;
-  --gold:#D4AC58; --gold-soft:#E2C27B; --gold-pale:rgba(212,172,88,.18);
-  --clay:#E57868; --clay-soft:#361D1A; --ok:#5CD692; --ok-soft:#163325;
-  --purple:#7BB3B8; --purple-soft:#1B2E31; --on-purple:#0B1416;
-  --blue:#7BB3B8; --blue-soft:#1B2E31; --on-blue:#0B1416;
-  --nav:#101D1F; --hero:#0E2124;
-  --shadow:0 4px 20px rgba(0,0,0,.28);
+  --paper:#0e1117;
+  --paper-deep:#161922;
+  --surface:#1c202a;
+  --ink:#f3f4f6;
+  --ink-soft:#cbd5e1;
+  --muted:#94a3b8;
+  --line:rgba(255,255,255,0.08);
+  --line-strong:rgba(255,255,255,0.16);
+  --forest:#2dd4bf;
+  --forest-dark:#14b8a6;
+  --forest-soft:rgba(45,212,191,0.12);
+  --on-forest:#042f2e;
+  --gold:#fbbf24;
+  --gold-soft:#fde68a;
+  --gold-pale:rgba(251,191,36,0.15);
+  --clay:#f87171;
+  --clay-soft:rgba(248,113,113,0.16);
+  --ok:#34d399;
+  --ok-soft:rgba(52,211,153,0.16);
+  --purple:#a78bfa;
+  --purple-soft:rgba(167,139,250,0.14);
+  --on-purple:#1e1b4b;
+  --blue:#38bdf8;
+  --blue-soft:rgba(56,189,248,0.14);
+  --on-blue:#082f49;
+  --nav:#12141a;
+  --hero:#161922;
+  --shadow:0 8px 30px rgba(0,0,0,0.5);
 }
 
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -1237,7 +1254,7 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
 .g2-table td { padding: 10px 14px; border-bottom: 1px solid var(--line); color: var(--ink-soft); vertical-align: middle; }
 .g2-table tr:last-child td { border-bottom: 0; }
 .g2-table td.ar-cell { text-align: right; font-size: 20px; }
-.g2-cell-wrap { display: inline-flex; align-items: center; justify-content: flex-end; gap: 10px; direction: ltr; white-space: nowrap; max-width: 100%; }
+.g2-cell-wrap, .gl-tbl-ar-wrap { display: inline-flex; align-items: center; justify-content: flex-end; gap: 10px; direction: ltr; white-space: nowrap; max-width: 100%; }
 .gl-tbl-ar, .gl-tbl-mix { display: inline-flex; align-items: center; justify-content: flex-end; gap: 8px; direction: ltr; }
 
 /* Voorbeelden */

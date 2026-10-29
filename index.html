@@ -2115,7 +2115,7 @@ function appHeader(){ return ''; }
 
 
 let sbCollapsed = false;
-let sbOpenMenu = null; // 'vocab' | 'gram' | 'conv' | null
+let sbMenuState = { gram: false, conv: false };
 try{sbCollapsed = localStorage.getItem('alm_sb_collapsed')==='1'}catch(e){}
 function applySbCollapsed(){
   if(sbCollapsed) document.body.classList.add('sb-collapsed');
@@ -2133,8 +2133,8 @@ function renderSidebar(){
   const overallPct = totalItems ? Math.round(100 * doneItems / totalItems) : 0;
   const mkCount = mistakeStats().length;
 
-  const gramOpen = sbOpenMenu === 'gram' || path === 'grammar';
-  const convOpen = sbOpenMenu === 'conv' || path === 'conv';
+  const gramOpen = !!sbMenuState.gram;
+  const convOpen = !!sbMenuState.conv;
 
   const gramLinks = lessonNums().map(n => {
     const title = (LESSON_META[n]||['',''])[0];
@@ -3988,6 +3988,13 @@ function glPara(p){
   if(glPureAr(p)) return `<div class="gl-arlist ar" lang="ar">${esc(p)}</div>`;
   return `<p class="gl-body">${glMix(p)}</p>`;
 }
+function glIsSpeakable(s){
+  if(!s) return false;
+  const str = String(s).trim();
+  const arabicLetters = str.match(/[\u0621-\u063A\u0641-\u064A\u0671-\u06D3]/g);
+  return !!arabicLetters && arabicLetters.length >= 1;
+}
+
 function glTable(tbl){
   if(!tbl||!tbl.rows||!tbl.rows.length) return '';
   const ths=(tbl.headers||[]).map(h=>`<th>${glMix(h)}</th>`).join('');
@@ -3995,11 +4002,13 @@ function glTable(tbl){
     const str=String(cell||'');
     const arMatch=str.match(/[\u0600-\u06FF][\u0600-\u06FF\u064B-\u065F\u0670\s،؟.!]*/);
     if(arMatch && glPureAr(str)){
-      return `<td><button type="button" class="gl-tbl-ar" data-act="speak-text" data-text="${esc(str)}"><span class="ar ar-mark" lang="ar">${markAr(str,'plain')}</span>${GL_ICO_SPK}</button></td>`;
+      const speakable = glIsSpeakable(str);
+      return `<td><div class="gl-tbl-ar-wrap"><span class="ar ar-mark" lang="ar" dir="rtl">${markAr(str,'plain')}</span>${speakable ? `<button type="button" class="gl-tbl-spk" data-act="speak-text" data-text="${esc(str)}" title="Beluister" aria-label="Beluister">${GL_ICO_SPK}</button>` : ''}</div></td>`;
     }
     if(arMatch){
       const cleanAr=arMatch[0].trim();
-      return `<td><div class="gl-tbl-mix"><span>${glMix(str)}</span><button type="button" class="gl-tbl-spk" data-act="speak-text" data-text="${esc(cleanAr)}" title="Afspelen">${GL_ICO_SPK}</button></div></td>`;
+      const speakable = glIsSpeakable(cleanAr);
+      return `<td><div class="gl-tbl-mix"><span>${glMix(str)}</span>${speakable ? `<button type="button" class="gl-tbl-spk" data-act="speak-text" data-text="${esc(cleanAr)}" title="Beluister" aria-label="Beluister">${GL_ICO_SPK}</button>` : ''}</div></td>`;
     }
     return `<td>${glMix(str)}</td>`;
   }).join('')}</tr>`).join('');
@@ -4567,11 +4576,14 @@ document.addEventListener('click',e=>{
   }
   else if(act==='sb-menu'){
     const m=btn.dataset.menu;
-    sbOpenMenu = (sbOpenMenu===m) ? null : m;
-    if(m==='gram' && state.view!=='book' && state.view!=='book-lesson'){
-      state.path='grammar';state.view='book';state.bookLesson=null;
-    } else if(m==='conv' && state.view!=='conv' && state.view!=='conv-unit'){
-      state.path='conv';state.view='conv';state.convUnit=null;
+    const willOpen = !sbMenuState[m];
+    sbMenuState[m] = willOpen;
+    if(willOpen){
+      if(m==='gram' && state.view!=='book' && state.view!=='book-lesson'){
+        state.path='grammar';state.view='book';state.bookLesson=null;
+      } else if(m==='conv' && state.view!=='conv' && state.view!=='conv-unit'){
+        state.path='conv';state.view='conv';state.convUnit=null;
+      }
     }
     render();
     return;
@@ -4581,9 +4593,9 @@ document.addEventListener('click',e=>{
     hideCompare();
     const v=btn.dataset.v;
     if(v==='vocab'){state.path='vocab';state.view='vocab';state.bookLesson=null}
-    else if(v==='book'){state.path='grammar';state.view='book';state.bookLesson=null;state.bookTab='uitleg'}
+    else if(v==='book'){state.path='grammar';state.view='book';state.bookLesson=null;state.bookTab='uitleg';sbMenuState.gram=true;}
     else if(v==='home'){state.path='home';state.view='home';state.bookLesson=null}
-    else if(v==='conv'){state.path='conv';state.view='conv';state.convUnit=null}
+    else if(v==='conv'){state.path='conv';state.view='conv';state.convUnit=null;sbMenuState.conv=true;}
     else if(v==='mistakes'){state.path='home';state.view='mistakes'}
     else{state.view=v;if(v==='words'||v==='add')state.path='vocab'}
     render();(document.getElementById("app")||window).scrollTop=0;
