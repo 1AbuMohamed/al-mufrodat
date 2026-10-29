@@ -1304,7 +1304,17 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
 .g2-correct { font-size: 15px; color: var(--ink); margin: 6px 0; }
 .g2-correct .ar { font-size: 22px; color: var(--forest); margin: 0 6px; }
 .g2-fb p { font-size: 13.5px; line-height: 1.5; color: var(--ink-soft); margin: 6px 0 10px; }
-.g2-fb .btn { margin-top: 8px; }
+.g2-fb .btn { margin-top: 0; }
+.g2-fb-actions { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 12px; flex-wrap: wrap; }
+.g2-auto-timer { display: inline-flex; align-items: center; width: 90px; height: 5px; background: rgba(0,0,0,0.08); border-radius: 999px; overflow: hidden; flex-shrink: 0; }
+[data-theme="dark"] .g2-auto-timer { background: rgba(255,255,255,0.12); }
+.g2-auto-bar { display: block; height: 100%; border-radius: 999px; width: 0%; }
+.g2-auto-timer.t-2s .g2-auto-bar { background: var(--ok); animation: g2FillBar 2s linear forwards; }
+.g2-auto-timer.t-3s .g2-auto-bar { background: var(--clay); animation: g2FillBar 3s linear forwards; }
+@keyframes g2FillBar {
+  from { width: 0%; }
+  to { width: 100%; }
+}
 
 /* Score */
 .g2-score { font-size: 54px; font-weight: 700; color: var(--forest); line-height: 1; margin: 10px 0; font-variant-numeric: tabular-nums; }

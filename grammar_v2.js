@@ -167,6 +167,7 @@ function resolveMistake(ref, ok, n){
 /* ---------- sessie (state.g2) ---------- */
 function S(){ if(!state.g2) state.g2={}; return state.g2; }
 function startNode(n, idx){
+  clearG2AutoTimer();
   const nd=nodes(n)[idx]; if(!nd) return;
   const s=S(); Object.assign(s,{n:Number(n), node:idx, kind:nd.k, phase:'rule', qi:0, ans:null, built:[], score:0, hideNl:false});
   if(nd.k==='step'){ s.si=nd.i; s.queue=stepDrills(n,nd.i).map(x=>x.ref); s.retry={}; s.phase='rule'; }
@@ -440,7 +441,10 @@ function renderDrill(s, kicker){
       ${ok?'':`<div class="g2-correct">Juist: <span class="ar" lang="ar">${isAr(correct)?arHtml(correct):mix(correct)}</span>${isAr(correct)?spk(correct):''}</div>`}
       ${d.explain?`<p>${mix(d.explain)}</p>`:''}
       ${!ok&&s.kind==='step'?'<p class="g2-hint">Deze vraag komt aan het einde van deze stap terug.</p>':''}
-      <button class="btn btn-primary" data-act="g2-next" data-gl="next">Verder →</button>
+      <div class="g2-fb-actions">
+        <button class="btn btn-primary" data-act="g2-next" data-gl="next">${s.queue.length>1?'Volgende vraag →':'Bekijk resultaat →'}</button>
+        <span class="g2-auto-timer ${ok?'t-2s':'t-3s'}" title="${ok?'Volgende over 2 sec':'Volgende over 3 sec'}"><i class="g2-auto-bar"></i></span>
+      </div>
     </div>`;
   }
   return `<div class="g2-card">${prog}${src}${q}${fb}</div>`;
@@ -493,6 +497,28 @@ function renderLesson(){
   return renderLessonMap(n);
 }
 
+/* ---------- automatische timer bij antwoord ---------- */
+let _g2AutoTimer = null;
+function clearG2AutoTimer(){
+  if(_g2AutoTimer){
+    clearTimeout(_g2AutoTimer);
+    _g2AutoTimer = null;
+  }
+}
+function scheduleG2AutoNext(ok){
+  clearG2AutoTimer();
+  const delay = ok ? 2000 : 3000; // 2s bij juist, 3s bij fout
+  _g2AutoTimer = setTimeout(()=>{
+    _g2AutoTimer = null;
+    const s = S();
+    if(state.view === 'book-lesson' && s.view === 'node' && s.ans !== null){
+      next();
+      render();
+      scrollTop();
+    }
+  }, delay);
+}
+
 /* ---------- acties ---------- */
 function answer(ok){
   const s=S(); s.lastOk=ok;
@@ -501,8 +527,10 @@ function answer(ok){
   else if(!ok) addMistake(ref);
   if(ok && !(s.retry&&s.retry[ref])) s.score++;
   if(typeof sfx==='function'){ try{ sfx(ok); }catch(e){} }
+  scheduleG2AutoNext(ok);
 }
 function next(){
+  clearG2AutoTimer();
   const s=S(); const ref=s.queue.shift();
   if(!s.lastOk && s.kind==='step'){ s.retry[ref]=true; s.queue.push(ref); }
   if(s.queue.length) prepDrill();
@@ -518,6 +546,7 @@ function finishRun(){
   save();
 }
 function finishNode(){
+  clearG2AutoTimer();
   const s=S(), p=lp(s.n);
   if(s.kind==='step') p.steps[s.si]=true;
   if(s.kind==='vocab') p.vocab=true;
@@ -533,6 +562,7 @@ document.addEventListener('click', e=>{
   const btn=e.target.closest&&e.target.closest('[data-act]'); if(!btn) return;
   const act=btn.dataset.act;
   if(act==='open-book'){
+    clearG2AutoTimer();
     e.stopImmediatePropagation();
     const n=parseInt(btn.dataset.l,10);
     if(!L[n]) return;
@@ -543,8 +573,9 @@ document.addEventListener('click', e=>{
   if(!act.startsWith('g2-')) return;
   e.stopImmediatePropagation();
   const s=S();
-  if(act==='g2-hub'){ state.view='book'; state.bookLesson=null; s.view='map'; render(); scrollTop(); return; }
+  if(act==='g2-hub'){ clearG2AutoTimer(); state.view='book'; state.bookLesson=null; s.view='map'; render(); scrollTop(); return; }
   if(act==='g2-open'){
+    clearG2AutoTimer();
     const n=parseInt(btn.dataset.l,10);
     if(!lessonOpen(n)){ alert('Rond eerst de eindtoets van de vorige les af (of zet "Alle lessen vrij openen" aan).'); return; }
     state.path='grammar'; state.view='book-lesson'; state.bookLesson=n; s.n=n; s.view='map';
@@ -552,9 +583,9 @@ document.addEventListener('click', e=>{
     render(); scrollTop(); return;
   }
   if(act==='g2-unlock'){ P.unlockAll=btn.checked; save(); render(); return; }
-  if(act==='g2-map'){ s.view='map'; render(); scrollTop(); return; }
-  if(act==='g2-node'){ startNode(state.bookLesson, +btn.dataset.i); render(); scrollTop(); return; }
-  if(act==='g2-phase'){ s.phase=btn.dataset.p; s.hideNl=false; render(); scrollTop(); return; }
+  if(act==='g2-map'){ clearG2AutoTimer(); s.view='map'; render(); scrollTop(); return; }
+  if(act==='g2-node'){ clearG2AutoTimer(); startNode(state.bookLesson, +btn.dataset.i); render(); scrollTop(); return; }
+  if(act==='g2-phase'){ clearG2AutoTimer(); s.phase=btn.dataset.p; s.hideNl=false; render(); scrollTop(); return; }
   if(act==='g2-hide'){ s.hideNl=!s.hideNl; s.shown={}; render(); return; }
   if(act==='g2-reveal'){ btn.classList.remove('hid'); btn.removeAttribute('data-act'); 
     const st=s.kind==='vocab'?L[s.n].vocab:L[s.n].steps[s.si].examples; const it=st[+btn.dataset.i]; if(it) btn.innerHTML=mix(it.nl||''); return; }
@@ -566,8 +597,8 @@ document.addEventListener('click', e=>{
     const got=s.built.map(i=>s.bank[i]?s.bank[i].w:'').filter(Boolean).join(' ');
     s.ans=-1; answer(got===s.cur.d.words.join(' ')); render(); return;
   }
-  if(act==='g2-next'){ next(); render(); scrollTop(); return; }
-  if(act==='g2-finish'){ finishNode(); render(); scrollTop(); return; }
+  if(act==='g2-next'){ clearG2AutoTimer(); next(); render(); scrollTop(); return; }
+  if(act==='g2-finish'){ clearG2AutoTimer(); finishNode(); render(); scrollTop(); return; }
 }, true);
 
 document.addEventListener('keydown', e=>{
@@ -577,6 +608,7 @@ document.addEventListener('keydown', e=>{
     const b=document.querySelectorAll('.g2-opt:not(:disabled)')[+e.key-1]; if(b){ e.preventDefault(); e.stopImmediatePropagation(); b.click(); }
   }
   if(e.key==='Enter'){
+    clearG2AutoTimer();
     const b=document.querySelector('.g2 [data-gl="next"]:not(:disabled)'); if(b){ e.preventDefault(); e.stopImmediatePropagation(); b.click(); }
   }
 }, true);

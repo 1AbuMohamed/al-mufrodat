@@ -3080,13 +3080,31 @@ function renderLearn(){
   </div>`;
 }
 
+let _vocabFbTimer = null;
+function clearVocabFbTimer(){
+  if(_vocabFbTimer){
+    clearTimeout(_vocabFbTimer);
+    _vocabFbTimer = null;
+  }
+}
+
 function showFb(ok,text){
+  clearVocabFbTimer();
   const bar=document.getElementById('fb');const txt=document.getElementById('fb-txt');const btn=document.getElementById('fb-btn');
   if(!bar)return;
   txt.textContent=text;
   bar.className='feedback show '+(ok?'ok':'no');
-  if(ok){btn.style.display='none';setTimeout(()=>continueLearn(),480)}
-  else{btn.style.display='inline-flex'}
+  if(btn){
+    btn.style.display='inline-flex';
+    btn.textContent='Volgende →';
+  }
+  const delay = ok ? 2000 : 3000;
+  _vocabFbTimer = setTimeout(()=>{
+    _vocabFbTimer = null;
+    if(state.view==='learn' && state.answered){
+      continueLearn();
+    }
+  }, delay);
 }
 
 function handleAnswer(ok){
@@ -3131,6 +3149,7 @@ function handleDontKnow(){
 }
 
 function continueLearn(){
+  clearVocabFbTimer();
   const bar=document.getElementById('fb');if(bar)bar.classList.remove('show');
   state.queue.shift();state.asked++;
   nextQ();
@@ -4589,6 +4608,7 @@ document.addEventListener('click',e=>{
     return;
   }
   else if(act==='nav'){
+    clearVocabFbTimer();
     stopAllMedia();
     hideCompare();
     const v=btn.dataset.v;
@@ -4859,7 +4879,7 @@ document.addEventListener('click',e=>{
   }
   else if(act==='submit-typed'){handleTyped()}
   else if(act==='dont-know'){handleDontKnow()}
-  else if(act==='continue-learn'){continueLearn()}
+  else if(act==='continue-learn'){clearVocabFbTimer();continueLearn()}
   else if(act==='book-list'){
     state.path='grammar';state.view='book';state.bookLesson=null;state.bookTab='uitleg';render();(document.getElementById("app")||window).scrollTop=0;
   }
