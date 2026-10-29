@@ -2288,6 +2288,33 @@ function nextLesson(){
 }
 
 
+const VOCAB_TITLES = {
+  1: "Huis & Voorwerpen",
+  2: "Dit & Dat op Afstand",
+  3: "Eigenschappen & Tegenstellingen",
+  4: "Plekken & Kamers",
+  5: "Bezit & Familie",
+  6: "Lichaamsdelen & Vrouwelijk",
+  7: "Dieren & Verwijzingen",
+  8: "Beroepen & Plaatsen",
+  9: "Beschrijvingen & Talen",
+  10: "Relaties & Gezin",
+  11: "In het Huis",
+  12: "Vrouwelijke Personen & Familie",
+  13: "Mensen & Meervouden",
+  14: "Faculteiten & Beroepen",
+  15: "Dames & Tijdstippen",
+  16: "Reizen & Gebouwen",
+  17: "Bedrijf & Handel",
+  18: "Tijd & School",
+  19: "Reizen & Getallen (m)",
+  20: "Kamers & Getallen (v)",
+  21: "Mijn School",
+  22: "Kleuren & Sleutels",
+  23: "Steden & Landen",
+  24: "Reader 8 · Tijd & Handelingen"
+};
+
 function renderVocabHub(){
   const total=ALL.length, m=mastered(ALL), pct=total?Math.round(100*m/total):0;
   let lessons='';
@@ -2295,14 +2322,14 @@ function renderVocabHub(){
     const ws=wordsFor(n); const mm=mastered(ws); const p=ws.length?Math.round(100*mm/ws.length):0;
     const stt=p>=100?'done':p>0?'busy':'new';
     const lab=p>=100?'Beheerst':p>0?'Bezig · '+p+'%':'Nieuw';
-    const title=(LESSON_META[n]||['',''])[0];
-    const sub=(LESSON_META[n]||['',''])[1]||'';
+    const cleanTitle = VOCAB_TITLES[n] || (LESSON_META[n]||['',''])[0];
+    const previewWords = ws.slice(0, 4).map(w=>w.ar).join('  ·  ');
     lessons+=`<div class="lesson path-lesson ${stt}">
       <div class="path-num">${n}</div>
       <div class="path-body">
         <div class="status ${stt}">${lab} · ${mm}/${ws.length} woorden</div>
-        <h3>${esc(hoofdstuk(n))} · ${esc(title)}</h3>
-        <div class="blurb">${esc(sub)}</div>
+        <h3>Les ${n} · ${esc(cleanTitle)}</h3>
+        <div class="vocab-preview ar" lang="ar" dir="rtl">${previewWords}</div>
         <div class="progress"><i style="width:${p}%"></i></div>
         <button class="btn btn-primary btn-sm" data-act="start-learn" data-l="${n}">${p>=100?'Herhaal hoofdstuk':'Start oefenen'}</button>
         <div class="path-alts">

@@ -26,12 +26,60 @@ function lp(n){ if(!P.lessons[n]) P.lessons[n]={steps:{},vocab:false,book:null,t
 const E = s => (typeof esc==='function'?esc(s):String(s??''));
 const AR_RE = /[\u0600-\u06FF]/;
 function isAr(s){ s=String(s||''); return AR_RE.test(s) && !/[a-zA-Z]{2,}/.test(s); }
+function isSpeakable(s){
+  if(!s) return false;
+  const str=String(s).trim();
+  const lettersOnly=str.replace(/[\u064B-\u065F\u0670\u0640\s_ـ«»()[\]{}.,،؟:!]/g,'');
+  return lettersOnly.length>=1;
+}
 function arHtml(s){ return (typeof markAr==='function') ? markAr(String(s),'plain') : E(s); }
 function mix(s){ return (typeof glMix==='function') ? glMix(String(s||'')) : E(s); }
 function shuf(a){ return (typeof shuffle==='function') ? shuffle(a) : a.slice().sort(()=>Math.random()-.5); }
 function spk(text, label){
+  if(!isSpeakable(text)) return '';
   return `<button type="button" class="g2-spk" data-act="speak-text" data-text="${E(text)}" title="Beluister" aria-label="Beluister">${label||ICO.spk}</button>`;
 }
+
+/* ---------- Geluidseffecten (Web Audio API) ---------- */
+let _g2AudioCtx = null;
+function playSfx(ok) {
+  if (!ok) return;
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    if (!_g2AudioCtx) _g2AudioCtx = new AudioCtx();
+    if (_g2AudioCtx.state === 'suspended') _g2AudioCtx.resume();
+    const ctx = _g2AudioCtx;
+    const now = ctx.currentTime;
+
+    // Aangenaam belletje bij juist antwoord: D5 (587Hz) -> D6 (1174Hz)
+    const o1 = ctx.createOscillator();
+    const g1 = ctx.createGain();
+    o1.type = 'sine';
+    o1.frequency.setValueAtTime(587.33, now);
+    o1.frequency.exponentialRampToValueAtTime(880, now + 0.1);
+    g1.gain.setValueAtTime(0.14, now);
+    g1.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+    o1.connect(g1);
+    g1.connect(ctx.destination);
+    o1.start(now);
+    o1.stop(now + 0.28);
+
+    const o2 = ctx.createOscillator();
+    const g2 = ctx.createGain();
+    o2.type = 'sine';
+    o2.frequency.setValueAtTime(880, now + 0.08);
+    o2.frequency.exponentialRampToValueAtTime(1174.66, now + 0.2);
+    g2.gain.setValueAtTime(0.001, now);
+    g2.gain.setValueAtTime(0.18, now + 0.08);
+    g2.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+    o2.connect(g2);
+    g2.connect(ctx.destination);
+    o2.start(now + 0.08);
+    o2.stop(now + 0.45);
+  } catch (e) {}
+}
+window.sfx = playSfx;
 const ICO = {
   spk:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>',
   lock:'<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
@@ -170,6 +218,34 @@ function pillarPct(p){
   return Math.round(sum / p.lessons.length);
 }
 
+const SHORT_TITLES = {
+  0: "Klinkertekens & Symbolen",
+  1: "Aanwijzer هَذَا & Vragen met أَ",
+  2: "Aanwijzer ذَلِكَ & Voegwoord وَ",
+  3: "Bepaald lidwoord الْ & Zonneletters",
+  4: "Voorzetsels (حُرُوفُ الْجَرِّ)",
+  5: "De Bezitsconstructie (الْإِضَافَةُ)",
+  6: "Vrouwelijk (هَذِهِ & Taa' Marboetah)",
+  7: "Verwijzen op Afstand (تِلْكَ)",
+  8: "Aanwijzer met Bepaling (Badal)",
+  9: "Bijvoeglijk Naamwoord (النَّعْت)",
+  10: "Bezittelijke Voornaamwoorden",
+  11: "In het Huis (فِيهِ / فِيهَا)",
+  12: "Vrouwelijk Aanspreken (أَنْتِ)",
+  13: "Het Meervoud (الْجَمْعُ)",
+  14: "Meervoud Aanspreken (أَنْتُمْ)",
+  15: "Vrouwelijk Meervoud (أَنْتُنَّ)",
+  16: "Niet-menselijk Meervoud (Ghayr 'Āqil)",
+  17: "Toepassing Meervouden",
+  18: "Het Tweevoud (الْمُثَنَّى)",
+  19: "Getallen 3–10 (Mannelijk)",
+  20: "Getallen 3–10 (Vrouwelijk)",
+  21: "Mijn School (مَدْرَسَتِي)",
+  22: "Diptoten (الْمَمْنُوعُ مِنَ الصَّرْفِ)",
+  23: "Diptoten in de Genitief",
+  24: "Bijwoorden van Tijd & Plaats (Reader 8)"
+};
+
 function renderHub(){
   const done=KEYS.filter(lessonPassed).length;
   const pct=KEYS.length?Math.round(100*done/KEYS.length):0;
@@ -178,11 +254,12 @@ function renderHub(){
     const g=L[n], open=lessonOpen(n), passed=lessonPassed(n), p=lessonPct(n);
     const cls=passed?'done':!open?'locked':p>0?'busy':'new';
     const lbl=passed?'Afgerond':!open?'Vergrendeld':p>0?p+'%':'Nieuw';
+    const cleanTitle = SHORT_TITLES[n] || g.title || '';
     return `<button type="button" class="g2-lesson ${cls} ${n===nextN?'next':''}" data-act="g2-open" data-l="${n}" ${open?'':'aria-disabled="true"'}>
       <span class="g2-num">${passed?ICO.check:!open?ICO.lock:String(n).padStart(2,'0')}</span>
       <span class="g2-lbody">
         <span class="g2-lmeta">${n===0?'Inleiding':n===24?'Reader 8':'Les '+n} · blz. ${E(g.pages||'')} · ${lbl}</span>
-        <span class="g2-ltitle">${E(g.title||'')}</span>
+        <span class="g2-ltitle">${E(cleanTitle)}</span>
         <span class="g2-lbar"><i style="width:${p}%"></i></span>
       </span>
     </button>`;
@@ -196,7 +273,7 @@ function renderHub(){
       </div>
       <div class="g2-hero-stat"><b>${done}</b><span>/ ${KEYS.length} lessen</span><div class="g2-lbar"><i style="width:${pct}%"></i></div></div>
     </div>
-    ${nextN!==undefined?`<button type="button" class="g2-resume" data-act="g2-open" data-l="${nextN}"><span>Ga verder</span><b>${nextN===0?'Inleiding':'Les '+nextN} · ${E(L[nextN].title)}</b><span>→</span></button>`:''}
+    ${nextN!==undefined?`<button type="button" class="g2-resume" data-act="g2-open" data-l="${nextN}"><span>Ga verder</span><b>${nextN===0?'Inleiding':'Les '+nextN} · ${E(SHORT_TITLES[nextN] || L[nextN].title)}</b><span>→</span></button>`:''}
     <div class="g2-pillars">
       <div class="g2-pillar-head">
         <h3>Voortgang per grammaticale pijler</h3>
@@ -248,7 +325,10 @@ function renderTable(t){
   const th=(t.headers||[]).map(h=>`<th>${mix(h)}</th>`).join('');
   const tr=t.rows.map(r=>'<tr>'+r.map(c=>{
     const s=String(c??'');
-    return isAr(s)?`<td class="ar-cell"><span class="ar" lang="ar">${arHtml(s)}</span>${spk(s)}</td>`:`<td>${mix(s)}</td>`;
+    const speakBtn = isSpeakable(s) ? spk(s) : '';
+    return isAr(s)
+      ? `<td class="ar-cell"><div class="g2-cell-wrap"><span class="ar" lang="ar" dir="rtl">${arHtml(s)}</span>${speakBtn}</div></td>`
+      : `<td>${mix(s)}</td>`;
   }).join('')+'</tr>').join('');
   return `<div class="g2-table-wrap"><table class="g2-table">${th?`<thead><tr>${th}</tr></thead>`:''}<tbody>${tr}</tbody></table></div>`;
 }

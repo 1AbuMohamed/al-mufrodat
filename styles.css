@@ -216,7 +216,8 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 .path-lesson.busy .path-num{background:var(--gold-pale);color:var(--forest);border-color:var(--gold)}
 .path-lesson.done .path-num{background:var(--forest);color:var(--on-forest);border-color:var(--forest)}
 .path-body{flex:1;min-width:0}
-.path-body h3{font-size:15.5px;margin:2px 0 4px}
+.path-body h3{font-size:15.5px;margin:2px 0 4px;font-weight:700;line-height:1.35}
+.vocab-preview{font-family:var(--ar);font-size:18px;color:var(--forest);margin:4px 0 8px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;direction:rtl;letter-spacing:.02em}
 .path-body .btn{width:100%;margin-top:8px}
 .path-alts{display:flex;gap:14px;justify-content:center;margin-top:8px;padding-top:6px;border-top:1px dashed var(--line)}
 .path-alts button{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;color:var(--muted);padding:3px 8px;border-radius:6px;transition:color .15s,background .15s}
@@ -1236,6 +1237,8 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
 .g2-table td { padding: 10px 14px; border-bottom: 1px solid var(--line); color: var(--ink-soft); vertical-align: middle; }
 .g2-table tr:last-child td { border-bottom: 0; }
 .g2-table td.ar-cell { text-align: right; font-size: 20px; }
+.g2-cell-wrap { display: inline-flex; align-items: center; justify-content: flex-end; gap: 10px; direction: ltr; white-space: nowrap; max-width: 100%; }
+.gl-tbl-ar, .gl-tbl-mix { display: inline-flex; align-items: center; justify-content: flex-end; gap: 8px; direction: ltr; }
 
 /* Voorbeelden */
 .g2-ex { display: grid; gap: 8px; margin: 14px 0; }
@@ -1243,8 +1246,9 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
 .g2-exar { font-size: 22px; color: var(--ink); flex: 1; text-align: right; line-height: 1.4; }
 .g2-exnl { font-size: 14px; color: var(--ink-soft); flex: 1; text-align: left; }
 .g2-exnl.hid { color: var(--muted); font-style: italic; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
-.g2-spk { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--forest); cursor: pointer; flex-shrink: 0; }
-.g2-spk:hover { border-color: var(--gold); color: var(--gold); }
+.g2-spk { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--forest); cursor: pointer; flex-shrink: 0; vertical-align: middle; margin: 0 4px; transition: all .15s; }
+.g2-spk:hover { border-color: var(--gold); color: var(--gold); transform: scale(1.05); }
+.g2-spk:active { transform: scale(0.95); }
 
 /* Drills / Oefeningen */
 .g2-qprog { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
@@ -1253,7 +1257,7 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
 .g2-sub { font-size: 13.5px; color: var(--muted); margin-bottom: 6px; }
 .g2-fill { font-size: 32px; color: var(--ink); margin: 12px 0; text-align: center; line-height: 1.4; }
 .g2-gap { display: inline-block; min-width: 32px; border-bottom: 2px dashed var(--gold); color: var(--forest); padding: 0 4px; }
-.g2-from { font-size: 26px; color: var(--forest); text-align: center; margin: 8px 0 14px; }
+.g2-from { display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 26px; color: var(--forest); margin: 8px 0 14px; }
 
 /* Woordbouw (order) */
 .g2-build { min-height: 54px; padding: 10px 14px; border-radius: 10px; border: 1.5px dashed var(--line-strong); background: var(--paper); display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; font-size: 24px; color: var(--ink); }
@@ -1291,7 +1295,7 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
 /* Zinsontleding · I'rāb Coach */
 .g2-parse-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--gold-pale); border: 1px solid var(--gold); color: var(--gold-deep); font-size: 12px; font-weight: 700; margin-bottom: 12px; }
 .g2-parse-box { background: var(--paper-deep); border: 1.5px solid var(--line-strong); border-radius: 12px; padding: 18px 16px; margin: 10px 0 16px; text-align: center; }
-.g2-parse-sent { font-size: 26px; line-height: 1.8; color: var(--ink); margin-bottom: 8px; }
+.g2-parse-sent { display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 26px; line-height: 1.8; color: var(--ink); margin-bottom: 8px; }
 .g2-parse-target { background: rgba(30, 74, 56, 0.12); color: var(--forest); border-bottom: 3px solid var(--forest); border-radius: 6px; padding: 2px 8px; font-weight: 700; display: inline-block; }
 
 /* Pillars Grid */
