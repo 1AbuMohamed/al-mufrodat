@@ -258,10 +258,36 @@ const SHORT_TITLES = {
 };
 
 function renderHub(){
+  const s=S();
+  s.hubFilter = s.hubFilter || 'all';
+  s.hubSearch = s.hubSearch || '';
+
   const done=KEYS.filter(lessonPassed).length;
   const pct=KEYS.length?Math.round(100*done/KEYS.length):0;
   let nextN=KEYS.find(n=>!lessonPassed(n)); if(nextN===undefined) nextN=KEYS[KEYS.length-1];
-  const items=KEYS.map(n=>{
+
+  let filteredKeys = KEYS;
+  let activePillar = null;
+  if(s.hubFilter && s.hubFilter.startsWith('p')){
+    activePillar = PILLARS.find(p => p.id === s.hubFilter);
+    if(activePillar) filteredKeys = filteredKeys.filter(n => activePillar.lessons.includes(n));
+  } else if(s.hubFilter === 'done'){
+    filteredKeys = filteredKeys.filter(n => lessonPassed(n));
+  } else if(s.hubFilter === 'busy'){
+    filteredKeys = filteredKeys.filter(n => !lessonPassed(n) && (lessonOpen(n) || lessonPct(n) > 0));
+  }
+  if(s.hubSearch){
+    const q = s.hubSearch.toLowerCase().trim();
+    filteredKeys = filteredKeys.filter(n => {
+      const g = L[n] || {};
+      const title = (SHORT_TITLES[n] || g.title || '').toLowerCase();
+      const sum = (g.summary || '').toLowerCase();
+      const num = String(n);
+      return title.includes(q) || sum.includes(q) || num === q;
+    });
+  }
+
+  const items=filteredKeys.map(n=>{
     const g=L[n], open=lessonOpen(n), passed=lessonPassed(n), p=lessonPct(n);
     const cls=passed?'done':!open?'locked':p>0?'busy':'new';
     const lbl=passed?'Afgerond':!open?'Vergrendeld':p>0?p+'%':'Nieuw';
@@ -294,18 +320,31 @@ function renderHub(){
         ${PILLARS.map(p => {
           const pct = pillarPct(p);
           const isDone = pct === 100;
-          return `<div class="g2-pillar-card ${isDone ? 'done' : pct > 0 ? 'busy' : ''}">
+          const isSelected = s.hubFilter === p.id;
+          return `<button type="button" class="g2-pillar-card ${isDone ? 'done' : pct > 0 ? 'busy' : ''} ${isSelected ? 'selected' : ''}" data-act="g2-pillar" data-pid="${p.id}" title="Klik om lessen van deze pijler te filteren">
             <div class="g2-pillar-top">
               <span class="g2-pillar-name">${E(p.name)}</span>
               <span class="g2-pillar-pct">${isDone ? ICO.check : pct + '%'}</span>
             </div>
             <div class="g2-pillar-desc">${E(p.desc)}</div>
             <div class="g2-lbar"><i style="width:${pct}%"></i></div>
-          </div>`;
+          </button>`;
         }).join('')}
       </div>
     </div>
-    <div class="g2-list">${items}</div>
+    <div class="g2-hub-toolbar">
+      <div class="g2-hub-tabs">
+        <button type="button" class="g2-tab ${s.hubFilter==='all'?'active':''}" data-act="g2-hub-filter" data-f="all">Alle (${KEYS.length})</button>
+        <button type="button" class="g2-tab ${s.hubFilter==='busy'?'active':''}" data-act="g2-hub-filter" data-f="busy">Open / Bezig</button>
+        <button type="button" class="g2-tab ${s.hubFilter==='done'?'active':''}" data-act="g2-hub-filter" data-f="done">Beheerst (${done})</button>
+        ${activePillar ? `<span class="g2-filter-pill">Pijler: ${E(activePillar.name)} <button type="button" data-act="g2-hub-filter" data-f="all" title="Filter wissen">×</button></span>` : ''}
+      </div>
+      <div class="g2-hub-search-wrap">
+        <input type="search" class="g2-search-input" placeholder="Zoek op onderwerp (bijv. Badal, Diptoot)..." value="${E(s.hubSearch||'')}" data-act="g2-hub-search">
+        ${s.hubSearch ? `<button type="button" class="g2-search-clear" data-act="g2-hub-clear-search">×</button>` : ''}
+      </div>
+    </div>
+    <div class="g2-list">${items.length ? items : `<div class="g2-empty-state"><p>Geen lessen gevonden voor deze selectie.</p><button type="button" class="btn btn-secondary btn-sm" data-act="g2-hub-reset">Toon alle lessen</button></div>`}</div>
     <label class="g2-unlock"><input type="checkbox" data-act="g2-unlock" ${P.unlockAll?'checked':''}> Alle lessen en stappen vrij openen (zonder volgorde)</label>
   </div>`;
 }
@@ -643,6 +682,20 @@ document.addEventListener('click', e=>{
     render(); scrollTop(); return;
   }
   if(act==='g2-unlock'){ P.unlockAll=btn.checked; save(); render(); return; }
+  if(act==='g2-pillar'){
+    const pid = btn.dataset.pid;
+    s.hubFilter = (s.hubFilter === pid) ? 'all' : pid;
+    render(); return;
+  }
+  if(act==='g2-hub-filter'){
+    s.hubFilter = btn.dataset.f;
+    render(); return;
+  }
+  if(act==='g2-hub-clear-search'||act==='g2-hub-reset'){
+    s.hubSearch = '';
+    s.hubFilter = 'all';
+    render(); return;
+  }
   if(act==='g2-toggle-auto'){ toggleAutoAdvance(); return; }
   if(act==='g2-toggle-sfx'){ toggleSfx(); return; }
   if(act==='g2-toggle-timer'){ toggleDrillTimer(); return; }
@@ -681,6 +734,21 @@ document.addEventListener('keydown', e=>{
   if(e.key==='Escape'){
     const hub = document.querySelector('[data-act="g2-hub"]');
     if(hub){ e.preventDefault(); e.stopImmediatePropagation(); hub.click(); }
+  }
+}, true);
+
+document.addEventListener('input', e=>{
+  const inp = e.target.closest&&e.target.closest('[data-act="g2-hub-search"]');
+  if(inp){
+    const s = S();
+    s.hubSearch = inp.value;
+    const pos = inp.selectionStart;
+    render();
+    const newInp = document.querySelector('[data-act="g2-hub-search"]');
+    if(newInp){
+      newInp.focus();
+      try{ newInp.setSelectionRange(pos, pos); }catch(err){}
+    }
   }
 }, true);
 
