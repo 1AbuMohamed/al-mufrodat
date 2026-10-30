@@ -1367,10 +1367,26 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
 .g2-empty-state { text-align: center; padding: 36px 20px; background: var(--surface); border: 1px dashed var(--line-strong); border-radius: 12px; margin: 12px 0; color: var(--muted); font-size: 14px; width: 100%; }
 .g2-empty-state p { margin-bottom: 12px; }
 
+.g2-success-banner { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 18px; border-radius: 12px; border: 1.5px solid var(--ok); background: var(--ok-soft); color: var(--ink); font-size: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+.g2-success-banner svg { color: var(--ok); flex-shrink: 0; width: 22px; height: 22px; }
+
 @media (max-width: 680px) {
   .g2-hero { flex-direction: column; text-align: left; }
   .g2-hero-stat { text-align: left; }
   .g2-card { padding: 18px 16px; }
   .g2-exrow { flex-direction: column; align-items: stretch; text-align: left; }
   .g2-exar { text-align: right; }
+  .g2-hub-toolbar { flex-direction: column; align-items: stretch; }
+  .g2-hub-search-wrap { max-width: 100%; width: 100%; min-width: 100%; }
+  .g2-hub-tabs { width: 100%; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
+  .g2-opt { min-height: 48px; padding: 12px 14px; }
+  .g2-top { justify-content: flex-start; }
+  .g2-top .grow { display: none; }
+}
+
+@media (max-width: 480px) {
+  .g2-pillar-grid { grid-template-columns: 1fr; }
+  .g2-phases { gap: 4px; }
+  .g2-phases span { padding: 6px 4px; font-size: 11.5px; }
+  .g2-chip { padding: 8px 12px; font-size: 20px; }
 }

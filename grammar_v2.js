@@ -360,13 +360,16 @@ function renderLessonMap(n){
     </button>`;
   }).join('');
   const p=lp(n);
-  const testInfo=p.test?`<div class="g2-note">Beste score eindtoets: <b>${Math.round(100*p.test.best)}%</b>${p.test.passed?' · afgerond':''}</div>`:'';
+  const passed=lessonPassed(n);
   const i=KEYS.indexOf(n), nx=KEYS[i+1];
+  const testInfo=p.test?`<div class="g2-note">Beste score eindtoets: <b>${Math.round(100*p.test.best)}%</b>${p.test.passed?' · afgerond':''}</div>`:'';
+  const congrats=passed?`<div class="g2-success-banner">${ICO.check} <div><b>Gefeliciteerd!</b> Je beheerst deze les volledig.</div>${nx!==undefined?`<button class="btn btn-primary btn-sm" data-act="g2-open" data-l="${nx}">Volgende les (${nx}) →</button>`:''}</div>`:'';
   return `<div class="desktop-page g2">
     ${head(n, `<div class="g2-lbar big"><i style="width:${lessonPct(n)}%"></i></div>`)}
+    ${congrats}
     ${testInfo}
     <div class="g2-path">${rows}</div>
-    ${lessonPassed(n)&&nx!==undefined?`<button class="btn btn-primary" data-act="g2-open" data-l="${nx}">Volgende les →</button>`:''}
+    ${passed&&nx!==undefined?`<div style="text-align:center;margin-top:20px"><button class="btn btn-primary" data-act="g2-open" data-l="${nx}">Door naar les ${nx} →</button></div>`:''}
   </div>`;
 }
 
