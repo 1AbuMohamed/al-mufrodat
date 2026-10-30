@@ -1177,7 +1177,11 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
    GRAMMATICA V2 · "Regel → Zien → Doen → Toetsen" STYLING
    ===================================================================== */
 .g2 { max-width: 900px; margin: 0 auto; padding-bottom: 40px; }
-.g2-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.g2-top { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+.g2-pill-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--muted); background: var(--surface); border: 1px solid var(--line); cursor: pointer; transition: all .15s; }
+.g2-pill-btn:hover { border-color: var(--line-strong); color: var(--ink); transform: translateY(-1px); }
+.g2-pill-btn.active { border-color: var(--forest); color: var(--forest); background: var(--forest-soft); }
+[data-theme="dark"] .g2-pill-btn.active { border-color: var(--forest); color: var(--forest); background: rgba(45,212,191,0.12); }
 .g2-head { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
 .g2-eyebrow { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--gold); margin-bottom: 6px; }
 .g2-head h1 { font-size: 26px; font-weight: 700; color: var(--ink); margin: 0 0 4px; line-height: 1.25; }
@@ -1311,10 +1315,15 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
 .g2-auto-bar { display: block; height: 100%; border-radius: 999px; width: 0%; }
 .g2-auto-timer.t-2s .g2-auto-bar { background: var(--ok); animation: g2FillBar 2s linear forwards; }
 .g2-auto-timer.t-3s .g2-auto-bar { background: var(--clay); animation: g2FillBar 3s linear forwards; }
+.g2-auto-timer.paused .g2-auto-bar { animation-play-state: paused; }
 @keyframes g2FillBar {
   from { width: 0%; }
   to { width: 100%; }
 }
+.g2-timer-btn { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--line-strong); background: var(--surface); cursor: pointer; font-size: 12px; font-weight: 600; color: var(--muted); transition: all .15s; }
+.g2-timer-btn:hover { border-color: var(--gold); color: var(--ink); transform: translateY(-1px); }
+.g2-timer-btn.paused { border-color: var(--gold); background: var(--gold-pale); color: var(--ink); }
+.g2-manual-hint { font-size: 12.5px; color: var(--muted); font-style: italic; }
 
 /* Score */
 .g2-score { font-size: 54px; font-weight: 700; color: var(--forest); line-height: 1; margin: 10px 0; font-variant-numeric: tabular-nums; }

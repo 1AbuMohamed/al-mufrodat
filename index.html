@@ -3098,6 +3098,12 @@ function showFb(ok,text){
     btn.style.display='inline-flex';
     btn.textContent='Volgende →';
   }
+  bar.onclick=(e)=>{
+    if(e.target&&e.target.id!=='fb-btn'&&_vocabFbTimer){
+      clearVocabFbTimer();
+      txt.innerHTML=text+' <small style="display:block;opacity:0.8;font-size:12px;margin-top:4px">⏸️ Timer gepauzeerd</small>';
+    }
+  };
   const delay = ok ? 2000 : 3000;
   _vocabFbTimer = setTimeout(()=>{
     _vocabFbTimer = null;

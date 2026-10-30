@@ -16,9 +16,11 @@ const LS_KEY = 'alm_g2_v1';
 /* ---------- opslag ---------- */
 let P;
 try{ P = JSON.parse(localStorage.getItem(LS_KEY)||'null'); }catch(e){ P=null; }
-if(!P||typeof P!=='object') P = {lessons:{}, mistakes:[], unlockAll:false};
+if(!P||typeof P!=='object') P = {lessons:{}, mistakes:[], unlockAll:false, autoAdvance:true, sfx:true};
 if(!P.lessons) P.lessons={};
 if(!Array.isArray(P.mistakes)) P.mistakes=[];
+if(P.autoAdvance===undefined) P.autoAdvance=true;
+if(P.sfx===undefined) P.sfx=true;
 function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(P)); }catch(e){} }
 function lp(n){ if(!P.lessons[n]) P.lessons[n]={steps:{},vocab:false,book:null,test:null,review:false}; return P.lessons[n]; }
 
@@ -43,7 +45,7 @@ function spk(text, label){
 /* ---------- Geluidseffecten (Web Audio API) ---------- */
 let _g2AudioCtx = null;
 function playSfx(ok) {
-  if (!ok) return;
+  if (!ok || P.sfx === false) return;
   try {
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     if (!AudioCtx) return;
@@ -190,9 +192,17 @@ function prepDrill(){
 /* ---------- renderers ---------- */
 function head(n, sub){
   const g=L[n]||{};
+  const autoOn = P.autoAdvance !== false;
+  const sfxOn = P.sfx !== false;
   return `<div class="g2-top">
     <button class="back" data-act="g2-hub" style="margin:0"><span>←</span> Alle lessen</button>
     <span class="grow"></span>
+    <button type="button" class="g2-pill-btn ${autoOn?'active':''}" data-act="g2-toggle-auto" title="${autoOn?'Auto-doorgaan is actief (2s/3s) — klik om handmatig te maken':'Auto-doorgaan staat uit — klik om aan te zetten'}">
+      ${autoOn?'⚡ Auto: aan':'⏸️ Auto: uit'}
+    </button>
+    <button type="button" class="g2-pill-btn ${sfxOn?'active':''}" data-act="g2-toggle-sfx" title="${sfxOn?'Geluidseffect staat aan — klik om te dempen':'Geluidseffect is gedempt — klik om aan te zetten'}">
+      ${sfxOn?'🔊 SFX':'🔇 SFX'}
+    </button>
     ${typeof wordsFor==='function'&&wordsFor(n).length?`<button class="btn btn-secondary btn-sm" data-act="start-learn" data-l="${n}">Woorden oefenen</button>`:''}
   </div>
   <div class="g2-head">
@@ -446,6 +456,16 @@ function renderDrill(s, kicker){
   if(answered){
     const ok=s.lastOk;
     const correct = d.type==='order' ? d.words.join(' ') : d.options[d.answer];
+    const autoOn = P.autoAdvance !== false;
+    let timerActionHtml = '';
+    if(autoOn){
+      timerActionHtml = `<button type="button" class="g2-timer-btn ${s.timerPaused ? 'paused' : (ok ? 't-2s' : 't-3s')}" data-act="g2-toggle-timer" title="${s.timerPaused ? 'Klik om timer te hervatten' : 'Klik om timer te pauzeren en rustig te lezen'}">
+        <span class="g2-timer-label">${s.timerPaused ? '⏸️ Gepauzeerd' : (ok ? '⏱️ 2s...' : '⏱️ 3s...')}</span>
+        <span class="g2-auto-timer ${s.timerPaused ? 'paused' : (ok ? 't-2s' : 't-3s')}"><i class="g2-auto-bar"></i></span>
+      </button>`;
+    } else {
+      timerActionHtml = `<span class="g2-manual-hint">Druk op Enter of klik verder</span>`;
+    }
     fb=`<div class="g2-fb ${ok?'ok':'bad'}">
       <b>${ok?'Goed!':'Nog niet goed'}</b>
       ${ok?'':`<div class="g2-correct">Juist: <span class="ar" lang="ar">${isAr(correct)?arHtml(correct):mix(correct)}</span>${isAr(correct)?spk(correct):''}</div>`}
@@ -453,7 +473,7 @@ function renderDrill(s, kicker){
       ${!ok&&s.kind==='step'?'<p class="g2-hint">Deze vraag komt aan het einde van deze stap terug.</p>':''}
       <div class="g2-fb-actions">
         <button class="btn btn-primary" data-act="g2-next" data-gl="next">${s.queue.length>1?'Volgende vraag →':'Bekijk resultaat →'}</button>
-        <span class="g2-auto-timer ${ok?'t-2s':'t-3s'}" title="${ok?'Volgende over 2 sec':'Volgende over 3 sec'}"><i class="g2-auto-bar"></i></span>
+        ${timerActionHtml}
       </div>
     </div>`;
   }
@@ -507,7 +527,7 @@ function renderLesson(){
   return renderLessonMap(n);
 }
 
-/* ---------- automatische timer bij antwoord ---------- */
+/* ---------- automatische timer & instellingen bij antwoord ---------- */
 let _g2AutoTimer = null;
 function clearG2AutoTimer(){
   if(_g2AutoTimer){
@@ -517,16 +537,46 @@ function clearG2AutoTimer(){
 }
 function scheduleG2AutoNext(ok){
   clearG2AutoTimer();
+  const s = S();
+  s.timerPaused = false;
+  if(P.autoAdvance === false) return;
   const delay = ok ? 2000 : 3000; // 2s bij juist, 3s bij fout
   _g2AutoTimer = setTimeout(()=>{
     _g2AutoTimer = null;
-    const s = S();
-    if(state.view === 'book-lesson' && s.view === 'node' && s.ans !== null){
+    const curState = S();
+    if(state.view === 'book-lesson' && curState.view === 'node' && curState.ans !== null && !curState.timerPaused){
       next();
       render();
       scrollTop();
     }
   }, delay);
+}
+function toggleAutoAdvance(){
+  P.autoAdvance = (P.autoAdvance === false) ? true : false;
+  save();
+  if(!P.autoAdvance) clearG2AutoTimer();
+  else {
+    const s = S();
+    if(s.ans !== null && s.lastOk !== undefined) scheduleG2AutoNext(s.lastOk);
+  }
+  render();
+}
+function toggleSfx(){
+  P.sfx = (P.sfx === false) ? true : false;
+  save();
+  render();
+}
+function toggleDrillTimer(){
+  const s = S();
+  if(_g2AutoTimer && !s.timerPaused){
+    clearTimeout(_g2AutoTimer);
+    _g2AutoTimer = null;
+    s.timerPaused = true;
+  } else if(s.timerPaused && s.ans !== null){
+    s.timerPaused = false;
+    scheduleG2AutoNext(s.lastOk);
+  }
+  render();
 }
 
 /* ---------- acties ---------- */
@@ -593,6 +643,9 @@ document.addEventListener('click', e=>{
     render(); scrollTop(); return;
   }
   if(act==='g2-unlock'){ P.unlockAll=btn.checked; save(); render(); return; }
+  if(act==='g2-toggle-auto'){ toggleAutoAdvance(); return; }
+  if(act==='g2-toggle-sfx'){ toggleSfx(); return; }
+  if(act==='g2-toggle-timer'){ toggleDrillTimer(); return; }
   if(act==='g2-map'){ clearG2AutoTimer(); s.view='map'; render(); scrollTop(); return; }
   if(act==='g2-node'){ clearG2AutoTimer(); startNode(state.bookLesson, +btn.dataset.i); render(); scrollTop(); return; }
   if(act==='g2-phase'){ clearG2AutoTimer(); s.phase=btn.dataset.p; s.hideNl=false; render(); scrollTop(); return; }
@@ -620,6 +673,14 @@ document.addEventListener('keydown', e=>{
   if(e.key==='Enter'){
     clearG2AutoTimer();
     const b=document.querySelector('.g2 [data-gl="next"]:not(:disabled)'); if(b){ e.preventDefault(); e.stopImmediatePropagation(); b.click(); }
+  }
+  if(e.key===' ' || e.code==='Space'){
+    const tBtn = document.querySelector('[data-act="g2-toggle-timer"]');
+    if(tBtn){ e.preventDefault(); e.stopImmediatePropagation(); tBtn.click(); }
+  }
+  if(e.key==='Escape'){
+    const hub = document.querySelector('[data-act="g2-hub"]');
+    if(hub){ e.preventDefault(); e.stopImmediatePropagation(); hub.click(); }
   }
 }, true);
 
