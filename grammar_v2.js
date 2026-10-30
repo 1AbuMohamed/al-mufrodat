@@ -404,7 +404,17 @@ function renderDrill(s, kicker){
     let prompt='';
     if(d.type==='fill'){
       const parts=String(d.ar||'').split('_');
-      prompt=`<div class="g2-fill ar" lang="ar" dir="rtl">${arHtml(parts[0]||'')}<span class="g2-gap">${answered?arHtml(d.options[d.answer]):'&nbsp;؟&nbsp;'}</span>${arHtml(parts.slice(1).join('_'))}</div>${d.nl?`<div class="g2-sub">${mix(d.nl)}</div>`:''}<div class="g2-q">Kies wat op de open plek hoort</div>`;
+      const optText=answered?String(d.options[d.answer]||''):'';
+      const optParts=optText.includes(' / ')?optText.split(' / '):[optText,optText,optText];
+      let fillHtml='';
+      parts.forEach((p,pIdx)=>{
+        fillHtml+=arHtml(p);
+        if(pIdx<parts.length-1){
+          const fillVal=answered?arHtml(optParts[pIdx]||optText):'&nbsp;؟&nbsp;';
+          fillHtml+=`<span class="g2-gap">${fillVal}</span>`;
+        }
+      });
+      prompt=`<div class="g2-fill ar" lang="ar" dir="rtl">${fillHtml}</div>${d.nl?`<div class="g2-sub">${mix(d.nl)}</div>`:''}<div class="g2-q">Kies wat op de open ${parts.length>2?'plekken hoort':'plek hoort'}</div>`;
     }else if(d.type==='transform'){
       prompt=`<div class="g2-q">${mix(d.prompt||'')}</div><div class="g2-from ar" lang="ar">${arHtml(d.from||'')} ${spk(d.from||'')}</div>`;
     }else if(d.type==='parse'){
