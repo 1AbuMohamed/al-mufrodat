@@ -89,13 +89,26 @@ const ICO = {
   book:'<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14z"/><path d="M6.5 17A2.5 2.5 0 0 0 4 19.5 2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>'
 };
 
+function shortTitle(t){
+  const OV={"Examenstof Deel 2":"Examen: Aanwijzende voornaamwoorden","Overzichtstabel van de vier":"Overzicht aanwijzers","De tegengestelde geslachtsregel":"Geslachtsregel bij getallen","Getallen 3 t/m 10 bij vrouwelijke":"Getallen bij vrouwelijke woorden","Wat optreedt als vervanger":"Vervangers van het bijwoord","Aanwijzende voornaamwoorden in het tweevoud":"Aanwijzers in het tweevoud","Voortzetting van les 16":"Meervoud van حِمَارٌ","Nieuw patroon van het gebroken":"Nieuw gebroken meervoud","Voorzetsels فِي (in) en عَلَى":"Voorzetsels فِي en عَلَى","Aanwijzend voornaamwoord ver meervoud":"Aanwijzer ver, meervoud"};
+  for(const k in OV){ if(String(t||'').startsWith(k)) return OV[k]; }
+  let s=String(t||'').trim(), pre='';
+  const m=s.match(/^Examenstof Deel \d+:\s*/); if(m){ pre='Examen: '; s=s.slice(m[0].length); }
+  s=s.replace(/\s*\((?:Les \d+[abc])\)/gi,'').replace(/\s*·\s*Les \d+[abc]\s*$/i,'');
+  const cutAt=(str,seps)=>{ for(const sp of seps){ const i=str.indexOf(sp); if(i>8) return str.slice(0,i); } return str; };
+  s=cutAt(s,[' · ',' — ',': ']);
+  if(s.length>34) s=s.replace(/\s*\([^)]*\)/g,'');
+  if(s.length>34) s=cutAt(s,[' en ',' & ',', ',' tegenover ',' vs. ']);
+  return (pre+s).trim();
+}
+
 /* ---------- lesstructuur ---------- */
 // nodes: review? · step 0..k · vocab · book · test
 function nodes(n){
   const g=L[n]; if(!g) return [];
   const out=[];
   if(dueMistakes(n).length) out.push({k:'review', t:'Herhaling', s:'Fouten uit eerdere lessen'});
-  (g.steps||[]).forEach((s,i)=>out.push({k:'step', i, t:s.title, s:'blz. '+(s.page||g.pages||'')}));
+  (g.steps||[]).forEach((s,i)=>out.push({k:'step', i, t:shortTitle(s.title), s:'blz. '+(s.page||g.pages||'')}));
   if((g.vocab||[]).length) out.push({k:'vocab', t:'Woordenlijst', s:g.vocab.length+' woorden uit de les'});
   if(bookItems(n).length) out.push({k:'book', t:'Oefeningen uit het boek', s:bookItems(n).length+' opdrachten'});
   if(testPool(n).length) out.push({k:'test', t:'Eindtoets', s:'80% nodig om af te ronden'});
@@ -208,7 +221,7 @@ function head(n, sub){
   </div>
   <div class="g2-head">
     <div class="g2-eyebrow">${n===24?'Madinah Arabic Reader 8':'Medina Deel 1'} · ${n===0?'Inleiding':'Les '+n} · blz. ${E(g.pages||'')}</div>
-    <h1>${E(g.title||'')}</h1>
+    <h1>${E(SHORT_TITLES[n]||shortTitle(g.title||''))}</h1>
     ${g.titleAr?`<div class="g2-titlear ar" lang="ar">${arHtml(g.titleAr)}</div>`:''}
     ${sub||''}
   </div>`;
@@ -420,7 +433,7 @@ function renderStep(n){
   if(s.phase==='rule'){
     body=`<div class="g2-card">
       <div class="g2-kicker">Regel ${s.si+1} van ${nTot} · blz. ${E(st.page||'')}</div>
-      <h2>${E(st.title)}</h2>
+      <h2>${E(shortTitle(st.title))}</h2>
       ${(st.text||[]).map(p=>isAr(p)?`<p class="g2-arp ar" lang="ar">${arHtml(p)}</p>`:`<p>${mix(p)}</p>`).join('')}
       ${renderTable(st.table)}
       <div class="g2-actions"><button class="btn btn-primary" data-act="g2-phase" data-p="${(st.examples||[]).length?'see':'do'}" data-gl="next">${(st.examples||[]).length?'Bekijk de voorbeelden →':'Pas de regel toe →'}</button></div>
@@ -429,7 +442,7 @@ function renderStep(n){
     const ex=st.examples||[];
     body=`<div class="g2-card">
       <div class="g2-kicker">Voorbeelden uit het boek · blz. ${E(st.page||'')}</div>
-      <h2>${E(st.title)}</h2>
+      <h2>${E(shortTitle(st.title))}</h2>
       <p class="g2-hint">Lees hardop en luister. Verberg de vertaling om jezelf te testen.</p>
       <div class="g2-tools"><button class="btn btn-ghost btn-sm" data-act="g2-hide">${s.hideNl?'Toon vertalingen':'Verberg vertalingen'}</button></div>
       ${renderExamples(ex, s.hideNl)}
@@ -441,7 +454,7 @@ function renderStep(n){
   }else{
     body = s.queue.length ? renderDrill(s, `Toepassen · regel ${s.si+1}`) : `<div class="g2-card g2-center">
       <div class="g2-kicker">Regel ${s.si+1} beheerst</div>
-      <h2>${E(st.title)}</h2>
+      <h2>${E(shortTitle(st.title))}</h2>
       <div class="g2-actions"><button class="btn btn-primary" data-act="g2-finish" data-gl="next">Verder in de les →</button></div>
     </div>`;
   }
@@ -530,7 +543,6 @@ function renderDrill(s, kicker){
       ${!ok&&s.kind==='step'?'<p class="g2-hint">Deze vraag komt aan het einde van deze stap terug.</p>':''}
       <div class="g2-fb-actions">
         <button class="btn btn-primary" data-act="g2-next" data-gl="next">${s.queue.length>1?'Volgende vraag →':'Bekijk resultaat →'}</button>
-        ${timerActionHtml}
       </div>
     </div>`;
   }
@@ -597,7 +609,7 @@ function scheduleG2AutoNext(ok){
   const s = S();
   s.timerPaused = false;
   if(P.autoAdvance === false) return;
-  const delay = ok ? 2000 : 3000; // 2s bij juist, 3s bij fout
+  const delay = ok ? 500 : 3000; // juist: bijna meteen door, fout: 3s op de achtergrond
   _g2AutoTimer = setTimeout(()=>{
     _g2AutoTimer = null;
     const curState = S();
