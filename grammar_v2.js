@@ -198,10 +198,10 @@ function head(n, sub){
     <button class="back" data-act="g2-hub" style="margin:0"><span>←</span> Alle lessen</button>
     <span class="grow"></span>
     <button type="button" class="g2-pill-btn ${autoOn?'active':''}" data-act="g2-toggle-auto" title="${autoOn?'Auto-doorgaan is actief (2s/3s) — klik om handmatig te maken':'Auto-doorgaan staat uit — klik om aan te zetten'}">
-      ${autoOn?'⚡ Auto: aan':'⏸️ Auto: uit'}
+      ${autoOn?'Auto: aan':'Auto: uit'}
     </button>
     <button type="button" class="g2-pill-btn ${sfxOn?'active':''}" data-act="g2-toggle-sfx" title="${sfxOn?'Geluidseffect staat aan — klik om te dempen':'Geluidseffect is gedempt — klik om aan te zetten'}">
-      ${sfxOn?'🔊 SFX':'🔇 SFX'}
+      ${sfxOn?'Geluid: aan':'Geluid: uit'}
     </button>
     ${typeof wordsFor==='function'&&wordsFor(n).length?`<button class="btn btn-secondary btn-sm" data-act="start-learn" data-l="${n}">Woorden oefenen</button>`:''}
   </div>
@@ -311,6 +311,11 @@ function renderHub(){
       <div class="g2-hero-stat"><b>${done}</b><span>/ ${KEYS.length} lessen</span><div class="g2-lbar"><i style="width:${pct}%"></i></div></div>
     </div>
     ${nextN!==undefined?`<button type="button" class="g2-resume" data-act="g2-open" data-l="${nextN}"><span>Ga verder</span><b>${nextN===0?'Inleiding':'Les '+nextN} · ${E(SHORT_TITLES[nextN] || L[nextN].title)}</b><span>→</span></button>`:''}
+    <button type="button" class="g2-resume g2-exam-banner" data-act="nav" data-v="exam">
+      <span>Examen</span>
+      <b>Al-Manarah Examen · Les 1 t/m 7 (100 punten · Oefenexamen & Officiële Toets)</b>
+      <span>Start →</span>
+    </button>
     <div class="g2-pillars">
       <div class="g2-pillar-head">
         <h3>Voortgang per grammaticale pijler</h3>
@@ -502,7 +507,7 @@ function renderDrill(s, kicker){
     let timerActionHtml = '';
     if(autoOn){
       timerActionHtml = `<button type="button" class="g2-timer-btn ${s.timerPaused ? 'paused' : (ok ? 't-2s' : 't-3s')}" data-act="g2-toggle-timer" title="${s.timerPaused ? 'Klik om timer te hervatten' : 'Klik om timer te pauzeren en rustig te lezen'}">
-        <span class="g2-timer-label">${s.timerPaused ? '⏸️ Gepauzeerd' : (ok ? '⏱️ 2s...' : '⏱️ 3s...')}</span>
+        <span class="g2-timer-label">${s.timerPaused ? 'Gepauzeerd' : (ok ? '2s...' : '3s...')}</span>
         <span class="g2-auto-timer ${s.timerPaused ? 'paused' : (ok ? 't-2s' : 't-3s')}"><i class="g2-auto-bar"></i></span>
       </button>`;
     } else {

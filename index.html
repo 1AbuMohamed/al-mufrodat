@@ -19,7 +19,7 @@
 <div id="tabbar-host"></div>
 <div class="toast" id="toast"></div>
 <script>
-const BASE_WORDS = [{"id":"l1-1","lesson":1,"ar":"بَيْتٌ","translit":"baytun","nl":"een huis","en":"house"},{"id":"l1-2","lesson":1,"ar":"مَسْجِدٌ","translit":"masjidun","nl":"een moskee","en":"mosque"},{"id":"l1-3","lesson":1,"ar":"بَابٌ","translit":"baabun","nl":"een deur","en":"door"},{"id":"l1-4","lesson":1,"ar":"كِتَابٌ","translit":"kitaabun","nl":"een boek","en":"book"},{"id":"l1-5","lesson":1,"ar":"قَلَمٌ","translit":"qalamun","nl":"een pen","en":"pen"},{"id":"l1-6","lesson":1,"ar":"مِفْتَاحٌ","translit":"miftaahun","nl":"een sleutel","en":"key"},{"id":"l1-7","lesson":1,"ar":"مَكْتَبٌ","translit":"maktabun","nl":"een bureau","en":"writing table"},{"id":"l1-8","lesson":1,"ar":"سَرِيرٌ","translit":"sareerun","nl":"een bed","en":"bed"},{"id":"l1-9","lesson":1,"ar":"كُرْسِيٌّ","translit":"kursiyyun","nl":"een stoel","en":"chair"},{"id":"l1-10","lesson":1,"ar":"نَجْمٌ","translit":"najmun","nl":"een ster","en":"star"},{"id":"l1-11","lesson":1,"ar":"قَمِيصٌ","translit":"qameesun","nl":"een hemd","en":"shirt"},{"id":"l1-12","lesson":1,"ar":"طَبِيبٌ","translit":"tabeebun","nl":"een dokter","en":"doctor"},{"id":"l1-13","lesson":1,"ar":"وَلَدٌ","translit":"waladun","nl":"een kind, jongen","en":"boy"},{"id":"l1-14","lesson":1,"ar":"طَالِبٌ","translit":"taalibun","nl":"een student","en":"student"},{"id":"l1-15","lesson":1,"ar":"رَجُلٌ","translit":"rajulun","nl":"een man","en":"man"},{"id":"l1-16","lesson":1,"ar":"تَاجِرٌ","translit":"taajirun","nl":"een handelaar","en":"merchant"},{"id":"l1-17","lesson":1,"ar":"كَلْبٌ","translit":"kalbun","nl":"een hond","en":"dog"},{"id":"l1-18","lesson":1,"ar":"قِطٌّ","translit":"qittun","nl":"een kat","en":"cat"},{"id":"l1-19","lesson":1,"ar":"حِمَارٌ","translit":"himaarun","nl":"een ezel","en":"donkey"},{"id":"l1-20","lesson":1,"ar":"حِصَانٌ","translit":"hisaanun","nl":"een paard","en":"horse"},{"id":"l1-21","lesson":1,"ar":"جَمَلٌ","translit":"jamalun","nl":"een kameel","en":"camel"},{"id":"l1-22","lesson":1,"ar":"دِيكٌ","translit":"deekun","nl":"een haan","en":"rooster"},{"id":"l1-23","lesson":1,"ar":"مُدَرِّسٌ","translit":"mudarrisun","nl":"een leraar","en":"teacher"},{"id":"l1-24","lesson":1,"ar":"مِنْدِيلٌ","translit":"mindeelun","nl":"een zakdoek","en":"handkerchief"},{"id":"l2-1","lesson":2,"ar":"إِمَامٌ","translit":"imaamun","nl":"een imam","en":"imam"},{"id":"l2-2","lesson":2,"ar":"حَجَرٌ","translit":"hajarun","nl":"een steen","en":"stone"},{"id":"l2-3","lesson":2,"ar":"سُكَّرٌ","translit":"sukkarun","nl":"suiker","en":"sugar"},{"id":"l2-4","lesson":2,"ar":"لَبَنٌ","translit":"labanun","nl":"melk, yoghurt","en":"milk"},{"id":"l3-1","lesson":3,"ar":"غَنِيٌّ","translit":"ghaniyyun","nl":"rijk","en":"rich"},{"id":"l3-2","lesson":3,"ar":"فَقِيرٌ","translit":"faqeerun","nl":"arm","en":"poor"},{"id":"l3-3","lesson":3,"ar":"طَوِيلٌ","translit":"taweelun","nl":"lang","en":"tall"},{"id":"l3-4","lesson":3,"ar":"قَصِيرٌ","translit":"qaseerun","nl":"kort","en":"short"},{"id":"l3-5","lesson":3,"ar":"بَارِدٌ","translit":"baaridun","nl":"koud","en":"cold"},{"id":"l3-6","lesson":3,"ar":"حَارٌّ","translit":"haarrun","nl":"heet","en":"hot"},{"id":"l3-7","lesson":3,"ar":"جَالِسٌ","translit":"jaalisun","nl":"zittend","en":"sitting"},{"id":"l3-8","lesson":3,"ar":"وَاقِفٌ","translit":"waaqifun","nl":"staand","en":"standing"},{"id":"l3-9","lesson":3,"ar":"جَدِيدٌ","translit":"jadeedun","nl":"nieuw","en":"new"},{"id":"l3-10","lesson":3,"ar":"قَدِيمٌ","translit":"qadeemun","nl":"oud","en":"old"},{"id":"l3-11","lesson":3,"ar":"قَرِيبٌ","translit":"qareebun","nl":"dichtbij","en":"near"},{"id":"l3-12","lesson":3,"ar":"بَعِيدٌ","translit":"ba'eedun","nl":"ver","en":"far away"},{"id":"l3-13","lesson":3,"ar":"نَظِيفٌ","translit":"nazeefun","nl":"schoon","en":"clean"},{"id":"l3-14","lesson":3,"ar":"وَسِخٌ","translit":"wasikhun","nl":"vies","en":"dirty"},{"id":"l3-15","lesson":3,"ar":"صَغِيرٌ","translit":"sagheerun","nl":"klein","en":"small"},{"id":"l3-16","lesson":3,"ar":"كَبِيرٌ","translit":"kabeerun","nl":"groot","en":"big"},{"id":"l3-17","lesson":3,"ar":"خَفِيفٌ","translit":"khafeefun","nl":"licht","en":"light (weight)"},{"id":"l3-18","lesson":3,"ar":"ثَقِيلٌ","translit":"thaqeelun","nl":"zwaar","en":"heavy"},{"id":"l3-19","lesson":3,"ar":"الْوَرَقُ","translit":"al-waraqu","nl":"het papier","en":"paper"},{"id":"l3-20","lesson":3,"ar":"مَكْسُورٌ","translit":"maksoorun","nl":"gebroken","en":"broken"},{"id":"l3-21","lesson":3,"ar":"الْمَاءُ","translit":"al-maa'u","nl":"het water","en":"water"},{"id":"l3-22","lesson":3,"ar":"مَفْتُوحٌ","translit":"maftoohun","nl":"open","en":"open"},{"id":"l3-23","lesson":3,"ar":"التُّفَّاحُ","translit":"at-tuffaahu","nl":"de appel","en":"apple"},{"id":"l3-24","lesson":3,"ar":"حُلْوٌ","translit":"hulwun","nl":"zoet","en":"sweet"},{"id":"l3-25","lesson":3,"ar":"جَمِيلٌ","translit":"jameelun","nl":"mooi","en":"beautiful"},{"id":"l3-26","lesson":3,"ar":"مَرِيضٌ","translit":"mareedun","nl":"ziek","en":"ill"},{"id":"l3-27","lesson":3,"ar":"الدُّكَّانُ","translit":"ad-dukkaanu","nl":"de winkel","en":"shop"},{"id":"l3-28","lesson":3,"ar":"الشَّمْسُ","translit":"ash-shamsu","nl":"de zon","en":"the sun"},{"id":"l3-29","lesson":3,"ar":"الْقَمَرُ","translit":"al-qamaru","nl":"de maan","en":"the moon"},{"id":"l4-1","lesson":4,"ar":"أَيْنَ","translit":"ayna","nl":"waar","en":"where"},{"id":"l4-2","lesson":4,"ar":"غُرْفَةٌ","translit":"ghurfatun","nl":"een kamer","en":"room"},{"id":"l4-3","lesson":4,"ar":"السَّمَاءُ","translit":"as-samaa'u","nl":"de hemel, de lucht","en":"sky"},{"id":"l4-4","lesson":4,"ar":"الْحَمَّامُ","translit":"al-hammaamu","nl":"de badkamer","en":"bathroom"},{"id":"l4-5","lesson":4,"ar":"الْفَصْلُ","translit":"al-faslu","nl":"het klaslokaal","en":"classroom"},{"id":"l4-6","lesson":4,"ar":"الْمَطْبَخُ","translit":"al-matbakhu","nl":"de keuken","en":"kitchen"},{"id":"l4-7","lesson":4,"ar":"الْمِرْحَاضُ","translit":"al-mirhaadu","nl":"het toilet","en":"toilet"},{"id":"l4-8","lesson":4,"ar":"الْمَدْرَسَةُ","translit":"al-madrasatu","nl":"de school","en":"school"},{"id":"l4-9","lesson":4,"ar":"الْجَامِعَةُ","translit":"al-jaami'atu","nl":"de universiteit","en":"university"},{"id":"l4-10","lesson":4,"ar":"السُّوقُ","translit":"as-sooqu","nl":"de markt","en":"market"},{"id":"l4-11","lesson":4,"ar":"الْيَابَانُ","translit":"al-yaabaanu","nl":"Japan","en":"Japan"},{"id":"l4-12","lesson":4,"ar":"الصِّينُ","translit":"as-seenu","nl":"China","en":"China"},{"id":"l4-13","lesson":4,"ar":"الْهِنْدُ","translit":"al-hindu","nl":"India","en":"India"},{"id":"l4-14","lesson":4,"ar":"الْفِلِبِّينُ","translit":"al-filibbeenu","nl":"de Filipijnen","en":"Philippines"},{"id":"l4-15","lesson":4,"ar":"الْمُدِيرُ","translit":"al-mudeeru","nl":"de directeur","en":"director / headmaster"},{"id":"l4-16","lesson":4,"ar":"ذَهَبَ","translit":"dhahaba","nl":"hij ging","en":"he went"},{"id":"l4-17","lesson":4,"ar":"خَرَجَ","translit":"kharaja","nl":"hij ging naar buiten","en":"he went out"},{"id":"l4-18","lesson":4,"ar":"فِي","translit":"fee","nl":"in","en":"in"},{"id":"l4-19","lesson":4,"ar":"عَلَى","translit":"'alaa","nl":"op","en":"on"},{"id":"l4-20","lesson":4,"ar":"مِنْ","translit":"min","nl":"van, uit","en":"from"},{"id":"l4-21","lesson":4,"ar":"إِلَى","translit":"ilaa","nl":"naar","en":"to"},{"id":"l4-22","lesson":4,"ar":"هُوَ","translit":"huwa","nl":"hij / het (m)","en":"he / it (m)"},{"id":"l4-23","lesson":4,"ar":"هِيَ","translit":"hiya","nl":"zij / het (v)","en":"she / it (f)"},{"id":"l4-24","lesson":4,"ar":"أَنَا","translit":"anaa","nl":"ik","en":"I"},{"id":"l4-25","lesson":4,"ar":"أَنْتَ","translit":"anta","nl":"jij (mannelijk)","en":"you (m)"},{"id":"l5-1","lesson":5,"ar":"الرَّسُولُ","translit":"ar-rasoolu","nl":"de Boodschapper","en":"the Messenger"},{"id":"l5-2","lesson":5,"ar":"الْعَمُّ","translit":"al-'ammu","nl":"de oom (van vaderszijde)","en":"paternal uncle"},{"id":"l5-3","lesson":5,"ar":"الْخَالُ","translit":"al-khaalu","nl":"de oom (van moederszijde)","en":"maternal uncle"},{"id":"l5-4","lesson":5,"ar":"الْكَعْبَةُ","translit":"al-ka'batu","nl":"de Ka'bah","en":"the Kabah"},{"id":"l5-5","lesson":5,"ar":"الشَّارِعُ","translit":"ash-shaari'u","nl":"de straat, de weg","en":"street"},{"id":"l5-6","lesson":5,"ar":"مُغْلَقٌ","translit":"mughlaqun","nl":"gesloten","en":"closed"},{"id":"l5-7","lesson":5,"ar":"الْاِسْمُ","translit":"al-ismu","nl":"de naam","en":"name"},{"id":"l5-8","lesson":5,"ar":"الْحَقِيبَةُ","translit":"al-haqeebatu","nl":"de tas","en":"bag"},{"id":"l5-9","lesson":5,"ar":"تَحْتَ","translit":"tahta","nl":"onder","en":"under"},{"id":"l5-10","lesson":5,"ar":"السَّيَّارَةُ","translit":"as-sayyaaratu","nl":"de auto","en":"car"},{"id":"l5-11","lesson":5,"ar":"هُنَا","translit":"hunaa","nl":"hier","en":"here"},{"id":"l5-12","lesson":5,"ar":"هُنَاكَ","translit":"hunaaka","nl":"daar","en":"there"},{"id":"l5-13","lesson":5,"ar":"الْبِنْتُ","translit":"al-bintu","nl":"de dochter, het meisje","en":"daughter / girl"},{"id":"l5-14","lesson":5,"ar":"الْاِبْنُ","translit":"al-ibnu","nl":"de zoon","en":"the son"},{"id":"l5-15","lesson":5,"ar":"يَا","translit":"yaa","nl":"o! (aanroeppartikel)","en":"O! (vocative)"},{"id":"l6-1","lesson":6,"ar":"الْيَدُ","translit":"al-yadu","nl":"de hand (v)","en":"hand"},{"id":"l6-2","lesson":6,"ar":"الرَّأْسُ","translit":"ar-ra'su","nl":"het hoofd (m)","en":"head"},{"id":"l6-3","lesson":6,"ar":"الْأَنْفُ","translit":"al-anfu","nl":"de neus (m)","en":"nose"},{"id":"l6-4","lesson":6,"ar":"الرِّجْلُ","translit":"ar-rijlu","nl":"het been, de voet (v)","en":"leg / foot"},{"id":"l6-5","lesson":6,"ar":"الْفَمُ","translit":"al-famu","nl":"de mond (m)","en":"mouth"},{"id":"l6-6","lesson":6,"ar":"الْعَيْنُ","translit":"al-'aynu","nl":"het oog (v)","en":"eye"},{"id":"l6-7","lesson":6,"ar":"الْوَجْهُ","translit":"al-wajhu","nl":"het gezicht (m)","en":"face"},{"id":"l6-8","lesson":6,"ar":"الْأُذُنُ","translit":"al-udhunu","nl":"het oor (v)","en":"ear"},{"id":"l6-9","lesson":6,"ar":"الْحَدِيدُ","translit":"al-hadeedu","nl":"het ijzer","en":"iron"},{"id":"l6-10","lesson":6,"ar":"الدَّرَّاجَةُ","translit":"ad-darraajatu","nl":"de fiets","en":"bicycle"},{"id":"l6-11","lesson":6,"ar":"الْمِلْعَقَةُ","translit":"al-mil'aqatu","nl":"de lepel","en":"spoon"},{"id":"l6-12","lesson":6,"ar":"الْقِدْرُ","translit":"al-qidru","nl":"de kookpot (v)","en":"cooking pot"},{"id":"l6-13","lesson":6,"ar":"الْبَقَرَةُ","translit":"al-baqaratu","nl":"de koe","en":"cow"},{"id":"l6-14","lesson":6,"ar":"الْفَلَّاحُ","translit":"al-fallaahu","nl":"de boer","en":"farmer"},{"id":"l6-15","lesson":6,"ar":"الشَّايُ","translit":"ash-shaayu","nl":"de thee","en":"tea"},{"id":"l6-16","lesson":6,"ar":"الْأُمُّ","translit":"al-ummu","nl":"de moeder","en":"mother"},{"id":"l6-17","lesson":6,"ar":"الثَّلَّاجَةُ","translit":"ath-thallaajatu","nl":"de koelkast","en":"fridge"},{"id":"l6-18","lesson":6,"ar":"الْقَهْوَةُ","translit":"al-qahwatu","nl":"de koffie","en":"coffee"},{"id":"l6-19","lesson":6,"ar":"سَرِيعٌ","translit":"saree'un","nl":"snel","en":"fast"},{"id":"l6-20","lesson":6,"ar":"النَّافِذَةُ","translit":"an-naafidhatu","nl":"het raam","en":"window"},{"id":"l6-21","lesson":6,"ar":"جِدًّا","translit":"jiddan","nl":"heel, erg, zeer","en":"very"},{"id":"l6-22","lesson":6,"ar":"أَيْضًا","translit":"aydan","nl":"ook","en":"also"},{"id":"l6-23","lesson":6,"ar":"الْمِكْوَاةُ","translit":"al-mikwaatu","nl":"het strijkijzer","en":"iron (appliance)"},{"id":"l6-24","lesson":6,"ar":"الشَّرْقُ","translit":"ash-sharqu","nl":"het oosten","en":"the east"},{"id":"l6-25","lesson":6,"ar":"الْمَغْرِبُ","translit":"al-maghribu","nl":"het westen","en":"the west"},{"id":"l7-1","lesson":7,"ar":"النَّاقَةُ","translit":"an-naaqatu","nl":"de vrouwtjeskameel","en":"she-camel"},{"id":"l7-2","lesson":7,"ar":"الْبَطَّةُ","translit":"al-battatu","nl":"de eend","en":"duck"},{"id":"l7-3","lesson":7,"ar":"مُمَرِّضٌ","translit":"mumarridun","nl":"een verpleger","en":"nurse (m)"},{"id":"l7-4","lesson":7,"ar":"الْبَيْضَةُ","translit":"al-baydatu","nl":"het ei","en":"egg"},{"id":"l7-5","lesson":7,"ar":"الْمُؤَذِّنُ","translit":"al-mu'adhdhinu","nl":"de gebedsomroeper","en":"muezzin"},{"id":"l7-6","lesson":7,"ar":"الدَّجَاجَةُ","translit":"ad-dajaajatu","nl":"de kip, de hen","en":"hen"},{"id":"l7-7","lesson":7,"ar":"الْمُمَرِّضَةُ","translit":"al-mumarridatu","nl":"de verpleegster","en":"nurse (f)"},{"id":"l7-8","lesson":7,"ar":"هَذَا","translit":"haadhaa","nl":"dit / deze (m)","en":"this (m)"},{"id":"l7-9","lesson":7,"ar":"هَذِهِ","translit":"haadhihi","nl":"dit / deze (v)","en":"this (f)"},{"id":"l7-10","lesson":7,"ar":"ذَلِكَ","translit":"dhaalika","nl":"die / dat (m)","en":"that (m)"},{"id":"l7-11","lesson":7,"ar":"تِلْكَ","translit":"tilka","nl":"die / dat (v)","en":"that (f)"},{"id":"l8-1","lesson":8,"ar":"أَمْرِيكَا","translit":"amreekaa","nl":"Amerika","en":"America"},{"id":"l8-2","lesson":8,"ar":"أَلْمَانِيَا","translit":"almaaniyaa","nl":"Duitsland","en":"Germany"},{"id":"l8-3","lesson":8,"ar":"الْعِرَاقُ","translit":"al-'iraaqu","nl":"Irak","en":"Iraq"},{"id":"l8-4","lesson":8,"ar":"إِنْكِلْتِرَا","translit":"inkiltiraa","nl":"Engeland","en":"England"},{"id":"l8-5","lesson":8,"ar":"سُوِيسَرَا","translit":"suweesaraa","nl":"Zwitserland","en":"Switzerland"},{"id":"l8-6","lesson":8,"ar":"السِّكِّينُ","translit":"as-sikkeenu","nl":"het mes","en":"knife"},{"id":"l8-7","lesson":8,"ar":"الْمُسْتَشْفَى","translit":"al-mustashfaa","nl":"het ziekenhuis","en":"hospital"},{"id":"l8-8","lesson":8,"ar":"الْمُهَنْدِسُ","translit":"al-muhandisu","nl":"de ingenieur","en":"engineer"},{"id":"l8-9","lesson":8,"ar":"خَلْفَ","translit":"khalfa","nl":"achter","en":"behind"},{"id":"l8-10","lesson":8,"ar":"أَمَامَ","translit":"amaama","nl":"voor (plaats)","en":"in front of"},{"id":"l8-11","lesson":8,"ar":"جَلَسَ","translit":"jalasa","nl":"hij zat","en":"he sat"},{"id":"l9-1","lesson":9,"ar":"الْفَاكِهَةُ","translit":"al-faakihatu","nl":"het fruit","en":"fruit"},{"id":"l9-2","lesson":9,"ar":"الْعُصْفُورُ","translit":"al-'usfooru","nl":"de mus","en":"sparrow"},{"id":"l9-3","lesson":9,"ar":"الطَّائِرُ","translit":"at-taa'iru","nl":"de vogel","en":"bird"},{"id":"l9-4","lesson":9,"ar":"الْعَرَبِيَّةُ","translit":"al-'arabiyyatu","nl":"het Arabisch","en":"Arabic"},{"id":"l9-5","lesson":9,"ar":"اللُّغَةُ","translit":"al-lughatu","nl":"de taal","en":"language"},{"id":"l9-6","lesson":9,"ar":"سَهْلٌ","translit":"sahlun","nl":"gemakkelijk","en":"easy"},{"id":"l9-7","lesson":9,"ar":"مُجْتَهِدٌ","translit":"mujtahidun","nl":"ijverig, hardwerkend","en":"hardworking"},{"id":"l9-8","lesson":9,"ar":"شَهِيرٌ","translit":"shaheerun","nl":"beroemd","en":"famous"},{"id":"l9-9","lesson":9,"ar":"الْإِنْكِلِيزِيَّةُ","translit":"al-inkileeziyyatu","nl":"het Engels","en":"English (language)"},{"id":"l9-10","lesson":9,"ar":"صَعْبٌ","translit":"sa'bun","nl":"moeilijk","en":"difficult"},{"id":"l9-11","lesson":9,"ar":"الْمَدِينَةُ","translit":"al-madeenatu","nl":"de stad","en":"city"},{"id":"l9-12","lesson":9,"ar":"الْقَاهِرَةُ","translit":"al-qaahiratu","nl":"Caïro","en":"Cairo"},{"id":"l9-13","lesson":9,"ar":"الْيَوْمَ","translit":"al-yawma","nl":"vandaag","en":"today"},{"id":"l9-14","lesson":9,"ar":"لِمَاذَا","translit":"limaadhaa","nl":"waarom","en":"why"},{"id":"l9-15","lesson":9,"ar":"الْكُوبُ","translit":"al-koobu","nl":"de beker, het glas","en":"cup / glass"},{"id":"l9-16","lesson":9,"ar":"جَوْعَانُ","translit":"jaw'aanu","nl":"hongerig","en":"hungry"},{"id":"l9-17","lesson":9,"ar":"عَطْشَانُ","translit":"'atshaanu","nl":"dorstig","en":"thirsty"},{"id":"l9-18","lesson":9,"ar":"مَلْآنُ","translit":"mal'aanu","nl":"vol","en":"full"},{"id":"l9-19","lesson":9,"ar":"غَضْبَانُ","translit":"ghadbaanu","nl":"boos","en":"angry"},{"id":"l9-20","lesson":9,"ar":"الْمَكْتَبَةُ","translit":"al-maktabatu","nl":"de bibliotheek, boekhandel","en":"library"},{"id":"l9-21","lesson":9,"ar":"الْآنَ","translit":"al-aana","nl":"nu","en":"now"},{"id":"l9-22","lesson":9,"ar":"الْمُسْتَوْصَفُ","translit":"al-mustawsafu","nl":"de kliniek","en":"clinic"},{"id":"l9-23","lesson":9,"ar":"الْمِرْوَحَةُ","translit":"al-mirwahatu","nl":"de ventilator","en":"fan"},{"id":"l9-24","lesson":9,"ar":"الْكُوَيْتُ","translit":"al-kuwaytu","nl":"Koeweit","en":"Kuwait"},{"id":"l9-25","lesson":9,"ar":"الْمَدْرَسَةُ الثَّانَوِيَّةُ","translit":"al-madrasatu th-thaanawiyyatu","nl":"de middelbare school","en":"secondary school"},{"id":"l9-26","lesson":9,"ar":"الْوَزِيرُ","translit":"al-wazeeru","nl":"de minister","en":"minister"},{"id":"l9-27","lesson":9,"ar":"حَادٌّ","translit":"haaddun","nl":"scherp","en":"sharp"},{"id":"l9-28","lesson":9,"ar":"إِنْدُونِيسِيَا","translit":"indooneesiyaa","nl":"Indonesië","en":"Indonesia"},{"id":"l9-29","lesson":9,"ar":"كَسْلَانُ","translit":"kaslaanu","nl":"lui","en":"lazy"},{"id":"l9-30","lesson":9,"ar":"الَّذِي","translit":"alladhee","nl":"die, dat, welk (m)","en":"who / which (m)"},{"id":"l10-1","lesson":10,"ar":"الزَّمِيلُ","translit":"az-zameelu","nl":"de collega, klasgenoot","en":"colleague / classmate"},{"id":"l10-2","lesson":10,"ar":"الزَّوْجُ","translit":"az-zawju","nl":"de echtgenoot","en":"husband"},{"id":"l10-3","lesson":10,"ar":"الطِّفْلُ","translit":"at-tiflu","nl":"het kind, de baby","en":"child"},{"id":"l10-4","lesson":10,"ar":"الْفَتَى","translit":"al-fataa","nl":"de jongeman","en":"young man"},{"id":"l10-5","lesson":10,"ar":"وَاحِدٌ","translit":"waahidun","nl":"één","en":"one"},{"id":"l10-6","lesson":10,"ar":"عِنْدَ","translit":"'inda","nl":"bij, hebben","en":"with / have"},{"id":"l10-7","lesson":10,"ar":"مَعَ","translit":"ma'a","nl":"met","en":"with"},{"id":"l10-8","lesson":10,"ar":"عِنْدِي","translit":"'indee","nl":"ik heb (scheidbaar bezit)","en":"I have"},{"id":"l10-9","lesson":10,"ar":"لِي","translit":"lee","nl":"ik heb (familie / lichaamsdelen)","en":"I have (inseparable)"},{"id":"l10-10","lesson":10,"ar":"أَبٌ","translit":"abun","nl":"een vader (als Moedaaf: أَبُو)","en":"father"},{"id":"l10-11","lesson":10,"ar":"أَخٌ","translit":"akhun","nl":"een broer (als Moedaaf: أَخُو)","en":"brother"},{"id":"l10-12","lesson":10,"ar":"ذَهَبْتَ","translit":"dhahabta","nl":"jij ging (m)","en":"you went (m)"},{"id":"l10-13","lesson":10,"ar":"ذَهَبْتُ","translit":"dhahabtu","nl":"ik ging","en":"I went"},{"id":"l11-1","lesson":11,"ar":"فِيهِ","translit":"feehi","nl":"erin, in hem (m)","en":"in it / in him"},{"id":"l11-2","lesson":11,"ar":"فِيهَا","translit":"feehaa","nl":"erin, in haar (v)","en":"in it / in her"},{"id":"l11-3","lesson":11,"ar":"أُحِبُّ","translit":"uhibbu","nl":"ik houd van","en":"I love"},{"id":"l11-4","lesson":11,"ar":"تُحِبُّ","translit":"tuhibbu","nl":"jij houdt van (m)","en":"you love (m)"},{"id":"l12-1","lesson":12,"ar":"أَنْتِ","translit":"anti","nl":"jij (vrouwelijk enkelvoud)","en":"you (f. sg.)"},{"id":"l12-2","lesson":12,"ar":"ذَهَبَتْ","translit":"dhahabat","nl":"zij ging","en":"she went"},{"id":"l12-3","lesson":12,"ar":"الَّتِي","translit":"allatee","nl":"die, dat, welk (vrouwelijk)","en":"who / which (f)"},{"id":"l12-4","lesson":12,"ar":"يَا سَيِّدِي","translit":"yaa sayyidee","nl":"Meneer!","en":"Sir!"},{"id":"l12-5","lesson":12,"ar":"يَا سَيِّدَتِي","translit":"yaa sayyidatee","nl":"Mevrouw!","en":"Madam!"},{"id":"l12-6","lesson":12,"ar":"الدَّفْتَرُ","translit":"ad-daftaru","nl":"het schrift","en":"the notebook"},{"id":"l12-7","lesson":12,"ar":"الْعَمَّةُ","translit":"al-'ammatu","nl":"de tante (van vaderskant)","en":"paternal aunt"},{"id":"l12-8","lesson":12,"ar":"الْخَالَةُ","translit":"al-khaalatu","nl":"de tante (van moederskant)","en":"maternal aunt"},{"id":"l12-9","lesson":12,"ar":"كَيْفَ حَالُكَ؟","translit":"kayfa haaluka","nl":"Hoe gaat het met je?","en":"How are you?"},{"id":"l12-10","lesson":12,"ar":"أَنَا بِخَيْرٍ","translit":"anaa bikhayrin","nl":"Het gaat goed met mij","en":"I am fine"},{"id":"l12-11","lesson":12,"ar":"بَعْدَ","translit":"ba'da","nl":"na","en":"after"},{"id":"l12-12","lesson":12,"ar":"الشَّجَرَةُ","translit":"ash-shajaratu","nl":"de boom","en":"the tree"},{"id":"l12-13","lesson":12,"ar":"الْفَتَاةُ","translit":"al-fataatu","nl":"de jongedame, het meisje","en":"the young lady"},{"id":"l12-14","lesson":12,"ar":"الْمُفَتِّشُ","translit":"al-mufattishu","nl":"de inspecteur","en":"the inspector"},{"id":"l12-15","lesson":12,"ar":"سُورِيَا","translit":"sooriyaa","nl":"Syrië","en":"Syria"},{"id":"l12-16","lesson":12,"ar":"مَالِيزِيَا","translit":"maaleeziyaa","nl":"Maleisië","en":"Malaysia"},{"id":"l12-17","lesson":12,"ar":"عُلَمَاءُ","translit":"'ulamaa'u","nl":"geleerden (enk. عَالِمٌ)","en":"scholars"},{"id":"l12-18","lesson":12,"ar":"أَقْوِيَاءُ","translit":"aqwiyaa'u","nl":"sterk (mv. van قَوِيٌّ)","en":"strong (pl.)"},{"id":"l12-19","lesson":12,"ar":"ضِعَافٌ","translit":"di'aafun","nl":"zwak (mv. van ضَعِيفٌ)","en":"weak (pl.)"},{"id":"l12-20","lesson":12,"ar":"أُمَّهَاتٌ","translit":"ummahaatun","nl":"moeders (enk. أُمٌّ)","en":"mothers"},{"id":"l12-21","lesson":12,"ar":"آبَاءٌ","translit":"aabaa'un","nl":"vaders (enk. أَبٌ)","en":"fathers"},{"id":"l12-22","lesson":12,"ar":"وُزَرَاءُ","translit":"wuzaraa'u","nl":"ministers (enk. وَزِيرٌ)","en":"ministers"},{"id":"l13-1","lesson":13,"ar":"هَؤُلَاءِ","translit":"haa'ulaa'i","nl":"deze, dezen (mv. m/v)","en":"these"},{"id":"l13-2","lesson":13,"ar":"أُولَئِكَ","translit":"ulaa'ika","nl":"die (mv. m/v)","en":"those"},{"id":"l13-3","lesson":13,"ar":"هُمْ","translit":"hum","nl":"zij / hun (m. mv.)","en":"they / their (m)"},{"id":"l13-4","lesson":13,"ar":"هُنَّ","translit":"hunna","nl":"zij / hun (v. mv.)","en":"they / their (f)"},{"id":"l13-5","lesson":13,"ar":"ذَهَبُوا","translit":"dhahaboo","nl":"zij gingen (m. mv.)","en":"they went (m)"},{"id":"l13-6","lesson":13,"ar":"ذَهَبْنَ","translit":"dhahabna","nl":"zij gingen (v. mv.)","en":"they went (f)"},{"id":"l13-7","lesson":13,"ar":"بَعْضٌ","translit":"ba'dun","nl":"sommige(n), enkele(n)","en":"some"},{"id":"l13-8","lesson":13,"ar":"طِوَالٌ","translit":"tiwaalun","nl":"lang (mv. van طَوِيلٌ)","en":"tall (pl.)"},{"id":"l13-9","lesson":13,"ar":"قِصَارٌ","translit":"qisaarun","nl":"kort (mv. van قَصِيرٌ)","en":"short (pl.)"},{"id":"l13-10","lesson":13,"ar":"جُدُدٌ","translit":"jududun","nl":"nieuw (mv. van جَدِيدٌ)","en":"new (pl.)"},{"id":"l13-11","lesson":13,"ar":"قَرْيَةٌ","translit":"qaryatun","nl":"een dorp (mv. قُرًى)","en":"a village"},{"id":"l13-12","lesson":13,"ar":"ضَيْفٌ","translit":"dayfun","nl":"een gast (mv. ضُيُوفٌ)","en":"a guest"},{"id":"l13-13","lesson":13,"ar":"طُلَّابٌ","translit":"tullaabun","nl":"studenten (enk. طَالِبٌ)","en":"students"},{"id":"l13-14","lesson":13,"ar":"زُمَلَاءُ","translit":"zumalaa'u","nl":"klasgenoten (enk. زَمِيلٌ)","en":"classmates"},{"id":"l13-15","lesson":13,"ar":"أَصْدِقَاءُ","translit":"asdiqaa'u","nl":"vrienden (enk. صَدِيقٌ)","en":"friends"},{"id":"l13-16","lesson":13,"ar":"فِتْيَةٌ","translit":"fityatun","nl":"jongemannen (enk. فَتًى)","en":"young men"},{"id":"l13-17","lesson":13,"ar":"حُجَّاجٌ","translit":"hujjaajun","nl":"bedevaartgangers (enk. حَاجٌّ)","en":"pilgrims"},{"id":"l13-18","lesson":13,"ar":"شَيْخٌ","translit":"shaykhun","nl":"een oude man, geleerde (mv. شُيُوخٌ)","en":"scholar / elder"},{"id":"l13-19","lesson":13,"ar":"حَقْلٌ","translit":"haqlun","nl":"een veld, akker","en":"a field"},{"id":"l13-20","lesson":13,"ar":"النَّاسُ","translit":"an-naasu","nl":"de mensen","en":"the people"},{"id":"l13-21","lesson":13,"ar":"الْمَطْعَمُ","translit":"al-mat'amu","nl":"het restaurant","en":"the restaurant"},{"id":"l13-22","lesson":13,"ar":"أَبْنَاءٌ","translit":"abnaa'un","nl":"zonen (enk. اِبْنٌ)","en":"sons"},{"id":"l13-23","lesson":13,"ar":"بَنَاتٌ","translit":"banaatun","nl":"dochters (enk. بِنْتٌ)","en":"daughters"},{"id":"l13-24","lesson":13,"ar":"أَخَوَاتٌ","translit":"akhawaatun","nl":"zussen (enk. أُخْتٌ)","en":"sisters"},{"id":"l13-25","lesson":13,"ar":"النِّسَاءُ","translit":"an-nisaa'u","nl":"de vrouwen (enk. اِمْرَأَةٌ)","en":"the women"},{"id":"l13-26","lesson":13,"ar":"زَوْجَةٌ","translit":"zawjatun","nl":"een echtgenote","en":"a wife"},{"id":"l14-1","lesson":14,"ar":"أَنْتُمْ","translit":"antum","nl":"jullie (mannelijk meervoud)","en":"you (m. pl.)"},{"id":"l14-2","lesson":14,"ar":"نَحْنُ","translit":"nahnu","nl":"wij (m/v)","en":"we"},{"id":"l14-3","lesson":14,"ar":"ذَهَبْتُمْ","translit":"dhahabtum","nl":"jullie gingen (m. mv.)","en":"you went (m. pl.)"},{"id":"l14-4","lesson":14,"ar":"ذَهَبْنَا","translit":"dhahabnaa","nl":"wij gingen","en":"we went"},{"id":"l14-5","lesson":14,"ar":"أَيُّ","translit":"ayyu","nl":"welk(e)? (+ Moedaaf Ilaih)","en":"which?"},{"id":"l14-6","lesson":14,"ar":"الدِّينُ","translit":"ad-deenu","nl":"de religie, godsdienst","en":"the religion"},{"id":"l14-7","lesson":14,"ar":"الرَّبُّ","translit":"ar-rabbu","nl":"de Heer","en":"the Lord"},{"id":"l14-8","lesson":14,"ar":"النَّبِيُّ","translit":"an-nabiyyu","nl":"de Profeet","en":"the Prophet"},{"id":"l14-9","lesson":14,"ar":"الْقِبْلَةُ","translit":"al-qiblatu","nl":"de gebedsrichting","en":"the Qiblah"},{"id":"l14-10","lesson":14,"ar":"الْكُلِّيَّةُ","translit":"al-kulliyyatu","nl":"de faculteit","en":"the faculty"},{"id":"l14-11","lesson":14,"ar":"كُلِّيَّةُ الطِّبِّ","translit":"kulliyyatu t-tibbi","nl":"Faculteit Geneeskunde","en":"Faculty of Medicine"},{"id":"l14-12","lesson":14,"ar":"كُلِّيَّةُ الشَّرِيعَةِ","translit":"kulliyyatu sh-sharee'ati","nl":"Faculteit Islamitisch Recht","en":"Faculty of Shariah"},{"id":"l14-13","lesson":14,"ar":"الْمَطَارُ","translit":"al-mataaru","nl":"het vliegveld, de luchthaven","en":"the airport"},{"id":"l14-14","lesson":14,"ar":"الْحَدِيقَةُ","translit":"al-hadeeqatu","nl":"de tuin, het park","en":"the garden"},{"id":"l14-15","lesson":14,"ar":"الشَّهْرُ","translit":"ash-shahru","nl":"de maand","en":"the month"},{"id":"l14-16","lesson":14,"ar":"الْمَحْكَمَةُ","translit":"al-mahkamatu","nl":"de rechtbank","en":"the court"},{"id":"l14-17","lesson":14,"ar":"الدُّسْتُورُ","translit":"ad-dustooru","nl":"de grondwet, constitutie","en":"the constitution"},{"id":"l14-18","lesson":14,"ar":"حَفِيدٌ","translit":"hafeedun","nl":"een kleinzoon (mv. حَفَدَةٌ)","en":"grandson"},{"id":"l15-1","lesson":15,"ar":"أَنْتُنَّ","translit":"antunna","nl":"jullie (vrouwelijk meervoud)","en":"you (f. pl.)"},{"id":"l15-2","lesson":15,"ar":"ذَهَبْتِ","translit":"dhahabti","nl":"jij ging (vrouwelijk enkelvoud)","en":"you went (f. sg.)"},{"id":"l15-3","lesson":15,"ar":"ذَهَبْتُنَّ","translit":"dhahabtunna","nl":"jullie gingen (v. mv.)","en":"you went (f. pl.)"},{"id":"l15-4","lesson":15,"ar":"قَبْلَ","translit":"qabla","nl":"vóór (tijd)","en":"before"},{"id":"l15-5","lesson":15,"ar":"رَجَعَ","translit":"raja'a","nl":"hij keerde terug","en":"he returned"},{"id":"l15-6","lesson":15,"ar":"الدَّرْسُ","translit":"ad-darsu","nl":"de les","en":"the lesson"},{"id":"l15-7","lesson":15,"ar":"الْأُسْبُوعُ","translit":"al-usboo'u","nl":"de week","en":"the week"},{"id":"l15-8","lesson":15,"ar":"الْاِخْتِبَارُ","translit":"al-ikhtibaaru","nl":"het examen, de toets","en":"the exam"},{"id":"l16-1","lesson":16,"ar":"الْبَحْرُ","translit":"al-bahru","nl":"de zee","en":"the sea"},{"id":"l16-2","lesson":16,"ar":"النَّهْرُ","translit":"an-nahru","nl":"de rivier","en":"the river"},{"id":"l16-3","lesson":16,"ar":"الْفُنْدُقُ","translit":"al-funduqu","nl":"het hotel","en":"the hotel"},{"id":"l16-4","lesson":16,"ar":"الطَّائِرَةُ","translit":"at-taa'iratu","nl":"het vliegtuig","en":"the airplane"},{"id":"l16-5","lesson":16,"ar":"مَسَاجِدُ","translit":"masaajidu","nl":"moskeeën (mv. van مَسْجِدٌ)","en":"mosques"},{"id":"l16-6","lesson":16,"ar":"دَفَاتِرُ","translit":"dafaatiru","nl":"schriften (mv. van دَفْتَرٌ)","en":"notebooks"},{"id":"l17-1","lesson":17,"ar":"رَخِيصٌ","translit":"rakheesun","nl":"goedkoop","en":"cheap"},{"id":"l17-2","lesson":17,"ar":"الشَّرِكَةُ","translit":"ash-sharikatu","nl":"de firma, het bedrijf","en":"the company"},{"id":"l17-3","lesson":17,"ar":"قُمْصَانٌ","translit":"qumsaanun","nl":"hemden (mv. van قَمِيصٌ)","en":"shirts"},{"id":"l17-4","lesson":17,"ar":"يَابَانِيَّةٌ","translit":"yaabaaniyyatun","nl":"Japans (v)","en":"Japanese"},{"id":"l17-5","lesson":17,"ar":"مُدِيرُ الشَّرِكَةِ","translit":"mudeeru sh-sharikati","nl":"de directeur van het bedrijf","en":"company director"},{"id":"l17-6","lesson":17,"ar":"حُمُرٌ","translit":"humurun","nl":"ezels (mv. van حِمَارٌ)","en":"donkeys"},{"id":"l18-1","lesson":18,"ar":"السَّنَةُ","translit":"as-sanatu","nl":"het jaar","en":"the year"},{"id":"l18-2","lesson":18,"ar":"الْعَجَلَةُ","translit":"al-'ajalatu","nl":"het wiel","en":"the wheel"},{"id":"l18-3","lesson":18,"ar":"الْعِيدُ","translit":"al-'eedu","nl":"de feestdag","en":"the festival / Eid"},{"id":"l18-4","lesson":18,"ar":"الْحَيُّ","translit":"al-hayyu","nl":"het stadsdeel, de wijk","en":"the neighborhood"},{"id":"l18-5","lesson":18,"ar":"الرَّكْعَةُ","translit":"ar-rak'atu","nl":"de gebedseenheid (mv. رَكَعَاتٌ)","en":"rak'ah"},{"id":"l18-6","lesson":18,"ar":"الرِّيَالُ","translit":"ar-riyaalu","nl":"de riyal","en":"the riyal"},{"id":"l18-7","lesson":18,"ar":"الْمِسْطَرَةُ","translit":"al-mistaratu","nl":"de liniaal","en":"the ruler"},{"id":"l18-8","lesson":18,"ar":"السَّبُّورَةُ","translit":"as-sabbooratu","nl":"het schrijfbord","en":"the blackboard"},{"id":"l18-9","lesson":18,"ar":"هَذَانِ","translit":"haadhaani","nl":"deze twee (m)","en":"these two (m)"},{"id":"l18-10","lesson":18,"ar":"هَاتَانِ","translit":"haataani","nl":"deze twee (v)","en":"these two (f)"},{"id":"l18-11","lesson":18,"ar":"هُمَا","translit":"humaa","nl":"zij tweeën (tweevoud m/v)","en":"they two"},{"id":"l18-12","lesson":18,"ar":"كَمْ","translit":"kam","nl":"hoeveel?","en":"how many?"},{"id":"l19-1","lesson":19,"ar":"الْحَافِلَةُ","translit":"al-haafilatu","nl":"de bus","en":"the bus"},{"id":"l19-2","lesson":19,"ar":"أُورُبَّا","translit":"oorubbaa","nl":"Europa","en":"Europe"},{"id":"l19-3","lesson":19,"ar":"مِنْهُمْ","translit":"minhum","nl":"van hen","en":"from them"},{"id":"l19-4","lesson":19,"ar":"الْبَلَدُ","translit":"al-baladu","nl":"het land (mv. بِلَادٌ)","en":"the country"},{"id":"l19-5","lesson":19,"ar":"كُلٌّ","translit":"kullun","nl":"alle, elk, ieder","en":"all / each"},{"id":"l19-6","lesson":19,"ar":"مُخْتَلِفٌ","translit":"mukhtalifun","nl":"verschillend, verscheiden","en":"different"},{"id":"l19-7","lesson":19,"ar":"كُلُّهُمْ","translit":"kulluhum","nl":"zij allemaal","en":"all of them"},{"id":"l19-8","lesson":19,"ar":"كُلُّنَا","translit":"kullunaa","nl":"wij allemaal","en":"all of us"},{"id":"l19-9","lesson":19,"ar":"كُلُّكُمْ","translit":"kullukum","nl":"jullie allemaal","en":"all of you"},{"id":"l19-10","lesson":19,"ar":"الرَّاكِبُ","translit":"ar-raakibu","nl":"de passagier (mv. رُكَّابٌ)","en":"the passenger"},{"id":"l19-11","lesson":19,"ar":"الْجَيْبُ","translit":"al-jaybu","nl":"de zak (in kleding)","en":"the pocket"},{"id":"l19-12","lesson":19,"ar":"الثَّمَنُ","translit":"ath-thamanu","nl":"de prijs","en":"the price"},{"id":"l19-13","lesson":19,"ar":"النِّصْفُ","translit":"an-nisfu","nl":"de helft","en":"the half"},{"id":"l19-14","lesson":19,"ar":"شُكْرًا","translit":"shukran","nl":"bedankt","en":"thank you"},{"id":"l19-15","lesson":19,"ar":"السُّؤَالُ","translit":"as-su'aalu","nl":"de vraag","en":"the question"},{"id":"l19-16","lesson":19,"ar":"قُدَامَى","translit":"qudaamaa","nl":"oud (mv. van قَدِيمٌ)","en":"old (pl.)"},{"id":"l19-17","lesson":19,"ar":"الْيَوْمُ","translit":"al-yawmu","nl":"de dag (mv. أَيَّامٌ)","en":"the day"},{"id":"l19-18","lesson":19,"ar":"الْقِرْشُ","translit":"al-qirshu","nl":"1/10 van een riyal (mv. قُرُوشٌ)","en":"qirsh"},{"id":"l20-1","lesson":20,"ar":"دُرُوسٌ","translit":"duroosun","nl":"lessen (enk. دَرْسٌ)","en":"lessons"},{"id":"l20-2","lesson":20,"ar":"غُرَفٌ","translit":"ghurafun","nl":"kamers (enk. غُرْفَةٌ)","en":"rooms"},{"id":"l20-3","lesson":20,"ar":"حَرْفٌ","translit":"harfun","nl":"een letter (mv. حُرُوفٌ)","en":"a letter"},{"id":"l20-4","lesson":20,"ar":"مَجَلَّةٌ","translit":"majallatun","nl":"een tijdschrift","en":"a magazine"},{"id":"l20-5","lesson":20,"ar":"كَلِمَاتٌ","translit":"kalimaatun","nl":"woorden (enk. كَلِمَةٌ)","en":"words"},{"id":"l20-6","lesson":20,"ar":"أَعْمَامٌ","translit":"a'maamun","nl":"ooms van vaderskant (enk. عَمٌّ)","en":"paternal uncles"},{"id":"l21-1","lesson":21,"ar":"آسِيَا","translit":"aasiyaa","nl":"Azië","en":"Asia"},{"id":"l21-2","lesson":21,"ar":"وَاسِعٌ","translit":"waasi'un","nl":"ruim, wijd","en":"spacious"},{"id":"l21-3","lesson":21,"ar":"ذَاكَ","translit":"dhaaka","nl":"dat (hetzelfde als ذَلِكَ)","en":"that"},{"id":"l21-4","lesson":21,"ar":"نُحِبُّ","translit":"nuhibbu","nl":"wij houden van","en":"we love"},{"id":"l21-5","lesson":21,"ar":"نُحِبُّهُ","translit":"nuhibbuhu","nl":"wij houden van hem","en":"we love him"},{"id":"l21-6","lesson":21,"ar":"اللَّوْنُ","translit":"al-lawnu","nl":"de kleur (mv. أَلْوَانٌ)","en":"the color"},{"id":"l22-1","lesson":22,"ar":"أَبْيَضُ","translit":"abyadu","nl":"wit","en":"white"},{"id":"l22-2","lesson":22,"ar":"أَصْفَرُ","translit":"asfaru","nl":"geel","en":"yellow"},{"id":"l22-3","lesson":22,"ar":"أَحْمَرُ","translit":"ahmaru","nl":"rood","en":"red"},{"id":"l22-4","lesson":22,"ar":"أَسْوَدُ","translit":"aswadu","nl":"zwart","en":"black"},{"id":"l22-5","lesson":22,"ar":"أَخْضَرُ","translit":"akhdaru","nl":"groen","en":"green"},{"id":"l22-6","lesson":22,"ar":"أَزْرَقُ","translit":"azraqu","nl":"blauw","en":"blue"},{"id":"l22-7","lesson":22,"ar":"مَفَاتِيحُ","translit":"mafaateehu","nl":"sleutels (mv. van مِفْتَاحٌ)","en":"keys"},{"id":"l22-8","lesson":22,"ar":"قَالَ","translit":"qaala","nl":"hij zei","en":"he said"},{"id":"l22-9","lesson":22,"ar":"قَالَتْ","translit":"qaalat","nl":"zij zei","en":"she said"},{"id":"l22-10","lesson":22,"ar":"بَغْدَادُ","translit":"baghdaadu","nl":"Bagdad","en":"Baghdad"},{"id":"l22-11","lesson":22,"ar":"جُدَّةُ","translit":"juddatu","nl":"Djedda","en":"Jeddah"},{"id":"l22-12","lesson":22,"ar":"مَنَادِيلُ","translit":"manaadeelu","nl":"zakdoeken (mv. van مِنْدِيلٌ)","en":"handkerchiefs"},{"id":"l22-13","lesson":22,"ar":"دَقِيقَةٌ","translit":"daqeeqatun","nl":"een minuut (mv. دَقَائِقُ)","en":"a minute"},{"id":"l22-14","lesson":22,"ar":"فِنْجَانٌ","translit":"finjaanun","nl":"een theekopje (mv. فَنَاجِينُ)","en":"a teacup"},{"id":"l23-1","lesson":23,"ar":"إِصْطَنْبُولُ","translit":"istanboolu","nl":"Istanbul","en":"Istanbul"},{"id":"l23-2","lesson":23,"ar":"الطَّائِفُ","translit":"at-taa'ifu","nl":"Taif (stad in Saoedi-Arabië)","en":"Taif"},{"id":"l23-3","lesson":23,"ar":"وَاشِنْطُنُ","translit":"waashintunu","nl":"Washington","en":"Washington"},{"id":"l24-1","ar":"أَمْسِ","translit":"amsi","nl":"gisteren (mabnie op kasrah)","lesson":24},{"id":"l24-2","ar":"حَيْثُ","translit":"haythu","nl":"waar / alwaar (mabnie op dammah)","lesson":24},{"id":"l24-3","ar":"قَطُّ","translit":"qattu","nl":"ooit / nooit in het verleden (mabnie op dammah)","lesson":24},{"id":"l24-4","ar":"ثَمَّ","translit":"thamma","nl":"daar (zarf makaan)","lesson":24},{"id":"l24-5","ar":"لَوْ","translit":"law","nl":"als / indien (onvervulde voorwaarde)","lesson":24},{"id":"l24-6","ar":"اسْتَقْبَلَ","translit":"istaqbala","nl":"hij verwelkomde / wachtte op","lesson":24},{"id":"l24-7","ar":"انْتَظَرَ","translit":"intazhara","nl":"hij wachtte op","lesson":24},{"id":"l24-8","ar":"سَافَرَ","translit":"saafara","nl":"hij reisde","lesson":24},{"id":"l24-9","ar":"سَاعَدَ","translit":"saa‘ada","nl":"hij hielp","lesson":24},{"id":"l24-10","ar":"رَحَّبَ","translit":"rahhaba","nl":"hij heette welkom","lesson":24},{"id":"l24-11","ar":"مَكَثَ","translit":"makatha","nl":"hij verbleef / toefde","lesson":24},{"id":"l24-12","ar":"لَبِثَ","translit":"labitha","nl":"hij bleef / vertoefde","lesson":24},{"id":"l24-13","ar":"كَسَبَ","translit":"kasaba","nl":"hij verdiende / won","lesson":24},{"id":"l24-14","ar":"فَاتَ","translit":"faata","nl":"het ging voorbij / werd gemist","lesson":24},{"id":"l24-15","ar":"ضَرَّ","translit":"darra","nl":"hij schaadde","lesson":24},{"id":"l24-16","ar":"زَائِرٌ","translit":"zaa’irun","nl":"bezoeker (mv. زُوَّارٌ)","lesson":24},{"id":"l24-17","ar":"شَدِيدٌ","translit":"shadeedun","nl":"hevig / krachtig (mv. شِدَادٌ)","lesson":24},{"id":"l24-18","ar":"جَرِيحٌ","translit":"jareehun","nl":"gewonde (mv. جَرْحَى)","lesson":24},{"id":"l24-19","ar":"مَقْعَدٌ خَالٍ","translit":"maq‘adun khaalin","nl":"een lege zitplaats","lesson":24},{"id":"l24-20","ar":"الْبَارِحَةَ","translit":"al-baarihata","nl":"afgelopen nacht / gisteravond","lesson":24},{"id":"l24-21","ar":"مِنْ قَبْلُ","translit":"min qablu","nl":"voorheen / van tevoren (mabnie op dammah)","lesson":24}];
+const BASE_WORDS = [{"id":"l1-1","lesson":1,"ar":"بَيْتٌ","translit":"baytun","nl":"een huis","en":"house"},{"id":"l1-2","lesson":1,"ar":"مَسْجِدٌ","translit":"masjidun","nl":"een moskee","en":"mosque"},{"id":"l1-3","lesson":1,"ar":"بَابٌ","translit":"baabun","nl":"een deur","en":"door"},{"id":"l1-4","lesson":1,"ar":"كِتَابٌ","translit":"kitaabun","nl":"een boek","en":"book"},{"id":"l1-5","lesson":1,"ar":"قَلَمٌ","translit":"qalamun","nl":"een pen","en":"pen"},{"id":"l1-6","lesson":1,"ar":"مِفْتَاحٌ","translit":"miftaahun","nl":"een sleutel","en":"key"},{"id":"l1-7","lesson":1,"ar":"مَكْتَبٌ","translit":"maktabun","nl":"een bureau","en":"writing table"},{"id":"l1-8","lesson":1,"ar":"سَرِيرٌ","translit":"sareerun","nl":"een bed","en":"bed"},{"id":"l1-9","lesson":1,"ar":"كُرْسِيٌّ","translit":"kursiyyun","nl":"een stoel","en":"chair"},{"id":"l1-10","lesson":1,"ar":"نَجْمٌ","translit":"najmun","nl":"een ster","en":"star"},{"id":"l1-11","lesson":1,"ar":"قَمِيصٌ","translit":"qameesun","nl":"een hemd","en":"shirt"},{"id":"l1-12","lesson":1,"ar":"طَبِيبٌ","translit":"tabeebun","nl":"een dokter","en":"doctor"},{"id":"l1-13","lesson":1,"ar":"وَلَدٌ","translit":"waladun","nl":"een kind, jongen","en":"boy"},{"id":"l1-14","lesson":1,"ar":"طَالِبٌ","translit":"taalibun","nl":"een student","en":"student"},{"id":"l1-15","lesson":1,"ar":"رَجُلٌ","translit":"rajulun","nl":"een man","en":"man"},{"id":"l1-16","lesson":1,"ar":"تَاجِرٌ","translit":"taajirun","nl":"een handelaar","en":"merchant"},{"id":"l1-17","lesson":1,"ar":"كَلْبٌ","translit":"kalbun","nl":"een hond","en":"dog"},{"id":"l1-18","lesson":1,"ar":"قِطٌّ","translit":"qittun","nl":"een kat","en":"cat"},{"id":"l1-19","lesson":1,"ar":"حِمَارٌ","translit":"himaarun","nl":"een ezel","en":"donkey"},{"id":"l1-20","lesson":1,"ar":"حِصَانٌ","translit":"hisaanun","nl":"een paard","en":"horse"},{"id":"l1-21","lesson":1,"ar":"جَمَلٌ","translit":"jamalun","nl":"een kameel","en":"camel"},{"id":"l1-22","lesson":1,"ar":"دِيكٌ","translit":"deekun","nl":"een haan","en":"rooster"},{"id":"l1-23","lesson":1,"ar":"مُدَرِّسٌ","translit":"mudarrisun","nl":"een leraar","en":"teacher"},{"id":"l1-24","lesson":1,"ar":"مِنْدِيلٌ","translit":"mindeelun","nl":"een zakdoek","en":"handkerchief"},{"id":"l1-25","lesson":1,"ar":"أُسْتَاذٌ","translit":"ustaadhun","nl":"een leraar, docent","en":"teacher / professor"},{"id":"l2-1","lesson":2,"ar":"إِمَامٌ","translit":"imaamun","nl":"een imam","en":"imam"},{"id":"l2-2","lesson":2,"ar":"حَجَرٌ","translit":"hajarun","nl":"een steen","en":"stone"},{"id":"l2-3","lesson":2,"ar":"سُكَّرٌ","translit":"sukkarun","nl":"suiker","en":"sugar"},{"id":"l2-4","lesson":2,"ar":"لَبَنٌ","translit":"labanun","nl":"melk, yoghurt","en":"milk"},{"id":"l3-1","lesson":3,"ar":"غَنِيٌّ","translit":"ghaniyyun","nl":"rijk","en":"rich"},{"id":"l3-2","lesson":3,"ar":"فَقِيرٌ","translit":"faqeerun","nl":"arm","en":"poor"},{"id":"l3-3","lesson":3,"ar":"طَوِيلٌ","translit":"taweelun","nl":"lang","en":"tall"},{"id":"l3-4","lesson":3,"ar":"قَصِيرٌ","translit":"qaseerun","nl":"kort","en":"short"},{"id":"l3-5","lesson":3,"ar":"بَارِدٌ","translit":"baaridun","nl":"koud","en":"cold"},{"id":"l3-6","lesson":3,"ar":"حَارٌّ","translit":"haarrun","nl":"heet","en":"hot"},{"id":"l3-7","lesson":3,"ar":"جَالِسٌ","translit":"jaalisun","nl":"zittend","en":"sitting"},{"id":"l3-8","lesson":3,"ar":"وَاقِفٌ","translit":"waaqifun","nl":"staand","en":"standing"},{"id":"l3-9","lesson":3,"ar":"جَدِيدٌ","translit":"jadeedun","nl":"nieuw","en":"new"},{"id":"l3-10","lesson":3,"ar":"قَدِيمٌ","translit":"qadeemun","nl":"oud","en":"old"},{"id":"l3-11","lesson":3,"ar":"قَرِيبٌ","translit":"qareebun","nl":"dichtbij","en":"near"},{"id":"l3-12","lesson":3,"ar":"بَعِيدٌ","translit":"ba'eedun","nl":"ver","en":"far away"},{"id":"l3-13","lesson":3,"ar":"نَظِيفٌ","translit":"nazeefun","nl":"schoon","en":"clean"},{"id":"l3-14","lesson":3,"ar":"وَسِخٌ","translit":"wasikhun","nl":"vies","en":"dirty"},{"id":"l3-15","lesson":3,"ar":"صَغِيرٌ","translit":"sagheerun","nl":"klein","en":"small"},{"id":"l3-16","lesson":3,"ar":"كَبِيرٌ","translit":"kabeerun","nl":"groot","en":"big"},{"id":"l3-17","lesson":3,"ar":"خَفِيفٌ","translit":"khafeefun","nl":"licht","en":"light (weight)"},{"id":"l3-18","lesson":3,"ar":"ثَقِيلٌ","translit":"thaqeelun","nl":"zwaar","en":"heavy"},{"id":"l3-19","lesson":3,"ar":"الْوَرَقُ","translit":"al-waraqu","nl":"het papier","en":"paper"},{"id":"l3-20","lesson":3,"ar":"مَكْسُورٌ","translit":"maksoorun","nl":"gebroken","en":"broken"},{"id":"l3-21","lesson":3,"ar":"الْمَاءُ","translit":"al-maa'u","nl":"het water","en":"water"},{"id":"l3-22","lesson":3,"ar":"مَفْتُوحٌ","translit":"maftoohun","nl":"open","en":"open"},{"id":"l3-23","lesson":3,"ar":"التُّفَّاحُ","translit":"at-tuffaahu","nl":"de appel","en":"apple"},{"id":"l3-24","lesson":3,"ar":"حُلْوٌ","translit":"hulwun","nl":"zoet","en":"sweet"},{"id":"l3-25","lesson":3,"ar":"جَمِيلٌ","translit":"jameelun","nl":"mooi","en":"beautiful"},{"id":"l3-26","lesson":3,"ar":"مَرِيضٌ","translit":"mareedun","nl":"ziek","en":"ill"},{"id":"l3-27","lesson":3,"ar":"الدُّكَّانُ","translit":"ad-dukkaanu","nl":"de winkel","en":"shop"},{"id":"l3-28","lesson":3,"ar":"الشَّمْسُ","translit":"ash-shamsu","nl":"de zon","en":"the sun"},{"id":"l3-29","lesson":3,"ar":"الْقَمَرُ","translit":"al-qamaru","nl":"de maan","en":"the moon"},{"id":"l3-30","lesson":3,"ar":"كَرِيمٌ","translit":"kareemun","nl":"edel, vrijgevig","en":"generous / noble"},{"id":"l4-1","lesson":4,"ar":"أَيْنَ","translit":"ayna","nl":"waar","en":"where"},{"id":"l4-2","lesson":4,"ar":"غُرْفَةٌ","translit":"ghurfatun","nl":"een kamer","en":"room"},{"id":"l4-3","lesson":4,"ar":"السَّمَاءُ","translit":"as-samaa'u","nl":"de hemel, de lucht","en":"sky"},{"id":"l4-4","lesson":4,"ar":"الْحَمَّامُ","translit":"al-hammaamu","nl":"de badkamer","en":"bathroom"},{"id":"l4-5","lesson":4,"ar":"الْفَصْلُ","translit":"al-faslu","nl":"het klaslokaal","en":"classroom"},{"id":"l4-6","lesson":4,"ar":"الْمَطْبَخُ","translit":"al-matbakhu","nl":"de keuken","en":"kitchen"},{"id":"l4-7","lesson":4,"ar":"الْمِرْحَاضُ","translit":"al-mirhaadu","nl":"het toilet","en":"toilet"},{"id":"l4-8","lesson":4,"ar":"الْمَدْرَسَةُ","translit":"al-madrasatu","nl":"de school","en":"school"},{"id":"l4-9","lesson":4,"ar":"الْجَامِعَةُ","translit":"al-jaami'atu","nl":"de universiteit","en":"university"},{"id":"l4-10","lesson":4,"ar":"السُّوقُ","translit":"as-sooqu","nl":"de markt","en":"market"},{"id":"l4-11","lesson":4,"ar":"الْيَابَانُ","translit":"al-yaabaanu","nl":"Japan","en":"Japan"},{"id":"l4-12","lesson":4,"ar":"الصِّينُ","translit":"as-seenu","nl":"China","en":"China"},{"id":"l4-13","lesson":4,"ar":"الْهِنْدُ","translit":"al-hindu","nl":"India","en":"India"},{"id":"l4-14","lesson":4,"ar":"الْفِلِبِّينُ","translit":"al-filibbeenu","nl":"de Filipijnen","en":"Philippines"},{"id":"l4-15","lesson":4,"ar":"الْمُدِيرُ","translit":"al-mudeeru","nl":"de directeur","en":"director / headmaster"},{"id":"l4-16","lesson":4,"ar":"ذَهَبَ","translit":"dhahaba","nl":"hij ging","en":"he went"},{"id":"l4-17","lesson":4,"ar":"خَرَجَ","translit":"kharaja","nl":"hij ging naar buiten","en":"he went out"},{"id":"l4-18","lesson":4,"ar":"فِي","translit":"fee","nl":"in","en":"in"},{"id":"l4-19","lesson":4,"ar":"عَلَى","translit":"'alaa","nl":"op","en":"on"},{"id":"l4-20","lesson":4,"ar":"مِنْ","translit":"min","nl":"van, uit","en":"from"},{"id":"l4-21","lesson":4,"ar":"إِلَى","translit":"ilaa","nl":"naar","en":"to"},{"id":"l4-22","lesson":4,"ar":"هُوَ","translit":"huwa","nl":"hij / het (m)","en":"he / it (m)"},{"id":"l4-23","lesson":4,"ar":"هِيَ","translit":"hiya","nl":"zij / het (v)","en":"she / it (f)"},{"id":"l4-24","lesson":4,"ar":"أَنَا","translit":"anaa","nl":"ik","en":"I"},{"id":"l4-25","lesson":4,"ar":"أَنْتَ","translit":"anta","nl":"jij (mannelijk)","en":"you (m)"},{"id":"l4-26","lesson":4,"ar":"الطَّاوِلَةُ","translit":"at-taawilatu","nl":"de tafel","en":"the table"},{"id":"l4-27","lesson":4,"ar":"مَكَّةُ","translit":"makkatu","nl":"Mekka","en":"Mecca"},{"id":"l4-28","lesson":4,"ar":"مِصْرُ","translit":"misru","nl":"Egypte","en":"Egypt"},{"id":"l5-1","lesson":5,"ar":"الرَّسُولُ","translit":"ar-rasoolu","nl":"de Boodschapper","en":"the Messenger"},{"id":"l5-2","lesson":5,"ar":"الْعَمُّ","translit":"al-'ammu","nl":"de oom (van vaderszijde)","en":"paternal uncle"},{"id":"l5-3","lesson":5,"ar":"الْخَالُ","translit":"al-khaalu","nl":"de oom (van moederszijde)","en":"maternal uncle"},{"id":"l5-4","lesson":5,"ar":"الْكَعْبَةُ","translit":"al-ka'batu","nl":"de Ka'bah","en":"the Kabah"},{"id":"l5-5","lesson":5,"ar":"الشَّارِعُ","translit":"ash-shaari'u","nl":"de straat, de weg","en":"street"},{"id":"l5-6","lesson":5,"ar":"مُغْلَقٌ","translit":"mughlaqun","nl":"gesloten","en":"closed"},{"id":"l5-7","lesson":5,"ar":"الْاِسْمُ","translit":"al-ismu","nl":"de naam","en":"name"},{"id":"l5-8","lesson":5,"ar":"الْحَقِيبَةُ","translit":"al-haqeebatu","nl":"de tas","en":"bag"},{"id":"l5-9","lesson":5,"ar":"تَحْتَ","translit":"tahta","nl":"onder","en":"under"},{"id":"l5-10","lesson":5,"ar":"السَّيَّارَةُ","translit":"as-sayyaaratu","nl":"de auto","en":"car"},{"id":"l5-11","lesson":5,"ar":"هُنَا","translit":"hunaa","nl":"hier","en":"here"},{"id":"l5-12","lesson":5,"ar":"هُنَاكَ","translit":"hunaaka","nl":"daar","en":"there"},{"id":"l5-13","lesson":5,"ar":"الْبِنْتُ","translit":"al-bintu","nl":"de dochter, het meisje","en":"daughter / girl"},{"id":"l5-14","lesson":5,"ar":"الْاِبْنُ","translit":"al-ibnu","nl":"de zoon","en":"the son"},{"id":"l5-15","lesson":5,"ar":"يَا","translit":"yaa","nl":"o! (aanroeppartikel)","en":"O! (vocative)"},{"id":"l6-1","lesson":6,"ar":"الْيَدُ","translit":"al-yadu","nl":"de hand (v)","en":"hand"},{"id":"l6-2","lesson":6,"ar":"الرَّأْسُ","translit":"ar-ra'su","nl":"het hoofd (m)","en":"head"},{"id":"l6-3","lesson":6,"ar":"الْأَنْفُ","translit":"al-anfu","nl":"de neus (m)","en":"nose"},{"id":"l6-4","lesson":6,"ar":"الرِّجْلُ","translit":"ar-rijlu","nl":"het been, de voet (v)","en":"leg / foot"},{"id":"l6-5","lesson":6,"ar":"الْفَمُ","translit":"al-famu","nl":"de mond (m)","en":"mouth"},{"id":"l6-6","lesson":6,"ar":"الْعَيْنُ","translit":"al-'aynu","nl":"het oog (v)","en":"eye"},{"id":"l6-7","lesson":6,"ar":"الْوَجْهُ","translit":"al-wajhu","nl":"het gezicht (m)","en":"face"},{"id":"l6-8","lesson":6,"ar":"الْأُذُنُ","translit":"al-udhunu","nl":"het oor (v)","en":"ear"},{"id":"l6-9","lesson":6,"ar":"الْحَدِيدُ","translit":"al-hadeedu","nl":"het ijzer","en":"iron"},{"id":"l6-10","lesson":6,"ar":"الدَّرَّاجَةُ","translit":"ad-darraajatu","nl":"de fiets","en":"bicycle"},{"id":"l6-11","lesson":6,"ar":"الْمِلْعَقَةُ","translit":"al-mil'aqatu","nl":"de lepel","en":"spoon"},{"id":"l6-12","lesson":6,"ar":"الْقِدْرُ","translit":"al-qidru","nl":"de kookpot (v)","en":"cooking pot"},{"id":"l6-13","lesson":6,"ar":"الْبَقَرَةُ","translit":"al-baqaratu","nl":"de koe","en":"cow"},{"id":"l6-14","lesson":6,"ar":"الْفَلَّاحُ","translit":"al-fallaahu","nl":"de boer","en":"farmer"},{"id":"l6-15","lesson":6,"ar":"الشَّايُ","translit":"ash-shaayu","nl":"de thee","en":"tea"},{"id":"l6-16","lesson":6,"ar":"الْأُمُّ","translit":"al-ummu","nl":"de moeder","en":"mother"},{"id":"l6-17","lesson":6,"ar":"الثَّلَّاجَةُ","translit":"ath-thallaajatu","nl":"de koelkast","en":"fridge"},{"id":"l6-18","lesson":6,"ar":"الْقَهْوَةُ","translit":"al-qahwatu","nl":"de koffie","en":"coffee"},{"id":"l6-19","lesson":6,"ar":"سَرِيعٌ","translit":"saree'un","nl":"snel","en":"fast"},{"id":"l6-20","lesson":6,"ar":"النَّافِذَةُ","translit":"an-naafidhatu","nl":"het raam","en":"window"},{"id":"l6-21","lesson":6,"ar":"جِدًّا","translit":"jiddan","nl":"heel, erg, zeer","en":"very"},{"id":"l6-22","lesson":6,"ar":"أَيْضًا","translit":"aydan","nl":"ook","en":"also"},{"id":"l6-23","lesson":6,"ar":"الْمِكْوَاةُ","translit":"al-mikwaatu","nl":"het strijkijzer","en":"iron (appliance)"},{"id":"l6-24","lesson":6,"ar":"الشَّرْقُ","translit":"ash-sharqu","nl":"het oosten","en":"the east"},{"id":"l6-25","lesson":6,"ar":"الْمَغْرِبُ","translit":"al-maghribu","nl":"het westen","en":"the west"},{"id":"l6-26","lesson":6,"ar":"طَالِبَةٌ","translit":"taalibatun","nl":"een studente (v)","en":"female student"},{"id":"l6-27","lesson":6,"ar":"حَدِيقَةٌ","translit":"hadeeqatun","nl":"een tuin, park","en":"garden"},{"id":"l7-1","lesson":7,"ar":"النَّاقَةُ","translit":"an-naaqatu","nl":"de vrouwtjeskameel","en":"she-camel"},{"id":"l7-2","lesson":7,"ar":"الْبَطَّةُ","translit":"al-battatu","nl":"de eend","en":"duck"},{"id":"l7-3","lesson":7,"ar":"مُمَرِّضٌ","translit":"mumarridun","nl":"een verpleger","en":"nurse (m)"},{"id":"l7-4","lesson":7,"ar":"الْبَيْضَةُ","translit":"al-baydatu","nl":"het ei","en":"egg"},{"id":"l7-5","lesson":7,"ar":"الْمُؤَذِّنُ","translit":"al-mu'adhdhinu","nl":"de gebedsomroeper","en":"muezzin"},{"id":"l7-6","lesson":7,"ar":"الدَّجَاجَةُ","translit":"ad-dajaajatu","nl":"de kip, de hen","en":"hen"},{"id":"l7-7","lesson":7,"ar":"الْمُمَرِّضَةُ","translit":"al-mumarridatu","nl":"de verpleegster","en":"nurse (f)"},{"id":"l7-8","lesson":7,"ar":"هَذَا","translit":"haadhaa","nl":"dit / deze (m)","en":"this (m)"},{"id":"l7-9","lesson":7,"ar":"هَذِهِ","translit":"haadhihi","nl":"dit / deze (v)","en":"this (f)"},{"id":"l7-10","lesson":7,"ar":"ذَلِكَ","translit":"dhaalika","nl":"die / dat (m)","en":"that (m)"},{"id":"l7-11","lesson":7,"ar":"تِلْكَ","translit":"tilka","nl":"die / dat (v)","en":"that (f)"},{"id":"l8-1","lesson":8,"ar":"أَمْرِيكَا","translit":"amreekaa","nl":"Amerika","en":"America"},{"id":"l8-2","lesson":8,"ar":"أَلْمَانِيَا","translit":"almaaniyaa","nl":"Duitsland","en":"Germany"},{"id":"l8-3","lesson":8,"ar":"الْعِرَاقُ","translit":"al-'iraaqu","nl":"Irak","en":"Iraq"},{"id":"l8-4","lesson":8,"ar":"إِنْكِلْتِرَا","translit":"inkiltiraa","nl":"Engeland","en":"England"},{"id":"l8-5","lesson":8,"ar":"سُوِيسَرَا","translit":"suweesaraa","nl":"Zwitserland","en":"Switzerland"},{"id":"l8-6","lesson":8,"ar":"السِّكِّينُ","translit":"as-sikkeenu","nl":"het mes","en":"knife"},{"id":"l8-7","lesson":8,"ar":"الْمُسْتَشْفَى","translit":"al-mustashfaa","nl":"het ziekenhuis","en":"hospital"},{"id":"l8-8","lesson":8,"ar":"الْمُهَنْدِسُ","translit":"al-muhandisu","nl":"de ingenieur","en":"engineer"},{"id":"l8-9","lesson":8,"ar":"خَلْفَ","translit":"khalfa","nl":"achter","en":"behind"},{"id":"l8-10","lesson":8,"ar":"أَمَامَ","translit":"amaama","nl":"voor (plaats)","en":"in front of"},{"id":"l8-11","lesson":8,"ar":"جَلَسَ","translit":"jalasa","nl":"hij zat","en":"he sat"},{"id":"l9-1","lesson":9,"ar":"الْفَاكِهَةُ","translit":"al-faakihatu","nl":"het fruit","en":"fruit"},{"id":"l9-2","lesson":9,"ar":"الْعُصْفُورُ","translit":"al-'usfooru","nl":"de mus","en":"sparrow"},{"id":"l9-3","lesson":9,"ar":"الطَّائِرُ","translit":"at-taa'iru","nl":"de vogel","en":"bird"},{"id":"l9-4","lesson":9,"ar":"الْعَرَبِيَّةُ","translit":"al-'arabiyyatu","nl":"het Arabisch","en":"Arabic"},{"id":"l9-5","lesson":9,"ar":"اللُّغَةُ","translit":"al-lughatu","nl":"de taal","en":"language"},{"id":"l9-6","lesson":9,"ar":"سَهْلٌ","translit":"sahlun","nl":"gemakkelijk","en":"easy"},{"id":"l9-7","lesson":9,"ar":"مُجْتَهِدٌ","translit":"mujtahidun","nl":"ijverig, hardwerkend","en":"hardworking"},{"id":"l9-8","lesson":9,"ar":"شَهِيرٌ","translit":"shaheerun","nl":"beroemd","en":"famous"},{"id":"l9-9","lesson":9,"ar":"الْإِنْكِلِيزِيَّةُ","translit":"al-inkileeziyyatu","nl":"het Engels","en":"English (language)"},{"id":"l9-10","lesson":9,"ar":"صَعْبٌ","translit":"sa'bun","nl":"moeilijk","en":"difficult"},{"id":"l9-11","lesson":9,"ar":"الْمَدِينَةُ","translit":"al-madeenatu","nl":"de stad","en":"city"},{"id":"l9-12","lesson":9,"ar":"الْقَاهِرَةُ","translit":"al-qaahiratu","nl":"Caïro","en":"Cairo"},{"id":"l9-13","lesson":9,"ar":"الْيَوْمَ","translit":"al-yawma","nl":"vandaag","en":"today"},{"id":"l9-14","lesson":9,"ar":"لِمَاذَا","translit":"limaadhaa","nl":"waarom","en":"why"},{"id":"l9-15","lesson":9,"ar":"الْكُوبُ","translit":"al-koobu","nl":"de beker, het glas","en":"cup / glass"},{"id":"l9-16","lesson":9,"ar":"جَوْعَانُ","translit":"jaw'aanu","nl":"hongerig","en":"hungry"},{"id":"l9-17","lesson":9,"ar":"عَطْشَانُ","translit":"'atshaanu","nl":"dorstig","en":"thirsty"},{"id":"l9-18","lesson":9,"ar":"مَلْآنُ","translit":"mal'aanu","nl":"vol","en":"full"},{"id":"l9-19","lesson":9,"ar":"غَضْبَانُ","translit":"ghadbaanu","nl":"boos","en":"angry"},{"id":"l9-20","lesson":9,"ar":"الْمَكْتَبَةُ","translit":"al-maktabatu","nl":"de bibliotheek, boekhandel","en":"library"},{"id":"l9-21","lesson":9,"ar":"الْآنَ","translit":"al-aana","nl":"nu","en":"now"},{"id":"l9-22","lesson":9,"ar":"الْمُسْتَوْصَفُ","translit":"al-mustawsafu","nl":"de kliniek","en":"clinic"},{"id":"l9-23","lesson":9,"ar":"الْمِرْوَحَةُ","translit":"al-mirwahatu","nl":"de ventilator","en":"fan"},{"id":"l9-24","lesson":9,"ar":"الْكُوَيْتُ","translit":"al-kuwaytu","nl":"Koeweit","en":"Kuwait"},{"id":"l9-25","lesson":9,"ar":"الْمَدْرَسَةُ الثَّانَوِيَّةُ","translit":"al-madrasatu th-thaanawiyyatu","nl":"de middelbare school","en":"secondary school"},{"id":"l9-26","lesson":9,"ar":"الْوَزِيرُ","translit":"al-wazeeru","nl":"de minister","en":"minister"},{"id":"l9-27","lesson":9,"ar":"حَادٌّ","translit":"haaddun","nl":"scherp","en":"sharp"},{"id":"l9-28","lesson":9,"ar":"إِنْدُونِيسِيَا","translit":"indooneesiyaa","nl":"Indonesië","en":"Indonesia"},{"id":"l9-29","lesson":9,"ar":"كَسْلَانُ","translit":"kaslaanu","nl":"lui","en":"lazy"},{"id":"l9-30","lesson":9,"ar":"الَّذِي","translit":"alladhee","nl":"die, dat, welk (m)","en":"who / which (m)"},{"id":"l10-1","lesson":10,"ar":"الزَّمِيلُ","translit":"az-zameelu","nl":"de collega, klasgenoot","en":"colleague / classmate"},{"id":"l10-2","lesson":10,"ar":"الزَّوْجُ","translit":"az-zawju","nl":"de echtgenoot","en":"husband"},{"id":"l10-3","lesson":10,"ar":"الطِّفْلُ","translit":"at-tiflu","nl":"het kind, de baby","en":"child"},{"id":"l10-4","lesson":10,"ar":"الْفَتَى","translit":"al-fataa","nl":"de jongeman","en":"young man"},{"id":"l10-5","lesson":10,"ar":"وَاحِدٌ","translit":"waahidun","nl":"één","en":"one"},{"id":"l10-6","lesson":10,"ar":"عِنْدَ","translit":"'inda","nl":"bij, hebben","en":"with / have"},{"id":"l10-7","lesson":10,"ar":"مَعَ","translit":"ma'a","nl":"met","en":"with"},{"id":"l10-8","lesson":10,"ar":"عِنْدِي","translit":"'indee","nl":"ik heb (scheidbaar bezit)","en":"I have"},{"id":"l10-9","lesson":10,"ar":"لِي","translit":"lee","nl":"ik heb (familie / lichaamsdelen)","en":"I have (inseparable)"},{"id":"l10-10","lesson":10,"ar":"أَبٌ","translit":"abun","nl":"een vader (als Moedaaf: أَبُو)","en":"father"},{"id":"l10-11","lesson":10,"ar":"أَخٌ","translit":"akhun","nl":"een broer (als Moedaaf: أَخُو)","en":"brother"},{"id":"l10-12","lesson":10,"ar":"ذَهَبْتَ","translit":"dhahabta","nl":"jij ging (m)","en":"you went (m)"},{"id":"l10-13","lesson":10,"ar":"ذَهَبْتُ","translit":"dhahabtu","nl":"ik ging","en":"I went"},{"id":"l11-1","lesson":11,"ar":"فِيهِ","translit":"feehi","nl":"erin, in hem (m)","en":"in it / in him"},{"id":"l11-2","lesson":11,"ar":"فِيهَا","translit":"feehaa","nl":"erin, in haar (v)","en":"in it / in her"},{"id":"l11-3","lesson":11,"ar":"أُحِبُّ","translit":"uhibbu","nl":"ik houd van","en":"I love"},{"id":"l11-4","lesson":11,"ar":"تُحِبُّ","translit":"tuhibbu","nl":"jij houdt van (m)","en":"you love (m)"},{"id":"l12-1","lesson":12,"ar":"أَنْتِ","translit":"anti","nl":"jij (vrouwelijk enkelvoud)","en":"you (f. sg.)"},{"id":"l12-2","lesson":12,"ar":"ذَهَبَتْ","translit":"dhahabat","nl":"zij ging","en":"she went"},{"id":"l12-3","lesson":12,"ar":"الَّتِي","translit":"allatee","nl":"die, dat, welk (vrouwelijk)","en":"who / which (f)"},{"id":"l12-4","lesson":12,"ar":"يَا سَيِّدِي","translit":"yaa sayyidee","nl":"Meneer!","en":"Sir!"},{"id":"l12-5","lesson":12,"ar":"يَا سَيِّدَتِي","translit":"yaa sayyidatee","nl":"Mevrouw!","en":"Madam!"},{"id":"l12-6","lesson":12,"ar":"الدَّفْتَرُ","translit":"ad-daftaru","nl":"het schrift","en":"the notebook"},{"id":"l12-7","lesson":12,"ar":"الْعَمَّةُ","translit":"al-'ammatu","nl":"de tante (van vaderskant)","en":"paternal aunt"},{"id":"l12-8","lesson":12,"ar":"الْخَالَةُ","translit":"al-khaalatu","nl":"de tante (van moederskant)","en":"maternal aunt"},{"id":"l12-9","lesson":12,"ar":"كَيْفَ حَالُكَ؟","translit":"kayfa haaluka","nl":"Hoe gaat het met je?","en":"How are you?"},{"id":"l12-10","lesson":12,"ar":"أَنَا بِخَيْرٍ","translit":"anaa bikhayrin","nl":"Het gaat goed met mij","en":"I am fine"},{"id":"l12-11","lesson":12,"ar":"بَعْدَ","translit":"ba'da","nl":"na","en":"after"},{"id":"l12-12","lesson":12,"ar":"الشَّجَرَةُ","translit":"ash-shajaratu","nl":"de boom","en":"the tree"},{"id":"l12-13","lesson":12,"ar":"الْفَتَاةُ","translit":"al-fataatu","nl":"de jongedame, het meisje","en":"the young lady"},{"id":"l12-14","lesson":12,"ar":"الْمُفَتِّشُ","translit":"al-mufattishu","nl":"de inspecteur","en":"the inspector"},{"id":"l12-15","lesson":12,"ar":"سُورِيَا","translit":"sooriyaa","nl":"Syrië","en":"Syria"},{"id":"l12-16","lesson":12,"ar":"مَالِيزِيَا","translit":"maaleeziyaa","nl":"Maleisië","en":"Malaysia"},{"id":"l12-17","lesson":12,"ar":"عُلَمَاءُ","translit":"'ulamaa'u","nl":"geleerden (enk. عَالِمٌ)","en":"scholars"},{"id":"l12-18","lesson":12,"ar":"أَقْوِيَاءُ","translit":"aqwiyaa'u","nl":"sterk (mv. van قَوِيٌّ)","en":"strong (pl.)"},{"id":"l12-19","lesson":12,"ar":"ضِعَافٌ","translit":"di'aafun","nl":"zwak (mv. van ضَعِيفٌ)","en":"weak (pl.)"},{"id":"l12-20","lesson":12,"ar":"أُمَّهَاتٌ","translit":"ummahaatun","nl":"moeders (enk. أُمٌّ)","en":"mothers"},{"id":"l12-21","lesson":12,"ar":"آبَاءٌ","translit":"aabaa'un","nl":"vaders (enk. أَبٌ)","en":"fathers"},{"id":"l12-22","lesson":12,"ar":"وُزَرَاءُ","translit":"wuzaraa'u","nl":"ministers (enk. وَزِيرٌ)","en":"ministers"},{"id":"l13-1","lesson":13,"ar":"هَؤُلَاءِ","translit":"haa'ulaa'i","nl":"deze, dezen (mv. m/v)","en":"these"},{"id":"l13-2","lesson":13,"ar":"أُولَئِكَ","translit":"ulaa'ika","nl":"die (mv. m/v)","en":"those"},{"id":"l13-3","lesson":13,"ar":"هُمْ","translit":"hum","nl":"zij / hun (m. mv.)","en":"they / their (m)"},{"id":"l13-4","lesson":13,"ar":"هُنَّ","translit":"hunna","nl":"zij / hun (v. mv.)","en":"they / their (f)"},{"id":"l13-5","lesson":13,"ar":"ذَهَبُوا","translit":"dhahaboo","nl":"zij gingen (m. mv.)","en":"they went (m)"},{"id":"l13-6","lesson":13,"ar":"ذَهَبْنَ","translit":"dhahabna","nl":"zij gingen (v. mv.)","en":"they went (f)"},{"id":"l13-7","lesson":13,"ar":"بَعْضٌ","translit":"ba'dun","nl":"sommige(n), enkele(n)","en":"some"},{"id":"l13-8","lesson":13,"ar":"طِوَالٌ","translit":"tiwaalun","nl":"lang (mv. van طَوِيلٌ)","en":"tall (pl.)"},{"id":"l13-9","lesson":13,"ar":"قِصَارٌ","translit":"qisaarun","nl":"kort (mv. van قَصِيرٌ)","en":"short (pl.)"},{"id":"l13-10","lesson":13,"ar":"جُدُدٌ","translit":"jududun","nl":"nieuw (mv. van جَدِيدٌ)","en":"new (pl.)"},{"id":"l13-11","lesson":13,"ar":"قَرْيَةٌ","translit":"qaryatun","nl":"een dorp (mv. قُرًى)","en":"a village"},{"id":"l13-12","lesson":13,"ar":"ضَيْفٌ","translit":"dayfun","nl":"een gast (mv. ضُيُوفٌ)","en":"a guest"},{"id":"l13-13","lesson":13,"ar":"طُلَّابٌ","translit":"tullaabun","nl":"studenten (enk. طَالِبٌ)","en":"students"},{"id":"l13-14","lesson":13,"ar":"زُمَلَاءُ","translit":"zumalaa'u","nl":"klasgenoten (enk. زَمِيلٌ)","en":"classmates"},{"id":"l13-15","lesson":13,"ar":"أَصْدِقَاءُ","translit":"asdiqaa'u","nl":"vrienden (enk. صَدِيقٌ)","en":"friends"},{"id":"l13-16","lesson":13,"ar":"فِتْيَةٌ","translit":"fityatun","nl":"jongemannen (enk. فَتًى)","en":"young men"},{"id":"l13-17","lesson":13,"ar":"حُجَّاجٌ","translit":"hujjaajun","nl":"bedevaartgangers (enk. حَاجٌّ)","en":"pilgrims"},{"id":"l13-18","lesson":13,"ar":"شَيْخٌ","translit":"shaykhun","nl":"een oude man, geleerde (mv. شُيُوخٌ)","en":"scholar / elder"},{"id":"l13-19","lesson":13,"ar":"حَقْلٌ","translit":"haqlun","nl":"een veld, akker","en":"a field"},{"id":"l13-20","lesson":13,"ar":"النَّاسُ","translit":"an-naasu","nl":"de mensen","en":"the people"},{"id":"l13-21","lesson":13,"ar":"الْمَطْعَمُ","translit":"al-mat'amu","nl":"het restaurant","en":"the restaurant"},{"id":"l13-22","lesson":13,"ar":"أَبْنَاءٌ","translit":"abnaa'un","nl":"zonen (enk. اِبْنٌ)","en":"sons"},{"id":"l13-23","lesson":13,"ar":"بَنَاتٌ","translit":"banaatun","nl":"dochters (enk. بِنْتٌ)","en":"daughters"},{"id":"l13-24","lesson":13,"ar":"أَخَوَاتٌ","translit":"akhawaatun","nl":"zussen (enk. أُخْتٌ)","en":"sisters"},{"id":"l13-25","lesson":13,"ar":"النِّسَاءُ","translit":"an-nisaa'u","nl":"de vrouwen (enk. اِمْرَأَةٌ)","en":"the women"},{"id":"l13-26","lesson":13,"ar":"زَوْجَةٌ","translit":"zawjatun","nl":"een echtgenote","en":"a wife"},{"id":"l14-1","lesson":14,"ar":"أَنْتُمْ","translit":"antum","nl":"jullie (mannelijk meervoud)","en":"you (m. pl.)"},{"id":"l14-2","lesson":14,"ar":"نَحْنُ","translit":"nahnu","nl":"wij (m/v)","en":"we"},{"id":"l14-3","lesson":14,"ar":"ذَهَبْتُمْ","translit":"dhahabtum","nl":"jullie gingen (m. mv.)","en":"you went (m. pl.)"},{"id":"l14-4","lesson":14,"ar":"ذَهَبْنَا","translit":"dhahabnaa","nl":"wij gingen","en":"we went"},{"id":"l14-5","lesson":14,"ar":"أَيُّ","translit":"ayyu","nl":"welk(e)? (+ Moedaaf Ilaih)","en":"which?"},{"id":"l14-6","lesson":14,"ar":"الدِّينُ","translit":"ad-deenu","nl":"de religie, godsdienst","en":"the religion"},{"id":"l14-7","lesson":14,"ar":"الرَّبُّ","translit":"ar-rabbu","nl":"de Heer","en":"the Lord"},{"id":"l14-8","lesson":14,"ar":"النَّبِيُّ","translit":"an-nabiyyu","nl":"de Profeet","en":"the Prophet"},{"id":"l14-9","lesson":14,"ar":"الْقِبْلَةُ","translit":"al-qiblatu","nl":"de gebedsrichting","en":"the Qiblah"},{"id":"l14-10","lesson":14,"ar":"الْكُلِّيَّةُ","translit":"al-kulliyyatu","nl":"de faculteit","en":"the faculty"},{"id":"l14-11","lesson":14,"ar":"كُلِّيَّةُ الطِّبِّ","translit":"kulliyyatu t-tibbi","nl":"Faculteit Geneeskunde","en":"Faculty of Medicine"},{"id":"l14-12","lesson":14,"ar":"كُلِّيَّةُ الشَّرِيعَةِ","translit":"kulliyyatu sh-sharee'ati","nl":"Faculteit Islamitisch Recht","en":"Faculty of Shariah"},{"id":"l14-13","lesson":14,"ar":"الْمَطَارُ","translit":"al-mataaru","nl":"het vliegveld, de luchthaven","en":"the airport"},{"id":"l14-14","lesson":14,"ar":"الْحَدِيقَةُ","translit":"al-hadeeqatu","nl":"de tuin, het park","en":"the garden"},{"id":"l14-15","lesson":14,"ar":"الشَّهْرُ","translit":"ash-shahru","nl":"de maand","en":"the month"},{"id":"l14-16","lesson":14,"ar":"الْمَحْكَمَةُ","translit":"al-mahkamatu","nl":"de rechtbank","en":"the court"},{"id":"l14-17","lesson":14,"ar":"الدُّسْتُورُ","translit":"ad-dustooru","nl":"de grondwet, constitutie","en":"the constitution"},{"id":"l14-18","lesson":14,"ar":"حَفِيدٌ","translit":"hafeedun","nl":"een kleinzoon (mv. حَفَدَةٌ)","en":"grandson"},{"id":"l15-1","lesson":15,"ar":"أَنْتُنَّ","translit":"antunna","nl":"jullie (vrouwelijk meervoud)","en":"you (f. pl.)"},{"id":"l15-2","lesson":15,"ar":"ذَهَبْتِ","translit":"dhahabti","nl":"jij ging (vrouwelijk enkelvoud)","en":"you went (f. sg.)"},{"id":"l15-3","lesson":15,"ar":"ذَهَبْتُنَّ","translit":"dhahabtunna","nl":"jullie gingen (v. mv.)","en":"you went (f. pl.)"},{"id":"l15-4","lesson":15,"ar":"قَبْلَ","translit":"qabla","nl":"vóór (tijd)","en":"before"},{"id":"l15-5","lesson":15,"ar":"رَجَعَ","translit":"raja'a","nl":"hij keerde terug","en":"he returned"},{"id":"l15-6","lesson":15,"ar":"الدَّرْسُ","translit":"ad-darsu","nl":"de les","en":"the lesson"},{"id":"l15-7","lesson":15,"ar":"الْأُسْبُوعُ","translit":"al-usboo'u","nl":"de week","en":"the week"},{"id":"l15-8","lesson":15,"ar":"الْاِخْتِبَارُ","translit":"al-ikhtibaaru","nl":"het examen, de toets","en":"the exam"},{"id":"l16-1","lesson":16,"ar":"الْبَحْرُ","translit":"al-bahru","nl":"de zee","en":"the sea"},{"id":"l16-2","lesson":16,"ar":"النَّهْرُ","translit":"an-nahru","nl":"de rivier","en":"the river"},{"id":"l16-3","lesson":16,"ar":"الْفُنْدُقُ","translit":"al-funduqu","nl":"het hotel","en":"the hotel"},{"id":"l16-4","lesson":16,"ar":"الطَّائِرَةُ","translit":"at-taa'iratu","nl":"het vliegtuig","en":"the airplane"},{"id":"l16-5","lesson":16,"ar":"مَسَاجِدُ","translit":"masaajidu","nl":"moskeeën (mv. van مَسْجِدٌ)","en":"mosques"},{"id":"l16-6","lesson":16,"ar":"دَفَاتِرُ","translit":"dafaatiru","nl":"schriften (mv. van دَفْتَرٌ)","en":"notebooks"},{"id":"l17-1","lesson":17,"ar":"رَخِيصٌ","translit":"rakheesun","nl":"goedkoop","en":"cheap"},{"id":"l17-2","lesson":17,"ar":"الشَّرِكَةُ","translit":"ash-sharikatu","nl":"de firma, het bedrijf","en":"the company"},{"id":"l17-3","lesson":17,"ar":"قُمْصَانٌ","translit":"qumsaanun","nl":"hemden (mv. van قَمِيصٌ)","en":"shirts"},{"id":"l17-4","lesson":17,"ar":"يَابَانِيَّةٌ","translit":"yaabaaniyyatun","nl":"Japans (v)","en":"Japanese"},{"id":"l17-5","lesson":17,"ar":"مُدِيرُ الشَّرِكَةِ","translit":"mudeeru sh-sharikati","nl":"de directeur van het bedrijf","en":"company director"},{"id":"l17-6","lesson":17,"ar":"حُمُرٌ","translit":"humurun","nl":"ezels (mv. van حِمَارٌ)","en":"donkeys"},{"id":"l18-1","lesson":18,"ar":"السَّنَةُ","translit":"as-sanatu","nl":"het jaar","en":"the year"},{"id":"l18-2","lesson":18,"ar":"الْعَجَلَةُ","translit":"al-'ajalatu","nl":"het wiel","en":"the wheel"},{"id":"l18-3","lesson":18,"ar":"الْعِيدُ","translit":"al-'eedu","nl":"de feestdag","en":"the festival / Eid"},{"id":"l18-4","lesson":18,"ar":"الْحَيُّ","translit":"al-hayyu","nl":"het stadsdeel, de wijk","en":"the neighborhood"},{"id":"l18-5","lesson":18,"ar":"الرَّكْعَةُ","translit":"ar-rak'atu","nl":"de gebedseenheid (mv. رَكَعَاتٌ)","en":"rak'ah"},{"id":"l18-6","lesson":18,"ar":"الرِّيَالُ","translit":"ar-riyaalu","nl":"de riyal","en":"the riyal"},{"id":"l18-7","lesson":18,"ar":"الْمِسْطَرَةُ","translit":"al-mistaratu","nl":"de liniaal","en":"the ruler"},{"id":"l18-8","lesson":18,"ar":"السَّبُّورَةُ","translit":"as-sabbooratu","nl":"het schrijfbord","en":"the blackboard"},{"id":"l18-9","lesson":18,"ar":"هَذَانِ","translit":"haadhaani","nl":"deze twee (m)","en":"these two (m)"},{"id":"l18-10","lesson":18,"ar":"هَاتَانِ","translit":"haataani","nl":"deze twee (v)","en":"these two (f)"},{"id":"l18-11","lesson":18,"ar":"هُمَا","translit":"humaa","nl":"zij tweeën (tweevoud m/v)","en":"they two"},{"id":"l18-12","lesson":18,"ar":"كَمْ","translit":"kam","nl":"hoeveel?","en":"how many?"},{"id":"l19-1","lesson":19,"ar":"الْحَافِلَةُ","translit":"al-haafilatu","nl":"de bus","en":"the bus"},{"id":"l19-2","lesson":19,"ar":"أُورُبَّا","translit":"oorubbaa","nl":"Europa","en":"Europe"},{"id":"l19-3","lesson":19,"ar":"مِنْهُمْ","translit":"minhum","nl":"van hen","en":"from them"},{"id":"l19-4","lesson":19,"ar":"الْبَلَدُ","translit":"al-baladu","nl":"het land (mv. بِلَادٌ)","en":"the country"},{"id":"l19-5","lesson":19,"ar":"كُلٌّ","translit":"kullun","nl":"alle, elk, ieder","en":"all / each"},{"id":"l19-6","lesson":19,"ar":"مُخْتَلِفٌ","translit":"mukhtalifun","nl":"verschillend, verscheiden","en":"different"},{"id":"l19-7","lesson":19,"ar":"كُلُّهُمْ","translit":"kulluhum","nl":"zij allemaal","en":"all of them"},{"id":"l19-8","lesson":19,"ar":"كُلُّنَا","translit":"kullunaa","nl":"wij allemaal","en":"all of us"},{"id":"l19-9","lesson":19,"ar":"كُلُّكُمْ","translit":"kullukum","nl":"jullie allemaal","en":"all of you"},{"id":"l19-10","lesson":19,"ar":"الرَّاكِبُ","translit":"ar-raakibu","nl":"de passagier (mv. رُكَّابٌ)","en":"the passenger"},{"id":"l19-11","lesson":19,"ar":"الْجَيْبُ","translit":"al-jaybu","nl":"de zak (in kleding)","en":"the pocket"},{"id":"l19-12","lesson":19,"ar":"الثَّمَنُ","translit":"ath-thamanu","nl":"de prijs","en":"the price"},{"id":"l19-13","lesson":19,"ar":"النِّصْفُ","translit":"an-nisfu","nl":"de helft","en":"the half"},{"id":"l19-14","lesson":19,"ar":"شُكْرًا","translit":"shukran","nl":"bedankt","en":"thank you"},{"id":"l19-15","lesson":19,"ar":"السُّؤَالُ","translit":"as-su'aalu","nl":"de vraag","en":"the question"},{"id":"l19-16","lesson":19,"ar":"قُدَامَى","translit":"qudaamaa","nl":"oud (mv. van قَدِيمٌ)","en":"old (pl.)"},{"id":"l19-17","lesson":19,"ar":"الْيَوْمُ","translit":"al-yawmu","nl":"de dag (mv. أَيَّامٌ)","en":"the day"},{"id":"l19-18","lesson":19,"ar":"الْقِرْشُ","translit":"al-qirshu","nl":"1/10 van een riyal (mv. قُرُوشٌ)","en":"qirsh"},{"id":"l20-1","lesson":20,"ar":"دُرُوسٌ","translit":"duroosun","nl":"lessen (enk. دَرْسٌ)","en":"lessons"},{"id":"l20-2","lesson":20,"ar":"غُرَفٌ","translit":"ghurafun","nl":"kamers (enk. غُرْفَةٌ)","en":"rooms"},{"id":"l20-3","lesson":20,"ar":"حَرْفٌ","translit":"harfun","nl":"een letter (mv. حُرُوفٌ)","en":"a letter"},{"id":"l20-4","lesson":20,"ar":"مَجَلَّةٌ","translit":"majallatun","nl":"een tijdschrift","en":"a magazine"},{"id":"l20-5","lesson":20,"ar":"كَلِمَاتٌ","translit":"kalimaatun","nl":"woorden (enk. كَلِمَةٌ)","en":"words"},{"id":"l20-6","lesson":20,"ar":"أَعْمَامٌ","translit":"a'maamun","nl":"ooms van vaderskant (enk. عَمٌّ)","en":"paternal uncles"},{"id":"l21-1","lesson":21,"ar":"آسِيَا","translit":"aasiyaa","nl":"Azië","en":"Asia"},{"id":"l21-2","lesson":21,"ar":"وَاسِعٌ","translit":"waasi'un","nl":"ruim, wijd","en":"spacious"},{"id":"l21-3","lesson":21,"ar":"ذَاكَ","translit":"dhaaka","nl":"dat (hetzelfde als ذَلِكَ)","en":"that"},{"id":"l21-4","lesson":21,"ar":"نُحِبُّ","translit":"nuhibbu","nl":"wij houden van","en":"we love"},{"id":"l21-5","lesson":21,"ar":"نُحِبُّهُ","translit":"nuhibbuhu","nl":"wij houden van hem","en":"we love him"},{"id":"l21-6","lesson":21,"ar":"اللَّوْنُ","translit":"al-lawnu","nl":"de kleur (mv. أَلْوَانٌ)","en":"the color"},{"id":"l22-1","lesson":22,"ar":"أَبْيَضُ","translit":"abyadu","nl":"wit","en":"white"},{"id":"l22-2","lesson":22,"ar":"أَصْفَرُ","translit":"asfaru","nl":"geel","en":"yellow"},{"id":"l22-3","lesson":22,"ar":"أَحْمَرُ","translit":"ahmaru","nl":"rood","en":"red"},{"id":"l22-4","lesson":22,"ar":"أَسْوَدُ","translit":"aswadu","nl":"zwart","en":"black"},{"id":"l22-5","lesson":22,"ar":"أَخْضَرُ","translit":"akhdaru","nl":"groen","en":"green"},{"id":"l22-6","lesson":22,"ar":"أَزْرَقُ","translit":"azraqu","nl":"blauw","en":"blue"},{"id":"l22-7","lesson":22,"ar":"مَفَاتِيحُ","translit":"mafaateehu","nl":"sleutels (mv. van مِفْتَاحٌ)","en":"keys"},{"id":"l22-8","lesson":22,"ar":"قَالَ","translit":"qaala","nl":"hij zei","en":"he said"},{"id":"l22-9","lesson":22,"ar":"قَالَتْ","translit":"qaalat","nl":"zij zei","en":"she said"},{"id":"l22-10","lesson":22,"ar":"بَغْدَادُ","translit":"baghdaadu","nl":"Bagdad","en":"Baghdad"},{"id":"l22-11","lesson":22,"ar":"جُدَّةُ","translit":"juddatu","nl":"Djedda","en":"Jeddah"},{"id":"l22-12","lesson":22,"ar":"مَنَادِيلُ","translit":"manaadeelu","nl":"zakdoeken (mv. van مِنْدِيلٌ)","en":"handkerchiefs"},{"id":"l22-13","lesson":22,"ar":"دَقِيقَةٌ","translit":"daqeeqatun","nl":"een minuut (mv. دَقَائِقُ)","en":"a minute"},{"id":"l22-14","lesson":22,"ar":"فِنْجَانٌ","translit":"finjaanun","nl":"een theekopje (mv. فَنَاجِينُ)","en":"a teacup"},{"id":"l23-1","lesson":23,"ar":"إِصْطَنْبُولُ","translit":"istanboolu","nl":"Istanbul","en":"Istanbul"},{"id":"l23-2","lesson":23,"ar":"الطَّائِفُ","translit":"at-taa'ifu","nl":"Taif (stad in Saoedi-Arabië)","en":"Taif"},{"id":"l23-3","lesson":23,"ar":"وَاشِنْطُنُ","translit":"waashintunu","nl":"Washington","en":"Washington"},{"id":"l24-1","ar":"أَمْسِ","translit":"amsi","nl":"gisteren (mabnie op kasrah)","lesson":24},{"id":"l24-2","ar":"حَيْثُ","translit":"haythu","nl":"waar / alwaar (mabnie op dammah)","lesson":24},{"id":"l24-3","ar":"قَطُّ","translit":"qattu","nl":"ooit / nooit in het verleden (mabnie op dammah)","lesson":24},{"id":"l24-4","ar":"ثَمَّ","translit":"thamma","nl":"daar (zarf makaan)","lesson":24},{"id":"l24-5","ar":"لَوْ","translit":"law","nl":"als / indien (onvervulde voorwaarde)","lesson":24},{"id":"l24-6","ar":"اسْتَقْبَلَ","translit":"istaqbala","nl":"hij verwelkomde / wachtte op","lesson":24},{"id":"l24-7","ar":"انْتَظَرَ","translit":"intazhara","nl":"hij wachtte op","lesson":24},{"id":"l24-8","ar":"سَافَرَ","translit":"saafara","nl":"hij reisde","lesson":24},{"id":"l24-9","ar":"سَاعَدَ","translit":"saa‘ada","nl":"hij hielp","lesson":24},{"id":"l24-10","ar":"رَحَّبَ","translit":"rahhaba","nl":"hij heette welkom","lesson":24},{"id":"l24-11","ar":"مَكَثَ","translit":"makatha","nl":"hij verbleef / toefde","lesson":24},{"id":"l24-12","ar":"لَبِثَ","translit":"labitha","nl":"hij bleef / vertoefde","lesson":24},{"id":"l24-13","ar":"كَسَبَ","translit":"kasaba","nl":"hij verdiende / won","lesson":24},{"id":"l24-14","ar":"فَاتَ","translit":"faata","nl":"het ging voorbij / werd gemist","lesson":24},{"id":"l24-15","ar":"ضَرَّ","translit":"darra","nl":"hij schaadde","lesson":24},{"id":"l24-16","ar":"زَائِرٌ","translit":"zaa’irun","nl":"bezoeker (mv. زُوَّارٌ)","lesson":24},{"id":"l24-17","ar":"شَدِيدٌ","translit":"shadeedun","nl":"hevig / krachtig (mv. شِدَادٌ)","lesson":24},{"id":"l24-18","ar":"جَرِيحٌ","translit":"jareehun","nl":"gewonde (mv. جَرْحَى)","lesson":24},{"id":"l24-19","ar":"مَقْعَدٌ خَالٍ","translit":"maq‘adun khaalin","nl":"een lege zitplaats","lesson":24},{"id":"l24-20","ar":"الْبَارِحَةَ","translit":"al-baarihata","nl":"afgelopen nacht / gisteravond","lesson":24},{"id":"l24-21","ar":"مِنْ قَبْلُ","translit":"min qablu","nl":"voorheen / van tevoren (mabnie op dammah)","lesson":24}];
 const LESSON_META = {
   "1": [
     "Wat is dit? · هَذَا",
@@ -2215,6 +2215,11 @@ function renderSidebar(){
         ${convLinks}
       </div>
 
+      <button type="button" class="sbn ${state.view==='exam'?'active':''}" data-act="nav" data-v="exam">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        <span>Examen (Les 1–7)</span>
+      </button>
+
       <button type="button" class="sbn ${state.view==='words'?'active':''}" data-act="nav" data-v="words">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
         <span>Woordenlijst</span>
@@ -2262,6 +2267,7 @@ function renderTopbar(){
     'book-lesson': 'Grammatica · ' + hoofdstuk(state.bookLesson),
     conv: 'Dialogen & Gesprekken',
     'conv-unit': 'Dialogen · Eenheid ' + (state.convUnit||''),
+    exam: 'Examen · Les 1 t/m 7',
     mistakes: 'Fouten herhalen',
     settings: 'Profiel & Instellingen'
   };
@@ -2291,12 +2297,13 @@ function tabbar(){
   const path=currentPath();
   const items=[
     {v:'home',l:'Start',svg:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/>',active:state.view==='home'},
-    {v:'vocab',l:'Woorden',svg:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',active:path==='vocab'&&state.view!=='home'},
-    {v:'book',l:'Grammatica',svg:'<path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>',active:path==='grammar'},
+    {v:'vocab',l:'Woorden',svg:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',active:path==='vocab'&&state.view!=='home'&&state.view!=='exam'},
+    {v:'book',l:'Grammatica',svg:'<path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>',active:path==='grammar'&&state.view!=='exam'},
     {v:'conv',l:'Dialogen',svg:'<path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>',active:state.view==='conv'||state.view==='conv-unit'},
+    {v:'exam',l:'Examen',svg:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',active:state.view==='exam'},
     {v:'settings',l:'Profiel',svg:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9c0 .7.4 1.3 1 1.5H21a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.5 1z"/>',active:state.view==='settings'},
   ];
-  return`<div class="tabbar"><div class="tabbar-inner" style="grid-template-columns:repeat(5,1fr)">${items.map(i=>`
+  return`<div class="tabbar"><div class="tabbar-inner" style="grid-template-columns:repeat(6,1fr)">${items.map(i=>`
     <button class="tab ${i.active?'active':''}" data-act="nav" data-v="${i.v}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${i.svg}</svg>
       ${i.l}
@@ -2454,6 +2461,7 @@ function renderHome(){
         <div class="hero-btns">
           <button type="button" class="btn btn-primary" data-act="start-learn" data-l="${next}">Start met leren · ${next==='all'?'Alles':hoofdstuk(next)} →</button>
           <button type="button" class="btn btn-secondary" data-act="nav" data-v="book">Grammatica & Regels</button>
+          <button type="button" class="btn btn-secondary" data-act="nav" data-v="exam">Examen (Les 1–7)</button>
           <button type="button" class="btn btn-ghost" data-act="nav" data-v="conv">Dialogen</button>
         </div>
       </div>
@@ -2507,6 +2515,12 @@ function renderHome(){
             <p>Beluister natuurlijke Arabische gesprekken en oefen elke regel met de microfoon.</p>
             <strong>Open ${cCount} eenheden →</strong>
           </button>
+          <button type="button" class="route-card" data-act="nav" data-v="exam">
+            <div class="route-card-top"><span>04</span><span class="route-card-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span></div>
+            <h3>Examen (Les 1–7)</h3>
+            <p>Oefen het officiële Al-Manarah examen en het oefenexamen (100 punten, 7 delen + iʿrāb).</p>
+            <strong>Start examen of bekijk antwoordmodel →</strong>
+          </button>
         </div>
       </section>
 
@@ -2556,6 +2570,11 @@ ${mkCount?`<button type="button" class="home-nudge" data-act="nav" data-v="mista
         <h3>Dialogen</h3>
         <p>Beluisteren en nazeggen</p>
         <div class="pc-meta">${cCount} eenheden</div>
+      </button>
+      <button class="path-card exam" data-act="nav" data-v="exam">
+        <h3>Examen · Les 1–7</h3>
+        <p>Officieel examen, oefenexamen & antwoordmodel</p>
+        <div class="pc-meta">100 pt</div>
       </button>
     </div>
     ${mistakes.length?`<button type="button" class="resume-row" data-act="nav" data-v="mistakes" style="margin-top:12px">
@@ -4556,6 +4575,717 @@ function renderMistakes(){
   </div>`;
 }
 
+const EXAM_DATA = {
+  official: {
+    id: 'official',
+    title: 'Officieel Examen · Les 1 t/m 7',
+    subtitle: 'Al-Manarah · Klas van Ustādh Abū Muḥammad · Totaal: 100 punten (Voldoende: 65+ | Goed: 80+ | Uitstekend: 90+)',
+    parts: [
+      {
+        num: 1,
+        title: 'Deel 1: Woordenschat (الْمُفْرَدَاتُ)',
+        pts: 30,
+        desc: 'Vraag 1: Dictee (luister & kies het juiste woord met tashkīl, 10 pt) · Vraag 2: Arabisch → Nederlands (10 pt) · Vraag 3: Nederlands → Arabisch met tashkīl (10 pt).',
+        questions: [
+          { id:'o1_1', q:'Vraag 1.1 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'مِفْتَاحٌ', opts:['مِفْتَاحٌ','مَفْتَحٌ','مِفْتَاحُ','مُفْتَاحٌ'], ans:0, pts:1, note:'مِفْتَاحٌ (miftāḥun) = een sleutel.' },
+          { id:'o1_2', q:'Vraag 1.2 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'مَسْجِدٌ', opts:['مَسْجَدٌ','مَسْجِدٌ','مِسْجِدٌ','الْمَسْجِدُ'], ans:1, pts:1, note:'مَسْجِدٌ (masjidun) = een moskee (met kasrah onder de ج).' },
+          { id:'o1_3', q:'Vraag 1.3 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'مُدَرِّسٌ', opts:['مُدَرِسٌ','مَدْرَسَةٌ','مُدَرِّسٌ','مُدِيرٌ'], ans:2, pts:1, note:'مُدَرِّسٌ (mudarrisun) = een leraar (met shaddah + kasrah op de ر).' },
+          { id:'o1_4', q:'Vraag 1.4 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'الْمَدْرَسَةُ', opts:['الْمَدْرَسَةُ','الْمُدَرِّسَةُ','مَدْرَسَةٌ','الْمَدْرَسَةِ'], ans:0, pts:1, note:'الْمَدْرَسَةُ (al-madrasatu) = de school.' },
+          { id:'o1_5', q:'Vraag 1.5 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'طَبِيبٌ', opts:['طَالِبٌ','طَبِيبٌ','طَوِيلٌ','طَبِيبَةٌ'], ans:1, pts:1, note:'طَبِيبٌ (ṭabībun) = een arts / dokter.' },
+          { id:'o1_6', q:'Vraag 1.6 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'مِلْعَقَةٌ', opts:['مِكْوَاةٌ','مِلْعَقَةٌ','مِقْلَمَةٌ','مِرْوَحَةٌ'], ans:1, pts:1, note:'مِلْعَقَةٌ (milʿaqatun) = een lepel.' },
+          { id:'o1_7', q:'Vraag 1.7 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'الْكُرْسِيُّ', opts:['كُرْسِيٌّ','الْكُرْسِيُّ','الْكُرْسِيُ','الْكَرْسِيُّ'], ans:1, pts:1, note:'الْكُرْسِيُّ (al-kursiyyu) = de stoel.' },
+          { id:'o1_8', q:'Vraag 1.8 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'سَاعَةٌ', opts:['سَيَّارَةٌ','سَاعَةٌ','سَبُّورَةٌ','سَرِيرٌ'], ans:1, pts:1, note:'سَاعَةٌ (sāʿatun) = een horloge / klok.' },
+          { id:'o1_9', q:'Vraag 1.9 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'الْمُهَنْدِسُ', opts:['الْمُدَرِّسُ','الْمُهَنْدِسُ','مُهَنْدِسٌ','الْمُدِيرُ'], ans:1, pts:1, note:'الْمُهَنْدِسُ (al-muhandisu) = de ingenieur.' },
+          { id:'o1_10', q:'Vraag 1.10 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'نَافِذَةٌ', opts:['نَاقَةٌ','نَافِذَةٌ','نَظِيفَةٌ','ثَلَّاجَةٌ'], ans:1, pts:1, note:'نَافِذَةٌ (nāfidhatun) = een raam.' },
+
+          { id:'o2_1', q:'Vraag 2.1 (1 pt): Wat betekent dit Arabische woord?', ar:'كُرْسِيٌّ', opts:['stoel','bed','bureau','tafel'], ans:0, pts:1, note:'كُرْسِيٌّ = een stoel.' },
+          { id:'o2_2', q:'Vraag 2.2 (1 pt): Wat betekent dit Arabische woord?', ar:'قَمِيصٌ', opts:['zakdoek','hemd','tas','sleutel'], ans:1, pts:1, note:'قَمِيصٌ = een hemd / overhemd.' },
+          { id:'o2_3', q:'Vraag 2.3 (1 pt): Wat betekent dit Arabische woord?', ar:'حِصَانٌ', opts:['ezel','kameel','paard','haan'], ans:2, pts:1, note:'حِصَانٌ = een paard.' },
+          { id:'o2_4', q:'Vraag 2.4 (1 pt): Wat betekent dit Arabische woord?', ar:'تَاجِرٌ', opts:['boer','handelaar / koopman','ingenieur','directeur'], ans:1, pts:1, note:'تَاجِرٌ = een handelaar / koopman.' },
+          { id:'o2_5', q:'Vraag 2.5 (1 pt): Wat betekent dit Arabische woord?', ar:'حُلْوٌ', opts:['heet','koud','zoet','zwaar'], ans:2, pts:1, note:'حُلْوٌ = zoet.' },
+          { id:'o2_6', q:'Vraag 2.6 (1 pt): Wat betekent dit Arabische woord?', ar:'الدُّكَّانُ', opts:['de markt','de winkel','de kamer','de keuken'], ans:1, pts:1, note:'الدُّكَّانُ = de winkel.' },
+          { id:'o2_7', q:'Vraag 2.7 (1 pt): Wat betekent dit Arabische woord?', ar:'الْبَقَرَةُ', opts:['de kip','de koe','de geit','de vrouwtjeskameel'], ans:1, pts:1, note:'الْبَقَرَةُ = de koe.' },
+          { id:'o2_8', q:'Vraag 2.8 (1 pt): Wat betekent dit Arabische woord?', ar:'الْأُذُنُ', opts:['het oog','de mond','het oor','de neus'], ans:2, pts:1, note:'الْأُذُنُ = het oor (dubbel lichaamsdeel → vrouwelijk).' },
+          { id:'o2_9', q:'Vraag 2.9 (1 pt): Wat betekent dit Arabische woord?', ar:'الشَّايُ', opts:['de koffie','de melk','de thee','het water'], ans:2, pts:1, note:'الشَّايُ = de thee.' },
+          { id:'o2_10', q:'Vraag 2.10 (1 pt): Wat betekent dit Arabische woord?', ar:'النَّاقَةُ', opts:['de vrouwtjeskameel','de eend','de verpleegster','het raam'], ans:0, pts:1, note:'النَّاقَةُ = de vrouwtjeskameel (Les 7).' },
+
+          { id:'o3_1', q:'Vraag 3.1 (1 pt): Vertaal naar het Arabisch (met tashkīl): "bed"', opts:['سَرِيرٌ','كُرْسِيٌّ','مَكْتَبٌ','بَيْتٌ'], ans:0, pts:1, note:'bed = سَرِيرٌ (onbepaald → tanwīn ḍammah).' },
+          { id:'o3_2', q:'Vraag 3.2 (1 pt): Vertaal naar het Arabisch (met tashkīl): "ster"', opts:['قَمَرٌ','شَمْسٌ','نَجْمٌ','سَمَاءٌ'], ans:2, pts:1, note:'ster = نَجْمٌ (zonletter ن bij الـ: النَّجْمُ).' },
+          { id:'o3_3', q:'Vraag 3.3 (1 pt): Vertaal naar het Arabisch (met tashkīl): "jongen"', opts:['رَجُلٌ','وَلَدٌ','طَالِبٌ','ابْنٌ'], ans:1, pts:1, note:'jongen = وَلَدٌ.' },
+          { id:'o3_4', q:'Vraag 3.4 (1 pt): Vertaal naar het Arabisch (met tashkīl): "kameel"', opts:['حِصَانٌ','حِمَارٌ','جَمَلٌ','كَلْبٌ'], ans:2, pts:1, note:'kameel = جَمَلٌ.' },
+          { id:'o3_5', q:'Vraag 3.5 (1 pt): Vertaal naar het Arabisch (met tashkīl): "imam"', opts:['إِمَامٌ','مُدَرِّسٌ','مُدِيرٌ','تَاجِرٌ'], ans:0, pts:1, note:'imam = إِمَامٌ (met hamzah + kasrah onder de alif).' },
+          { id:'o3_6', q:'Vraag 3.6 (1 pt): Vertaal naar het Arabisch (met tashkīl): "vies / vuil"', opts:['نَظِيفٌ','وَسِخٌ','ثَقِيلٌ','مَكْسُورٌ'], ans:1, pts:1, note:'vies / vuil = وَسِخٌ (tegenovergestelde van نَظِيفٌ).' },
+          { id:'o3_7', q:'Vraag 3.7 (1 pt): Vertaal naar het Arabisch (met tashkīl): "gesloten"', opts:['مَفْتُوحٌ','مَكْسُورٌ','مُغْلَقٌ','وَاقِفٌ'], ans:2, pts:1, note:'gesloten = مُغْلَقٌ (tegenovergestelde van مَفْتُوحٌ).' },
+          { id:'o3_8', q:'Vraag 3.8 (1 pt): Vertaal naar het Arabisch (met tashkīl): "de fiets"', opts:['دَرَّاجَةٌ','الدَّرَّاجَةُ','السَّيَّارَةُ','الدَِّرَاجَةٌ'], ans:1, pts:1, note:'"de fiets" is bepaald → الدَّرَّاجَةُ (zonletter د krijgt shaddah, géén tanwīn aan het eind).' },
+          { id:'o3_9', q:'Vraag 3.9 (1 pt): Vertaal naar het Arabisch (met tashkīl): "de moeder"', opts:['أُمٌّ','الْأُمُّ','الْأَبُ','الْأُخْتُ'], ans:1, pts:1, note:'"de moeder" = الْأُمُّ (met shaddah + enkele ḍammah op de م).' },
+          { id:'o3_10', q:'Vraag 3.10 (1 pt): Vertaal naar het Arabisch (met tashkīl): "het ei"', opts:['بَيْضَةٌ','الْبَيْضَةُ','الْبَطَّةُ','الدَّجَاجَةُ'], ans:1, pts:1, note:'"het ei" is bepaald → الْبَيْضَةُ.' }
+        ]
+      },
+      {
+        num: 2,
+        title: 'Deel 2: Aanwijzende voornaamwoorden (أَسْمَاءُ الْإِشَارَةِ)',
+        pts: 10,
+        desc: 'Vraag 4 (10 pt): Kies het juiste aanwijzend voornaamwoord (هَذَا / هَذِهِ / ذَلِكَ / تِلْكَ) én vorm een volledige zin met een passend bijvoeglijk naamwoord uit: (كَبِيرٌ – قَدِيمٌ – جَمِيلٌ – حَارٌّ – طَوِيلٌ). Let op het geslacht!',
+        questions: [
+          { id:'o4_1', q:'Vraag 4.1 (2 pt): (mannelijk / vrouwelijk? Let op! · nabij) ___ الْقِدْرُ + bijvoeglijk naamwoord:', ar:'___ الْقِدْرُ', opts:['هَذِهِ الْقِدْرُ حَارَّةٌ (of: هَذَا الْقِدْرُ حَارٌّ)','ذَلِكَ الْقِدْرُ حَارٌّ','تِلْكَ الْقِدْرُ حَارَّةٌ','هَذَا الْقِدْرُ حَارٌ'], ans:0, pts:2, note:'In Les 6 leerden we dat الْقِدْرُ (de kookpot) vrouwelijk is (هَذِهِ الْقِدْرُ حَارَّةٌ), maar omdat de hint in het examen "(mannelijk, nabij)" vermeldt wordt هَذَا الْقِدْرُ حَارٌّ ook volledig goed gerekend.' },
+          { id:'o4_2', q:'Vraag 4.2 (2 pt): (vrouwelijk, ver) ___ النَّاقَةُ + bijvoeglijk naamwoord:', ar:'___ النَّاقَةُ', opts:['تِلْكَ النَّاقَةُ طَوِيلَةٌ','ذَلِكَ النَّاقَةُ طَوِيلٌ','هَذِهِ النَّاقَةُ طَوِيلَةٌ','تِلْكَ النَّاقَةُ طَوِيلٌ'], ans:0, pts:2, note:'النَّاقَةُ (de vrouwtjeskameel) is vrouwelijk + ver → تِلْكَ النَّاقَةُ طَوِيلَةٌ (Die vrouwtjeskameel is lang/groot).' },
+          { id:'o4_3', q:'Vraag 4.3 (2 pt): (vrouwelijk, nabij) ___ الدَّرَّاجَةُ + bijvoeglijk naamwoord:', ar:'___ الدَّرَّاجَةُ', opts:['هَذِهِ الدَّرَّاجَةُ جَمِيلَةٌ','هَذَا الدَّرَّاجَةُ جَمِيلٌ','تِلْكَ الدَّرَّاجَةُ جَمِيلَةٌ','هَذِهِ الدَّرَّاجَةُ جَمِيلٌ'], ans:0, pts:2, note:'الدَّرَّاجَةُ (de fiets) eindigt op ة (vrouwelijk) + nabij → هَذِهِ الدَّرَّاجَةُ جَمِيلَةٌ.' },
+          { id:'o4_4', q:'Vraag 4.4 (2 pt): (mannelijk, ver) ___ الْحِمَارُ + bijvoeglijk naamwoord:', ar:'___ الْحِمَارُ', opts:['ذَلِكَ الْحِمَارُ كَبِيرٌ','تِلْكَ الْحِمَارُ كَبِيرَةٌ','هَذَا الْحِمَارُ كَبِيرٌ','ذَلِكَ الْحِمَارُ كَبِيرَةٌ'], ans:0, pts:2, note:'الْحِمَارُ (de ezel) is mannelijk + ver → ذَلِكَ الْحِمَارُ كَبِيرٌ (Die ezel is groot).' },
+          { id:'o4_5', q:'Vraag 4.5 (2 pt): (vrouwelijk, nabij) ___ الْمِكْوَاةُ + bijvoeglijk naamwoord:', ar:'___ الْمِكْوَاةُ', opts:['هَذِهِ الْمِكْوَاةُ قَدِيمَةٌ','هَذَا الْمِكْوَاةُ قَدِيمٌ','تِلْكَ الْمِكْوَاةُ قَدِيمَةٌ','هَذِهِ الْمِكْوَاةُ قَدِيمٌ'], ans:0, pts:2, note:'الْمِكْوَاةُ (het strijkijzer) eindigt op ة (vrouwelijk) + nabij → هَذِهِ الْمِكْوَاةُ قَدِيمَةٌ.' }
+        ]
+      },
+      {
+        num: 3,
+        title: 'Deel 3: Voorzetsels (أَحْرُفُ الْجَرِّ)',
+        pts: 10,
+        desc: 'Vraag 5 (10 pt): Vul het juiste voorzetsel in uit (مِنْ – إِلَى – فِي – عَلَى – مَعَ) en kies de juiste Nederlandse vertaling van de hele zin.',
+        questions: [
+          { id:'o5_1', q:'Vraag 5.1 (2 pt): الْقَهْوَةُ ___ الطَّاوِلَةِ (hint: op)', ar:'الْقَهْوَةُ ___ الطَّاوِلَةِ', opts:['عَلَى — De koffie staat op de tafel.','فِي — De koffie is in de tafel.','إِلَى — De koffie gaat naar de tafel.','مِنْ — De koffie komt van de tafel.'], ans:0, pts:2, note:'عَلَى = op. الْقَهْوَةُ عَلَى الطَّاوِلَةِ = De koffie staat op de tafel (الطَّاوِلَةِ krijgt kasrah na عَلَى).' },
+          { id:'o5_2', q:'Vraag 5.2 (2 pt): ذَهَبَ الْفَلَّاحُ ___ السُّوقِ (hint: naar)', ar:'ذَهَبَ الْفَلَّاحُ ___ السُّوقِ', opts:['إِلَى — De boer ging naar de markt.','مِنْ — De boer kwam van de markt.','فِي — De boer is op de markt.','مَعَ — De boer is met de markt.'], ans:0, pts:2, note:'إِلَى = naar (richting). ذَهَبَ الْفَلَّاحُ إِلَى السُّوقِ = De boer ging naar de markt.' },
+          { id:'o5_3', q:'Vraag 5.3 (2 pt): الرَّسُولُ ___ مَكَّةَ (hint: uit/van)', ar:'الرَّسُولُ ___ مَكَّةَ', opts:['مِنْ — De Boodschapper komt uit Mekka.','إِلَى — De Boodschapper ging naar Mekka.','فِي — De Boodschapper is in Mekka.','عَلَى — De Boodschapper is op Mekka.'], ans:0, pts:2, note:'مِنْ = uit/van. الرَّسُولُ مِنْ مَكَّةَ = De Boodschapper komt uit Mekka (مَكَّةَ krijgt fatḥah i.p.v. kasrah omdat het mamnūʿ min aṣ-ṣarf is).' },
+          { id:'o5_4', q:'Vraag 5.4 (2 pt): الدَّجَاجَةُ ___ الْحَدِيقَةِ (hint: in)', ar:'الدَّجَاجَةُ ___ الْحَدِيقَةِ', opts:['فِي — De kip is in de tuin.','عَلَى — De kip zit op de tuin.','مِنْ — De kip komt uit de tuin.','مَعَ — De kip is met de tuin.'], ans:0, pts:2, note:'فِي = in. الدَّجَاجَةُ فِي الْحَدِيقَةِ = De kip is in de tuin.' },
+          { id:'o5_5', q:'Vraag 5.5 (2 pt): الْوَلَدُ ___ أَبِيهِ (hint: met/bij)', ar:'الْوَلَدُ ___ أَبِيهِ', opts:['مَعَ — De jongen is met zijn vader.','إِلَى — De jongen ging naar zijn vader.','مِنْ — De jongen komt van zijn vader.','عَلَى — De jongen zit op zijn vader.'], ans:0, pts:2, note:'مَعَ = met / bij. الْوَلَدُ مَعَ أَبِيهِ = De jongen is met zijn vader.' }
+        ]
+      },
+      {
+        num: 4,
+        title: 'Deel 4: Lidwoord (أَلْ التَّعْرِيفِ) & Zonne-/Maanletters',
+        pts: 15,
+        desc: 'Vraag 6 (10 pt): Geef aan of de eerste letter een zonletter of maanletter is en schrijf het woord met الـ inclusief volledige tashkīl (shaddah waar nodig, en géén tanwīn!). · Vraag 7 (5 pt): Uitleg verschil zonneletters vs. maanletters.',
+        questions: [
+          { id:'o6_1', q:'Vraag 6.1 (2 pt): سُوقٌ — Zonletter of Maanletter? En hoe schrijf je het met الـ?', ar:'سُوقٌ', opts:['Zonletter (س) → السُّوقُ','Maanletter (س) → الْسُوقُ','Zonletter (س) → السُّوقٌ','Maanletter (س) → السُوقُ'], ans:0, pts:2, note:'س is een zonletter (حرف شمسي): de ل wordt niet uitgesproken, س krijgt shaddah en de tanwīn wordt één ḍammah → السُّوقُ.' },
+          { id:'o6_2', q:'Vraag 6.2 (2 pt): حَدِيقَةٌ — Zonletter of Maanletter? En hoe schrijf je het met الـ?', ar:'حَدِيقَةٌ', opts:['Maanletter (ح) → الْحَدِيقَةُ','Zonletter (ح) → الحَّدِيقَةُ','Maanletter (ح) → الْحَدِيقَةٌ','Zonletter (ح) → الْحَدِيقَةُ'], ans:0, pts:2, note:'ح is een maanletter (حرف قمري): de ل krijgt sukūn (الْـ) en blijft hoorbaar → الْحَدِيقَةُ.' },
+          { id:'o6_3', q:'Vraag 6.3 (2 pt): دَرَّاجَةٌ — Zonletter of Maanletter? En hoe schrijf je het met الـ?', ar:'دَرَّاجَةٌ', opts:['Zonletter (د) → الدَّرَّاجَةُ','Maanletter (د) → الْدَرَّاجَةُ','Zonletter (د) → الدَّرَّاجَةٌ','Maanletter (د) → الدَرَّاجَةُ'], ans:0, pts:2, note:'د is een zonletter (حرف شمسي): shaddah op de د en enkele ḍammah op het einde → الدَّرَّاجَةُ.' },
+          { id:'o6_4', q:'Vraag 6.4 (2 pt): نَافِذَةٌ — Zonletter of Maanletter? En hoe schrijf je het met الـ?', ar:'نَافِذَةٌ', opts:['Zonletter (ن) → النَّافِذَةُ','Maanletter (ن) → الْنَافِذَةُ','Zonletter (ن) → النَّافِذَةٌ','Maanletter (ن) → النَّافِذَةُ'], ans:0, pts:2, note:'ن is een zonletter (حرف شمسي): shaddah op de ن en enkele ḍammah → النَّافِذَةُ.' },
+          { id:'o6_5', q:'Vraag 6.5 (2 pt): كَعْبَةٌ — Zonletter of Maanletter? En hoe schrijf je het met الـ?', ar:'كَعْبَةٌ', opts:['Maanletter (ك) → الْكَعْبَةُ','Zonletter (ك) → الكَّعْبَةُ','Maanletter (ك) → الْكَعْبَةٌ','Zonletter (ك) → الْكَعْبَةُ'], ans:0, pts:2, note:'ك is een maanletter (حرف قمري): de ل krijgt sukūn en de tanwīn verdwijnt → الْكَعْبَةُ.' },
+          { id:'o7_1', q:'Vraag 7 (5 pt): Wat is het verschil tussen zonneletters (حُرُوفٌ شَمْسِيَّةٌ) en maanletters (حُرُوفٌ قَمَرِيَّةٌ) en welke 5 + 5 voorbeelden horen daarbij?', opts:[
+            'Bij een zonletter smelt de ل van الـ samen met de eerste letter (de ل wordt niet uitgesproken en de zonletter krijgt een shaddah ّ, bv. الشَّمْسُ، السُّوقُ، الدَّرَّاجَةُ، النَّافِذَةُ، الطَّالِبُ). Bij een maanletter blijft de ل van الـ duidelijk hoorbaar met sukūn (bv. الْقَمَرُ، الْحَدِيقَةُ، الْكَعْبَةُ، الْبَيْتُ، الْمَسْجِدُ).',
+            'Bij een maanletter verdwijnt de ل in de uitspraak en krijgt de letter een shaddah; bij een zonletter blijft de ل van الـ hoorbaar.',
+            'Zonneletters krijgen altijd tanwīn na الـ (bv. الشَّمْسٌ) en maanletters krijgen een kasrah na الـ.',
+            'Zonneletters komen alleen voor bij vrouwelijke woorden en maanletters alleen bij mannelijke woorden.'
+          ], ans:0, pts:5, note:'Volledige 5 punten: (1) uitspraakverschil van de ل van الـ, (2) shaddah op de zonletter vs. sukūn op de ل bij maanletter, en (3) 5 voorbeelden van elk.' }
+        ]
+      },
+      {
+        num: 5,
+        title: 'Deel 5: Het bijvoeglijk naamwoord (النَّعْتُ)',
+        pts: 10,
+        desc: 'Vraag 8 (10 pt): Pas het bijvoeglijk naamwoord tussen haakjes aan op het zelfstandig naamwoord. Let op: (1) geslacht, (2) bepaaldheid (الـ of tanwīn), en (3) de naamval (ḍammah of kasrah)!',
+        questions: [
+          { id:'o8_1', q:'Vraag 8.1 (2 pt): هَذَا حِمَارٌ ________ (كَبِيرٌ)', ar:'هَذَا حِمَارٌ ___ (كَبِيرٌ)', opts:['كَبِيرٌ','الْكَبِيرُ','كَبِيرَةٌ','الْكَبِيرَةِ'], ans:0, pts:2, note:'حِمَارٌ is mannelijk, onbepaald en marfūʿ (خبر) → كَبِيرٌ.' },
+          { id:'o8_2', q:'Vraag 8.2 (2 pt): تِلْكَ النَّاقَةُ ________ (طَوِيلٌ)', ar:'تِلْكَ النَّاقَةُ ___ (طَوِيلٌ)', opts:['الطَّوِيلَةُ (als bijv. nw. bij النَّاقَةُ) of طَوِيلَةٌ (als gezegde)','الطَّوِيلُ','طَوِيلٌ','الطَّوِيلَةِ'], ans:0, pts:2, note:'النَّاقَةُ is vrouwelijk en marfūʿ: als bijvoeglijk naamwoord (نعت) bij النَّاقَةُ wordt het الطَّوِيلَةُ; als naamwoordelijk gezegde (خبر) wordt het طَوِيلَةٌ.' },
+          { id:'o8_3', q:'Vraag 8.3 (2 pt): الْإِمَامُ فِي الْمَسْجِدِ ________ (كَرِيمٌ)', ar:'الْإِمَامُ فِي الْمَسْجِدِ ___ (كَرِيمٌ)', opts:['الْكَرِيمِ (met الـ en kasrah!)','الْكَرِيمُ','كَرِيمٍ','الْكَرِيمَةُ'], ans:0, pts:2, note:'Let op de valkuil! الْمَسْجِدِ is mannelijk, bepaald (الـ) én majrūr (kasrah door فِي). Het bijvoeglijk naamwoord volgt in alle drie → الْكَرِيمِ.' },
+          { id:'o8_4', q:'Vraag 8.4 (2 pt): هَذِهِ بَيْضَةٌ ________ (صَغِيرٌ)', ar:'هَذِهِ بَيْضَةٌ ___ (صَغِيرٌ)', opts:['صَغِيرَةٌ','الصَّغِيرَةُ','صَغِيرٌ','الصَّغِيرُ'], ans:0, pts:2, note:'بَيْضَةٌ is vrouwelijk, onbepaald en marfūʿ → صَغِيرَةٌ.' },
+          { id:'o8_5', q:'Vraag 8.5 (2 pt): ذَلِكَ الدُّكَّانُ ________ (قَدِيمٌ)', ar:'ذَلِكَ الدُّكَّانُ ___ (قَدِيمٌ)', opts:['الْقَدِيمُ (als نعت) of قَدِيمٌ (als خبر)','الْقَدِيمَةُ','قَدِيمَةٌ','الْقَدِيمِ'], ans:0, pts:2, note:'الدُّكَّانُ is mannelijk en bepaald: als نعت wordt het الْقَدِيمُ ("die oude winkel"), als خبر wordt het قَدِيمٌ ("die winkel is oud").' }
+        ]
+      },
+      {
+        num: 6,
+        title: 'Deel 6: De bezitsconstructie (الْإِضَافَةُ)',
+        pts: 10,
+        desc: 'Vraag 9 (10 pt): Verbind de woorden tot een correcte Idāfah-constructie (met volledige tashkīl) en geef de Nederlandse vertaling. Regel: muḍāf = géén الـ en géén tanwīn; muḍāf ilayhi = majrūr (kasrah).',
+        questions: [
+          { id:'o9_1', q:'Vraag 9.1 (2 pt): قَمِيصٌ + الْوَلَدُ →', ar:'قَمِيصٌ + الْوَلَدُ', opts:['قَمِيصُ الْوَلَدِ — Het hemd van de jongen','الْقَمِيصُ الْوَلَدِ — Het hemd van de jongen','قَمِيصٌ الْوَلَدِ — Het hemd van de jongen','قَمِيصُ الْوَلَدُ — Het hemd van de jongen'], ans:0, pts:2, note:'قَمِيصُ (muḍāf: ḍammah zonder tanwīn/الـ) + الْوَلَدِ (muḍāf ilayhi: kasrah) = Het hemd van de jongen.' },
+          { id:'o9_2', q:'Vraag 9.2 (2 pt): بَابٌ + الدُّكَّانُ →', ar:'بَابٌ + الدُّكَّانُ', opts:['بَابُ الدُّكَّانِ — De deur van de winkel','الْبَابُ الدُّكَّانِ — De deur van de winkel','بَابُ الدُّكَّانُ — De deur van de winkel','بَابٌ الدُّكَّانِ — De deur van de winkel'], ans:0, pts:2, note:'بَابُ الدُّكَّانِ = De deur van de winkel.' },
+          { id:'o9_3', q:'Vraag 9.3 (2 pt): مَكْتَبٌ + الْإِمَامُ →', ar:'مَكْتَبٌ + الْإِمَامُ', opts:['مَكْتَبُ الْإِمَامِ — Het bureau van de imam','الْمَكْتَبُ الْإِمَامِ — Het bureau van de imam','مَكْتَبُ الْإِمَامُ — Het bureau van de imam','مَكْتَبٌ الْإِمَامِ — Het bureau van de imam'], ans:0, pts:2, note:'مَكْتَبُ الْإِمَامِ = Het bureau van de imam.' },
+          { id:'o9_4', q:'Vraag 9.4 (2 pt): حَقِيبَةٌ + الطَّالِبَةُ + الْكَبِيرَةُ →', ar:'حَقِيبَةٌ + الطَّالِبَةُ + الْكَبِيرَةُ', opts:['حَقِيبَةُ الطَّالِبَةِ الْكَبِيرَةِ — De tas van de grote studente','حَقِيبَةُ الطَّالِبَةِ الْكَبِيرَةُ — De tas van de grote studente','الْحَقِيبَةُ الطَّالِبَةِ الْكَبِيرَةِ — De tas van de grote studente','حَقِيبَةٌ الطَّالِبَةِ الْكَبِيرَةِ — De tas van de grote studente'], ans:0, pts:2, note:'حَقِيبَةُ (muḍāf, ḍammah) + الطَّالِبَةِ (muḍāf ilayhi, kasrah) + الْكَبِيرَةِ (naʿt bij الطَّالِبَةِ → volgt in kasrah!) = De tas van de grote studente.' },
+          { id:'o9_5', q:'Vraag 9.5 (2 pt): مَطْبَخٌ + الْبَيْتُ →', ar:'مَطْبَخٌ + الْبَيْتُ', opts:['مَطْبَخُ الْبَيْتِ — De keuken van het huis','الْمَطْبَخُ الْبَيْتِ — De keuken van het huis','مَطْبَخُ الْبَيْتُ — De keuken van het huis','مَطْبَخٌ الْبَيْتِ — De keuken van het huis'], ans:0, pts:2, note:'مَطْبَخُ الْبَيْتِ = De keuken van het huis.' }
+        ]
+      },
+      {
+        num: 7,
+        title: 'Deel 7: Grammaticale analyse (الْإِعْرَابُ)',
+        pts: 15,
+        desc: 'Vraag 10 (15 pt): Ontleed elk onderstreept woord in de 4 zinnen: bepaal (1) de grammaticale functie, (2) de grammaticale status (مَرْفُوع / مَجْرُور) en (3) het klinkerteken (الْحَرَكَة).',
+        questions: [
+          { id:'o10_1', q:'Zin 1 (3 pt): الْإِمَامُ فِي الْمَسْجِدِ — Wat is de volledige Iʿrāb van deze 3 woorden?', ar:'الْإِمَامُ فِي الْمَسْجِدِ', opts:[
+            'الْإِمَامُ: مُبْتَدَأ (مَرْفُوع · ضَمَّة) · فِي: حَرْفُ جَرٍّ (—) · الْمَسْجِدِ: اِسْمٌ مَجْرُورٌ (مَجْرُور · كَسْرَة)',
+            'الْإِمَامُ: خَبَر (مَرْفُوع · ضَمَّة) · فِي: حَرْفُ جَرٍّ · الْمَسْجِدِ: مُضَاف إِلَيْهِ (مَجْرُور · كَسْرَة)',
+            'الْإِمَامُ: مُبْتَدَأ (مَجْرُور · كَسْرَة) · فِي: حَرْفُ جَرٍّ · الْمَسْجِدِ: خَبَر (مَرْفُوع · ضَمَّة)',
+            'الْإِمَامُ: نَعْت (مَرْفُوع · ضَمَّة) · فِي: حَرْفُ جَرٍّ · الْمَسْجِدِ: اِسْمٌ مَجْرُورٌ (مَجْرُور · كَسْرَة)'
+          ], ans:0, pts:3, note:'الْإِمَامُ begint de zin (مبتدأ مرفوع بالضمة), فِي is een voorzetsel (حرف جر), en الْمَسْجِدِ staat na فِي (اسم مجرور بالكسرة).' },
+          { id:'o10_2', q:'Zin 2 (4 pt): حَقِيبَةُ الطَّالِبِ عَلَى السَّرِيرِ — Wat is de volledige Iʿrāb van deze 4 woorden?', ar:'حَقِيبَةُ الطَّالِبِ عَلَى السَّرِيرِ', opts:[
+            'حَقِيبَةُ: مُبْتَدَأ وَهُوَ مُضَاف (مَرْفُوع · ضَمَّة) · الطَّالِبِ: مُضَاف إِلَيْهِ (مَجْرُور · كَسْرَة) · عَلَى: حَرْفُ جَرٍّ (—) · السَّرِيرِ: اِسْمٌ مَجْرُورٌ (مَجْرُور · كَسْرَة)',
+            'حَقِيبَةُ: مُبْتَدَأ (مَرْفُوع · ضَمَّة) · الطَّالِبِ: نَعْت (مَجْرُور · كَسْرَة) · عَلَى: حَرْفُ جَرٍّ · السَّرِيرِ: اِسْمٌ مَجْرُورٌ',
+            'حَقِيبَةُ: خَبَر (مَرْفُوع · ضَمَّة) · الطَّالِبِ: مُبْتَدَأ (مَجْرُور · كَسْرَة) · عَلَى: حَرْفُ جَرٍّ · السَّرِيرِ: مُضَاف إِلَيْهِ',
+            'حَقِيبَةُ: مُضَاف إِلَيْهِ (مَرْفُوع · ضَمَّة) · الطَّالِبِ: مُضَاف (مَجْرُور · كَسْرَة) · عَلَى: حَرْفُ جَرٍّ · السَّرِيرِ: اِسْمٌ مَجْرُورٌ'
+          ], ans:0, pts:4, note:'حَقِيبَةُ is onderwerp én muḍāf (daarom enkele ḍammah zonder الـ), الطَّالِبِ is bezitter (مضاف إليه مجرور بالكسرة), عَلَى = حرف جر, السَّرِيرِ = اسم مجرور بالكسرة.' },
+          { id:'o10_3', q:'Zin 3 (4 pt): قَمِيصُ الْوَلَدِ الصَّغِيرِ فِي الْغُرْفَةِ — Wat is de volledige Iʿrāb van قَمِيصُ، الْوَلَدِ، الصَّغِيرِ en الْغُرْفَةِ?', ar:'قَمِيصُ الْوَلَدِ الصَّغِيرِ فِي الْغُرْفَةِ', opts:[
+            'قَمِيصُ: مُبْتَدَأ / مُضَاف (مَرْفُوع · ضَمَّة) · الْوَلَدِ: مُضَاف إِلَيْهِ (مَجْرُور · كَسْرَة) · الصَّغِيرِ: نَعْت لِلْوَلَدِ (مَجْرُور · كَسْرَة) · الْغُرْفَةِ: اِسْمٌ مَجْرُورٌ (مَجْرُور · كَسْرَة)',
+            'قَمِيصُ: مُبْتَدَأ (مَرْفُوع · ضَمَّة) · الْوَلَدِ: مُضَاف إِلَيْهِ (مَجْرُور · كَسْرَة) · الصَّغِيرِ: خَبَر (مَرْفُوع · ضَمَّة) · الْغُرْفَةِ: اِسْمٌ مَجْرُورٌ',
+            'قَمِيصُ: مُبْتَدَأ (مَرْفُوع · ضَمَّة) · الْوَلَدِ: نَعْت (مَجْرُور · كَسْرَة) · الصَّغِيرِ: مُضَاف إِلَيْهِ (مَجْرُور · كَسْرَة) · الْغُرْفَةِ: اِسْمٌ مَجْرُورٌ',
+            'قَمِيصُ: خَبَر · الْوَلَدِ: مُبْتَدَأ · الصَّغِيرِ: نَعْت · الْغُرْفَةِ: مُضَاف إِلَيْهِ'
+          ], ans:0, pts:4, note:'الصَّغِيرِ beschrijft الْوَلَدِ (de kleine jongen). Omdat الْوَلَدِ muḍāf ilayhi (majrūr met kasrah) is, is الصَّغِيرِ een نَعْت مَجْرُور met kasrah!' },
+          { id:'o10_4', q:'Zin 4 (4 pt): الْفَلَّاحُ الْغَنِيُّ مِنَ السُّوقِ — Wat is de volledige Iʿrāb van deze 4 woorden?', ar:'الْفَلَّاحُ الْغَنِيُّ مِنَ السُّوقِ', opts:[
+            'الْفَلَّاحُ: مُبْتَدَأ (مَرْفُوع · ضَمَّة) · الْغَنِيُّ: نَعْت (مَرْفُوع · ضَمَّة) · مِنَ: حَرْفُ جَرٍّ (—) · السُّوقِ: اِسْمٌ مَجْرُورٌ (مَجْرُور · كَسْرَة)',
+            'الْفَلَّاحُ: مُبْتَدَأ (مَرْفُوع · ضَمَّة) · الْغَنِيُّ: خَبَر (مَرْفُوع · ضَمَّة) · مِنَ: حَرْفُ جَرٍّ · السُّوقِ: مُضَاف إِلَيْهِ (مَجْرُور · كَسْرَة)',
+            'الْفَلَّاحُ: مُضَاف (مَرْفُوع · ضَمَّة) · الْغَنِيُّ: مُضَاف إِلَيْهِ (مَجْرُور · كَسْرَة) · مِنَ: حَرْفُ جَرٍّ · السُّوقِ: اِسْمٌ مَجْرُورٌ',
+            'الْفَلَّاحُ: مُبْتَدَأ (مَرْفُوع · ضَمَّة) · الْغَنِيُّ: نَعْت (مَجْرُور · كَسْرَة) · مِنَ: حَرْفُ جَرٍّ · السُّوقِ: اِسْمٌ مَجْرُورٌ'
+          ], ans:0, pts:4, note:'الْغَنِيُّ heeft الـ net als الْفَلَّاحُ en is dus een bijvoeglijk naamwoord (نعت مرفوع بالضمة) bij de boer: "De rijke boer komt van de markt".' }
+        ]
+      }
+    ]
+  },
+
+  practice: {
+    id: 'practice',
+    title: 'Oefenexamen · Les 1 t/m 7',
+    subtitle: 'Al-Manarah · Klas van Ustādh Abū Muḥammad · Volledig Oefenexamen + Antwoordmodel (100 punten)',
+    parts: [
+      {
+        num: 1,
+        title: 'Deel 1: Woordenschat (الْمُفْرَدَاتُ)',
+        pts: 30,
+        desc: 'Vraag 1: Dictee (10 pt) · Vraag 2: Vertaal van het Arabisch naar het Nederlands (10 pt) · Vraag 3: Vertaal van het Nederlands naar het Arabisch met tashkīl (10 pt).',
+        questions: [
+          { id:'p1_1', q:'Vraag 1.1 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'كِتَابٌ', opts:['كِتَابٌ','كَتَابٌ','كُتُبٌ','الْكِتَابُ'], ans:0, pts:1, note:'كِتَابٌ (kitābun) = een boek.' },
+          { id:'p1_2', q:'Vraag 1.2 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'قَلَمٌ', opts:['قَلَمٌ','قَمَرٌ','قَلْبٌ','الْقَلَمُ'], ans:0, pts:1, note:'قَلَمٌ (qalamun) = een pen.' },
+          { id:'p1_3', q:'Vraag 1.3 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'بَيْتٌ', opts:['بِنْتٌ','بَيْتٌ','بَابٌ','الْبَيْتُ'], ans:1, pts:1, note:'بَيْتٌ (baytun) = een huis.' },
+          { id:'p1_4', q:'Vraag 1.4 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'سَيَّارَةٌ', opts:['سَاعَةٌ','سَيَّارَةٌ','سَبُّورَةٌ','سَرِيرٌ'], ans:1, pts:1, note:'سَيَّارَةٌ (sayyāratun) = een auto (met shaddah op de ي).' },
+          { id:'p1_5', q:'Vraag 1.5 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'طَالِبَةٌ', opts:['طَالِبٌ','طَبِيبَةٌ','طَالِبَةٌ','طَوِيلَةٌ'], ans:2, pts:1, note:'طَالِبَةٌ (ṭālibatun) = een studente (v.).' },
+          { id:'p1_6', q:'Vraag 1.6 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'الْحَدِيقَةُ', opts:['حَدِيقَةٌ','الْحَدِيقَةُ','الْحَقِيبَةُ','الْغُرْفَةُ'], ans:1, pts:1, note:'الْحَدِيقَةُ (al-ḥadīqatu) = de tuin.' },
+          { id:'p1_7', q:'Vraag 1.7 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'الْمُدِيرُ', opts:['الْمُدَرِّسُ','الْمُدِيرُ','مُدِيرٌ','الْمُهَنْدِسُ'], ans:1, pts:1, note:'الْمُدِيرُ (al-mudīru) = de directeur.' },
+          { id:'p1_8', q:'Vraag 1.8 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'مُجْتَهِدٌ', opts:['مُجْتَهِدٌ','مُغْلَقٌ','مَفْتُوحٌ','مَكْسُورٌ'], ans:0, pts:1, note:'مُجْتَهِدٌ (mujtahidun) = ijverig / hardwerkend.' },
+          { id:'p1_9', q:'Vraag 1.9 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'ثَقِيلٌ', opts:['خَفِيفٌ','ثَقِيلٌ','جَمِيلٌ','قَدِيمٌ'], ans:1, pts:1, note:'ثَقِيلٌ (thaqīlun) = zwaar.' },
+          { id:'p1_10', q:'Vraag 1.10 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'فَقِيرٌ', opts:['غَنِيٌّ','فَقِيرٌ','قَصِيرٌ','كَبِيرٌ'], ans:1, pts:1, note:'فَقِيرٌ (faqīrun) = arm.' },
+
+          { id:'p2_1', q:'Vraag 2.1 (1 pt): Vertaal naar het Nederlands:', ar:'بَيْتٌ', opts:['huis','deur','kamer','moskee'], ans:0, pts:1, note:'بَيْتٌ = een huis.' },
+          { id:'p2_2', q:'Vraag 2.2 (1 pt): Vertaal naar het Nederlands:', ar:'مَسْجِدٌ', opts:['school','moskee','markt','winkel'], ans:1, pts:1, note:'مَسْجِدٌ = een moskee.' },
+          { id:'p2_3', q:'Vraag 2.3 (1 pt): Vertaal naar het Nederlands:', ar:'جَمِيلٌ', opts:['nieuw','oud','mooi','groot'], ans:2, pts:1, note:'جَمِيلٌ = mooi.' },
+          { id:'p2_4', q:'Vraag 2.4 (1 pt): Vertaal naar het Nederlands:', ar:'مِفْتَاحٌ', opts:['sleutel','lepel','strijkijzer','horloge'], ans:0, pts:1, note:'مِفْتَاحٌ = een sleutel.' },
+          { id:'p2_5', q:'Vraag 2.5 (1 pt): Vertaal naar het Nederlands:', ar:'الْحَدِيقَةُ', opts:['de tas','de kamer','de tuin','de keuken'], ans:2, pts:1, note:'الْحَدِيقَةُ = de tuin.' },
+          { id:'p2_6', q:'Vraag 2.6 (1 pt): Vertaal naar het Nederlands:', ar:'طَبِيبٌ', opts:['student','dokter / arts','leraar','ingenieur'], ans:1, pts:1, note:'طَبِيبٌ = een dokter / arts.' },
+          { id:'p2_7', q:'Vraag 2.7 (1 pt): Vertaal naar het Nederlands:', ar:'الْمُهَنْدِسُ', opts:['de directeur','de handelaar','de ingenieur','de verpleegster'], ans:2, pts:1, note:'الْمُهَنْدِسُ = de ingenieur.' },
+          { id:'p2_8', q:'Vraag 2.8 (1 pt): Vertaal naar het Nederlands:', ar:'فَقِيرٌ', opts:['rijk','arm','zwak','sterk'], ans:1, pts:1, note:'فَقِيرٌ = arm.' },
+          { id:'p2_9', q:'Vraag 2.9 (1 pt): Vertaal naar het Nederlands:', ar:'قَلَمٌ', opts:['boek','pen','schrift','bureau'], ans:1, pts:1, note:'قَلَمٌ = een pen.' },
+          { id:'p2_10', q:'Vraag 2.10 (1 pt): Vertaal naar het Nederlands:', ar:'ثَقِيلٌ', opts:['licht','zwaar','schoon','vuil'], ans:1, pts:1, note:'ثَقِيلٌ = zwaar.' },
+
+          { id:'p3_1', q:'Vraag 3.1 (1 pt): Vertaal naar het Arabisch (met tashkīl): "deur"', opts:['بَابٌ','بَيْتٌ','نَافِذَةٌ','الْبَابُ'], ans:0, pts:1, note:'deur = بَابٌ.' },
+          { id:'p3_2', q:'Vraag 3.2 (1 pt): Vertaal naar het Arabisch (met tashkīl): "sleutel"', opts:['مِفْتَاحٌ','مِنْدِيلٌ','مِكْوَاةٌ','قَلَمٌ'], ans:0, pts:1, note:'sleutel = مِفْتَاحٌ.' },
+          { id:'p3_3', q:'Vraag 3.3 (1 pt): Vertaal naar het Arabisch (met tashkīl): "leraar"', opts:['مُدَرِّسٌ (of أُسْتَاذٌ)','طَالِبٌ','مُدِيرٌ','مُهَنْدِسٌ'], ans:0, pts:1, note:'leraar = مُدَرِّسٌ / أُسْتَاذٌ.' },
+          { id:'p3_4', q:'Vraag 3.4 (1 pt): Vertaal naar het Arabisch (met tashkīl): "student (m.)"', opts:['طَالِبٌ','طَالِبَةٌ','طَبِيبٌ','وَلَدٌ'], ans:0, pts:1, note:'student (m.) = طَالِبٌ.' },
+          { id:'p3_5', q:'Vraag 3.5 (1 pt): Vertaal naar het Arabisch (met tashkīl): "groot"', opts:['كَبِيرٌ','صَغِيرٌ','طَوِيلٌ','كَثِيرٌ'], ans:0, pts:1, note:'groot = كَبِيرٌ.' },
+          { id:'p3_6', q:'Vraag 3.6 (1 pt): Vertaal naar het Arabisch (met tashkīl): "klein"', opts:['صَغِيرٌ','قَصِيرٌ','قَلِيلٌ','خَفِيفٌ'], ans:0, pts:1, note:'klein = صَغِيرٌ.' },
+          { id:'p3_7', q:'Vraag 3.7 (1 pt): Vertaal naar het Arabisch (met tashkīl): "de auto"', opts:['السَّيَّارَةُ','سَيَّارَةٌ','الدَّرَّاجَةُ','الطَّائِرَةُ'], ans:0, pts:1, note:'"de auto" = السَّيَّارَةُ (zonletter س + shaddah op س én ي).' },
+          { id:'p3_8', q:'Vraag 3.8 (1 pt): Vertaal naar het Arabisch (met tashkīl): "de markt"', opts:['السُّوقُ','سُوقٌ','الدُّكَّانُ','الْمَسْجِدُ'], ans:0, pts:1, note:'"de markt" = السُّوقُ (zonletter س + shaddah).' },
+          { id:'p3_9', q:'Vraag 3.9 (1 pt): Vertaal naar het Arabisch (met tashkīl): "snel"', opts:['سَرِيعٌ','بَعِيدٌ','قَرِيبٌ','جَدِيدٌ'], ans:0, pts:1, note:'snel = سَرِيعٌ.' },
+          { id:'p3_10', q:'Vraag 3.10 (1 pt): Vertaal naar het Arabisch (met tashkīl): "het ei"', opts:['الْبَيْضَةُ','بَيْضَةٌ','الدَّجَاجَةُ','الْبَقَرَةُ'], ans:0, pts:1, note:'"het ei" = الْبَيْضَةُ.' }
+        ]
+      },
+      {
+        num: 2,
+        title: 'Deel 2: Aanwijzende voornaamwoorden (هَذَا / هَذِهِ)',
+        pts: 10,
+        desc: 'Vraag 4 (10 pt): Vul هَذَا of هَذِهِ in en maak een volledige zin. Regel: هَذَا voor mannelijk enkelvoud; هَذِهِ voor vrouwelijk enkelvoud (vaak herkenbaar aan ـة of vrouwelijke personen).',
+        questions: [
+          { id:'p4_1', q:'Vraag 4.1 (2 pt): ________ كِتَابٌ', ar:'___ كِتَابٌ', opts:['هَذَا كِتَابٌ — Dit is een boek.','هَذِهِ كِتَابٌ — Dit is een boek.','تِلْكَ كِتَابٌ — Dat is een boek.','هَذَا الْكِتَابُ — Dit is een boek.'], ans:0, pts:2, note:'كِتَابٌ is mannelijk → هَذَا كِتَابٌ (Dit is een boek).' },
+          { id:'p4_2', q:'Vraag 4.2 (2 pt): ________ سَيَّارَةٌ', ar:'___ سَيَّارَةٌ', opts:['هَذِهِ سَيَّارَةٌ — Dit is een auto.','هَذَا سَيَّارَةٌ — Dit is een auto.','ذَلِكَ سَيَّارَةٌ — Dat is een auto.','هَذِهِ السَّيَّارَةُ — Dit is een auto.'], ans:0, pts:2, note:'سَيَّارَةٌ eindigt op ة (vrouwelijk) → هَذِهِ سَيَّارَةٌ (Dit is een auto).' },
+          { id:'p4_3', q:'Vraag 4.3 (2 pt): ________ بِنْتٌ', ar:'___ بِنْتٌ', opts:['هَذِهِ بِنْتٌ — Dit is een meisje.','هَذَا بِنْتٌ — Dit is een meisje.','ذَلِكَ بِنْتٌ — Dat is een meisje.','هَذِهِ الْبِنْتُ — Dit is een meisje.'], ans:0, pts:2, note:'بِنْتٌ (meisje/dochter) verwijst naar een vrouwelijk persoon en is dus vrouwelijk van betekenis (مؤنث معنوي), ook al eindigt het op een gewone ت → هَذِهِ بِنْتٌ.' },
+          { id:'p4_4', q:'Vraag 4.4 (2 pt): ________ طَالِبَةٌ', ar:'___ طَالِبَةٌ', opts:['هَذِهِ طَالِبَةٌ — Dit is een studente.','هَذَا طَالِبَةٌ — Dit is een studente.','ذَلِكَ طَالِبَةٌ — Dat is een studente.','هَذَا طَالِبٌ — Dit is een studente.'], ans:0, pts:2, note:'طَالِبَةٌ eindigt op ة (vrouwelijk) → هَذِهِ طَالِبَةٌ (Dit is een studente).' },
+          { id:'p4_5', q:'Vraag 4.5 (2 pt): ________ مَسْجِدٌ', ar:'___ مَسْجِدٌ', opts:['هَذَا مَسْجِدٌ — Dit is een moskee.','هَذِهِ مَسْجِدٌ — Dit is een moskee.','تِلْكَ مَسْجِدٌ — Dat is een moskee.','هَذَا الْمَسْجِدُ — Dit is een moskee.'], ans:0, pts:2, note:'مَسْجِدٌ is mannelijk → هَذَا مَسْجِدٌ (Dit is een moskee).' }
+        ]
+      },
+      {
+        num: 3,
+        title: 'Deel 3: Voorzetsels (أَحْرُفُ الْجَرِّ)',
+        pts: 10,
+        desc: 'Vraag 5 (10 pt): Vul het juiste voorzetsel in uit (فِي – عَلَى – مِنْ – إِلَى – مَعَ) en vertaal de zin. Elk zelfstandig naamwoord na een voorzetsel staat in de majrūr-vorm (kasrah).',
+        questions: [
+          { id:'p5_1', q:'Vraag 5.1 (2 pt): الْكِتَابُ ________ الطَّاوِلَةِ', ar:'الْكِتَابُ ___ الطَّاوِلَةِ', opts:['عَلَى — Het boek ligt op de tafel.','إِلَى — Het boek gaat naar de tafel.','مِنْ — Het boek komt uit de tafel.','مَعَ — Het boek is met de tafel.'], ans:0, pts:2, note:'الْكِتَابُ عَلَى الطَّاوِلَةِ = Het boek ligt op de tafel.' },
+          { id:'p5_2', q:'Vraag 5.2 (2 pt): الطَّالِبُ ________ الْغُرْفَةِ', ar:'الطَّالِبُ ___ الْغُرْفَةِ', opts:['فِي — De student is in de kamer.','عَلَى — De student zit op de kamer.','مَعَ — De student is met de kamer.','إِلَى — De student gaat naar de kamer.'], ans:0, pts:2, note:'الطَّالِبُ فِي الْغُرْفَةِ = De student is in de kamer.' },
+          { id:'p5_3', q:'Vraag 5.3 (2 pt): ذَهَبَ سُفْيَانُ ________ الْمَسْجِدِ', ar:'ذَهَبَ سُفْيَانُ ___ الْمَسْجِدِ', opts:['إِلَى — Sufyān ging naar de moskee.','فِي — Sufyān ging in de moskee.','عَلَى — Sufyān ging op de moskee.','مَعَ — Sufyān ging met de moskee.'], ans:0, pts:2, note:'Bij het werkwoord ذَهَبَ (hij ging) hoort إِلَى (naar): ذَهَبَ سُفْيَانُ إِلَى الْمَسْجِدِ.' },
+          { id:'p5_4', q:'Vraag 5.4 (2 pt): هُوَ ________ مِصْرَ', ar:'هُوَ ___ مِصْرَ', opts:['مِنْ — Hij komt uit Egypte.','عَلَى — Hij is op Egypte.','مَعَ — Hij is met Egypte.','إِلَى — Hij komt uit Egypte.'], ans:0, pts:2, note:'هُوَ مِنْ مِصْرَ = Hij komt uit Egypte (مِصْرَ krijgt fatḥah i.p.v. kasrah omdat het een diptoot is).' },
+          { id:'p5_5', q:'Vraag 5.5 (2 pt): الْقَلَمُ ________ الْكِتَابِ', ar:'الْقَلَمُ ___ الْكِتَابِ', opts:['مَعَ — De pen is bij/met het boek.','إِلَى — De pen gaat naar het boek.','مِنْ — De pen komt uit het boek.','فِي — De pen is bij/met het boek.'], ans:0, pts:2, note:'الْقَلَمُ مَعَ الْكِتَابِ = De pen ligt bij/met het boek.' }
+        ]
+      },
+      {
+        num: 4,
+        title: 'Deel 4: Lidwoord (أَلْ التَّعْرِيفِ) & Zonne-/Maanletters',
+        pts: 15,
+        desc: 'Vraag 6 (10 pt): Geef aan of de eerste letter een zonletter of maanletter is en schrijf het woord met الـ en tashkīl · Vraag 7 (5 pt): Leg het verschil uit en geef 5 voorbeelden van elk.',
+        questions: [
+          { id:'p6_1', q:'Vraag 6.1 (2 pt): شَمْسٌ — Zonletter of Maanletter? En hoe schrijf je het met الـ?', ar:'شَمْسٌ', opts:['Zonletter (ش) → الشَّمْسُ','Maanletter (ش) → الْشَمْسُ','Zonletter (ش) → الشَّمْسٌ','Maanletter (ش) → الشَمْسُ'], ans:0, pts:2, note:'ش is het voorbeeldwoord van de zonneletters (حروف شمسية) → الشَّمْسُ.' },
+          { id:'p6_2', q:'Vraag 6.2 (2 pt): قَمَرٌ — Zonletter of Maanletter? En hoe schrijf je het met الـ?', ar:'قَمَرٌ', opts:['Maanletter (ق) → الْقَمَرُ','Zonletter (ق) → القَّمَرُ','Maanletter (ق) → الْقَمَرٌ','Zonletter (ق) → الْقَمَرُ'], ans:0, pts:2, note:'ق is het voorbeeldwoord van de maanletters (حروف قمرية) → الْقَمَرُ.' },
+          { id:'p6_3', q:'Vraag 6.3 (2 pt): طَالِبٌ — Zonletter of Maanletter? En hoe schrijf je het met الـ?', ar:'طَالِبٌ', opts:['Zonletter (ط) → الطَّالِبُ','Maanletter (ط) → الْطَالِبُ','Zonletter (ط) → الطَّالِبٌ','Maanletter (ط) → الطَالِبُ'], ans:0, pts:2, note:'ط is een zonletter → الطَّالِبُ (shaddah op de ط, één ḍammah op het einde).' },
+          { id:'p6_4', q:'Vraag 6.4 (2 pt): نَجْمٌ — Zonletter of Maanletter? En hoe schrijf je het met الـ?', ar:'نَجْمٌ', opts:['Zonletter (ن) → النَّجْمُ','Maanletter (ن) → الْنَجْمُ','Zonletter (ن) → النَّجْمٌ','Maanletter (ن) → النَجْمُ'], ans:0, pts:2, note:'ن is een zonletter → النَّجْمُ.' },
+          { id:'p6_5', q:'Vraag 6.5 (2 pt): دِيكٌ — Zonletter of Maanletter? En hoe schrijf je het met الـ?', ar:'دِيكٌ', opts:['Zonletter (د) → الدِّيكُ','Maanletter (د) → الْدِيكُ','Zonletter (د) → الدِّيكٌ','Maanletter (د) → الدِيكُ'], ans:0, pts:2, note:'د is een zonletter → الدِّيكُ (de haan).' },
+          { id:'p7_1', q:'Vraag 7 (5 pt): Welke samenvatting bevat de volledige uitleg + 5 zonneletter- en 5 maanlettervoorbeelden uit het antwoordmodel?', opts:[
+            'Zonneletters (حروف شمسية): de ل van الـ smelt samen met de eerste letter (niet uitgesproken) en de letter krijgt een shaddah (bv. الشَّمْسُ، الطَّالِبُ، النَّجْمُ، الدِّيكُ، السَّيَّارَةُ). Maanletters (حروف قمرية): de ل van الـ wordt wél uitgesproken met sukūn (bv. الْقَمَرُ، الْكِتَابُ، الْبَيْتُ، الْمَسْجِدُ، الْقَلَمُ).',
+            'Zonneletters krijgen sukūn op de ل en maanletters krijgen een shaddah op de eerste letter.',
+            'Bij zowel zonneletters als maanletters blijft de tanwīn aan het einde van het woord staan.',
+            'Maanletters komen alleen voor aan het begin van een zin.'
+          ], ans:0, pts:5, note:'Exact conform het antwoordmodel van het oefenexamen!' }
+        ]
+      },
+      {
+        num: 5,
+        title: 'Deel 5: Het bijvoeglijk naamwoord (النَّعْتُ)',
+        pts: 10,
+        desc: 'Vraag 8 (10 pt): Vul het bijvoeglijk naamwoord tussen haakjes in de juiste vorm in. Regel: het bijvoeglijk naamwoord volgt het zelfstandig naamwoord in geslacht, bepaaldheid (الـ of tanwīn) en naamval.',
+        questions: [
+          { id:'p8_1', q:'Vraag 8.1 (2 pt): هَذَا بَيْتٌ ________ (كَبِيرٌ)', ar:'هَذَا بَيْتٌ ___ (كَبِيرٌ)', opts:['كَبِيرٌ','الْكَبِيرُ','كَبِيرَةٌ','الْكَبِيرَةُ'], ans:0, pts:2, note:'بَيْتٌ is mannelijk en onbepaald → هَذَا بَيْتٌ كَبِيرٌ (Dit is een groot huis).' },
+          { id:'p8_2', q:'Vraag 8.2 (2 pt): هَذِهِ غُرْفَةٌ ________ (جَمِيلٌ)', ar:'هَذِهِ غُرْفَةٌ ___ (جَمِيلٌ)', opts:['جَمِيلَةٌ','الْجَمِيلَةُ','جَمِيلٌ','الْجَمِيلُ'], ans:0, pts:2, note:'غُرْفَةٌ is vrouwelijk en onbepaald → هَذِهِ غُرْفَةٌ جَمِيلَةٌ (Dit is een mooie kamer).' },
+          { id:'p8_3', q:'Vraag 8.3 (2 pt): الْكِتَابُ ________ (جَدِيدٌ)', ar:'الْكِتَابُ ___ (جَدِيدٌ)', opts:['الْجَدِيدُ','جَدِيدٌ','الْجَدِيدَةُ','الْجَدِيدِ'], ans:0, pts:2, note:'الْكِتَابُ is mannelijk en bepaald (الـ) → الْكِتَابُ الْجَدِيدُ (Het nieuwe boek).' },
+          { id:'p8_4', q:'Vraag 8.4 (2 pt): الطَّالِبَةُ ________ (مُجْتَهِدٌ)', ar:'الطَّالِبَةُ ___ (مُجْتَهِدٌ)', opts:['الْمُجْتَهِدَةُ','مُجْتَهِدَةٌ','الْمُجْتَهِدُ','مُجْتَهِدٌ'], ans:0, pts:2, note:'الطَّالِبَةُ is vrouwelijk en bepaald (الـ) → الطَّالِبَةُ الْمُجْتَهِدَةُ (De ijverige studente).' },
+          { id:'p8_5', q:'Vraag 8.5 (2 pt): ذَلِكَ رَجُلٌ ________ (غَنِيٌّ)', ar:'ذَلِكَ رَجُلٌ ___ (غَنِيٌّ)', opts:['غَنِيٌّ','الْغَنِيُّ','غَنِيَّةٌ','الْغَنِيَّةُ'], ans:0, pts:2, note:'رَجُلٌ is mannelijk en onbepaald → ذَلِكَ رَجُلٌ غَنِيٌّ (Dat is een rijke man).' }
+        ]
+      },
+      {
+        num: 6,
+        title: 'Deel 6: De bezitsconstructie (الْإِضَافَةُ)',
+        pts: 10,
+        desc: 'Vraag 9 (10 pt): Verbind de twee woorden tot een correcte Idāfah en vertaal naar het Nederlands. Eerste woord (مُضَاف): géén الـ en géén tanwīn. Tweede woord (مُضَاف إِلَيْهِ): majrūr (kasrah).',
+        questions: [
+          { id:'p9_1', q:'Vraag 9.1 (2 pt): الْكِتَابُ + الطَّالِبُ →', ar:'الْكِتَابُ + الطَّالِبُ', opts:['كِتَابُ الطَّالِبِ — Het boek van de student','الْكِتَابُ الطَّالِبِ — Het boek van de student','كِتَابٌ الطَّالِبِ — Het boek van de student','كِتَابُ الطَّالِبُ — Het boek van de student'], ans:0, pts:2, note:'الـ vervalt bij het eerste woord (كِتَابُ) en het tweede woord krijgt kasrah (الطَّالِبِ) → كِتَابُ الطَّالِبِ.' },
+          { id:'p9_2', q:'Vraag 9.2 (2 pt): الْبَابُ + الْبَيْتُ →', ar:'الْبَابُ + الْبَيْتُ', opts:['بَابُ الْبَيْتِ — De deur van het huis','الْبَابُ الْبَيْتِ — De deur van het huis','بَابٌ الْبَيْتِ — De deur van het huis','بَابُ الْبَيْتُ — De deur van het huis'], ans:0, pts:2, note:'بَابُ الْبَيْتِ = De deur van het huis.' },
+          { id:'p9_3', q:'Vraag 9.3 (2 pt): الْقَلَمُ + الْأُسْتَاذُ →', ar:'الْقَلَمُ + الْأُسْتَاذُ', opts:['قَلَمُ الْأُسْتَاذِ — De pen van de leraar','الْقَلَمُ الْأُسْتَاذِ — De pen van de leraar','قَلَمٌ الْأُسْتَاذِ — De pen van de leraar','قَلَمُ الْأُسْتَاذُ — De pen van de leraar'], ans:0, pts:2, note:'قَلَمُ الْأُسْتَاذِ = De pen van de leraar.' },
+          { id:'p9_4', q:'Vraag 9.4 (2 pt): الْمَكْتَبُ + الْمُدِيرُ →', ar:'الْمَكْتَبُ + الْمُدِيرُ', opts:['مَكْتَبُ الْمُدِيرِ — Het bureau van de directeur','الْمَكْتَبُ الْمُدِيرِ — Het bureau van de directeur','مَكْتَبٌ الْمُدِيرِ — Het bureau van de directeur','مَكْتَبُ الْمُدِيرُ — Het bureau van de directeur'], ans:0, pts:2, note:'مَكْتَبُ الْمُدِيرِ = Het bureau van de directeur.' },
+          { id:'p9_5', q:'Vraag 9.5 (2 pt): السَّاعَةُ + التَّاجِرُ →', ar:'السَّاعَةُ + التَّاجِرُ', opts:['سَاعَةُ التَّاجِرِ — Het horloge van de handelaar','السَّاعَةُ التَّاجِرِ — Het horloge van de handelaar','سَاعَةٌ التَّاجِرِ — Het horloge van de handelaar','سَاعَةُ التَّاجِرُ — Het horloge van de handelaar'], ans:0, pts:2, note:'سَاعَةُ التَّاجِرِ = Het horloge van de handelaar.' }
+        ]
+      },
+      {
+        num: 7,
+        title: 'Deel 7: Grammaticale analyse (الْإِعْرَابُ)',
+        pts: 15,
+        desc: 'Vraag 10 (15 pt): Ontleed de onderstreepte woorden in de 4 zinnen uit het oefenexamen (Functie, Status en Harakah).',
+        questions: [
+          { id:'p10_1', q:'Zin 1 (3 pt): كِتَابُ الطَّالِبِ جَدِيدٌ — Wat is de volledige Iʿrāb van deze 3 woorden?', ar:'كِتَابُ الطَّالِبِ جَدِيدٌ', opts:[
+            'كِتَابُ: مُبْتَدَأ وَهُوَ مُضَاف (مَرْفُوع · ضَمَّة) · الطَّالِبِ: مُضَاف إِلَيْهِ (مَجْرُور · كَسْرَة) · جَدِيدٌ: خَبَر (مَرْفُوع · تَنْوِين ضَمَّة)',
+            'كِتَابُ: مُبْتَدَأ (مَرْفُوع · ضَمَّة) · الطَّالِبِ: نَعْت (مَجْرُور · كَسْرَة) · جَدِيدٌ: خَبَر (مَرْفُوع · ضَمَّة)',
+            'كِتَابُ: خَبَر · الطَّالِبِ: مُبْتَدَأ · جَدِيدٌ: نَعْت',
+            'كِتَابُ: مُضَاف إِلَيْهِ · الطَّالِبِ: مُضَاف · جَدِيدٌ: خَبَر'
+          ], ans:0, pts:3, note:'كِتَابُ is onderwerp (مبتدأ) én muḍāf, الطَّالِبِ is bezitter (مضاف إليه مجرور بالكسرة), en جَدِيدٌ is het gezegde (خبر مرفوع بتنوين الضم): "Het boek van de student is nieuw."' },
+          { id:'p10_2', q:'Zin 2 (4 pt): قَلَمُ الْأُسْتَاذِ عَلَى الطَّاوِلَةِ — Wat is de volledige Iʿrāb van deze 4 woorden?', ar:'قَلَمُ الْأُسْتَاذِ عَلَى الطَّاوِلَةِ', opts:[
+            'قَلَمُ: مُبْتَدَأ وَهُوَ مُضَاف (مَرْفُوع · ضَمَّة) · الْأُسْتَاذِ: مُضَاف إِلَيْهِ (مَجْرُور · كَسْرَة) · عَلَى: حَرْفُ جَرٍّ (—) · الطَّاوِلَةِ: اِسْمٌ مَجْرُورٌ (مَجْرُور · كَسْرَة)',
+            'قَلَمُ: مُبْتَدَأ · الْأُسْتَاذِ: نَعْت · عَلَى: حَرْفُ جَرٍّ · الطَّاوِلَةِ: مُضَاف إِلَيْهِ',
+            'قَلَمُ: خَبَر · الْأُسْتَاذِ: مُضَاف إِلَيْهِ · عَلَى: حَرْفُ جَرٍّ · الطَّاوِلَةِ: اِسْمٌ مَجْرُورٌ',
+            'قَلَمُ: مُبْتَدَأ · الْأُسْتَاذِ: خَبَر · عَلَى: حَرْفُ جَرٍّ · الطَّاوِلَةِ: اِسْمٌ مَجْرُورٌ'
+          ], ans:0, pts:4, note:'قَلَمُ = مبتدأ (مضاف) مرفوع بالضمة · الْأُسْتَاذِ = مضاف إليه مجرور بالكسرة · عَلَى = حرف جر · الطَّاوِلَةِ = اسم مجرور بالكسرة.' },
+          { id:'p10_3', q:'Zin 3 (4 pt): كِتَابُ الطَّالِبِ الْجَدِيدِ عَلَى الْمَكْتَبِ — Wat is de volledige Iʿrāb van كِتَابُ، الطَّالِبِ، الْجَدِيدِ en الْمَكْتَبِ?', ar:'كِتَابُ الطَّالِبِ الْجَدِيدِ عَلَى الْمَكْتَبِ', opts:[
+            'كِتَابُ: مُبْتَدَأ / مُضَاف (مَرْفُوع · ضَمَّة) · الطَّالِبِ: مُضَاف إِلَيْهِ (مَجْرُور · كَسْرَة) · الْجَدِيدِ: نَعْت لِلطَّالِبِ (مَجْرُور · كَسْرَة) · الْمَكْتَبِ: اِسْمٌ مَجْرُورٌ (مَجْرُور · كَسْرَة)',
+            'كِتَابُ: مُبْتَدَأ · الطَّالِبِ: مُضَاف إِلَيْهِ · الْجَدِيدِ: خَبَر (مَرْفُوع · ضَمَّة) · الْمَكْتَبِ: اِسْمٌ مَجْرُورٌ',
+            'كِتَابُ: مُبْتَدَأ · الطَّالِبِ: نَعْت · الْجَدِيدِ: مُضَاف إِلَيْهِ · الْمَكْتَبِ: اِسْمٌ مَجْرُورٌ',
+            'كِتَابُ: خَبَر · الطَّالِبِ: مُبْتَدَأ · الْجَدِيدِ: نَعْت · الْمَكْتَبِ: اِسْمٌ مَجْرُورٌ'
+          ], ans:0, pts:4, note:'الْجَدِيدِ heeft الـ en een kasrah: het is het bijvoeglijk naamwoord (نعت مجرور بالكسرة) bij الطَّالِبِ ("Het boek van de nieuwe student ligt op het bureau").' },
+          { id:'p10_4', q:'Zin 4 (4 pt): الطَّالِبُ مُجْتَهِدٌ — Wat is de volledige Iʿrāb van deze 2 woorden?', ar:'الطَّالِبُ مُجْتَهِدٌ', opts:[
+            'الطَّالِبُ: مُبْتَدَأ (مَرْفُوع · ضَمَّة) · مُجْتَهِدٌ: خَبَر (مَرْفُوع · تَنْوِين ضَمَّة)',
+            'الطَّالِبُ: مُبْتَدَأ (مَرْفُوع · ضَمَّة) · مُجْتَهِدٌ: نَعْت (مَرْفُوع · تَنْوِين ضَمَّة)',
+            'الطَّالِبُ: مُضَاف (مَرْفُوع · ضَمَّة) · مُجْتَهِدٌ: مُضَاف إِلَيْهِ (مَجْرُور · كَسْرَة)',
+            'الطَّالِبُ: خَبَر (مَرْفُوع · ضَمَّة) · مُجْتَهِدٌ: مُبْتَدَأ (مَرْفُوع · تَنْوِين ضَمَّة)'
+          ], ans:0, pts:4, note:'الطَّالِبُ is bepaald (مبتدأ مرفوع بالضمة) en مُجْتَهِدٌ is onbepaald (خبر مرفوع بتنوين الضم): "De student is ijverig."' }
+        ]
+      }
+    ]
+  }
+};
+
+const EXAM_IRAB_TABLES = {
+  official: [
+    {
+      title: 'Zin 1 (3 pt): الْإِمَامُ فِي الْمَسْجِدِ',
+      nl: 'De imam is in de moskee.',
+      rows: [
+        ['الْإِمَامُ', 'مُبْتَدَأ (onderwerp)', 'مَرْفُوع', 'ضَمَّة (ـُ)'],
+        ['فِي', 'حَرْفُ جَرٍّ (voorzetsel)', 'مَبْنِيّ (onveranderlijk)', '—'],
+        ['الْمَسْجِدِ', 'اِسْمٌ مَجْرُورٌ (na voorzetsel)', 'مَجْرُور', 'كَسْرَة (ـِ)']
+      ]
+    },
+    {
+      title: 'Zin 2 (4 pt): حَقِيبَةُ الطَّالِبِ عَلَى السَّرِيرِ',
+      nl: 'De tas van de student ligt op het bed.',
+      rows: [
+        ['حَقِيبَةُ', 'مُبْتَدَأ وَهُوَ مُضَاف (onderwerp & bezit)', 'مَرْفُوع', 'ضَمَّة (ـُ) zonder tanwīn'],
+        ['الطَّالِبِ', 'مُضَاف إِلَيْهِ (bezitter)', 'مَجْرُور', 'كَسْرَة (ـِ)'],
+        ['عَلَى', 'حَرْفُ جَرٍّ (voorzetsel)', 'مَبْنِيّ', '—'],
+        ['السَّرِيرِ', 'اِسْمٌ مَجْرُورٌ (na voorzetsel)', 'مَجْرُور', 'كَسْرَة (ـِ)']
+      ]
+    },
+    {
+      title: 'Zin 3 (4 pt): قَمِيصُ الْوَلَدِ الصَّغِيرِ فِي الْغُرْفَةِ',
+      nl: 'Het hemd van de kleine jongen is in de kamer.',
+      rows: [
+        ['قَمِيصُ', 'مُبْتَدَأ وَهُوَ مُضَاف (onderwerp & bezit)', 'مَرْفُوع', 'ضَمَّة (ـُ) zonder tanwīn'],
+        ['الْوَلَدِ', 'مُضَاف إِلَيْهِ (bezitter)', 'مَجْرُور', 'كَسْرَة (ـِ)'],
+        ['الصَّغِيرِ', 'نَعْت لِلْوَلَدِ (bijv. nw. bij الْوَلَدِ)', 'مَجْرُور', 'كَسْرَة (ـِ)'],
+        ['الْغُرْفَةِ', 'اِسْمٌ مَجْرُورٌ (na فِي)', 'مَجْرُور', 'كَسْرَة (ـِ)']
+      ]
+    },
+    {
+      title: 'Zin 4 (4 pt): الْفَلَّاحُ الْغَنِيُّ مِنَ السُّوقِ',
+      nl: 'De rijke boer komt van de markt.',
+      rows: [
+        ['الْفَلَّاحُ', 'مُبْتَدَأ (onderwerp)', 'مَرْفُوع', 'ضَمَّة (ـُ)'],
+        ['الْغَنِيُّ', 'نَعْت (bijvoeglijk naamwoord)', 'مَرْفُوع', 'ضَمَّة (ـُ)'],
+        ['مِنَ', 'حَرْفُ جَرٍّ (voorzetsel)', 'مَبْنِيّ', '—'],
+        ['السُّوقِ', 'اِسْمٌ مَجْرُورٌ (na مِنَ)', 'مَجْرُور', 'كَسْرَة (ـِ)']
+      ]
+    }
+  ],
+  practice: [
+    {
+      title: 'Zin 1 (3 pt): كِتَابُ الطَّالِبِ جَدِيدٌ',
+      nl: 'Het boek van de student is nieuw.',
+      rows: [
+        ['كِتَابُ', 'مُبْتَدَأ وَهُوَ مُضَاف (onderwerp & bezit)', 'مَرْفُوع', 'ضَمَّة (ـُ) zonder tanwīn'],
+        ['الطَّالِبِ', 'مُضَاف إِلَيْهِ (bezitter)', 'مَجْرُور', 'كَسْرَة (ـِ)'],
+        ['جَدِيدٌ', 'خَبَر (gezegde)', 'مَرْفُوع', 'تَنْوِين ضَمَّة (ـٌ)']
+      ]
+    },
+    {
+      title: 'Zin 2 (4 pt): قَلَمُ الْأُسْتَاذِ عَلَى الطَّاوِلَةِ',
+      nl: 'De pen van de leraar ligt op de tafel.',
+      rows: [
+        ['قَلَمُ', 'مُبْتَدَأ وَهُوَ مُضَاف (onderwerp & bezit)', 'مَرْفُوع', 'ضَمَّة (ـُ) zonder tanwīn'],
+        ['الْأُسْتَاذِ', 'مُضَاف إِلَيْهِ (bezitter)', 'مَجْرُور', 'كَسْرَة (ـِ)'],
+        ['عَلَى', 'حَرْفُ جَرٍّ (voorzetsel)', 'مَبْنِيّ', '—'],
+        ['الطَّاوِلَةِ', 'اِسْمٌ مَجْرُورٌ (na عَلَى)', 'مَجْرُور', 'كَسْرَة (ـِ)']
+      ]
+    },
+    {
+      title: 'Zin 3 (4 pt): كِتَابُ الطَّالِبِ الْجَدِيدِ عَلَى الْمَكْتَبِ',
+      nl: 'Het boek van de nieuwe student ligt op het bureau.',
+      rows: [
+        ['كِتَابُ', 'مُبْتَدَأ وَهُوَ مُضَاف (onderwerp & bezit)', 'مَرْفُوع', 'ضَمَّة (ـُ) zonder tanwīn'],
+        ['الطَّالِبِ', 'مُضَاف إِلَيْهِ (bezitter)', 'مَجْرُور', 'كَسْرَة (ـِ)'],
+        ['الْجَدِيدِ', 'نَعْت لِلطَّالِبِ (bijv. nw. bij الطَّالِبِ)', 'مَجْرُور', 'كَسْرَة (ـِ)'],
+        ['الْمَكْتَبِ', 'اِسْمٌ مَجْرُورٌ (na عَلَى)', 'مَجْرُور', 'كَسْرَة (ـِ)']
+      ]
+    },
+    {
+      title: 'Zin 4 (4 pt): الطَّالِبُ مُجْتَهِدٌ',
+      nl: 'De student is ijverig.',
+      rows: [
+        ['الطَّالِبُ', 'مُبْتَدَأ (onderwerp)', 'مَرْفُوع', 'ضَمَّة (ـُ)'],
+        ['مُجْتَهِدٌ', 'خَبَر (gezegde)', 'مَرْفُوع', 'تَنْوِين ضَمَّة (ـٌ)']
+      ]
+    }
+  ]
+};
+
+function renderExam(){
+  if(state.examInstant===undefined) state.examInstant = true;
+  if(!state.examAnswers) state.examAnswers = {};
+  if(!state.examPart) state.examPart = 'all';
+  if(!state.examSheetVar) state.examSheetVar = 'official';
+
+  const mode = state.examMode || 'hub';
+
+  if(mode === 'hub'){
+    return `<div class="desktop-page exam-page">
+      <div class="exam-hero">
+        <div class="exam-hero-main">
+          <div class="exam-eyebrow">Al-Manarah · Klas van Ustādh Abū Muḥammad</div>
+          <h1>Arabisch Examen · Les 1 t/m 7</h1>
+          <p>Oefen het volledige officiële examen én het oefenexamen (elk 100 punten, verdeeld over 7 onderdelen) of bestudeer het complete antwoordmodel met Iʿrāb-tabellen en uitspraak-audio.</p>
+          <div class="exam-norms">
+            <span class="exam-norm-pill">Totaal: <strong>100 pt</strong></span>
+            <span class="exam-norm-pill">Voldoende: <strong>65+ pt</strong></span>
+            <span class="exam-norm-pill">Goed: <strong>80+ pt</strong></span>
+            <span class="exam-norm-pill">Uitstekend: <strong>90+ pt</strong></span>
+            <span class="exam-norm-pill">Richttijd: <strong>± 60 min</strong></span>
+          </div>
+        </div>
+        <div class="exam-hero-ar ar" lang="ar" dir="rtl">اِمْتِحَانُ اللُّغَةِ الْعَرَبِيَّةِ</div>
+      </div>
+
+      <div class="exam-mode-grid">
+        <div class="exam-mode-card primary">
+          <div class="exam-mode-tag">Examen 1 · 100 punten</div>
+          <h2>Officieel Examen (Les 1–7)</h2>
+          <p>Alle 7 delen uit het officiële Al-Manarah examen: Woordenschat & Dictee (30 pt), Aanwijzende vnw. (10 pt), Voorzetsels (10 pt), Lidwoord & Zon-/Maanletters (15 pt), Bijvoeglijk nw. (10 pt), Idāfah (10 pt) en Iʿrāb (15 pt).</p>
+          <div class="exam-mode-actions">
+            <button type="button" class="btn btn-primary" data-act="exam-start" data-mode="official">Start Officieel Examen →</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-act="exam-sheet" data-var="official">Antwoordmodel</button>
+          </div>
+        </div>
+
+        <div class="exam-mode-card">
+          <div class="exam-mode-tag">Examen 2 · 100 punten</div>
+          <h2>Oefenexamen (Les 1–7)</h2>
+          <p>Tweede volledige examenvariant (100 punten) met 55 vragen over alle examenonderwerpen van Les 1 t/m 7 — ideaal om jezelf vooraf te testen en direct feedback per vraag te krijgen.</p>
+          <div class="exam-mode-actions">
+            <button type="button" class="btn btn-primary" data-act="exam-start" data-mode="practice">Start Oefenexamen →</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-act="exam-sheet" data-var="practice">Antwoordmodel</button>
+          </div>
+        </div>
+
+        <div class="exam-mode-card">
+          <div class="exam-mode-tag">Overzicht & Uitleg</div>
+          <h2>Studieblad & Antwoordmodel</h2>
+          <p>Bekijk alle vragen, antwoorden met volledige tashkīl, zonne- en maanletterregels, Idāfah-schema's en de complete 4-koloms Iʿrāb-tabellen van beide examens op één overzichtelijke pagina.</p>
+          <div class="exam-mode-actions">
+            <button type="button" class="btn btn-secondary" data-act="exam-sheet" data-var="official">Open Studieblad & Antwoordmodel →</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card exam-grammar-links">
+        <div class="exam-gl-head">
+          <div>
+            <div class="sh-eyebrow">Geïntegreerd in het leerpad</div>
+            <h3>Oefen de examenstof per grammatica-hoofdstuk</h3>
+            <p>Alle grammaticale onderdelen uit het examen zijn ook met extra uitleg, tabellen en oefeningen opgenomen in de betreffende lessen van de Grammatica-module:</p>
+          </div>
+        </div>
+        <div class="exam-gl-grid">
+          <button type="button" class="exam-gl-item" data-act="open-book" data-l="3">
+            <span class="exam-gl-part">Deel 4 · 15 pt</span>
+            <strong>Les 3 · Zonneletters, Maanletters & الـ</strong>
+            <span>سُوقٌ → السُّوقُ · حَدِيقَةٌ → الْحَدِيقَةُ + 14 vs. 14 overzicht</span>
+          </button>
+          <button type="button" class="exam-gl-item" data-act="open-book" data-l="4">
+            <span class="exam-gl-part">Deel 3 · 10 pt</span>
+            <strong>Les 4 · Voorzetsels (فِي، عَلَى، مِنْ، إِلَى، مَعَ)</strong>
+            <span>Alle 10 examenzinnen + diptoten مَكَّةَ en مِصْرَ</span>
+          </button>
+          <button type="button" class="exam-gl-item" data-act="open-book" data-l="5">
+            <span class="exam-gl-part">Deel 6 · 10 pt</span>
+            <strong>Les 5 · De bezitsconstructie (الْإِضَافَةُ)</strong>
+            <span>قَمِيصُ الْوَلَدِ · حَقِيبَةُ الطَّالِبَةِ الْكَبِيرَةِ</span>
+          </button>
+          <button type="button" class="exam-gl-item" data-act="open-book" data-l="7">
+            <span class="exam-gl-part">Deel 2, 5 & 7 · 35 pt</span>
+            <strong>Les 7 · هَذَا/ذَلِكَ/تِلْكَ, النَّعْتُ & الْإِعْرَابُ</strong>
+            <span>Alle 8 Iʿrāb-ontledingen + bijvoeglijk naamwoord in alle naamvallen</span>
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  if(mode === 'sheet'){
+    const v = state.examSheetVar === 'practice' ? 'practice' : 'official';
+    const ex = EXAM_DATA[v];
+    const irabs = EXAM_IRAB_TABLES[v];
+    const partsHtml = ex.parts.map(p => {
+      if(p.num === 7){
+        const tablesHtml = irabs.map(t => `
+          <div class="exam-sheet-irab-block">
+            <div class="exam-sheet-irab-head">
+              <strong class="ar-inline">${esc(t.title)}</strong>
+              <span>${esc(t.nl)}</span>
+            </div>
+            <div class="exam-irab-table-wrap">
+              <table class="exam-irab-table">
+                <thead>
+                  <tr><th>Woord</th><th>Grammaticale functie</th><th>Status</th><th>Harakah</th></tr>
+                </thead>
+                <tbody>
+                  ${t.rows.map(r => `<tr>
+                    <td data-label="Woord"><span class="ar" lang="ar" dir="rtl">${esc(r[0])}</span></td>
+                    <td data-label="Functie">${esc(r[1])}</td>
+                    <td data-label="Status"><strong>${esc(r[2])}</strong></td>
+                    <td data-label="Harakah">${esc(r[3])}</td>
+                  </tr>`).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>`).join('');
+        return `<section class="card exam-sheet-part">
+          <div class="exam-part-header">
+            <span class="exam-part-badge">Deel ${p.num} · ${p.pts} pt</span>
+            <h2>${esc(p.title)}</h2>
+            <p>${esc(p.desc)}</p>
+          </div>
+          ${tablesHtml}
+        </section>`;
+      }
+      const rows = p.questions.map((q, idx) => {
+        const ansText = q.opts[q.ans];
+        const spkTarget = q.audio || q.ar || '';
+        return `<div class="exam-sheet-row">
+          <div class="exam-sheet-q">
+            <span class="exam-sheet-num">${idx+1}</span>
+            <div class="exam-sheet-qbody">
+              <div class="exam-sheet-qtitle">${esc(q.q)}</div>
+              ${q.ar ? `<div class="exam-sheet-qar ar" lang="ar" dir="rtl">${esc(q.ar)}</div>` : ''}
+            </div>
+            ${spkTarget ? `<button type="button" class="btn btn-sm btn-secondary" data-act="speak-text" data-text="${esc(spkTarget)}" title="Beluister">${GL_ICO_SPK}</button>` : ''}
+          </div>
+          <div class="exam-sheet-ans">
+            <span class="exam-ans-badge">Antwoord</span>
+            <strong>${esc(ansText)}</strong>
+          </div>
+          ${q.note ? `<div class="exam-sheet-note">${esc(q.note)}</div>` : ''}
+        </div>`;
+      }).join('');
+      return `<section class="card exam-sheet-part">
+        <div class="exam-part-header">
+          <span class="exam-part-badge">Deel ${p.num} · ${p.pts} pt</span>
+          <h2>${esc(p.title)}</h2>
+          <p>${esc(p.desc)}</p>
+        </div>
+        <div class="exam-sheet-list">${rows}</div>
+      </section>`;
+    }).join('');
+
+    return `<div class="desktop-page exam-page">
+      <div class="exam-topbar">
+        <button type="button" class="btn btn-secondary btn-sm" data-act="exam-start" data-mode="hub">← Examenoverzicht</button>
+        <div class="exam-var-switch">
+          <button type="button" class="btn btn-sm ${v==='official'?'btn-primary':'btn-secondary'}" data-act="exam-sheet" data-var="official">Officieel Examen</button>
+          <button type="button" class="btn btn-sm ${v==='practice'?'btn-primary':'btn-secondary'}" data-act="exam-sheet" data-var="practice">Oefenexamen</button>
+        </div>
+        <button type="button" class="btn btn-primary btn-sm" data-act="exam-start" data-mode="${v}">Interactief maken →</button>
+      </div>
+
+      <div class="sh" style="margin-bottom:16px">
+        <div class="sh-main">
+          <div class="sh-eyebrow">Volledig Antwoordmodel & Studieblad</div>
+          <h1>${esc(ex.title)}</h1>
+          <p>${esc(ex.subtitle)}</p>
+        </div>
+      </div>
+
+      ${partsHtml}
+    </div>`;
+  }
+
+  // Interactive Exam Mode ('official' or 'practice')
+  const exKey = mode === 'practice' ? 'practice' : 'official';
+  const ex = EXAM_DATA[exKey];
+  const ansMap = state.examAnswers[exKey] || {};
+  let totalPts = 0, earnedPts = 0, totalQs = 0, answeredQs = 0;
+  const partStats = {};
+
+  for(const p of ex.parts){
+    let pEarned = 0, pTotal = 0, pAns = 0;
+    for(const q of p.questions){
+      totalQs++;
+      totalPts += q.pts;
+      pTotal += q.pts;
+      if(ansMap[q.id] !== undefined){
+        answeredQs++;
+        pAns++;
+        if(ansMap[q.id] === q.ans){
+          earnedPts += q.pts;
+          pEarned += q.pts;
+        }
+      }
+    }
+    partStats[p.num] = { earned: pEarned, total: pTotal, ans: pAns, count: p.questions.length };
+  }
+
+  const visibleParts = state.examPart === 'all' ? ex.parts : ex.parts.filter(p => String(p.num) === String(state.examPart));
+  const gradeLabel = earnedPts >= 90 ? 'Uitstekend (مُمْتَاز)' : earnedPts >= 80 ? 'Goed (جَيِّد جِدًّا)' : earnedPts >= 65 ? 'Voldoende (مَقْبُول / نَاجِح)' : 'Nog oefenen (< 65 pt)';
+  const gradeClass = earnedPts >= 80 ? 'good' : earnedPts >= 65 ? 'pass' : 'retry';
+
+  const resultBanner = state.examSubmitted ? `
+    <div class="exam-score-card ${gradeClass}">
+      <div class="exam-score-main">
+        <div>
+          <div class="exam-score-kicker">Eindresultaat · ${esc(ex.title)}</div>
+          <h2>${earnedPts} / ${totalPts} punten — ${gradeLabel}</h2>
+          <p>Je hebt ${answeredQs} van de ${totalQs} vragen beantwoord. Bekijk hieronder jouw score per onderdeel en de uitleg bij elke vraag.</p>
+        </div>
+        <div class="exam-score-circle">${earnedPts}<span>/100</span></div>
+      </div>
+      <div class="exam-score-parts">
+        ${ex.parts.map(p => {
+          const st = partStats[p.num];
+          return `<button type="button" class="exam-score-pill" data-act="exam-part" data-part="${p.num}">
+            <span>Deel ${p.num}</span>
+            <strong>${st.earned}/${st.total} pt</strong>
+          </button>`;
+        }).join('')}
+      </div>
+    </div>` : '';
+
+  const partsNav = `<div class="exam-parts-bar">
+    <button type="button" class="exam-part-tab ${state.examPart==='all'?'active':''}" data-act="exam-part" data-part="all">Alle 7 delen (${answeredQs}/${totalQs})</button>
+    ${ex.parts.map(p => {
+      const st = partStats[p.num];
+      return `<button type="button" class="exam-part-tab ${String(state.examPart)===String(p.num)?'active':''}" data-act="exam-part" data-part="${p.num}">Deel ${p.num} (${st.ans}/${st.count})</button>`;
+    }).join('')}
+  </div>`;
+
+  const questionsHtml = visibleParts.map(p => {
+    const qCards = p.questions.map((q) => {
+      const picked = ansMap[q.id];
+      const isAnswered = picked !== undefined;
+      const showFb = isAnswered && (state.examInstant || state.examSubmitted);
+      const isRight = isAnswered && picked === q.ans;
+      return `<div class="exam-q-card ${showFb ? (isRight ? 'correct' : 'wrong') : ''}">
+        <div class="exam-q-top">
+          <div class="exam-q-title">${esc(q.q)}</div>
+          <span class="exam-q-pts">${q.pts} ${q.pts===1?'pt':'pt'}</span>
+        </div>
+        ${q.audio ? `<div class="exam-q-audio">
+          <button type="button" class="btn btn-primary btn-sm" data-act="speak-text" data-text="${esc(q.audio)}">${GL_ICO_SPK} Beluister dictee-woord</button>
+          <span class="exam-q-audio-hint">Luister goed naar de klinkers, shaddah en tanwīn</span>
+        </div>` : ''}
+        ${q.ar ? `<div class="exam-q-ar-row">
+          <div class="exam-q-ar ar" lang="ar" dir="rtl">${esc(q.ar)}</div>
+          <button type="button" class="btn btn-secondary btn-sm" data-act="speak-text" data-text="${esc(q.ar.replace(/___+/g,''))}" title="Beluister">${GL_ICO_SPK}</button>
+        </div>` : ''}
+        <div class="exam-opts">
+          ${q.opts.map((opt, oi) => {
+            let cls = 'exam-opt';
+            if(picked === oi) cls += ' selected';
+            if(showFb){
+              if(oi === q.ans) cls += ' is-correct';
+              else if(picked === oi && picked !== q.ans) cls += ' is-wrong';
+            }
+            const hasAr = /[\u0600-\u06FF]/.test(opt);
+            return `<button type="button" class="${cls}" data-act="exam-ans" data-qid="${q.id}" data-oi="${oi}">
+              <span class="exam-opt-letter">${String.fromCharCode(65+oi)}</span>
+              <span class="exam-opt-text ${hasAr?'has-ar':''}">${esc(opt)}</span>
+            </button>`;
+          }).join('')}
+        </div>
+        ${showFb ? `<div class="exam-q-fb ${isRight?'ok':'err'}">
+          <strong>${isRight ? ('Goed! (+' + q.pts + ' pt)') : ('Juiste antwoord: ' + esc(q.opts[q.ans]))}</strong>
+          ${q.note ? `<div>${esc(q.note)}</div>` : ''}
+        </div>` : ''}
+      </div>`;
+    }).join('');
+
+    return `<section class="exam-part-section">
+      <div class="exam-part-header">
+        <span class="exam-part-badge">Deel ${p.num} · ${p.pts} punten</span>
+        <h2>${esc(p.title)}</h2>
+        <p>${esc(p.desc)}</p>
+      </div>
+      <div class="exam-q-list">${qCards}</div>
+    </section>`;
+  }).join('');
+
+  return `<div class="desktop-page exam-page">
+    <div class="exam-topbar">
+      <button type="button" class="btn btn-secondary btn-sm" data-act="exam-start" data-mode="hub">← Examenoverzicht</button>
+      <div class="exam-var-switch">
+        <button type="button" class="btn btn-sm ${exKey==='official'?'btn-primary':'btn-secondary'}" data-act="exam-start" data-mode="official">Officieel Examen</button>
+        <button type="button" class="btn btn-sm ${exKey==='practice'?'btn-primary':'btn-secondary'}" data-act="exam-start" data-mode="practice">Oefenexamen</button>
+      </div>
+      <div class="exam-controls">
+        <button type="button" class="btn btn-sm ${state.examInstant?'btn-primary':'btn-secondary'}" data-act="exam-check-instant">Direct nakijken: ${state.examInstant?'Aan':'Uit'}</button>
+        <button type="button" class="btn btn-sm btn-secondary" data-act="exam-sheet" data-var="${exKey}">Antwoordmodel</button>
+        <button type="button" class="btn btn-sm btn-secondary" data-act="exam-reset">Opnieuw</button>
+      </div>
+    </div>
+
+    <div class="exam-status-strip">
+      <div><strong>${esc(ex.title)}</strong> · Beantwoord: <strong>${answeredQs}/${totalQs}</strong></div>
+      <div>${(state.examInstant || state.examSubmitted) ? `Huidige score: <strong>${earnedPts} / 100 pt</strong>` : 'Examenmodus (score na inleveren)'}</div>
+    </div>
+
+    ${resultBanner}
+    ${partsNav}
+    ${questionsHtml}
+
+    <div class="card exam-submit-bar">
+      <div>
+        <strong>Klaar met ${state.examPart==='all'?'het examen':('Deel '+state.examPart)}?</strong>
+        <p style="font-size:13px;color:var(--muted);margin-top:2px">${answeredQs} van ${totalQs} vragen beantwoord.</p>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        ${state.examPart!=='all' ? `<button type="button" class="btn btn-secondary" data-act="exam-part" data-part="all">Toon alle 7 delen</button>` : ''}
+        <button type="button" class="btn btn-primary" data-act="exam-submit">Lever examen in & bereken eindcijfer (100 pt)</button>
+      </div>
+    </div>
+  </div>`;
+}
+
 function render(){
   const app=document.getElementById('app');
   document.body.classList.remove('hide-tab');
@@ -4572,9 +5302,10 @@ function render(){
   else if(state.view==='vocab')html=renderVocabHub();
   else if(state.view==='conv')html=renderConv();
   else if(state.view==='conv-unit')html=renderConvUnit();
+  else if(state.view==='exam')html=renderExam();
   else if(state.view==='settings')html=renderSettings();
   else if(state.view==='mistakes')html=renderMistakes();
-  app.innerHTML=appHeader()+html+((state.view==='vocab'||state.view==='book'||state.view==='conv')?`<button type="button" class="theme-fab" data-act="toggle-theme" aria-label="Thema">${darkMode?GL_ICO_SUN:GL_ICO_MOON}</button>`:'');
+  app.innerHTML=appHeader()+html+((state.view==='vocab'||state.view==='book'||state.view==='conv'||state.view==='exam')?`<button type="button" class="theme-fab" data-act="toggle-theme" aria-label="Thema">${darkMode?GL_ICO_SUN:GL_ICO_MOON}</button>`:'');
   const sbHost=document.getElementById('sidebar-host');
   if(sbHost) sbHost.innerHTML=renderSidebar();
   const tbHost=document.getElementById('topbar-host');
@@ -4655,9 +5386,56 @@ document.addEventListener('click',e=>{
     else if(v==='book'){state.path='grammar';state.view='book';state.bookLesson=null;state.bookTab='uitleg';sbMenuState.gram=true;}
     else if(v==='home'){state.path='home';state.view='home';state.bookLesson=null}
     else if(v==='conv'){state.path='conv';state.view='conv';state.convUnit=null;sbMenuState.conv=true;}
+    else if(v==='exam'){state.path='exam';state.view='exam';if(!state.examMode)state.examMode='hub';}
     else if(v==='mistakes'){state.path='home';state.view='mistakes'}
     else{state.view=v;if(v==='words'||v==='add')state.path='vocab'}
     render();(document.getElementById("app")||window).scrollTop=0;
+  }
+  else if(act==='exam-start'){
+    const m = btn.dataset.mode || 'hub';
+    state.view='exam';
+    state.path='exam';
+    state.examMode=m;
+    state.examSubmitted=false;
+    render();
+    (document.getElementById("app")||window).scrollTop=0;
+  }
+  else if(act==='exam-sheet'){
+    state.view='exam';
+    state.path='exam';
+    state.examMode='sheet';
+    state.examSheetVar = btn.dataset.var || 'official';
+    render();
+    (document.getElementById("app")||window).scrollTop=0;
+  }
+  else if(act==='exam-part'){
+    state.examPart = btn.dataset.part || 'all';
+    render();
+    (document.getElementById("app")||window).scrollTop=0;
+  }
+  else if(act==='exam-ans'){
+    const exKey = state.examMode === 'practice' ? 'practice' : 'official';
+    if(!state.examAnswers) state.examAnswers = {};
+    if(!state.examAnswers[exKey]) state.examAnswers[exKey] = {};
+    state.examAnswers[exKey][btn.dataset.qid] = parseInt(btn.dataset.oi, 10);
+    render();
+  }
+  else if(act==='exam-check-instant'){
+    state.examInstant = !state.examInstant;
+    render();
+  }
+  else if(act==='exam-submit'){
+    state.examSubmitted = true;
+    state.examPart = 'all';
+    render();
+    (document.getElementById("app")||window).scrollTop=0;
+  }
+  else if(act==='exam-reset'){
+    const exKey = state.examMode === 'practice' ? 'practice' : 'official';
+    if(state.examAnswers) state.examAnswers[exKey] = {};
+    state.examSubmitted = false;
+    render();
+    (document.getElementById("app")||window).scrollTop=0;
   }
   else if(act==='start-onboard'){
     onboarded=true;saveO();

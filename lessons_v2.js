@@ -1,4 +1,4 @@
-/* Auto-bundled Medina Deel 1 (Les 0-23) + Madinah Arabic Reader 8 (Les 24) */
+/* Auto-bundled Medina Deel 1 (Les 0-23) + Madinah Arabic Reader 8 (Les 24) + Al-Manarah Examenstof */
 window.G2_LESSONS = {
   "0": {
     "n": 0,
@@ -1233,6 +1233,164 @@ window.G2_LESSONS = {
             "explain": "الْقَمَرُ is het bepaalde onderwerp (Mubtada') van de nominale zin en staat in de nominatief (Marfū' op Dammah)."
           }
         ]
+      },
+      {
+        "title": "Examenstof Deel 4: Zonneletters vs. Maanletters & Bepaald maken met tashkīl",
+        "page": "19-20",
+        "text": [
+          "Bij het toevoegen van het bepaald lidwoord الْـ (al-taʿrīf) vallen twee zaken samen: (1) de tanwīn (-un) aan het einde vervalt en wordt één enkele dammah (-u), en (2) de uitspraak van de ل hangt af van de eerste letter van het woord.",
+          "Zonneletters (حُرُوفٌ شَمْسِيَّةٌ — 14 letters: ت ث د ذ ر ز س ش ص ض ط ظ ل ن): De ل van الـ verdwijnt in de uitspraak (assimileert) en de eerste letter krijgt een shaddah (ـّ). Voorbeeld: سُوقٌ → السُّوقُ · دَرَّاجَةٌ → الدَّرَّاجَةُ · نَافِذَةٌ → النَّافِذَةُ · شَمْسٌ → الشَّمْسُ · طَالِبٌ → الطَّالِبُ · نَجْمٌ → النَّجْمُ · دِيكٌ → الدِّيكُ.",
+          "Maanletters (حُرُوفٌ قَمَرِيَّةٌ — 14 letters: ء ب ج ح خ ع غ ف ق ك م و ه ي): De ل van الـ blijft hoorbaar in de uitspraak (krijgt een soekoen ـْ). Voorbeeld: حَدِيقَةٌ → الْحَدِيقَةُ · كَعْبَةٌ → الْكَعْبَةُ · قَمَرٌ → الْقَمَرُ · كِتَابٌ → الْكِتَابُ · بَيْتٌ → الْبَيْتُ."
+        ],
+        "table": {
+          "headers": [
+            "Onbepaald",
+            "Zon- of Maanletter?",
+            "Bepaald (met tashkīl)",
+            "Betekenis"
+          ],
+          "rows": [
+            [
+              "سُوقٌ",
+              "Zonneletter (س)",
+              "السُّوقُ",
+              "de markt"
+            ],
+            [
+              "حَدِيقَةٌ",
+              "Maanletter (ح)",
+              "الْحَدِيقَةُ",
+              "de tuin"
+            ],
+            [
+              "دَرَّاجَةٌ",
+              "Zonneletter (د)",
+              "الدَّرَّاجَةُ",
+              "de fiets"
+            ],
+            [
+              "نَافِذَةٌ",
+              "Zonneletter (ن)",
+              "النَّافِذَةُ",
+              "het raam"
+            ],
+            [
+              "كَعْبَةٌ",
+              "Maanletter (ك)",
+              "الْكَعْبَةُ",
+              "de Kaʿbah"
+            ],
+            [
+              "شَمْسٌ",
+              "Zonneletter (ش)",
+              "الشَّمْسُ",
+              "de zon"
+            ],
+            [
+              "قَمَرٌ",
+              "Maanletter (ق)",
+              "الْقَمَرُ",
+              "de maan"
+            ],
+            [
+              "طَالِبٌ",
+              "Zonneletter (ط)",
+              "الطَّالِبُ",
+              "de student"
+            ],
+            [
+              "نَجْمٌ",
+              "Zonneletter (ن)",
+              "النَّجْمُ",
+              "de ster"
+            ],
+            [
+              "دِيكٌ",
+              "Zonneletter (د)",
+              "الدِّيكُ",
+              "de haan"
+            ]
+          ]
+        },
+        "examples": [
+          {
+            "ar": "سُوقٌ ← السُّوقُ",
+            "nl": "een markt → de markt (zonneletter س krijgt shaddah)"
+          },
+          {
+            "ar": "حَدِيقَةٌ ← الْحَدِيقَةُ",
+            "nl": "een tuin → de tuin (maanletter ح, de ل blijft hoorbaar)"
+          },
+          {
+            "ar": "دَرَّاجَةٌ ← الدَّرَّاجَةُ",
+            "nl": "een fiets → de fiets (zonneletter د krijgt shaddah)"
+          },
+          {
+            "ar": "نَافِذَةٌ ← النَّافِذَةُ",
+            "nl": "een raam → het raam (zonneletter ن krijgt shaddah)"
+          },
+          {
+            "ar": "كَعْبَةٌ ← الْكَعْبَةُ",
+            "nl": "een Kaʿbah → de Kaʿbah (maanletter ك, de ل blijft hoorbaar)"
+          }
+        ],
+        "drills": [
+          {
+            "type": "mc",
+            "q": "Voeg الـ toe aan «سُوقٌ»: is de س een zon- of maanletter en hoe schrijf je het woord bepaald met tashkīl?",
+            "options": [
+              "Zonneletter (س) → السُّوقُ",
+              "Maanletter (س) → الْسُوقُ",
+              "Zonneletter (س) → السُّوقٌ"
+            ],
+            "answer": 0,
+            "explain": "س is een zonneletter: de ل assimileert, de س krijgt een shaddah en de tanwīn valt weg → السُّوقُ."
+          },
+          {
+            "type": "mc",
+            "q": "Voeg الـ toe aan «حَدِيقَةٌ»: is de ح een zon- of maanletter en hoe schrijf je het bepaald?",
+            "options": [
+              "Maanletter (ح) → الْحَدِيقَةُ",
+              "Zonneletter (ح) → الحَّدِيقَةُ",
+              "Maanletter (ح) → الْحَدِيقَةٌ"
+            ],
+            "answer": 0,
+            "explain": "ح is een maanletter: de ل van الْـ blijft hoorbaar (met soekoen) en de tanwīn wordt één dammah → الْحَدِيقَةُ."
+          },
+          {
+            "type": "mc",
+            "q": "Voeg الـ toe aan «دَرَّاجَةٌ» en «نَافِذَةٌ»:",
+            "options": [
+              "Beide zonneletters → الدَّرَّاجَةُ en النَّافِذَةُ",
+              "Beide maanletters → الْدَرَّاجَةُ en الْنَافِذَةُ",
+              "الدَّرَّاجَةٌ en النَّافِذَةٌ (met tanwīn)"
+            ],
+            "answer": 0,
+            "explain": "Zowel د als ن zijn zonneletters (حروف شمسية): ze krijgen een shaddah na الـ en verliezen de tanwīn."
+          },
+          {
+            "type": "mc",
+            "q": "Voeg الـ toe aan «كَعْبَةٌ»:",
+            "options": [
+              "Maanletter (ك) → الْكَعْبَةُ",
+              "Zonneletter (ك) → الكَّعْبَةُ",
+              "Maanletter (ك) → الْكَعْبَةٌ"
+            ],
+            "answer": 0,
+            "explain": "ك is een maanletter (حرف قمري): de ل blijft hoorbaar → الْكَعْبَةُ."
+          },
+          {
+            "type": "mc",
+            "q": "Wat is het verschil tussen zonneletters (حروف شمسية) en maanletters (حروف قمرية)?",
+            "options": [
+              "Bij zonneletters verdwijnt de ل van الـ in de uitspraak en krijgt de eerste letter een shaddah; bij maanletters blijft de ل hoorbaar.",
+              "Bij maanletters verdwijnt de ل in de uitspraak; bij zonneletters blijft de ل hoorbaar.",
+              "Zonneletters krijgen altijd tanwīn na الـ."
+            ],
+            "answer": 0,
+            "explain": "Bij zonneletters assimileert de ل (en krijgt de eerste letter een shaddah ـّ); bij maanletters blijft de ل van الْـ hoorbaar."
+          }
+        ]
       }
     ],
     "vocab": [
@@ -1778,6 +1936,160 @@ window.G2_LESSONS = {
             "explain": "الْفَصْلِ staat na het voorzetsel مِنَ en is daarom Madjrūr met een Kasrah."
           }
         ]
+      },
+      {
+        "title": "Examenstof Deel 3: De 5 voorzetsels (فِي، عَلَى، مِنْ، إِلَى، مَعَ) & zinsvertaling",
+        "page": "21-26",
+        "text": [
+          "In het examen van Les 1 t/m 7 pas je vijf veelgebruikte voorzetsels/partikels toe waarna het zelfstandig naamwoord in de genitief (مَجْرُور met كَسْرَة) komt te staan: فِي (in), عَلَى (op), مِنْ (uit/van), إِلَى (naar) en مَعَ (met/bij).",
+          "Let op: plaatsnamen zoals مَكَّةُ (Mekka) en مِصْرُ (Egypte) zijn diptoten (مَمْنُوع مِنَ الصَّرْف): zij krijgen géén tanwīn en krijgen na مِنْ of إِلَى een fathah (-a) in plaats van een kasrah: مِن مَكَّةَ (uit Mekka), مِن مِصْرَ (uit Egypte).",
+          "Bij مَعَ (met/bij) krijgt het volgende woord een kasrah (مَجْرُور): الْقَلَمُ مَعَ الْكِتَابِ (De pen ligt bij het boek) en الْوَلَدُ مَعَ أَبِيهِ (De jongen is met zijn vader)."
+        ],
+        "table": {
+          "headers": [
+            "Voorzetsel",
+            "Betekenis",
+            "Voorbeeldzin uit het examen",
+            "Vertaling"
+          ],
+          "rows": [
+            [
+              "عَلَى",
+              "op",
+              "الْقَهْوَةُ عَلَى الطَّاوِلَةِ / الْكِتَابُ عَلَى الطَّاوِلَةِ",
+              "De koffie staat op de tafel / Het boek ligt op de tafel"
+            ],
+            [
+              "إِلَى",
+              "naar",
+              "ذَهَبَ الْفَلَّاحُ إِلَى السُّوقِ / ذَهَبَ سُفْيَانُ إِلَى الْمَسْجِدِ",
+              "De boer ging naar de markt / Soefyan ging naar de moskee"
+            ],
+            [
+              "مِنْ",
+              "uit / van",
+              "الرَّسُولُ مِنْ مَكَّةَ / هُوَ مِنْ مِصْرَ",
+              "De Boodschapper komt uit Mekka / Hij komt uit Egypte"
+            ],
+            [
+              "فِي",
+              "in",
+              "الدَّجَاجَةُ فِي الْحَدِيقَةِ / الطَّالِبُ فِي الْغُرْفَةِ",
+              "De kip is in de tuin / De student is in de kamer"
+            ],
+            [
+              "مَعَ",
+              "met / bij",
+              "الْوَلَدُ مَعَ أَبِيهِ / الْقَلَمُ مَعَ الْكِتَابِ",
+              "De jongen is met zijn vader / De pen ligt bij het boek"
+            ]
+          ]
+        },
+        "examples": [
+          {
+            "ar": "الْقَهْوَةُ عَلَى الطَّاوِلَةِ.",
+            "nl": "De koffie staat op de tafel."
+          },
+          {
+            "ar": "ذَهَبَ الْفَلَّاحُ إِلَى السُّوقِ.",
+            "nl": "De boer ging naar de markt."
+          },
+          {
+            "ar": "الرَّسُولُ مِنْ مَكَّةَ.",
+            "nl": "De Boodschapper komt uit Mekka."
+          },
+          {
+            "ar": "الدَّجَاجَةُ فِي الْحَدِيقَةِ.",
+            "nl": "De kip is in de tuin."
+          },
+          {
+            "ar": "الْوَلَدُ مَعَ أَبِيهِ.",
+            "nl": "De jongen is met zijn vader."
+          },
+          {
+            "ar": "الْقَلَمُ مَعَ الْكِتَابِ.",
+            "nl": "De pen ligt bij het boek."
+          }
+        ],
+        "drills": [
+          {
+            "type": "fill",
+            "ar": "الْقَهْوَةُ _ الطَّاوِلَةِ",
+            "nl": "De koffie staat op de tafel. (hint: op)",
+            "options": [
+              "عَلَى",
+              "فِي",
+              "إِلَى",
+              "مِنْ"
+            ],
+            "answer": 0,
+            "explain": "عَلَى betekent «op». الطَّاوِلَةِ staat in de genitief (مَجْرُور met kasrah)."
+          },
+          {
+            "type": "fill",
+            "ar": "ذَهَبَ الْفَلَّاحُ _ السُّوقِ",
+            "nl": "De boer ging naar de markt. (hint: naar)",
+            "options": [
+              "إِلَى",
+              "مِنْ",
+              "عَلَى",
+              "مَعَ"
+            ],
+            "answer": 0,
+            "explain": "ذَهَبَ إِلَى betekent «hij ging naar». السُّوقِ krijgt een kasrah."
+          },
+          {
+            "type": "fill",
+            "ar": "الرَّسُولُ _ مَكَّةَ",
+            "nl": "De Boodschapper komt uit Mekka. (hint: uit/van)",
+            "options": [
+              "مِنْ",
+              "إِلَى",
+              "فِي",
+              "عَلَى"
+            ],
+            "answer": 0,
+            "explain": "مِنْ betekent «uit / van». مَكَّةَ is een diptoot en eindigt in de genitief op fathah."
+          },
+          {
+            "type": "fill",
+            "ar": "الدَّجَاجَةُ _ الْحَدِيقَةِ",
+            "nl": "De kip is in de tuin. (hint: in)",
+            "options": [
+              "فِي",
+              "عَلَى",
+              "إِلَى",
+              "مِنْ"
+            ],
+            "answer": 0,
+            "explain": "فِي betekent «in». الْحَدِيقَةِ krijgt een kasrah."
+          },
+          {
+            "type": "fill",
+            "ar": "الْوَلَدُ _ أَبِيهِ",
+            "nl": "De jongen is met zijn vader. (hint: met/bij)",
+            "options": [
+              "مَعَ",
+              "فِي",
+              "مِنْ",
+              "عَلَى"
+            ],
+            "answer": 0,
+            "explain": "مَعَ betekent «met / bij»."
+          },
+          {
+            "type": "parse",
+            "sentence": "الْإِمَامُ فِي الْمَسْجِدِ",
+            "target": "الْمَسْجِدِ",
+            "options": [
+              "Functie: اِسْم مَجْرُور · Status: مَجْرُور · Harakah: كَسْرَة",
+              "Functie: مُبْتَدَأ · Status: مَرْفُوع · Harakah: ضَمَّة",
+              "Functie: حَرْف جَرّ · Status: — · Harakah: —"
+            ],
+            "answer": 0,
+            "explain": "Na het voorzetsel فِي is الْمَسْجِدِ een اِسْم مَجْرُور met status مَجْرُور en harakah كَسْرَة."
+          }
+        ]
       }
     ],
     "vocab": [
@@ -2252,6 +2564,187 @@ window.G2_LESSONS = {
             ],
             "answer": 0,
             "explain": "مُحَمَّدٍ is de Mudāf Ilayh (de bezitter) in de Idāfah en staat in de genitief met Kasratayn."
+          }
+        ]
+      },
+      {
+        "title": "Examenstof Deel 6: Woorden verbinden tot een correcte الإضافة (met tashkīl)",
+        "page": "27-29",
+        "text": [
+          "Wanneer je twee losse woorden verbindt tot een bezitsconstructie (الْإِضَافَةُ), pas je twee vaste regels toe:",
+          "1. Het eerste woord heet الْمُضَافُ (het bezit): dit woord krijgt NOOIT الـ en NOOIT tanwīn (dus قَمِيصُ i.p.v. قَمِيصٌ of الْقَمِيصُ).",
+          "2. Het tweede woord heet الْمُضَافُ إِلَيْهِ (de bezitter): dit woord staat ALTIJD in de genitief (مَجْرُور) en krijgt dus een كَسْرَة (-i of -in), bijvoorbeeld الْوَلَدِ in قَمِيصُ الْوَلَدِ.",
+          "Komt er een bijvoeglijk naamwoord (نَعْت) achter de مُضَاف إِلَيْهِ (zoals حَقِيبَةٌ + الطَّالِبَةُ + الْكَبِيرَةُ), dan volgt het bijvoeglijk naamwoord in bepaaldheid, geslacht én naamval: حَقِيبَةُ الطَّالِبَةِ الْكَبِيرَةِ (de tas van de grote studente)."
+        ],
+        "table": {
+          "headers": [
+            "Losse woorden",
+            "Correcte الإضافة (met tashkīl)",
+            "Nederlandse vertaling",
+            "Grammaticale regel"
+          ],
+          "rows": [
+            [
+              "قَمِيصٌ + الْوَلَدُ",
+              "قَمِيصُ الْوَلَدِ",
+              "Het hemd van de jongen",
+              "مضاف: geen الـ/تنوين · مضاف إليه: kasra"
+            ],
+            [
+              "بَابٌ + الدُّكَّانُ",
+              "بَابُ الدُّكَّانِ",
+              "De deur van de winkel",
+              "مضاف: dammah · مضاف إليه: kasra"
+            ],
+            [
+              "مَكْتَبٌ + الْإِمَامُ",
+              "مَكْتَبُ الْإِمَامِ",
+              "Het bureau van de imam",
+              "مضاف: dammah · مضاف إليه: kasra"
+            ],
+            [
+              "حَقِيبَةٌ + الطَّالِبَةُ + الْكَبِيرَةُ",
+              "حَقِيبَةُ الطَّالِبَةِ الْكَبِيرَةِ",
+              "De tas van de grote studente",
+              "مضاف إليه + نعت beide majrūr (kasra)"
+            ],
+            [
+              "مَطْبَخٌ + الْبَيْتُ",
+              "مَطْبَخُ الْبَيْتِ",
+              "De keuken van het huis",
+              "مضاف: dammah · مضاف إليه: kasra"
+            ],
+            [
+              "الْكِتَابُ + الطَّالِبُ",
+              "كِتَابُ الطَّالِبِ",
+              "Het boek van de student",
+              "Verwijder الـ bij de مضاف!"
+            ],
+            [
+              "الْبَابُ + الْبَيْتُ",
+              "بَابُ الْبَيْتِ",
+              "De deur van het huis",
+              "مضاف إليه krijgt kasra"
+            ],
+            [
+              "الْقَلَمُ + الْأُسْتَاذُ",
+              "قَلَمُ الْأُسْتَاذِ",
+              "De pen van de leraar",
+              "مضاف إليه krijgt kasra"
+            ],
+            [
+              "الْمَكْتَبُ + الْمُدِيرُ",
+              "مَكْتَبُ الْمُدِيرِ",
+              "Het bureau van de directeur",
+              "مضاف إليه krijgt kasra"
+            ],
+            [
+              "السَّاعَةُ + التَّاجِرُ",
+              "سَاعَةُ التَّاجِرِ",
+              "Het horloge van de handelaar",
+              "مضاف إليه krijgt kasra"
+            ]
+          ]
+        },
+        "examples": [
+          {
+            "ar": "قَمِيصُ الْوَلَدِ",
+            "nl": "Het hemd van de jongen"
+          },
+          {
+            "ar": "بَابُ الدُّكَّانِ",
+            "nl": "De deur van de winkel"
+          },
+          {
+            "ar": "مَكْتَبُ الْإِمَامِ",
+            "nl": "Het bureau van de imam"
+          },
+          {
+            "ar": "حَقِيبَةُ الطَّالِبَةِ الْكَبِيرَةِ",
+            "nl": "De tas van de grote studente"
+          },
+          {
+            "ar": "مَطْبَخُ الْبَيْتِ",
+            "nl": "De keuken van het huis"
+          }
+        ],
+        "drills": [
+          {
+            "type": "transform",
+            "prompt": "Verbind tot een correcte إضافة (met tashkīl):",
+            "from": "قَمِيصٌ + الْوَلَدُ",
+            "options": [
+              "قَمِيصُ الْوَلَدِ",
+              "قَمِيصٌ الْوَلَدِ",
+              "الْقَمِيصُ الْوَلَدِ",
+              "قَمِيصُ الْوَلَدُ"
+            ],
+            "answer": 0,
+            "explain": "قَمِيصُ (مضاف: geen tanwīn, geen الـ) + الْوَلَدِ (مضاف إليه: kasrah) = «het hemd van de jongen»."
+          },
+          {
+            "type": "transform",
+            "prompt": "Verbind tot een correcte إضافة (met tashkīl):",
+            "from": "بَابٌ + الدُّكَّانُ",
+            "options": [
+              "بَابُ الدُّكَّانِ",
+              "بَابٌ الدُّكَّانِ",
+              "بَابُ الدُّكَّانُ",
+              "الْبَابُ الدُّكَّانِ"
+            ],
+            "answer": 0,
+            "explain": "بَابُ (één dammah) + الدُّكَّانِ (kasrah) = «de deur van de winkel»."
+          },
+          {
+            "type": "transform",
+            "prompt": "Verbind tot een correcte إضافة (met tashkīl):",
+            "from": "مَكْتَبٌ + الْإِمَامُ",
+            "options": [
+              "مَكْتَبُ الْإِمَامِ",
+              "مَكْتَبٌ الْإِمَامِ",
+              "مَكْتَبُ الْإِمَامُ",
+              "الْمَكْتَبُ الْإِمَامِ"
+            ],
+            "answer": 0,
+            "explain": "مَكْتَبُ الْإِمَامِ = «het bureau van de imam»."
+          },
+          {
+            "type": "transform",
+            "prompt": "Verbind tot een correcte إضافة (met tashkīl):",
+            "from": "حَقِيبَةٌ + الطَّالِبَةُ + الْكَبِيرَةُ",
+            "options": [
+              "حَقِيبَةُ الطَّالِبَةِ الْكَبِيرَةِ",
+              "حَقِيبَةٌ الطَّالِبَةِ الْكَبِيرَةِ",
+              "الْحَقِيبَةُ الطَّالِبَةِ الْكَبِيرَةِ",
+              "حَقِيبَةُ الطَّالِبَةُ الْكَبِيرَةُ"
+            ],
+            "answer": 0,
+            "explain": "حَقِيبَةُ is مضاف (dammah zonder tanwīn), الطَّالِبَةِ is مضاف إليه (kasrah) en الْكَبِيرَةِ volgt als نعت met kasrah."
+          },
+          {
+            "type": "transform",
+            "prompt": "Verbind tot een correcte إضافة (met tashkīl):",
+            "from": "مَطْبَخٌ + الْبَيْتُ",
+            "options": [
+              "مَطْبَخُ الْبَيْتِ",
+              "مَطْبَخٌ الْبَيْتِ",
+              "مَطْبَخُ الْبَيْتُ",
+              "الْمَطْبَخُ الْبَيْتِ"
+            ],
+            "answer": 0,
+            "explain": "مَطْبَخُ الْبَيْتِ = «de keuken van het huis»."
+          },
+          {
+            "type": "parse",
+            "sentence": "حَقِيبَةُ الطَّالِبِ عَلَى السَّرِيرِ",
+            "target": "حَقِيبَةُ",
+            "options": [
+              "Functie: مُبْتَدَأ (مُضَاف) · Status: مَرْفُوع · Harakah: ضَمَّة",
+              "Functie: مُضَاف إِلَيْهِ · Status: مَجْرُور · Harakah: كَسْرَة",
+              "Functie: خَبَر · Status: مَرْفُوع · Harakah: ضَمَّة + تَنْوِين"
+            ],
+            "answer": 0,
+            "explain": "حَقِيبَةُ staat aan het begin van de nominale zin (مُبْتَدَأ) én is het eerste deel van de bezitsconstructie (مُضَاف): مَرْفُوع met één ضَمَّة."
           }
         ]
       }
@@ -3138,6 +3631,498 @@ window.G2_LESSONS = {
             ],
             "answer": 0,
             "explain": "ذَلِكَ wordt تِلْكَ en طَالِبٌ wordt طَالِبَةٌ."
+          }
+        ]
+      },
+      {
+        "title": "Examenstof Deel 2: Zinnen bouwen met هَذَا / هَذِهِ / ذَلِكَ / تِلْكَ + bijvoeglijk naamwoord",
+        "page": "34-35",
+        "text": [
+          "Met de vier aanwijzende voornaamwoorden wijs je elk woord aan op basis van geslacht (mannelijk/vrouwelijk) en afstand (nabij/ver):",
+          "• Mannelijk nabij: هَذَا (dit/deze) — bijv. هَذَا كِتَابٌ · هَذَا مَسْجِدٌ · هَذَا الْقِدْرُ حَارٌّ.",
+          "• Vrouwelijk nabij: هَذِهِ (dit/deze) — bijv. هَذِهِ سَيَّارَةٌ · هَذِهِ بِنْتٌ · هَذِهِ طَالِبَةٌ · هَذِهِ الدَّرَّاجَةُ جَمِيلَةٌ · هَذِهِ الْمِكْوَاةُ قَدِيمَةٌ.",
+          "• Mannelijk ver: ذَلِكَ (die/dat) — bijv. ذَلِكَ الْحِمَارُ كَبِيرٌ · ذَلِكَ حِمَارٌ طَوِيلٌ.",
+          "• Vrouwelijk ver: تِلْكَ (die/dat) — bijv. تِلْكَ النَّاقَةُ طَوِيلَةٌ · تِلْكَ نَاقَةٌ كَبِيرَةٌ."
+        ],
+        "table": {
+          "headers": [
+            "Gegeven in examen",
+            "Aanwijzer",
+            "Volledige zin (met bijvoeglijk nw.)",
+            "Vertaling"
+          ],
+          "rows": [
+            [
+              "الْقِدْرُ (nabij)",
+              "هَذَا / هَذِهِ",
+              "هَذَا الْقِدْرُ حَارٌّ / هَذِهِ الْقِدْرُ حَارَّةٌ",
+              "Deze kookpot is heet"
+            ],
+            [
+              "النَّاقَةُ (vrouwelijk, ver)",
+              "تِلْكَ",
+              "تِلْكَ النَّاقَةُ طَوِيلَةٌ",
+              "Die vrouwtjeskameel is lang"
+            ],
+            [
+              "الدَّرَّاجَةُ (vrouwelijk, nabij)",
+              "هَذِهِ",
+              "هَذِهِ الدَّرَّاجَةُ جَمِيلَةٌ",
+              "Deze fiets is mooi"
+            ],
+            [
+              "الْحِمَارُ (mannelijk, ver)",
+              "ذَلِكَ",
+              "ذَلِكَ الْحِمَارُ كَبِيرٌ",
+              "Die ezel is groot"
+            ],
+            [
+              "الْمِكْوَاةُ (vrouwelijk, nabij)",
+              "هَذِهِ",
+              "هَذِهِ الْمِكْوَاةُ قَدِيمَةٌ",
+              "Dit strijkijzer is oud"
+            ],
+            [
+              "كِتَابٌ (m., nabij)",
+              "هَذَا",
+              "هَذَا كِتَابٌ",
+              "Dit is een boek"
+            ],
+            [
+              "سَيَّارَةٌ (v., nabij)",
+              "هَذِهِ",
+              "هَذِهِ سَيَّارَةٌ",
+              "Dit is een auto"
+            ],
+            [
+              "بِنْتٌ (v., nabij)",
+              "هَذِهِ",
+              "هَذِهِ بِنْتٌ",
+              "Dit is een meisje"
+            ],
+            [
+              "طَالِبَةٌ (v., nabij)",
+              "هَذِهِ",
+              "هَذِهِ طَالِبَةٌ",
+              "Dit is een studente"
+            ],
+            [
+              "مَسْجِدٌ (m., nabij)",
+              "هَذَا",
+              "هَذَا مَسْجِدٌ",
+              "Dit is een moskee"
+            ]
+          ]
+        },
+        "examples": [
+          {
+            "ar": "هَذَا الْقِدْرُ حَارٌّ.",
+            "nl": "Deze kookpot is heet."
+          },
+          {
+            "ar": "تِلْكَ النَّاقَةُ طَوِيلَةٌ.",
+            "nl": "Die vrouwtjeskameel is lang."
+          },
+          {
+            "ar": "هَذِهِ الدَّرَّاجَةُ جَمِيلَةٌ.",
+            "nl": "Deze fiets is mooi."
+          },
+          {
+            "ar": "ذَلِكَ الْحِمَارُ كَبِيرٌ.",
+            "nl": "Die ezel is groot."
+          },
+          {
+            "ar": "هَذِهِ الْمِكْوَاةُ قَدِيمَةٌ.",
+            "nl": "Dit strijkijzer is oud."
+          }
+        ],
+        "drills": [
+          {
+            "type": "mc",
+            "q": "Kies de juiste zin voor «النَّاقَةُ» (vrouwelijk, ver) met een bijvoeglijk naamwoord uit de lijst (كَبِيرٌ – قَدِيمٌ – جَمِيلٌ – حَارٌّ – طَوِيلٌ):",
+            "options": [
+              "تِلْكَ النَّاقَةُ طَوِيلَةٌ",
+              "ذَلِكَ النَّاقَةُ طَوِيلٌ",
+              "هَذِهِ النَّاقَةُ طَوِيلٌ"
+            ],
+            "answer": 0,
+            "explain": "النَّاقَةُ is vrouwelijk en ver → تِلْكَ, en het bijvoeglijk naamwoord krijgt een ة → طَوِيلَةٌ."
+          },
+          {
+            "type": "mc",
+            "q": "Kies de juiste zin voor «الدَّرَّاجَةُ» (vrouwelijk, nabij):",
+            "options": [
+              "هَذِهِ الدَّرَّاجَةُ جَمِيلَةٌ",
+              "هَذَا الدَّرَّاجَةُ جَمِيلٌ",
+              "تِلْكَ الدَّرَّاجَةُ جَمِيلٌ"
+            ],
+            "answer": 0,
+            "explain": "Vrouwelijk en nabij → هَذِهِ, met vrouwelijk bijvoeglijk naamwoord جَمِيلَةٌ."
+          },
+          {
+            "type": "mc",
+            "q": "Kies de juiste zin voor «الْحِمَارُ» (mannelijk, ver):",
+            "options": [
+              "ذَلِكَ الْحِمَارُ كَبِيرٌ",
+              "تِلْكَ الْحِمَارُ كَبِيرَةٌ",
+              "هَذَا الْحِمَارُ كَبِيرَةٌ"
+            ],
+            "answer": 0,
+            "explain": "Mannelijk en ver → ذَلِكَ, met mannelijk bijvoeglijk naamwoord كَبِيرٌ."
+          },
+          {
+            "type": "mc",
+            "q": "Kies de juiste zin voor «الْمِكْوَاةُ» (vrouwelijk, nabij):",
+            "options": [
+              "هَذِهِ الْمِكْوَاةُ قَدِيمَةٌ",
+              "هَذَا الْمِكْوَاةُ قَدِيمٌ",
+              "ذَلِكَ الْمِكْوَاةُ قَدِيمَةٌ"
+            ],
+            "answer": 0,
+            "explain": "الْمِكْوَاةُ eindigt op ة (vrouwelijk) en nabij → هَذِهِ الْمِكْوَاةُ قَدِيمَةٌ."
+          }
+        ]
+      },
+      {
+        "title": "Examenstof Deel 5: Het bijvoeglijk naamwoord (النَّعْتُ) — geslacht, bepaaldheid én naamval",
+        "page": "35-40",
+        "text": [
+          "Het bijvoeglijk naamwoord (النَّعْتُ) komt achter het zelfstandig naamwoord (الْمَنْعُوتُ) en neemt exact dezelfde eigenschappen over in:",
+          "1. Geslacht: mannelijk (كَبِيرٌ / جَمِيلٌ) of vrouwelijk met ـَةٌ (كَبِيرَةٌ / جَمِيلَةٌ / صَغِيرَةٌ).",
+          "2. Bepaaldheid: onbepaald met tanwīn (هَذَا بَيْتٌ كَبِيرٌ · هَذِهِ غُرْفَةٌ جَمِيلَةٌ) of bepaald met الـ zonder tanwīn (الْكِتَابُ الْجَدِيدُ · الطَّالِبَةُ الْمُجْتَهِدَةُ · تِلْكَ النَّاقَةُ الطَّوِيلَةُ · ذَلِكَ الدُّكَّانُ الْقَدِيمُ).",
+          "3. Naamval (Harakah): staat het zelfstandig naamwoord in de nominatief (مَرْفُوع met dammah), dan krijgt de نَعْت ook dammah. Staat het woord na een voorzetsel of als مضاف إليه in de genitief (مَجْرُور met kasrah), dan krijgt de نَعْت óók een kasrah! Voorbeeld: الْإِمَامُ فِي الْمَسْجِدِ الْكَرِيمِ en قَمِيصُ الْوَلَدِ الصَّغِيرِ."
+        ],
+        "table": {
+          "headers": [
+            "Zin uit het examen",
+            "Gegeven woord",
+            "Juiste vorm (النَّعْتُ)",
+            "Reden"
+          ],
+          "rows": [
+            [
+              "هَذَا حِمَارٌ ___",
+              "(كَبِيرٌ)",
+              "كَبِيرٌ",
+              "Onbepaald mannelijk, مَرْفُوع"
+            ],
+            [
+              "تِلْكَ النَّاقَةُ ___",
+              "(طَوِيلٌ)",
+              "الطَّوِيلَةُ",
+              "Bepaald vrouwelijk → الـ + ـَةُ"
+            ],
+            [
+              "الْإِمَامُ فِي الْمَسْجِدِ ___",
+              "(كَرِيمٌ)",
+              "الْكَرِيمِ",
+              "Bepaald mannelijk + مَجْرُور (kasrah na فِي)"
+            ],
+            [
+              "هَذِهِ بَيْضَةٌ ___",
+              "(صَغِيرٌ)",
+              "صَغِيرَةٌ",
+              "Onbepaald vrouwelijk → ـَةٌ"
+            ],
+            [
+              "ذَلِكَ الدُّكَّانُ ___",
+              "(قَدِيمٌ)",
+              "الْقَدِيمُ",
+              "Bepaald mannelijk → الـ"
+            ],
+            [
+              "هَذَا بَيْتٌ ___",
+              "(كَبِيرٌ)",
+              "كَبِيرٌ",
+              "Onbepaald mannelijk"
+            ],
+            [
+              "هَذِهِ غُرْفَةٌ ___",
+              "(جَمِيلٌ)",
+              "جَمِيلَةٌ",
+              "Onbepaald vrouwelijk → ة"
+            ],
+            [
+              "الْكِتَابُ ___",
+              "(جَدِيدٌ)",
+              "الْجَدِيدُ",
+              "Bepaald mannelijk → الـ"
+            ],
+            [
+              "الطَّالِبَةُ ___",
+              "(مُجْتَهِدٌ)",
+              "الْمُجْتَهِدَةُ",
+              "Bepaald vrouwelijk → الـ + ة"
+            ],
+            [
+              "ذَلِكَ رَجُلٌ ___",
+              "(غَنِيٌّ)",
+              "غَنِيٌّ",
+              "Onbepaald mannelijk"
+            ]
+          ]
+        },
+        "examples": [
+          {
+            "ar": "هَذَا حِمَارٌ كَبِيرٌ.",
+            "nl": "Dit is een grote ezel."
+          },
+          {
+            "ar": "تِلْكَ النَّاقَةُ الطَّوِيلَةُ.",
+            "nl": "Die lange vrouwtjeskameel."
+          },
+          {
+            "ar": "الْإِمَامُ فِي الْمَسْجِدِ الْكَرِيمِ.",
+            "nl": "De imam is in de edele moskee."
+          },
+          {
+            "ar": "هَذِهِ بَيْضَةٌ صَغِيرَةٌ.",
+            "nl": "Dit is een klein ei."
+          },
+          {
+            "ar": "ذَلِكَ الدُّكَّانُ الْقَدِيمُ.",
+            "nl": "Die oude winkel."
+          }
+        ],
+        "drills": [
+          {
+            "type": "fill",
+            "ar": "تِلْكَ النَّاقَةُ _",
+            "nl": "Vul (طَوِيلٌ) in de juiste vorm van النَّعْتُ in:",
+            "options": [
+              "الطَّوِيلَةُ",
+              "طَوِيلٌ",
+              "الطَّوِيلُ",
+              "طَوِيلَةٍ"
+            ],
+            "answer": 0,
+            "explain": "النَّاقَةُ is bepaald (الـ), vrouwelijk (ـة) en مَرْفُوع (dammah) → الطَّوِيلَةُ."
+          },
+          {
+            "type": "fill",
+            "ar": "الْإِمَامُ فِي الْمَسْجِدِ _",
+            "nl": "Vul (كَرِيمٌ) in de juiste vorm in bij الْمَسْجِدِ:",
+            "options": [
+              "الْكَرِيمِ",
+              "كَرِيمٌ",
+              "الْكَرِيمَةُ",
+              "كَرِيمٍ"
+            ],
+            "answer": 0,
+            "explain": "الْمَسْجِدِ is bepaald, mannelijk en مَجْرُور (met kasrah na فِي) → الْكَرِيمِ."
+          },
+          {
+            "type": "fill",
+            "ar": "هَذِهِ بَيْضَةٌ _",
+            "nl": "Vul (صَغِيرٌ) in de juiste vorm in:",
+            "options": [
+              "صَغِيرَةٌ",
+              "صَغِيرٌ",
+              "الصَّغِيرَةُ",
+              "صَغِيرَةٍ"
+            ],
+            "answer": 0,
+            "explain": "بَيْضَةٌ is onbepaald en vrouwelijk → صَغِيرَةٌ."
+          },
+          {
+            "type": "fill",
+            "ar": "ذَلِكَ الدُّكَّانُ _",
+            "nl": "Vul (قَدِيمٌ) in de juiste vorm van النَّعْتُ in:",
+            "options": [
+              "الْقَدِيمُ",
+              "قَدِيمَةٌ",
+              "الْقَدِيمَةُ",
+              "قَدِيمٍ"
+            ],
+            "answer": 0,
+            "explain": "الدُّكَّانُ is bepaald, mannelijk en مَرْفُوع → الْقَدِيمُ."
+          },
+          {
+            "type": "fill",
+            "ar": "الطَّالِبَةُ _",
+            "nl": "Vul (مُجْتَهِدٌ) in de juiste vorm van النَّعْتُ in:",
+            "options": [
+              "الْمُجْتَهِدَةُ",
+              "مُجْتَهِدٌ",
+              "الْمُجْتَهِدُ",
+              "مُجْتَهِدَةٌ"
+            ],
+            "answer": 0,
+            "explain": "Bepaald vrouwelijk → الـ + ة zonder tanwīn: الْمُجْتَهِدَةُ."
+          }
+        ]
+      },
+      {
+        "title": "Examenstof Deel 7: Grammaticale analyse (الْإِعْرَابُ) — Functie, Status & Harakah",
+        "page": "35",
+        "text": [
+          "In Deel 7 van het examen analyseer je elk woord van een zin op drie onderdelen: (1) Functie (bijv. مُبْتَدَأ، خَبَر، مُضَاف، مُضَاف إِلَيْهِ، حَرْف جَرّ، اِسْم مَجْرُور، نَعْت), (2) Status (مَرْفُوع، مَجْرُور of — bij een voorzetsel), en (3) Harakah (ضَمَّة، ضَمَّة + تَنْوِين، كَسْرَة of —).",
+          "Bestudeer hieronder de volledige Iʿrāb-tabellen van de examenzinnen:"
+        ],
+        "table": {
+          "headers": [
+            "Zin & Woord",
+            "1. Functie",
+            "2. Status",
+            "3. Harakah"
+          ],
+          "rows": [
+            [
+              "الْإِمَامُ (in الْإِمَامُ فِي الْمَسْجِدِ)",
+              "مُبْتَدَأ",
+              "مَرْفُوع",
+              "ضَمَّة"
+            ],
+            [
+              "فِي",
+              "حَرْف جَرّ",
+              "—",
+              "—"
+            ],
+            [
+              "الْمَسْجِدِ",
+              "اِسْم مَجْرُور",
+              "مَجْرُور",
+              "كَسْرَة"
+            ],
+            [
+              "حَقِيبَةُ (in حَقِيبَةُ الطَّالِبِ عَلَى السَّرِيرِ)",
+              "مُبْتَدَأ (مُضَاف)",
+              "مَرْفُوع",
+              "ضَمَّة"
+            ],
+            [
+              "الطَّالِبِ",
+              "مُضَاف إِلَيْهِ",
+              "مَجْرُور",
+              "كَسْرَة"
+            ],
+            [
+              "عَلَى السَّرِيرِ (السَّرِيرِ)",
+              "اِسْم مَجْرُور",
+              "مَجْرُور",
+              "كَسْرَة"
+            ],
+            [
+              "قَمِيصُ (in قَمِيصُ الْوَلَدِ الصَّغِيرِ فِي الْغُرْفَةِ)",
+              "مُبْتَدَأ (مُضَاف)",
+              "مَرْفُوع",
+              "ضَمَّة"
+            ],
+            [
+              "الْوَلَدِ",
+              "مُضَاف إِلَيْهِ",
+              "مَجْرُور",
+              "كَسْرَة"
+            ],
+            [
+              "الصَّغِيرِ",
+              "نَعْت لِلْوَلَدِ",
+              "مَجْرُور",
+              "كَسْرَة"
+            ],
+            [
+              "الْغُرْفَةِ",
+              "اِسْم مَجْرُور",
+              "مَجْرُور",
+              "كَسْرَة"
+            ],
+            [
+              "الْفَلَّاحُ (in الْفَلَّاحُ الْغَنِيُّ مِنَ السُّوقِ)",
+              "مُبْتَدَأ",
+              "مَرْفُوع",
+              "ضَمَّة"
+            ],
+            [
+              "الْغَنِيُّ",
+              "نَعْت",
+              "مَرْفُوع",
+              "ضَمَّة"
+            ],
+            [
+              "مِنَ",
+              "حَرْف جَرّ",
+              "—",
+              "—"
+            ],
+            [
+              "السُّوقِ",
+              "اِسْم مَجْرُور",
+              "مَجْرُور",
+              "كَسْرَة"
+            ]
+          ]
+        },
+        "examples": [
+          {
+            "ar": "الْإِمَامُ فِي الْمَسْجِدِ.",
+            "nl": "De imam is in de moskee."
+          },
+          {
+            "ar": "حَقِيبَةُ الطَّالِبِ عَلَى السَّرِيرِ.",
+            "nl": "De tas van de student ligt op het bed."
+          },
+          {
+            "ar": "قَمِيصُ الْوَلَدِ الصَّغِيرِ فِي الْغُرْفَةِ.",
+            "nl": "Het hemd van de kleine jongen is in de kamer."
+          },
+          {
+            "ar": "الْفَلَّاحُ الْغَنِيُّ مِنَ السُّوقِ.",
+            "nl": "De rijke boer komt van de markt."
+          },
+          {
+            "ar": "كِتَابُ الطَّالِبِ الْجَدِيدِ عَلَى الْمَكْتَبِ.",
+            "nl": "Het boek van de nieuwe student ligt op het bureau."
+          }
+        ],
+        "drills": [
+          {
+            "type": "parse",
+            "sentence": "قَمِيصُ الْوَلَدِ الصَّغِيرِ فِي الْغُرْفَةِ",
+            "target": "الصَّغِيرِ",
+            "options": [
+              "Functie: نَعْت لِلْوَلَدِ · Status: مَجْرُور · Harakah: كَسْرَة",
+              "Functie: خَبَر · Status: مَرْفُوع · Harakah: ضَمَّة",
+              "Functie: مُضَاف إِلَيْهِ · Status: مَجْرُور · Harakah: كَسْرَة"
+            ],
+            "answer": 0,
+            "explain": "الصَّغِيرِ beschrijft الْوَلَدِ (bepaald, mannelijk, مَجْرُور) en is dus نَعْت met status مَجْرُور en harakah كَسْرَة."
+          },
+          {
+            "type": "parse",
+            "sentence": "الْفَلَّاحُ الْغَنِيُّ مِنَ السُّوقِ",
+            "target": "الْغَنِيُّ",
+            "options": [
+              "Functie: نَعْت · Status: مَرْفُوع · Harakah: ضَمَّة",
+              "Functie: مُضَاف إِلَيْهِ · Status: مَجْرُور · Harakah: كَسْرَة",
+              "Functie: اِسْم مَجْرُور · Status: مَجْرُور · Harakah: كَسْرَة"
+            ],
+            "answer": 0,
+            "explain": "الْغَنِيُّ is een bijvoeglijk naamwoord (نَعْت) bij الْفَلَّاحُ (مُبْتَدَأ مَرْفُوع) en krijgt daarom ook status مَرْفُوع met ضَمَّة."
+          },
+          {
+            "type": "parse",
+            "sentence": "كِتَابُ الطَّالِبِ جَدِيدٌ",
+            "target": "جَدِيدٌ",
+            "options": [
+              "Functie: خَبَر · Status: مَرْفُوع · Harakah: ضَمَّة + تَنْوِين",
+              "Functie: نَعْت · Status: مَجْرُور · Harakah: كَسْرَة",
+              "Functie: مُضَاف إِلَيْهِ · Status: مَجْرُور · Harakah: كَسْرَة"
+            ],
+            "answer": 0,
+            "explain": "جَدِيدٌ is onbepaald en zegt iets over het onderwerp كِتَابُ الطَّالِبِ: het is dus het gezegde (خَبَر), مَرْفُوع met ضَمَّة + تَنْوِين."
+          },
+          {
+            "type": "parse",
+            "sentence": "كِتَابُ الطَّالِبِ الْجَدِيدِ عَلَى الْمَكْتَبِ",
+            "target": "الْجَدِيدِ",
+            "options": [
+              "Functie: نَعْت لِلطَّالِبِ · Status: مَجْرُور · Harakah: كَسْرَة",
+              "Functie: خَبَر · Status: مَرْفُوع · Harakah: ضَمَّة",
+              "Functie: مُبْتَدَأ · Status: مَرْفُوع · Harakah: ضَمَّة"
+            ],
+            "answer": 0,
+            "explain": "الْجَدِيدِ heeft الـ en een kasrah: het is dus نَعْت bij الطَّالِبِ (de nieuwe student), status مَجْرُور, harakah كَسْرَة."
           }
         ]
       }
