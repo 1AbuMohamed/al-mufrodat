@@ -1358,7 +1358,7 @@ function showCompare(expected, said, kind, hint, word, endInfo){
     '<div class="cmp-k">'+title+' · tik om te beluisteren</div>'+
     '<div class="cmp-row">'+
       '<div><div class="cmp-lab">Juist</div><div class="cmp-ar ar-mark">'+markAr(expected, kind==='haraka'?'haraka':'ok')+wantPill+'</div></div>'+
-      '<button type="button" class="btn btn-sm btn-secondary" data-act="cmp-gold">🔊 Juist</button>'+
+      '<button type="button" class="btn btn-sm btn-secondary" data-act="cmp-gold">Juist</button>'+
     '</div>'+
     '<div class="cmp-row">'+
       '<div><div class="cmp-lab">'+(kind==='word'?'Jij zei':'Gehoord')+'</div><div class="cmp-ar">'+you+'</div></div>'+
@@ -1509,9 +1509,9 @@ function gradeUtterance(expected, said, wordId, snap, alts){
   return oordeel(expected, said, wordId, snap, alts);
 }
 function zegOkHtml(g){
-  if(!g||g.uitspraak!=='juist') return '✓ Woord goed';
-  if(g.heard && g.end && g.end.agree==='yes') return '✓ Juist — gehoord <b>'+esc(endLabel(g.heard))+'</b>';
-  return '✓ Juist';
+  if(!g||g.uitspraak!=='juist') return 'Woord goed';
+  if(g.heard && g.end && g.end.agree==='yes') return 'Juist — gehoord <b>'+esc(endLabel(g.heard))+'</b>';
+  return 'Juist';
 }
 /** Align expected tokens vs said tokens → HTML with red errors */
 
@@ -1744,16 +1744,16 @@ function startDialoguePractice(lines, resultEl){
           '<button type="button" class="btn btn-secondary btn-sm" data-act="dlg-pause">⏸ Pauze</button>'+
           '<button type="button" class="btn btn-primary btn-sm" data-act="dlg-resume">▶ Ga verder</button>'+
           '<button type="button" class="btn btn-secondary btn-sm" data-act="dlg-retry-line">↺ Deze zin opnieuw</button>'+
-          '<button type="button" class="btn btn-secondary btn-sm" data-act="dlg-peek">👁 Kijk</button>'+
+          '<button type="button" class="btn btn-secondary btn-sm" data-act="dlg-peek">Kijk</button>'+
           '<button type="button" class="btn btn-secondary btn-sm" data-act="toggle-hide">'+(hideText?'Tekst aan':'Verberg')+'</button>'+
           '<button type="button" class="btn btn-secondary btn-sm" data-act="dlg-restart">↻ Helemaal opnieuw</button>'+
-          '<button type="button" class="btn btn-secondary btn-sm" data-act="dlg-finish">✓ Afronden</button>'+
+          '<button type="button" class="btn btn-secondary btn-sm" data-act="dlg-finish">Afronden</button>'+
         '</div>';
       score=resultEl.querySelector('.dlg-score');
       status=resultEl.querySelector('.dlg-status');
     }
     if(score) score.innerHTML='<span class="pct">'+g.pct+'%</span> · zin '+zin+'/'+lines.length+' · tik een gekleurd woord';
-    if(status) status.textContent=window._dlgListening?('🎤 Zeg zin '+zin+(hideText?' · tekst verborgen':'')):'⏸️ Gepauzeerd';
+    if(status) status.textContent=window._dlgListening?('Zeg zin '+zin+(hideText?' · tekst verborgen':'')):'⏸️ Gepauzeerd';
     const pauseBtn=resultEl.querySelector('[data-act="dlg-pause"]');
     const resumeBtn=resultEl.querySelector('[data-act="dlg-resume"]');
     if(pauseBtn) pauseBtn.style.display=window._dlgListening?'':'none';
@@ -1917,7 +1917,7 @@ function startSpeakPractice(expected, who, resultEl){
   window._spkDone=false;
   const left=()=>Math.max(0, Math.ceil((window._spkUntil-Date.now())/1000));
   const stillOn=()=>!window._spkDone && Date.now()<=window._spkUntil;
-  if(resultEl){resultEl.className='speak-result hint';resultEl.textContent='🎤 Blijf zeggen tot het groen is — tot 1 minuut'}
+  if(resultEl){resultEl.className='speak-result hint';resultEl.textContent='Blijf zeggen tot het groen is — tot 1 minuut'}
   document.querySelectorAll('.mic-btn').forEach(b=>b.classList.remove('listening'));
   const btn=document.querySelector('.mic-btn.listening-target');
   if(btn)btn.classList.add('listening');
@@ -1956,11 +1956,11 @@ function startSpeakPractice(expected, who, resultEl){
         if(!said){ resultEl.className='speak-result hint'; resultEl.textContent='Niets gehoord.'; }
         else if(harakaFail){
           resultEl.className='speak-result bad';
-          resultEl.innerHTML='✗ Uitgang: gehoord <b>'+esc(endLabel(g.end.heard))+'</b>, juist <b>'+esc(endLabel(g.end.cls))+'</b>.';
+          resultEl.innerHTML='Uitgang: gehoord <b>'+esc(endLabel(g.end.heard))+'</b>, juist <b>'+esc(endLabel(g.end.cls))+'</b>.';
           showCompare(expected, said, 'haraka', g.end.hint||'', {ar:expected}, g.end);
         }else{
           resultEl.className='speak-result bad';
-          resultEl.innerHTML='✗ Verkeerd woord.<br><span class="ar-diff ar-mark">'+d.html+'</span>';
+          resultEl.innerHTML='Verkeerd woord.<br><span class="ar-diff ar-mark">'+d.html+'</span>';
           showCompare(expected, said, 'word', 'Zeg het woord opnieuw.', {ar:expected}, g.end);
         }
       }
@@ -2645,7 +2645,7 @@ function startZegListen(w, resultEl){
   if(mush) mush.innerHTML=wrapTash(w.ar, hideText?'wait':'now');
   window._zegUntil=Date.now()+LISTEN_MS;
   window._zegDone=false;
-  if(resultEl){resultEl.className='speak-result hint';resultEl.textContent='🎤 Blijf zeggen tot het groen is — tot 1 minuut'}
+  if(resultEl){resultEl.className='speak-result hint';resultEl.textContent='Blijf zeggen tot het groen is — tot 1 minuut'}
   const left=()=>Math.max(0, Math.ceil((window._zegUntil-Date.now())/1000));
   const stillOn=()=>!window._zegDone && state.view==='zeg' && state.current && state.current.id===wordId && !state.answered && Date.now()<=window._zegUntil;
 
@@ -2684,13 +2684,13 @@ function startZegListen(w, resultEl){
         logMistake(w,'haraka', said);
         if(resultEl){
           resultEl.className='speak-result bad';
-          resultEl.innerHTML='✗ Uitgang: gehoord <b>'+esc(endLabel(g.end.heard))+'</b>, juist <b>'+esc(endLabel(g.end.cls))+'</b>. Tik Zeg en probeer opnieuw.';
+          resultEl.innerHTML='Uitgang: gehoord <b>'+esc(endLabel(g.end.heard))+'</b>, juist <b>'+esc(endLabel(g.end.cls))+'</b>. Tik Zeg en probeer opnieuw.';
         }
         showCompare(w.ar, said, 'haraka', g.end.hint||'', w, g.end);
       } else if(said){
         if(mush) mush.innerHTML=wrapTash(w.ar,'bad');
         logMistake(w,'word', said);
-        if(resultEl){resultEl.className='speak-result bad'; resultEl.innerHTML='✗ Verkeerd woord — zeg <b>'+esc(w.translit||'')+'</b>. Tik Zeg.';}
+        if(resultEl){resultEl.className='speak-result bad'; resultEl.innerHTML='Verkeerd woord — zeg <b>'+esc(w.translit||'')+'</b>. Tik Zeg.';}
         showCompare(w.ar, said, 'word', 'Zeg het hele woord, met de uitgang.', w, g.end);
       } else {
         if(mush) mush.innerHTML=wrapTash(w.ar,'wait');
@@ -2729,7 +2729,7 @@ function startZegListen(w, resultEl){
             if(g.uitspraak==='juist') live.textContent='klank goed';
             else if(g.uitspraak==='fout-klank' && g.heard) live.textContent='gehoord '+endLabel(g.heard);
             else if(g.uitspraak==='onzeker') live.textContent='nog niet zeker van de uitgang';
-            else live.textContent='🎤 nog '+left()+'s';
+            else live.textContent='nog '+left()+'s';
           }
           if(g.uitspraak==='juist'){ succeed(g); return true; }
           if(resultEl){
@@ -2767,7 +2767,7 @@ function startZegListen(w, resultEl){
           }
           if(resultEl){
             resultEl.className='speak-result hint';
-            resultEl.textContent='🎤 Nog '+left()+'s — zeg het woord met de uitgang';
+            resultEl.textContent='Nog '+left()+'s — zeg het woord met de uitgang';
           }
           setTimeout(()=>{ if(stillOn()) bind(); }, 60);
         };
@@ -3345,7 +3345,7 @@ function renderWords(){
       const isMast=getP(w.id).box>=MASTERY;
       html+=`<div class="wl-row ${heat}">
         <button class="icon-btn" style="width:36px;height:36px" data-act="speak" data-id="${w.id}" aria-label="Luister">${GL_ICO_SPK}</button>
-        <div class="nl">${esc(w.nl)}${isMast?' <span style="color:var(--ok);font-size:12px" title="Beheerst">✓</span>':''}${heat?`<span class="mk-heat ${heat}" title="vaak mis"></span>`:''}<div style="font-size:11.5px;color:var(--muted);font-weight:500">${esc(w.translit)}</div></div>
+        <div class="nl">${esc(w.nl)}${isMast?' <span style="color:var(--ok);font-size:12px" title="Beheerst"></span>':''}${heat?`<span class="mk-heat ${heat}" title="vaak mis"></span>`:''}<div style="font-size:11.5px;color:var(--muted);font-weight:500">${esc(w.translit)}</div></div>
         <div class="ar ar-mark" lang="ar">${wrapTash(w.ar,'plain')}</div>
       </div>`;
     }
@@ -4585,7 +4585,7 @@ const EXAM_DATA = {
         num: 1,
         title: 'Deel 1: Woordenschat (الْمُفْرَدَاتُ)',
         pts: 30,
-        desc: 'Vraag 1: Dictee (luister & kies het juiste woord met tashkīl, 10 pt) · Vraag 2: Arabisch → Nederlands (10 pt) · Vraag 3: Nederlands → Arabisch met tashkīl (10 pt).',
+        desc: 'Vraag 1: Dictee (10 pt; in de les spreekt de leraar 10 woorden uit — hier oefen je met 10 woorden uit Les 1–7) · Vraag 2: Arabisch → Nederlands (10 pt) · Vraag 3: Nederlands → Arabisch met tashkīl (10 pt).',
         questions: [
           { id:'o1_1', q:'Vraag 1.1 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'مِفْتَاحٌ', opts:['مِفْتَاحٌ','مَفْتَحٌ','مِفْتَاحُ','مُفْتَاحٌ'], ans:0, pts:1, note:'مِفْتَاحٌ (miftāḥun) = een sleutel.' },
           { id:'o1_2', q:'Vraag 1.2 · Dictee (1 pt): Beluister het woord en kies de juiste schrijfwijze met harakāt.', audio:'مَسْجِدٌ', opts:['مَسْجَدٌ','مَسْجِدٌ','مِسْجِدٌ','الْمَسْجِدُ'], ans:1, pts:1, note:'مَسْجِدٌ (masjidun) = een moskee (met kasrah onder de ج).' },
@@ -4627,7 +4627,7 @@ const EXAM_DATA = {
         pts: 10,
         desc: 'Vraag 4 (10 pt): Kies het juiste aanwijzend voornaamwoord (هَذَا / هَذِهِ / ذَلِكَ / تِلْكَ) én vorm een volledige zin met een passend bijvoeglijk naamwoord uit: (كَبِيرٌ – قَدِيمٌ – جَمِيلٌ – حَارٌّ – طَوِيلٌ). Let op het geslacht!',
         questions: [
-          { id:'o4_1', q:'Vraag 4.1 (2 pt): (mannelijk / vrouwelijk? Let op! · nabij) ___ الْقِدْرُ + bijvoeglijk naamwoord:', ar:'___ الْقِدْرُ', opts:['هَذِهِ الْقِدْرُ حَارَّةٌ (of: هَذَا الْقِدْرُ حَارٌّ)','ذَلِكَ الْقِدْرُ حَارٌّ','تِلْكَ الْقِدْرُ حَارَّةٌ','هَذَا الْقِدْرُ حَارٌ'], ans:0, pts:2, note:'In Les 6 leerden we dat الْقِدْرُ (de kookpot) vrouwelijk is (هَذِهِ الْقِدْرُ حَارَّةٌ), maar omdat de hint in het examen "(mannelijk, nabij)" vermeldt wordt هَذَا الْقِدْرُ حَارٌّ ook volledig goed gerekend.' },
+          { id:'o4_1', q:'Vraag 4.1 (2 pt): (mannelijk / vrouwelijk? Let op! · nabij) ___ الْقِدْرُ + bijvoeglijk naamwoord:', ar:'___ الْقِدْرُ', opts:['هَذَا الْقِدْرُ حَارٌّ','ذَلِكَ الْقِدْرُ حَارٌّ','تِلْكَ الْقِدْرُ حَارَّةٌ','هَذَا الْقِدْرُ حَارٌ'], ans:0, pts:2, note:'De opgave geeft aan: mannelijk + nabij → هَذَا + mannelijk bijvoeglijk naamwoord (حَارٌّ). Antwoord: هَذَا الْقِدْرُ حَارٌّ (Deze kookpot is heet).' },
           { id:'o4_2', q:'Vraag 4.2 (2 pt): (vrouwelijk, ver) ___ النَّاقَةُ + bijvoeglijk naamwoord:', ar:'___ النَّاقَةُ', opts:['تِلْكَ النَّاقَةُ طَوِيلَةٌ','ذَلِكَ النَّاقَةُ طَوِيلٌ','هَذِهِ النَّاقَةُ طَوِيلَةٌ','تِلْكَ النَّاقَةُ طَوِيلٌ'], ans:0, pts:2, note:'النَّاقَةُ (de vrouwtjeskameel) is vrouwelijk + ver → تِلْكَ النَّاقَةُ طَوِيلَةٌ (Die vrouwtjeskameel is lang/groot).' },
           { id:'o4_3', q:'Vraag 4.3 (2 pt): (vrouwelijk, nabij) ___ الدَّرَّاجَةُ + bijvoeglijk naamwoord:', ar:'___ الدَّرَّاجَةُ', opts:['هَذِهِ الدَّرَّاجَةُ جَمِيلَةٌ','هَذَا الدَّرَّاجَةُ جَمِيلٌ','تِلْكَ الدَّرَّاجَةُ جَمِيلَةٌ','هَذِهِ الدَّرَّاجَةُ جَمِيلٌ'], ans:0, pts:2, note:'الدَّرَّاجَةُ (de fiets) eindigt op ة (vrouwelijk) + nabij → هَذِهِ الدَّرَّاجَةُ جَمِيلَةٌ.' },
           { id:'o4_4', q:'Vraag 4.4 (2 pt): (mannelijk, ver) ___ الْحِمَارُ + bijvoeglijk naamwoord:', ar:'___ الْحِمَارُ', opts:['ذَلِكَ الْحِمَارُ كَبِيرٌ','تِلْكَ الْحِمَارُ كَبِيرَةٌ','هَذَا الْحِمَارُ كَبِيرٌ','ذَلِكَ الْحِمَارُ كَبِيرَةٌ'], ans:0, pts:2, note:'الْحِمَارُ (de ezel) is mannelijk + ver → ذَلِكَ الْحِمَارُ كَبِيرٌ (Die ezel is groot).' },
@@ -4794,8 +4794,8 @@ const EXAM_DATA = {
           { id:'p5_1', q:'Vraag 5.1 (2 pt): الْكِتَابُ ________ الطَّاوِلَةِ', ar:'الْكِتَابُ ___ الطَّاوِلَةِ', opts:['عَلَى — Het boek ligt op de tafel.','إِلَى — Het boek gaat naar de tafel.','مِنْ — Het boek komt uit de tafel.','مَعَ — Het boek is met de tafel.'], ans:0, pts:2, note:'الْكِتَابُ عَلَى الطَّاوِلَةِ = Het boek ligt op de tafel.' },
           { id:'p5_2', q:'Vraag 5.2 (2 pt): الطَّالِبُ ________ الْغُرْفَةِ', ar:'الطَّالِبُ ___ الْغُرْفَةِ', opts:['فِي — De student is in de kamer.','عَلَى — De student zit op de kamer.','مَعَ — De student is met de kamer.','إِلَى — De student gaat naar de kamer.'], ans:0, pts:2, note:'الطَّالِبُ فِي الْغُرْفَةِ = De student is in de kamer.' },
           { id:'p5_3', q:'Vraag 5.3 (2 pt): ذَهَبَ سُفْيَانُ ________ الْمَسْجِدِ', ar:'ذَهَبَ سُفْيَانُ ___ الْمَسْجِدِ', opts:['إِلَى — Sufyān ging naar de moskee.','فِي — Sufyān ging in de moskee.','عَلَى — Sufyān ging op de moskee.','مَعَ — Sufyān ging met de moskee.'], ans:0, pts:2, note:'Bij het werkwoord ذَهَبَ (hij ging) hoort إِلَى (naar): ذَهَبَ سُفْيَانُ إِلَى الْمَسْجِدِ.' },
-          { id:'p5_4', q:'Vraag 5.4 (2 pt): هُوَ ________ مِصْرَ', ar:'هُوَ ___ مِصْرَ', opts:['مِنْ — Hij komt uit Egypte.','عَلَى — Hij is op Egypte.','مَعَ — Hij is met Egypte.','إِلَى — Hij komt uit Egypte.'], ans:0, pts:2, note:'هُوَ مِنْ مِصْرَ = Hij komt uit Egypte (مِصْرَ krijgt fatḥah i.p.v. kasrah omdat het een diptoot is).' },
-          { id:'p5_5', q:'Vraag 5.5 (2 pt): الْقَلَمُ ________ الْكِتَابِ', ar:'الْقَلَمُ ___ الْكِتَابِ', opts:['مَعَ — De pen is bij/met het boek.','إِلَى — De pen gaat naar het boek.','مِنْ — De pen komt uit het boek.','فِي — De pen is bij/met het boek.'], ans:0, pts:2, note:'الْقَلَمُ مَعَ الْكِتَابِ = De pen ligt bij/met het boek.' }
+          { id:'p5_4', q:'Vraag 5.4 (2 pt): هُوَ ________ مِصْرَ', ar:'هُوَ ___ مِصْرَ', opts:['مِنْ — Hij komt uit Egypte.','عَلَى — Hij is op Egypte.','مَعَ — Hij is met Egypte.','إِلَى — Hij gaat naar Egypte.'], ans:0, pts:2, note:'هُوَ مِنْ مِصْرَ = Hij komt uit Egypte (مِصْرَ krijgt fatḥah i.p.v. kasrah omdat het een diptoot is).' },
+          { id:'p5_5', q:'Vraag 5.5 (2 pt): الْقَلَمُ ________ الْكِتَابِ', ar:'الْقَلَمُ ___ الْكِتَابِ', opts:['مَعَ — De pen is bij/met het boek.','إِلَى — De pen gaat naar het boek.','مِنْ — De pen komt uit het boek.','فِي — De pen zit in het boek.'], ans:0, pts:2, note:'الْقَلَمُ مَعَ الْكِتَابِ = De pen ligt bij/met het boek.' }
         ]
       },
       {
@@ -4962,9 +4962,23 @@ const EXAM_IRAB_TABLES = {
   ]
 };
 
+function examOrder(q){
+  let s=5;
+  for(const c of q.id) s=(s*31+c.charCodeAt(0))>>>0;
+  const idx=q.opts.map((_,i)=>i);
+  for(let i=idx.length-1;i>0;i--){
+    s=(Math.imul(s,1664525)+1013904223)>>>0;
+    const j=(s>>>8)%(i+1);
+    [idx[i],idx[j]]=[idx[j],idx[i]];
+  }
+  return idx;
+}
+
 function renderExam(){
   if(state.examInstant===undefined) state.examInstant = true;
-  if(!state.examAnswers) state.examAnswers = {};
+  if(!state.examAnswers){
+    try{ state.examAnswers = JSON.parse(localStorage.getItem('alm_exam_ans')||'{}') || {}; }catch(e){ state.examAnswers = {}; }
+  }
   if(!state.examPart) state.examPart = 'all';
   if(!state.examSheetVar) state.examSheetVar = 'official';
 
@@ -5219,7 +5233,8 @@ function renderExam(){
           <button type="button" class="btn btn-secondary btn-sm" data-act="speak-text" data-text="${esc(q.ar.replace(/___+/g,''))}" title="Beluister">${GL_ICO_SPK}</button>
         </div>` : ''}
         <div class="exam-opts">
-          ${q.opts.map((opt, oi) => {
+          ${examOrder(q).map((oi, pos) => {
+            const opt = q.opts[oi];
             let cls = 'exam-opt';
             if(picked === oi) cls += ' selected';
             if(showFb){
@@ -5228,7 +5243,7 @@ function renderExam(){
             }
             const hasAr = /[\u0600-\u06FF]/.test(opt);
             return `<button type="button" class="${cls}" data-act="exam-ans" data-qid="${q.id}" data-oi="${oi}">
-              <span class="exam-opt-letter">${String.fromCharCode(65+oi)}</span>
+              <span class="exam-opt-letter">${String.fromCharCode(65+pos)}</span>
               <span class="exam-opt-text ${hasAr?'has-ar':''}">${esc(opt)}</span>
             </button>`;
           }).join('')}
@@ -5418,6 +5433,7 @@ document.addEventListener('click',e=>{
     if(!state.examAnswers) state.examAnswers = {};
     if(!state.examAnswers[exKey]) state.examAnswers[exKey] = {};
     state.examAnswers[exKey][btn.dataset.qid] = parseInt(btn.dataset.oi, 10);
+    try{ localStorage.setItem('alm_exam_ans', JSON.stringify(state.examAnswers)); }catch(e){}
     render();
   }
   else if(act==='exam-check-instant'){
@@ -5433,6 +5449,7 @@ document.addEventListener('click',e=>{
   else if(act==='exam-reset'){
     const exKey = state.examMode === 'practice' ? 'practice' : 'official';
     if(state.examAnswers) state.examAnswers[exKey] = {};
+    try{ localStorage.setItem('alm_exam_ans', JSON.stringify(state.examAnswers||{})); }catch(e){}
     state.examSubmitted = false;
     render();
     (document.getElementById("app")||window).scrollTop=0;
