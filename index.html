@@ -2426,7 +2426,7 @@ function renderHome(){
           <div class="n">2</div>
           <div><b>Medina Grammatica & Zinsontleding</b><span>Volledige lesstekst, voorbeelden, quiz en iʿrāb-ontleding</span></div>
         </div>
-        <div class="step" data-act="start-onboard" data-mode="learn" style="cursor:pointer">
+        <div class="step" data-act="start-onboard" data-mode="conv" style="cursor:pointer">
           <div class="n">3</div>
           <div><b>Arabische Dialogen</b><span>Beluister gesprekken per spreker en spreek ze zin voor zin na</span></div>
         </div>
@@ -2469,19 +2469,6 @@ function renderHome(){
     </div>
 
     <div class="home-dashboard">
-      <button type="button" class="home-nudge" data-act="start-learn" data-l="${next}">
-        <span class="home-nudge-ic">→</span>
-        <span>Ga verder waar je was: <strong>${next==='all'?'Herhaal alle woorden':(esc(hoofdstuk(next))+' — '+esc(meta[0]))}</strong> (${nm}/${nws.length} beheerst)</span>
-        <span class="home-nudge-cta">Verder oefenen →</span>
-      </button>
-
-      <div class="home-stats">
-        <div class="home-stat"><i>01</i><b>${total}</b> woorden</div>
-        <div class="home-stat"><i>02</i><b>${gCount}</b> grammatica-lessen</div>
-        <div class="home-stat"><i>03</i><b>${cCount}</b> dialoog-eenheden</div>
-        <div class="home-stat"><i>04</i><b>${st}</b> ${st===1?'dag':'dagen'} reeks</div>
-      </div>
-
       <div class="dua-card">
         <div class="dua-kicker">
           <span>Duʿāʾ voor nuttige kennis</span>
@@ -2523,31 +2510,7 @@ function renderHome(){
         </div>
       </section>
 
-      <section class="home-section">
-        <div class="home-section-head">
-          <div>
-            <div class="home-kicker">Snel starten</div>
-            <h2>Direct aan de slag met een oefenvorm</h2>
-          </div>
-        </div>
-        <div class="core-strip">
-          <button type="button" class="core-item" data-act="start-zeg" data-l="${next}">
-            <span class="core-no">01</span>
-            <span><b>Zeg & Harakaat-check</b><small>Spreek woorden hardop uit met tanwīn-controle</small></span>
-            <span class="core-arrow">→</span>
-          </button>
-          <button type="button" class="core-item" data-act="start-flash" data-l="${next}">
-            <span class="core-no">02</span>
-            <span><b>Flashcards (${hoofdstuk(next)})</b><small>Draai kaarten om met audio & transcriptie</small></span>
-            <span class="core-arrow">→</span>
-          </button>
-          <button type="button" class="core-item" data-act="${mkCount ? 'nav' : 'open-book'}" data-v="mistakes" data-l="${lastGrammar||1}" data-tab="ontleed">
-            <span class="core-no">03</span>
-            <span><b>${mkCount ? ('Fouten herhalen ('+mkCount+')') : 'Zinsontleding (Iʿrāb)'}</b><small>${mkCount ? 'Oefen woorden die eerder misgingen' : 'Ontleed Arabische zinnen stap voor stap'}</small></span>
-            <span class="core-arrow">→</span>
-          </button>
-        </div>
-      </section>
+${mkCount?`<button type="button" class="home-nudge" data-act="nav" data-v="mistakes"><span class="home-nudge-ic">!</span><span><strong>${mkCount} woorden om te herhalen</strong> - eerder misgegaan bij uitspraak of harakaat</span><span class="home-nudge-cta">Herhalen →</span></button>`:''}
 
       <div class="site-credit">
         Gebaseerd op <strong>Durūs al-Lughah al-ʿArabiyyah li-Ghayr an-Nāṭiqīna bihā</strong> (Medina-boek Deel 1) van dr. V. Abdur Rahim.
@@ -4510,7 +4473,7 @@ function renderConvUnit(){
         <div class="conv-hero-kicker">Eenheid ${n} · Conversatieles</div>
         <h1 class="conv-hero-ar ar" lang="ar">${esc(c.titleAr)}</h1>
         <div class="conv-hero-nl">${esc(d.titleNl||c.titleNl)}</div>
-        ${d.instruction?`<div class="conv-instruction"><span class="conv-inst-icon">ℹ️</span> <span class="ar" lang="ar">${esc(d.instruction)}</span> <span class="conv-inst-sub">(Kijk, luister en herhaal)</span></div>`:''}
+        ${d.instruction?`<div class="conv-instruction"><span class="ar" lang="ar">${esc(d.instruction)}</span> <span class="conv-inst-sub">(Kijk, luister en herhaal)</span></div>`:''}
       </div>
     </div>
 
@@ -4522,7 +4485,7 @@ function renderConvUnit(){
         <button class="btn btn-secondary btn-sm conv-ctrl-btn" data-act="practice-dialogue" data-u="${n}" data-di="${di}">${GL_ICO_MIC} Oefen dialoog</button>
       </div>
       <div class="conv-ctrl-right">
-        <button class="btn btn-ghost btn-sm conv-ctrl-btn" data-act="toggle-all-trans">${state.convShowAll?'🇳🇱 NL uit':'🇳🇱 NL aan'}</button>
+        <button class="btn btn-ghost btn-sm conv-ctrl-btn" data-act="toggle-all-trans">${state.convShowAll?'Vertaling uit':'Vertaling aan'}</button>
         <button class="btn btn-ghost btn-sm conv-ctrl-btn" data-act="toggle-hide">${hideText?'Tekst aan':'Verberg'}</button>
       </div>
     </div>
@@ -4702,6 +4665,7 @@ document.addEventListener('click',e=>{
     if(mode==='home'){state.view='home';state.path='home';render();return}
     if(mode==='flash'){state.path='vocab';state.lesson=1;state.pool=shuffle(wordsFor(1));state.idx=0;state.flipped=false;state.view='flash';if(autoSpeak&&state.pool[0])speakWord(state.pool[0])}
     else if(mode==='book'){state.path='grammar';state.view='book'}
+    else if(mode==='conv'){state.path='conv';state.view='conv'}
     else startLearn(1);
     render();
   }
