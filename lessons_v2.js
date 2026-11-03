@@ -198,12 +198,12 @@ window.G2_LESSONS = {
   },
   "1": {
     "n": 1,
-    "title": "Les 1",
+    "title": "Les 1 · Nominale Zin & Aanwijzer هَذَا",
     "titleAr": "الدرس الأول",
     "pages": "13-14",
     "steps": [
       {
-        "title": "Wat is dit? Dit is een boek.",
+        "title": "Aanwijzer هَذَا (Dit)",
         "page": 13,
         "text": [
           "In deze les leren we het volgende:"
@@ -274,7 +274,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Het woord هٰذَا en geen woord voor \"is\"",
+        "title": "Geen Koppelwerkwoord 'is'",
         "page": 13,
         "text": [
           "Merk op:",
@@ -313,7 +313,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Tanwien: het onbepaald lidwoord \"een\"",
+        "title": "Tanwīn (Onbepaaldheid)",
         "page": 13,
         "text": [
           "3. Er is geen woord in het Arabisch dat overeenkomt met het Nederlandse woord \"een\", zoals in de zin: \"Dit is een boek.\"",
@@ -375,11 +375,14 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Vraagpartikel أَ",
+        "title": "Vraagpartikel أَ & Nominale Zin",
         "page": 13,
         "text": [
           "4. Een zin verandert in een vraag wanneer het partikel «أَ» aan het begin van de zin staat.",
-          "Voorbeeld:"
+          "Voorbeeld:",
+          "In de nominale zin (الْجُمْلَةُ الاِسْمِيَّةُ) zoals «هَذَا كِتَابٌ» heeft elk woord een vaste grammaticale rol (إِعْرَاب):",
+          "• هَذَا is het onderwerp (مُبْتَدَأ). Omdat het een aanwijzend voornaamwoord is, is het onveranderlijk (مَبْنِيّ) en neemt het de plaats in van een woord in de nominatief.",
+          "• كِتَابٌ is het gezegde/nieuws (خَبَر). Het staat in de nominatief (مَرْفُوع) en krijgt hier een tanwīn dammah (ـٌ)."
         ],
         "examples": [
           {
@@ -396,7 +399,7 @@ window.G2_LESSONS = {
         "drills": [
           {
             "type": "transform",
-            "prompt": "Maak er een vraag van",
+            "prompt": "Maak er een vraag van:",
             "from": "هٰذَا بَيْتٌ.",
             "options": [
               "مَا هٰذَا بَيْتٌ؟",
@@ -415,19 +418,28 @@ window.G2_LESSONS = {
             ],
             "answer": 1,
             "nl": "Is dit een huis?",
-            "explain": "«أَ» aan het begin van de zin = vraag."
+            "explain": "«أَ» aan het begin van de zin = vraagpartikel."
           },
           {
             "type": "parse",
-            "sentence": "هَذَا مَسْجِدٌ",
-            "target": "مَسْجِدٌ",
-            "options": [
-              "خَبَر مَرْفُوع (Gezegde van de nominale zin)",
-              "مُبْتَدَأ (Onderwerp)",
-              "فَاعِل (Dader van werkwoord)"
-            ],
-            "answer": 0,
-            "explain": "In de nominale zin «هَذَا مَسْجِدٌ» is هَذَا het onderwerp (Mubtada') en مَسْجِدٌ het gezegde (Khabar Marfū' met Tanwīn Dammah)."
+            "sentence": "هَذَا كِتَابٌ",
+            "nl": "Dit is een boek.",
+            "words": [
+              {
+                "ar": "هَذَا",
+                "role": "mubtada",
+                "status": "mabnee",
+                "mark": "none",
+                "explain": "«هَذَا» is een aanwijzend voornaamwoord dat fungeert als het onderwerp (مُبْتَدَأ). Aanwijzers zijn onveranderlijk (مَبْنِيّ)."
+              },
+              {
+                "ar": "كِتَابٌ",
+                "role": "khabar",
+                "status": "marfoo",
+                "mark": "tanween_damm",
+                "explain": "«كِتَابٌ» is het gezegde (خَبَر) van de nominale zin: altijd in de nominatief (مَرْفُوع met تَنْوِين ضَمّ)."
+              }
+            ]
           }
         ]
       }
@@ -691,12 +703,12 @@ window.G2_LESSONS = {
   },
   "2": {
     "n": 2,
-    "title": "Les 2",
+    "title": "Les 2 · Aanwijzer ذَلِكَ & Voegwoord وَ",
     "titleAr": "الدرس الثاني",
     "pages": "15-16",
     "steps": [
       {
-        "title": "ذٰلِكَ (die, dat) en وَ (en)",
+        "title": "ذَلِكَ (Dat) en وَ (En)",
         "page": 15,
         "text": [
           "In deze les leren we het gebruik van «ذٰلِكَ» en «وَ».",
@@ -749,7 +761,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Uitspraak van ذٰلِكَ en schrijfwijze van وَ",
+        "title": "Uitspraak en Schrijfwijze",
         "page": 15,
         "text": [
           "Merk op:",
@@ -886,12 +898,12 @@ window.G2_LESSONS = {
   },
   "3": {
     "n": 3,
-    "title": "Les 3 · Bepaald lidwoord الْ · Zonne- en Maanletters · Hamzatoel Wasl",
+    "title": "Les 3 · Bepaald Lidwoord الْ & Zonneletters",
     "titleAr": "الدرس الثالث",
     "pages": "17-20",
     "steps": [
       {
-        "title": "Het bepaald lidwoord الْ («al») en het wegvallen van de Tanwien",
+        "title": "Het Lidwoord الْ & Tanwīn",
         "page": 17,
         "text": [
           "In deze les leren we het gebruik van het Arabische bepaald lidwoord «al» (الْ), dat overeenkomt met het Nederlandse «de» of «het».",
@@ -985,7 +997,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Zonneletters en Maanletters: regel van assimilatie",
+        "title": "Zonneletters en Maanletters",
         "page": 17,
         "text": [
           "Het Arabische alfabet bestaat uit 28 letters. Hiervan zijn er 14 zonneletters en 14 maanletters.",
@@ -1041,7 +1053,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Overzichtstabel Zonne- en Maanletters",
+        "title": "Overzicht Zon & Maan",
         "page": 19,
         "text": [
           "Bestudeer het overzicht op blz. 19 van het boek: links de 14 zonneletters en rechts de 14 maanletters."
@@ -1176,7 +1188,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Hamzatoel Wasl (ٱ) en Bijvoeglijke naamwoorden",
+        "title": "Hamzatul Wasl (ٱ) & Zinsbouw",
         "page": 18,
         "text": [
           "Merk op dat de «a» van «al» alleen wordt uitgesproken wanneer het woord aan het begin van een zin staat. Als er een woord aan voorafgaat (zoals وَ), valt de «a» weg in de uitspraak. Deze Hamzah heet Hamzatoel Wasl (هَمْزَةُ الْوَصْلِ, teken ٱ).",
@@ -1222,20 +1234,29 @@ window.G2_LESSONS = {
           },
           {
             "type": "parse",
-            "sentence": "الْقَمَرُ جَمِيلٌ",
-            "target": "الْقَمَرُ",
-            "options": [
-              "مُبْتَدَأ مَرْفُوع بِالضَّمَّةِ (Onderwerp met Dammah)",
-              "خَبَر مَرْفُوع",
-              "مَفْعُول بِهِ"
-            ],
-            "answer": 0,
-            "explain": "الْقَمَرُ is het bepaalde onderwerp (Mubtada') van de nominale zin en staat in de nominatief (Marfū' op Dammah)."
+            "sentence": "الطَّالِبُ مُجْتَهِدٌ",
+            "nl": "De student is ijverig.",
+            "words": [
+              {
+                "ar": "الطَّالِبُ",
+                "role": "mubtada",
+                "status": "marfoo",
+                "mark": "dammah",
+                "explain": "«الطَّالِبُ» is het bepaalde onderwerp (مُبْتَدَأ): nominatief (مَرْفُوع met één ضَمَّة)."
+              },
+              {
+                "ar": "مُجْتَهِدٌ",
+                "role": "khabar",
+                "status": "marfoo",
+                "mark": "tanween_damm",
+                "explain": "«مُجْتَهِدٌ» is het onbepaalde gezegde (خَبَر): nominatief (مَرْفُوع met تَنْوِين ضَمّ)."
+              }
+            ]
           }
         ]
       },
       {
-        "title": "Examenstof Deel 4: Zonneletters vs. Maanletters & Bepaald maken met tashkīl",
+        "title": "Zon & Maan in de Praktijk",
         "page": "19-20",
         "text": [
           "Bij het toevoegen van het bepaald lidwoord الْـ (al-taʿrīf) vallen twee zaken samen: (1) de tanwīn (-un) aan het einde vervalt en wordt één enkele dammah (-u), en (2) de uitspraak van de ل hangt af van de eerste letter van het woord.",
@@ -1679,12 +1700,12 @@ window.G2_LESSONS = {
   },
   "4": {
     "n": 4,
-    "title": "Les 4 · Voorzetsels (حُرُوفُ الْجَرِّ) · فِي، عَلَى، مِنْ، إِلَى · هُوَ en هِيَ",
+    "title": "Les 4 · Voorzetsels (حُرُوفُ الْجَرِّ)",
     "titleAr": "الدرس الرابع",
     "pages": "21-26",
     "steps": [
       {
-        "title": "Voorzetsels فِي (in) en عَلَى (op) · De genitief (الْمَجْرُور)",
+        "title": "Voorzetsels فِي en عَلَى",
         "page": 21,
         "text": [
           "In deze les leren we Arabische voorzetsels (حُرُوفُ الْجَرِّ).",
@@ -1735,42 +1756,60 @@ window.G2_LESSONS = {
         "drills": [
           {
             "type": "fill",
-            "ar": "الْكِتَابُ عَلَى الْمَكْتَب_.",
+            "ar": "الْكِتَابُ _ الْمَكْتَبِ",
             "options": [
-              "ِ",
-              "ُ",
-              "َ"
+              "عَلَى",
+              "فِي",
+              "مِنْ"
             ],
             "answer": 0,
-            "nl": "op het bureau",
-            "explain": "Ná het voorzetsel عَلَى krijgt het woord een Kasrah (-i)."
+            "nl": "Het boek ligt op het bureau.",
+            "explain": "عَلَى betekent 'op'."
           },
           {
             "type": "fill",
-            "ar": "فِي بَيْت_.",
+            "ar": "الْمُحَمَّدُ فِي الْبَيْتِ_",
             "options": [
-              "ٍ",
-              "ٌ",
-              "ً"
+              "ـِ",
+              "ـُ",
+              "ـَ"
             ],
             "answer": 0,
-            "nl": "in een huis",
-            "explain": "Zonder al- krijgt het woord Tanwien met Kasrah (-in)."
+            "nl": "Kies de juiste klinker aan het einde van الْبَيْتِ",
+            "explain": "Na het voorzetsel فِي komt een kasrah (-i): الْبَيْتِ."
           },
           {
-            "type": "order",
-            "nl": "Muhammad is in de kamer.",
+            "type": "parse",
+            "sentence": "الْإِمَامُ فِي الْمَسْجِدِ",
+            "nl": "De imam is in de moskee.",
             "words": [
-              "مُحَمَّدٌ",
-              "فِي",
-              "الْغُرْفَةِ."
-            ],
-            "explain": "مُحَمَّدٌ = onderwerp, فِي الْغُرْفَةِ = voorzetselbepaling."
+              {
+                "ar": "الْإِمَامُ",
+                "role": "mubtada",
+                "status": "marfoo",
+                "mark": "dammah",
+                "explain": "«الْإِمَامُ» is het onderwerp (مُبْتَدَأ): nominatief (مَرْفُوع met ضَمَّة)."
+              },
+              {
+                "ar": "فِي",
+                "role": "harf_jarr",
+                "status": "mabnee",
+                "mark": "none",
+                "explain": "«فِي» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ)."
+              },
+              {
+                "ar": "الْمَسْجِدِ",
+                "role": "ism_majroor",
+                "status": "majroor",
+                "mark": "kasrah",
+                "explain": "«الْمَسْجِدِ» volgt na een voorzetsel (اِسْم مَجْرُور): genitief (مَجْرُور met كَسْرَة)."
+              }
+            ]
           }
         ]
       },
       {
-        "title": "Persoonlijke voornaamwoorden هُوَ (hij/het) en هِيَ (zij/het)",
+        "title": "Voornaamwoorden هُوَ en هِيَ",
         "page": 21,
         "text": [
           "In het Arabisch hebben alle naamwoorden een mannelijk of vrouwelijk geslacht.",
@@ -1821,7 +1860,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Werkwoorden ذَهَبَ (hij ging) en خَرَجَ (hij ging naar buiten)",
+        "title": "Werkwoorden ذَهَبَ en خَرَجَ",
         "page": 23,
         "text": [
           "In Les 4 maken we kennis met de eerste werkwoorden in de verleden tijd:",
@@ -1866,7 +1905,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Voorzetsels مِنْ (van/uit) en إِلَى (naar/tot) · Les 4b",
+        "title": "Voorzetsels مِنْ en إِلَى",
         "page": 25,
         "text": [
           "In Les 4b leren we nog twee belangrijke voorzetsels:",
@@ -1938,7 +1977,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Examenstof Deel 3: De 5 voorzetsels (فِي، عَلَى، مِنْ، إِلَى، مَعَ) & zinsvertaling",
+        "title": "Diptoten & Voorzetsel مَعَ",
         "page": "21-26",
         "text": [
           "In het examen van Les 1 t/m 7 pas je vijf veelgebruikte voorzetsels/partikels toe waarna het zelfstandig naamwoord in de genitief (مَجْرُور met كَسْرَة) komt te staan: فِي (in), عَلَى (op), مِنْ (uit/van), إِلَى (naar) en مَعَ (met/bij).",
@@ -2079,15 +2118,31 @@ window.G2_LESSONS = {
           },
           {
             "type": "parse",
-            "sentence": "الْإِمَامُ فِي الْمَسْجِدِ",
-            "target": "الْمَسْجِدِ",
-            "options": [
-              "Functie: اِسْم مَجْرُور · Status: مَجْرُور · Harakah: كَسْرَة",
-              "Functie: مُبْتَدَأ · Status: مَرْفُوع · Harakah: ضَمَّة",
-              "Functie: حَرْف جَرّ · Status: — · Harakah: —"
-            ],
-            "answer": 0,
-            "explain": "Na het voorzetsel فِي is الْمَسْجِدِ een اِسْم مَجْرُور met status مَجْرُور en harakah كَسْرَة."
+            "sentence": "الرَّسُولُ مِنْ مَكَّةَ",
+            "nl": "De Boodschapper komt uit Mekka.",
+            "words": [
+              {
+                "ar": "الرَّسُولُ",
+                "role": "mubtada",
+                "status": "marfoo",
+                "mark": "dammah",
+                "explain": "«الرَّسُولُ» is het onderwerp (مُبْتَدَأ): مَرْفُوع met ضَمَّة."
+              },
+              {
+                "ar": "مِنْ",
+                "role": "harf_jarr",
+                "status": "mabnee",
+                "mark": "none",
+                "explain": "«مِنْ» is een voorzetsel (حَرْف جَرّ): مَبْنِيّ."
+              },
+              {
+                "ar": "مَكَّةَ",
+                "role": "ism_majroor",
+                "status": "majroor",
+                "mark": "fathah",
+                "explain": "«مَكَّةَ» is een diptoot (مَمْنُوع مِنَ الصَّرْف) en krijgt in de genitief een fatha (ـَ) in plaats van een kasrah!"
+              }
+            ]
           }
         ]
       }
@@ -2298,12 +2353,12 @@ window.G2_LESSONS = {
   },
   "5": {
     "n": 5,
-    "title": "Les 5 · De Bezitsconstructie (الْإِضَافَةُ) · الْمُضَافُ وَالْمُضَافُ إِلَيْهِ · تَحْتَ · يَا",
+    "title": "Les 5 · De Bezitsconstructie (الْإِضَافَةُ)",
     "titleAr": "الدرس الخامس",
     "pages": "27-29",
     "steps": [
       {
-        "title": "De Idāfah: Eerste lid (مُضَاف) en tweede lid (مُضَاف إِلَيْهِ)",
+        "title": "De Bezitsconstructie (Idāfah)",
         "page": 27,
         "text": [
           "In deze les leren we de bezitsconstructie (الْإِضَافَةُ), zoals: \"het boek van Bilal\" of \"de auto van de leraar\".",
@@ -2402,7 +2457,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Het plaatsbijwoord تَحْتَ (onder)",
+        "title": "Plaatsbijwoord تَحْتَ (Onder)",
         "page": 28,
         "text": [
           "Het woord «تَحْتَ» (onder) is een plaatsaanduiding (ظَرْفُ مَكَانٍ).",
@@ -2446,7 +2501,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "De roepvorm met يَا (O...) · Het wegvallen van de Tanwien",
+        "title": "Roepvorm met يَا (O...)",
         "page": 28,
         "text": [
           "Het partikel «يَا» is het vocatief partikel (\"O...\").",
@@ -2511,7 +2566,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Woorden met Hamzatoel Wasl: اِسْمٌ en اِبْنٌ",
+        "title": "Hamzatul Wasl: اِسْم en اِبْن",
         "page": 29,
         "text": [
           "De woorden «اِسْمٌ» (naam) en «اِبْنٌ» (zoon) beginnen met een Hamzatoel Wasl (ٱ).",
@@ -2568,7 +2623,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Examenstof Deel 6: Woorden verbinden tot een correcte الإضافة (met tashkīl)",
+        "title": "Idāfah Zinnen & Ontleden",
         "page": "27-29",
         "text": [
           "Wanneer je twee losse woorden verbindt tot een bezitsconstructie (الْإِضَافَةُ), pas je twee vaste regels toe:",
@@ -2736,15 +2791,101 @@ window.G2_LESSONS = {
           },
           {
             "type": "parse",
+            "sentence": "كِتَابُ الطَّالِبِ جَدِيدٌ",
+            "nl": "Het boek van de student is nieuw.",
+            "words": [
+              {
+                "ar": "كِتَابُ",
+                "role": "mubtada_mudaf",
+                "status": "marfoo",
+                "mark": "dammah",
+                "explain": "«كِتَابُ» is het onderwerp (مُبْتَدَأ) én bezit (مُضَاف): nominatief (مَرْفُوع met één ضَمَّة, geen tanwīn)."
+              },
+              {
+                "ar": "الطَّالِبِ",
+                "role": "mudaf_ilayhi",
+                "status": "majroor",
+                "mark": "kasrah",
+                "explain": "«الطَّالِبِ» is de bezitter (مُضَاف إِلَيْهِ): altijd genitief (مَجْرُور met كَسْرَة)."
+              },
+              {
+                "ar": "جَدِيدٌ",
+                "role": "khabar",
+                "status": "marfoo",
+                "mark": "tanween_damm",
+                "explain": "«جَدِيدٌ» is het gezegde (خَبَر): nominatief (مَرْفُوع met تَنْوِين ضَمّ)."
+              }
+            ]
+          },
+          {
+            "type": "parse",
             "sentence": "حَقِيبَةُ الطَّالِبِ عَلَى السَّرِيرِ",
-            "target": "حَقِيبَةُ",
-            "options": [
-              "Functie: مُبْتَدَأ (مُضَاف) · Status: مَرْفُوع · Harakah: ضَمَّة",
-              "Functie: مُضَاف إِلَيْهِ · Status: مَجْرُور · Harakah: كَسْرَة",
-              "Functie: خَبَر · Status: مَرْفُوع · Harakah: ضَمَّة + تَنْوِين"
-            ],
-            "answer": 0,
-            "explain": "حَقِيبَةُ staat aan het begin van de nominale zin (مُبْتَدَأ) én is het eerste deel van de bezitsconstructie (مُضَاف): مَرْفُوع met één ضَمَّة."
+            "nl": "De tas van de student ligt op het bed.",
+            "words": [
+              {
+                "ar": "حَقِيبَةُ",
+                "role": "mubtada_mudaf",
+                "status": "marfoo",
+                "mark": "dammah",
+                "explain": "«حَقِيبَةُ» is مُبْتَدَأ وَهُوَ مُضَاف: مَرْفُوع met één ضَمَّة."
+              },
+              {
+                "ar": "الطَّالِبِ",
+                "role": "mudaf_ilayhi",
+                "status": "majroor",
+                "mark": "kasrah",
+                "explain": "«الطَّالِبِ» is مُضَاف إِلَيْهِ: مَجْرُور met كَسْرَة."
+              },
+              {
+                "ar": "عَلَى",
+                "role": "harf_jarr",
+                "status": "mabnee",
+                "mark": "none",
+                "explain": "«عَلَى» is حَرْف جَرّ: مَبْنِيّ."
+              },
+              {
+                "ar": "السَّرِيرِ",
+                "role": "ism_majroor",
+                "status": "majroor",
+                "mark": "kasrah",
+                "explain": "«السَّرِيرِ» is اِسْم مَجْرُور: مَجْرُور met كَسْرَة."
+              }
+            ]
+          },
+          {
+            "type": "parse",
+            "sentence": "قَلَمُ الْأُسْتَاذِ عَلَى الطَّاوِلَةِ",
+            "nl": "De pen van de leraar ligt op de tafel.",
+            "words": [
+              {
+                "ar": "قَلَمُ",
+                "role": "mubtada_mudaf",
+                "status": "marfoo",
+                "mark": "dammah",
+                "explain": "«قَلَمُ» is مُبْتَدَأ وَهُوَ مُضَاف: مَرْفُوع met één ضَمَّة."
+              },
+              {
+                "ar": "الْأُسْتَاذِ",
+                "role": "mudaf_ilayhi",
+                "status": "majroor",
+                "mark": "kasrah",
+                "explain": "«الْأُسْتَاذِ» is مُضَاف إِلَيْهِ: مَجْرُور met كَسْرَة."
+              },
+              {
+                "ar": "عَلَى",
+                "role": "harf_jarr",
+                "status": "mabnee",
+                "mark": "none",
+                "explain": "«عَلَى» is حَرْف جَرّ: مَبْنِيّ."
+              },
+              {
+                "ar": "الطَّاوِلَةِ",
+                "role": "ism_majroor",
+                "status": "majroor",
+                "mark": "kasrah",
+                "explain": "«الطَّاوِلَةِ» is اِسْم مَجْرُور: مَجْرُور met كَسْرَة."
+              }
+            ]
           }
         ]
       }
@@ -2944,12 +3085,12 @@ window.G2_LESSONS = {
   },
   "6": {
     "n": 6,
-    "title": "Les 6",
+    "title": "Les 6 · Vrouwelijk (هَذِهِ & Taa' Marboetah)",
     "titleAr": "الدرس السادس",
     "pages": "30-33",
     "steps": [
       {
-        "title": "هٰذِهِ: de vrouwelijke vorm van هٰذَا",
+        "title": "Vrouwelijk Aanwijzen (هَذِهِ)",
         "page": 30,
         "text": [
           "(هٰذِهِ) is de vrouwelijke vorm van (هٰذَا). Het wordt uitgesproken als (هَاذِهِ), maar de Alief wordt in schrift weggelaten.",
@@ -2999,7 +3140,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Vrouwelijk maken met Taa' Marboetah (ة)",
+        "title": "Taa' Marboetah (ة)",
         "page": 30,
         "text": [
           "Zelfstandige naamwoorden en bijvoeglijke naamwoorden worden vrouwelijk gemaakt door een Taa' Marboetah (ة) aan het eind toe te voegen. De laatste letter vóór de Taa' Marboetah (ة) krijgt een Fathah (َ):",
@@ -3081,7 +3222,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Geslacht van lichaamsdelen",
+        "title": "Geslacht van Lichaamsdelen",
         "page": 31,
         "text": [
           "Lichaamsdelen waarvan je er twee hebt, zijn meestal vrouwelijk, terwijl lichaamsdelen waarvan je er één hebt mannelijk zijn."
@@ -3188,7 +3329,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Het voorzetsel لِ en لِمَنْ",
+        "title": "Voorzetsels لِ en لِمَنْ",
         "page": 31,
         "text": [
           "(لِ) is een voorzetsel (Harf Djarr) dat \"behoort tot/aan\", \"van\" of \"voor\" betekent.",
@@ -3257,7 +3398,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "أَيْضًا (ook) en جِدًّا (heel)",
+        "title": "Bijwoorden أَيْضًا en جِدًّا",
         "page": 32,
         "text": [
           "Het woord (أَيْضًا) betekent: \"ook\".",
@@ -3517,12 +3658,12 @@ window.G2_LESSONS = {
   },
   "7": {
     "n": 7,
-    "title": "Les 7 · Dat / die (vrouwelijk) · تِلْكَ tegenover ذَلِكَ",
+    "title": "Les 7 · Aanwijzer تِلْكَ & Het Bijvoeglijk Naamwoord",
     "titleAr": "الدرس السابع",
     "pages": "34-35",
     "steps": [
       {
-        "title": "Het aanwijzend voornaamwoord تِلْكَ (die/dat, vrouwelijk ver)",
+        "title": "Aanwijzer op Afstand (تِلْكَ)",
         "page": 34,
         "text": [
           "In deze les leren we «تِلْكَ». Dit is de vrouwelijke tegenhanger van «ذَلِكَ» (die/dat voor mannelijk ver weg).",
@@ -3572,7 +3713,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Overzichtstabel van de vier aanwijzende voornaamwoorden",
+        "title": "Overzicht van de 4 Aanwijzers",
         "page": 35,
         "text": [
           "In het Arabisch hangt het aanwijzend voornaamwoord af van twee factoren: afstand (dichtbij vs. ver) en geslacht (mannelijk vs. vrouwelijk)."
@@ -3635,7 +3776,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Examenstof Deel 2: Zinnen bouwen met هَذَا / هَذِهِ / ذَلِكَ / تِلْكَ + bijvoeglijk naamwoord",
+        "title": "De 4 Aanwijzers Vergeleken",
         "page": "34-35",
         "text": [
           "Met de vier aanwijzende voornaamwoorden wijs je elk woord aan op basis van geslacht (mannelijk/vrouwelijk) en afstand (nabij/ver):",
@@ -3784,7 +3925,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Examenstof Deel 5: Het bijvoeglijk naamwoord (النَّعْتُ) — geslacht, bepaaldheid én naamval",
+        "title": "Bijvoeglijk Naamwoord (Na't)",
         "page": "35-40",
         "text": [
           "Het bijvoeglijk naamwoord (النَّعْتُ) komt achter het zelfstandig naamwoord (الْمَنْعُوتُ) en neemt exact dezelfde eigenschappen over in:",
@@ -3953,7 +4094,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Examenstof Deel 7: Grammaticale analyse (الْإِعْرَابُ) — Functie, Status & Harakah",
+        "title": "Complexe Zinsontleding (I'rāb)",
         "page": "35",
         "text": [
           "In Deel 7 van het examen analyseer je elk woord van een zin op drie onderdelen: (1) Functie (bijv. مُبْتَدَأ، خَبَر، مُضَاف، مُضَاف إِلَيْهِ، حَرْف جَرّ، اِسْم مَجْرُور، نَعْت), (2) Status (مَرْفُوع، مَجْرُور of — bij een voorzetsel), en (3) Harakah (ضَمَّة، ضَمَّة + تَنْوِين، كَسْرَة of —).",
@@ -4079,50 +4220,121 @@ window.G2_LESSONS = {
           {
             "type": "parse",
             "sentence": "قَمِيصُ الْوَلَدِ الصَّغِيرِ فِي الْغُرْفَةِ",
-            "target": "الصَّغِيرِ",
-            "options": [
-              "Functie: نَعْت لِلْوَلَدِ · Status: مَجْرُور · Harakah: كَسْرَة",
-              "Functie: خَبَر · Status: مَرْفُوع · Harakah: ضَمَّة",
-              "Functie: مُضَاف إِلَيْهِ · Status: مَجْرُور · Harakah: كَسْرَة"
-            ],
-            "answer": 0,
-            "explain": "الصَّغِيرِ beschrijft الْوَلَدِ (bepaald, mannelijk, مَجْرُور) en is dus نَعْت met status مَجْرُور en harakah كَسْرَة."
+            "nl": "Het hemd van de kleine jongen is in de kamer.",
+            "words": [
+              {
+                "ar": "قَمِيصُ",
+                "role": "mubtada_mudaf",
+                "status": "marfoo",
+                "mark": "dammah",
+                "explain": "«قَمِيصُ» is مُبْتَدَأ وَهُوَ مُضَاف: nominatief (مَرْفُوع met één ضَمَّة)."
+              },
+              {
+                "ar": "الْوَلَدِ",
+                "role": "mudaf_ilayhi",
+                "status": "majroor",
+                "mark": "kasrah",
+                "explain": "«الْوَلَدِ» is مُضَاف إِلَيْهِ (de bezitter): altijd genitief (مَجْرُور met كَسْرَة)."
+              },
+              {
+                "ar": "الصَّغِيرِ",
+                "role": "naat",
+                "status": "majroor",
+                "mark": "kasrah",
+                "explain": "«الصَّغِيرِ» is نَعْت bij الْوَلَدِ: volgt in bepaaldheid, mannelijk geslacht én genitief (مَجْرُور met كَسْرَة)."
+              },
+              {
+                "ar": "فِي",
+                "role": "harf_jarr",
+                "status": "mabnee",
+                "mark": "none",
+                "explain": "«فِي» is حَرْف جَرّ (voorzetsel): onveranderlijk (مَبْنِيّ)."
+              },
+              {
+                "ar": "الْغُرْفَةِ",
+                "role": "ism_majroor",
+                "status": "majroor",
+                "mark": "kasrah",
+                "explain": "«الْغُرْفَةِ» is اِسْم مَجْرُور na فِي: genitief (مَجْرُور met كَسْرَة)."
+              }
+            ]
           },
           {
             "type": "parse",
             "sentence": "الْفَلَّاحُ الْغَنِيُّ مِنَ السُّوقِ",
-            "target": "الْغَنِيُّ",
-            "options": [
-              "Functie: نَعْت · Status: مَرْفُوع · Harakah: ضَمَّة",
-              "Functie: مُضَاف إِلَيْهِ · Status: مَجْرُور · Harakah: كَسْرَة",
-              "Functie: اِسْم مَجْرُور · Status: مَجْرُور · Harakah: كَسْرَة"
-            ],
-            "answer": 0,
-            "explain": "الْغَنِيُّ is een bijvoeglijk naamwoord (نَعْت) bij الْفَلَّاحُ (مُبْتَدَأ مَرْفُوع) en krijgt daarom ook status مَرْفُوع met ضَمَّة."
-          },
-          {
-            "type": "parse",
-            "sentence": "كِتَابُ الطَّالِبِ جَدِيدٌ",
-            "target": "جَدِيدٌ",
-            "options": [
-              "Functie: خَبَر · Status: مَرْفُوع · Harakah: ضَمَّة + تَنْوِين",
-              "Functie: نَعْت · Status: مَجْرُور · Harakah: كَسْرَة",
-              "Functie: مُضَاف إِلَيْهِ · Status: مَجْرُور · Harakah: كَسْرَة"
-            ],
-            "answer": 0,
-            "explain": "جَدِيدٌ is onbepaald en zegt iets over het onderwerp كِتَابُ الطَّالِبِ: het is dus het gezegde (خَبَر), مَرْفُوع met ضَمَّة + تَنْوِين."
+            "nl": "De rijke boer komt van de markt.",
+            "words": [
+              {
+                "ar": "الْفَلَّاحُ",
+                "role": "mubtada",
+                "status": "marfoo",
+                "mark": "dammah",
+                "explain": "«الْفَلَّاحُ» is het onderwerp (مُبْتَدَأ): nominatief (مَرْفُوع met ضَمَّة)."
+              },
+              {
+                "ar": "الْغَنِيُّ",
+                "role": "naat",
+                "status": "marfoo",
+                "mark": "dammah",
+                "explain": "«الْغَنِيُّ» is een bijvoeglijk naamwoord (نَعْت) bij الْفَلَّاحُ: volgt in nominatief (مَرْفُوع met ضَمَّة)."
+              },
+              {
+                "ar": "مِنَ",
+                "role": "harf_jarr",
+                "status": "mabnee",
+                "mark": "none",
+                "explain": "«مِنَ» is حَرْف جَرّ (voorzetsel): onveranderlijk (مَبْنِيّ)."
+              },
+              {
+                "ar": "السُّوقِ",
+                "role": "ism_majroor",
+                "status": "majroor",
+                "mark": "kasrah",
+                "explain": "«السُّوقِ» is اِسْم مَجْرُور na مِنَ: genitief (مَجْرُور met كَسْرَة)."
+              }
+            ]
           },
           {
             "type": "parse",
             "sentence": "كِتَابُ الطَّالِبِ الْجَدِيدِ عَلَى الْمَكْتَبِ",
-            "target": "الْجَدِيدِ",
-            "options": [
-              "Functie: نَعْت لِلطَّالِبِ · Status: مَجْرُور · Harakah: كَسْرَة",
-              "Functie: خَبَر · Status: مَرْفُوع · Harakah: ضَمَّة",
-              "Functie: مُبْتَدَأ · Status: مَرْفُوع · Harakah: ضَمَّة"
-            ],
-            "answer": 0,
-            "explain": "الْجَدِيدِ heeft الـ en een kasrah: het is dus نَعْت bij الطَّالِبِ (de nieuwe student), status مَجْرُور, harakah كَسْرَة."
+            "nl": "Het boek van de nieuwe student ligt op het bureau.",
+            "words": [
+              {
+                "ar": "كِتَابُ",
+                "role": "mubtada_mudaf",
+                "status": "marfoo",
+                "mark": "dammah",
+                "explain": "«كِتَابُ» is مُبْتَدَأ وَهُوَ مُضَاف: nominatief (مَرْفُوع met één ضَمَّة)."
+              },
+              {
+                "ar": "الطَّالِبِ",
+                "role": "mudaf_ilayhi",
+                "status": "majroor",
+                "mark": "kasrah",
+                "explain": "«الطَّالِبِ» is مُضَاف إِلَيْهِ (de bezitter): genitief (مَجْرُور met كَسْرَة)."
+              },
+              {
+                "ar": "الْجَدِيدِ",
+                "role": "naat",
+                "status": "majroor",
+                "mark": "kasrah",
+                "explain": "«الْجَدِيدِ» is نَعْت bij الطَّالِبِ (de nieuwe student): volgt in de genitief (مَجْرُور met كَسْرَة)."
+              },
+              {
+                "ar": "عَلَى",
+                "role": "harf_jarr",
+                "status": "mabnee",
+                "mark": "none",
+                "explain": "«عَلَى» is حَرْف جَرّ (voorzetsel): onveranderlijk (مَبْنِيّ)."
+              },
+              {
+                "ar": "الْمَكْتَبِ",
+                "role": "ism_majroor",
+                "status": "majroor",
+                "mark": "kasrah",
+                "explain": "«الْمَكْتَبِ» is اِسْم مَجْرُور na عَلَى: genitief (مَجْرُور met كَسْرَة)."
+              }
+            ]
           }
         ]
       }
@@ -4246,7 +4458,7 @@ window.G2_LESSONS = {
     "pages": "36-38",
     "steps": [
       {
-        "title": "Aanwijzer + الْ : هَذَا الْكِتَابُ (dit boek) tegenover هَذَا كِتَابٌ (dit is een boek)",
+        "title": "Aanwijzer met Bepaling (Badal)",
         "page": 36,
         "text": [
           "Let goed op het grote verschil tussen deze twee constructies:",
@@ -4320,7 +4532,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Woorden eindigend op een lange Alif: أَمْرِيكَا، أَلْمَانِيَا، سُوِيسْرَا",
+        "title": "Woorden op Alif: أَمْرِيكَا",
         "page": 37,
         "text": [
           "Namen van landen die eindigen op een lange klinker (Alif) zoals «أَمْرِيكَا», «أَلْمَانِيَا», «إِنْكَلْتَرَّا», «سُوِيسْرَا», «فَرَنْسَا» en ook het woord «الْمُسْتَشْفَى» (het ziekenhuis):",
@@ -4365,7 +4577,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Plaatsaanduidingen أَمَامَ (voor) en خَلْفَ (achter)",
+        "title": "Plaatsaanduidingen أَمَامَ en خَلْفَ",
         "page": 38,
         "text": [
           "De woorden «أَمَامَ» (vóór) en «خَلْفَ» (achter) zijn bijwoorden van plaats (ظَرْفُ مَكَانٍ).",
@@ -4551,7 +4763,7 @@ window.G2_LESSONS = {
     "pages": "39-44",
     "steps": [
       {
-        "title": "Het bijvoeglijk naamwoord (النَّعْتُ) en de 4 overeenkomsten",
+        "title": "Bijvoeglijk Naamwoord (Na't)",
         "page": 39,
         "text": [
           "In deze les leren we het bijvoeglijk naamwoord: «النَّعْتُ» (of ṣifah). Het zelfstandig naamwoord dat beschreven wordt, heet «الْمَنْعُوتُ».",
@@ -4653,7 +4865,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Bijvoeglijke naamwoorden op ـَانُ (Diptoten / zonder Tanwien)",
+        "title": "Diptote Bijvoeglijke Nww.",
         "page": 41,
         "text": [
           "Sommige bijvoeglijke naamwoorden eindigen op het patroon «فَعْلَانُ» (met een Alif en Noen op het eind).",
@@ -4732,7 +4944,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Het betrekkelijk voornaamwoord الَّذِي (die / dat) · Les 9b",
+        "title": "Betrekkelijk Vnw. الَّذِي",
         "page": 43,
         "text": [
           "In Les 9b leren we het betrekkelijk voornaamwoord: «الَّذِي» (die / dat).",
@@ -4779,7 +4991,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Voorzetsel لِـ met الْـ (لِلْـ) en het bijwoord عِنْدَ",
+        "title": "Voorzetsel لِلْـ en عِنْدَ",
         "page": 44,
         "text": [
           "1. Wanneer het voorzetsel «لِـ» (voor / behorend aan) vóór een woord met «الْـ» komt, valt de Alif van «al-» ook in het schrift weg: «لِـ» + «الْمُدَرِّسُ» = «لِلْمُدَرِّسِ» (aan/voor de leraar).",
@@ -5041,7 +5253,7 @@ window.G2_LESSONS = {
     "pages": "45-49",
     "steps": [
       {
-        "title": "Gehechte bezittelijke voornaamwoorden: ـهُ، ـهَا، ـكَ، ـِي",
+        "title": "Bezittelijke Voornaamwoorden",
         "page": 45,
         "text": [
           "In deze les leren we bezittelijke voornaamwoorden die aan het eind van een zelfstandig naamwoord worden vastgemaakt:",
@@ -5139,7 +5351,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "De woorden أَبٌ (vader) en أَخٌ (broer) bij bezit",
+        "title": "De Woorden أَب en أَخ",
         "page": 47,
         "text": [
           "De woorden «أَبٌ» (vader) en «أَخٌ» (broer) hebben een bijzondere eigenschap:",
@@ -5187,7 +5399,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "عِنْدِي (ik heb) vs. لِي (ik heb) · Voorwerpen vs. Verwanten",
+        "title": "عِنْدِي vs. لِي",
         "page": 48,
         "text": [
           "In het Arabisch zijn er twee manieren om \"ik heb\" te zeggen:",
@@ -5233,7 +5445,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Werkwoorden ذَهَبْتَ (jij ging) en ذَهَبْتُ (ik ging) · Bijwoord مَعَ",
+        "title": "Werkwoorden ذَهَبْتَ en ذَهَبْتُ",
         "page": 48,
         "text": [
           "In Les 10 leren we de verleden tijd voor de 1e en 2e persoon enkelvoud:",
@@ -5518,7 +5730,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "أُحِبُّ – ik houd van; lijdend voorwerp accusatief",
+        "title": "Lijdend Voorwerp (أُحِبُّ)",
         "page": 50,
         "text": [
           "3) «أُحِبُّ» betekent: “ik houd van”.",
@@ -5823,7 +6035,7 @@ window.G2_LESSONS = {
     "pages": "52-54",
     "steps": [
       {
-        "title": "أَنْتِ – jij (vrouwelijk) en كِ – jouw",
+        "title": "Vrouwelijk Aanspreken (أَنْتِ)",
         "page": 52,
         "text": [
           "In deze les leren we het volgende:",
@@ -5956,7 +6168,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Soekoen van ذَهَبَتْ wordt Kasrah vóór أَلْ",
+        "title": "Soekoen vóór Alif-Lam",
         "page": 53,
         "text": [
           "In «ذَهَبَتْ» heeft de laatste letter een Soekoen «تْ». Als zo'n werkwoord gevolgd wordt door «أَلْ», dan verandert de Soekoen in een Kasrah."
@@ -6363,7 +6575,7 @@ window.G2_LESSONS = {
     "pages": "55-64",
     "steps": [
       {
-        "title": "Mannelijk meervoud (Les 13a): هَؤُلَاءِ، هُمْ en ذَهَبُوا",
+        "title": "Mannelijk Meervoud",
         "page": 55,
         "text": [
           "In Les 13a leren we het meervoud van personen (verstandhebbende wezens / عاقل):",
@@ -6453,7 +6665,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Vrouwelijk meervoud (Les 13b): هُنَّ en ـَاتٌ",
+        "title": "Vrouwelijk Meervoud",
         "page": 61,
         "text": [
           "In Les 13b leren we het vrouwelijk meervoud van personen:",
@@ -6503,7 +6715,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Aanwijzend voornaamwoord ver meervoud: أُولَئِكَ (Les 13c)",
+        "title": "Meervoud op Afstand (أُولَئِكَ)",
         "page": 64,
         "text": [
           "In Les 13c leren we «أُولَئِكَ» (die / dezen daar).",
@@ -6788,7 +7000,7 @@ window.G2_LESSONS = {
     "pages": "65-69",
     "steps": [
       {
-        "title": "2e persoon mannelijk meervoud: أَنْتُمْ (jullie), ـكُمْ (jullie) en ذَهَبْتُمْ",
+        "title": "Aanspreken Meervoud (أَنْتُمْ)",
         "page": 65,
         "text": [
           "In deze les leren we de aanspreekvorm voor meerdere mannen (jullie):",
@@ -6858,7 +7070,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "1e persoon meervoud: نَحْنُ (wij), ـنَا (ons) en ذَهَبْنَا (wij gingen)",
+        "title": "Wij-Vorm (نَحْنُ / ذَهَبْنَا)",
         "page": 66,
         "text": [
           "In deze les leren we ook de 1e persoon meervoud (wij):",
@@ -6905,7 +7117,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Vraagwoord أَيُّ (welke?) en niet-Arabische eigennamen",
+        "title": "Vraagwoord أَيُّ (Welke?)",
         "page": 67,
         "text": [
           "1. Het vraagwoord «أَيُّ» betekent \"welke?\". Het staat altijd als muḍāf vóór een zelfstandig naamwoord, waardoor dat woord majroer wordt: «أَيُّ يَوْمٍ هَذَا؟» (Welke dag is dit?), «فِي أَيِّ كُلِّيَّةٍ تَدْرُسُ؟» (In welke faculteit studeer je?).",
@@ -7132,7 +7344,7 @@ window.G2_LESSONS = {
     "pages": "70-72",
     "steps": [
       {
-        "title": "2e persoon vrouwelijk meervoud: أَنْتُنَّ (jullie, v.) en ـكُنَّ",
+        "title": "Vrouwelijk Meervoud (أَنْتُنَّ)",
         "page": 70,
         "text": [
           "In deze les leren we de aanspreekvorm voor een groep vrouwen (jullie, v.):",
@@ -7202,7 +7414,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Tijdsbepalingen قَبْلَ (vóór) en بَعْدَ (ná)",
+        "title": "Tijdsbepalingen قَبْلَ en بَعْدَ",
         "page": 71,
         "text": [
           "De woorden «قَبْلَ» (vóór) en «بَعْدَ» (ná) zijn bijwoorden van tijd (ظَرْفُ زَمَانٍ).",
@@ -7403,7 +7615,7 @@ window.G2_LESSONS = {
     "pages": "73-75",
     "steps": [
       {
-        "title": "Rationele en irrationele naamwoorden",
+        "title": "Menselijk vs. Niet-Menselijk",
         "page": 73,
         "text": [
           "In het Arabisch worden naamwoorden geclassificeerd als (1) rationeel en (2) irrationeel. Ze worden ook “met verstand” en “zonder verstand” genoemd.",
@@ -7501,7 +7713,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Meervoud van irrationele naamwoorden",
+        "title": "Niet-Menselijk Meervoud",
         "page": 73,
         "text": [
           "Het meervoud van irrationele naamwoorden wordt behandeld als vrouwelijk enkelvoud.",
@@ -7603,7 +7815,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Nieuw patroon van het gebroken meervoud: مَفَاعِلُ",
+        "title": "Gebroken Meervoud: مَفَاعِل",
         "page": 74,
         "text": [
           "We hebben enkele patronen van het gebroken meervoud geleerd. Hier volgt een nieuw patroon:",
@@ -7812,7 +8024,7 @@ window.G2_LESSONS = {
     "pages": "76-77",
     "steps": [
       {
-        "title": "Voortzetting van les 16; meervoud van حِمَارٌ",
+        "title": "Meervoud van حِمَار",
         "page": 76,
         "text": [
           "Dit is een voortzetting van les 16. Het bevat geen nieuwe constructies.",
@@ -7993,7 +8205,7 @@ window.G2_LESSONS = {
     "pages": "78-80",
     "steps": [
       {
-        "title": "Het tweevoud (الْمُثَنَّى): uitgang ـَانِ (-aani)",
+        "title": "Het Tweevoud (المثنى)",
         "page": 78,
         "text": [
           "In het Arabisch bestaat naast het enkelvoud en meervoud een aparte grammaticale vorm voor twee zaken: «الْمُثَنَّى» (het tweevoud).",
@@ -8072,7 +8284,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Aanwijzende voornaamwoorden in het tweevoud: هَذَانِ en هَاتَانِ",
+        "title": "Aanwijzers in Tweevoud",
         "page": 79,
         "text": [
           "In het tweevoud hebben ook de aanwijzende voornaamwoorden een aparte vorm:",
@@ -8120,7 +8332,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Het vraagwoord كَمْ (Hoeveel?) en de enkelvoudige accusatief",
+        "title": "Vraagwoord كَمْ (Hoeveel?)",
         "page": 79,
         "text": [
           "Het vraagwoord «كَمْ» betekent \"hoeveel?\".",
@@ -8346,7 +8558,7 @@ window.G2_LESSONS = {
     "pages": "81-83",
     "steps": [
       {
-        "title": "De tegengestelde geslachtsregel bij getallen 3 t/m 10",
+        "title": "Getallen 3–10 (Mannelijk)",
         "page": 81,
         "text": [
           "In deze les leren we de getallen 3 t/m 10 bij mannelijke zelfstandige naamwoorden.",
@@ -8616,7 +8828,7 @@ window.G2_LESSONS = {
     "pages": "84-86",
     "steps": [
       {
-        "title": "Getallen 3 t/m 10 bij vrouwelijke getelde woorden (zonder ة)",
+        "title": "Getallen 3–10 (Vrouwelijk)",
         "page": 84,
         "text": [
           "In deze les leren we de getallen 3 t/m 10 bij vrouwelijke zelfstandige naamwoorden.",
@@ -8858,7 +9070,7 @@ window.G2_LESSONS = {
     "pages": "87-88",
     "steps": [
       {
-        "title": "Tekstanalyse van مَدْرَسَتِي (Mijn school)",
+        "title": "Tekstanalyse: مَدْرَسَتِي",
         "page": 87,
         "text": [
           "In deze les passen we alle eerdere grammaticaregels (Les 1 t/m 20) toe in een doorlopende lees- en begrijptekst:",
@@ -9015,7 +9227,7 @@ window.G2_LESSONS = {
     "pages": "89-91",
     "steps": [
       {
-        "title": "Wat zijn Diptoten (الْمَمْنُوعُ مِنَ الصَّرْفِ)?",
+        "title": "Wat zijn Diptoten?",
         "page": 89,
         "text": [
           "In deze les leren we de categorie naamwoorden genaamd «الْمَمْنُوعُ مِنَ الصَّرْفِ» (Diptoten).",
@@ -9063,7 +9275,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "De 7 groepen van Al-Mamnū' min aṣ-Ṣarf",
+        "title": "De 7 Groepen Diptoten",
         "page": 90,
         "text": [
           "Bestudeer de 7 hoofdgroepen van diptoten uit het boek:",
@@ -9314,7 +9526,7 @@ window.G2_LESSONS = {
     "pages": "92-93",
     "steps": [
       {
-        "title": "De genitief van diptoten met Fathah (-a)",
+        "title": "Genitief met Fathah",
         "page": 92,
         "text": [
           "In deze les leren we de belangrijkste naamvalsregel voor diptoten:",
@@ -9388,7 +9600,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "De twee uitzonderingen: wanneer krijgt een diptoot wél Kasrah?",
+        "title": "Wanneer toch Kasrah?",
         "page": 93,
         "text": [
           "Een diptoot krijgt wél een gewone Kasrah (-i) in de genitief in twee gevallen:",
@@ -9560,7 +9772,7 @@ window.G2_LESSONS = {
     "pages": "3-14",
     "steps": [
       {
-        "title": "Het bijwoord van tijd en plaats: الْمَفْعُولُ فِيهِ (الظَّرْفُ)",
+        "title": "Bijwoorden (الْمَفْعُول فِيهِ)",
         "page": 3,
         "text": [
           "In Les 1 van Madinah Arabic Reader – Deel 8 leren we «الْمَفْعُولُ فِيهِ» (ook wel «الظَّرْفُ» genoemd).",
@@ -9652,7 +9864,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Onveranderlijke bijwoorden: الظُّرُوفُ الْمَبْنِيَّةُ",
+        "title": "Vaste Bijwoorden (مَبْنِيّ)",
         "page": 6,
         "text": [
           "Sommige bijwoorden zijn onveranderlijk («مَبْنِيٌّ»): hun vaste eindklinker verandert nooit!",
@@ -9753,7 +9965,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "Wat optreedt als vervanger van het bijwoord: مَا يَنُوبُ عَنِ الظَّرْفِ",
+        "title": "Vervangers van het Bijwoord",
         "page": 7,
         "text": [
           "Een woord dat van oorsprong geen tijds- of plaatsaanduiding is, kan toch de accusatiefuitgang (nasb) aannemen wanneer het optreedt als vervanger van het bijwoord («نَائِبٌ عَنِ الظَّرْفِ»):",
@@ -9804,7 +10016,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "De voorwaardelijke partikel لَوْ (Als / indien in het verleden)",
+        "title": "Voorwaarde met لَوْ",
         "page": 8,
         "text": [
           "Het partikel «لَوْ» wordt gebruikt om een ONVERVULDE voorwaarde in het verleden uit te drukken (\"Als... dan zou...\").",
@@ -9853,7 +10065,7 @@ window.G2_LESSONS = {
         ]
       },
       {
-        "title": "مِنْ قَبْلُ وَمِنْ بَعْدُ (Mabnī op Ḍammah bij weglating van de Muḍāf Ilayh)",
+        "title": "مِنْ قَبْلُ وَمِنْ بَعْدُ",
         "page": 9,
         "text": [
           "In Reader 8 leren we een prachtige subtiliteit over «قَبْلُ» en «بَعْدُ»:",

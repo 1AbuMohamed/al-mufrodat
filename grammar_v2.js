@@ -104,6 +104,564 @@ function shortTitle(t){
 
 /* ---------- lesstructuur ---------- */
 // nodes: review? · step 0..k · vocab · book · test
+
+/* ---------- Interactieve MVP Zinsontleder (Iʿrāb Coach & Studio) ---------- */
+const IRAB_ROLES = [
+  { id: 'mubtada', ar: 'مُبْتَدَأ', nl: 'Onderwerp' },
+  { id: 'mubtada_mudaf', ar: 'مُبْتَدَأ (مُضَاف)', nl: 'Onderwerp & Bezit' },
+  { id: 'khabar', ar: 'خَبَر', nl: 'Gezegde' },
+  { id: 'harf_jarr', ar: 'حَرْف جَرّ', nl: 'Voorzetsel' },
+  { id: 'ism_majroor', ar: 'اِسْم مَجْرُور', nl: 'Na voorzetsel' },
+  { id: 'mudaf_ilayhi', ar: 'مُضَاف إِلَيْهِ', nl: 'Bezitter' },
+  { id: 'naat', ar: 'نَعْت', nl: 'Bijvoeglijk nw.' }
+];
+
+const IRAB_STATUSES = [
+  { id: 'marfoo', ar: 'مَرْفُوع', nl: 'Nominatief (u/un)' },
+  { id: 'majroor', ar: 'مَجْرُور', nl: 'Genitief (i/in/a)' },
+  { id: 'mabnee', ar: 'مَبْنِيّ', nl: 'Onveranderlijk' }
+];
+
+const IRAB_MARKS = [
+  { id: 'dammah', ar: 'ضَمَّة (ـُ)', nl: 'Enkele dammah' },
+  { id: 'tanween_damm', ar: 'تَنْوِين ضَمّ (ـٌ)', nl: 'Tanwīn dammah' },
+  { id: 'kasrah', ar: 'كَسْرَة (ـِ)', nl: 'Enkele kasrah' },
+  { id: 'tanween_kasr', ar: 'تَنْوِين كَسْر (ـٍ)', nl: 'Tanwīn kasrah' },
+  { id: 'fathah', ar: 'فَتْحَة (ـَ)', nl: 'Fathah (diptoot)' },
+  { id: 'none', ar: '—', nl: 'Geen / onveranderlijk' }
+];
+
+const ALL_IRAB_SENTENCES = [
+  {
+    id: 'off_1',
+    category: 'official',
+    categoryTitle: 'Officieel Examen · Vraag 7.1',
+    sentence: 'الْإِمَامُ فِي الْمَسْجِدِ',
+    nl: 'De imam is in de moskee.',
+    words: [
+      { ar: 'الْإِمَامُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الْإِمَامُ» is het onderwerp (مُبْتَدَأ) van de nominale zin: nominatief (مَرْفُوع met één ضَمَّة).' },
+      { ar: 'فِي', role: 'harf_jarr', status: 'mabnee', mark: 'none', explain: '«فِي» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ).' },
+      { ar: 'الْمَسْجِدِ', role: 'ism_majroor', status: 'majroor', mark: 'kasrah', explain: '«الْمَسْجِدِ» volgt na een voorzetsel (اِسْم مَجْرُور): genitief (مَجْرُور met كَسْرَة).' }
+    ]
+  },
+  {
+    id: 'off_2',
+    category: 'official',
+    categoryTitle: 'Officieel Examen · Vraag 7.2',
+    sentence: 'حَقِيبَةُ الطَّالِبِ عَلَى السَّرِيرِ',
+    nl: 'De tas van de student ligt op het bed.',
+    words: [
+      { ar: 'حَقِيبَةُ', role: 'mubtada_mudaf', status: 'marfoo', mark: 'dammah', explain: '«حَقِيبَةُ» is het onderwerp (مُبْتَدَأ) én bezit (مُضَاف): nominatief (مَرْفُوع met één ضَمَّة, geen tanwīn).' },
+      { ar: 'الطَّالِبِ', role: 'mudaf_ilayhi', status: 'majroor', mark: 'kasrah', explain: '«الطَّالِبِ» is de bezitter (مُضَاف إِلَيْهِ): altijd genitief (مَجْرُور met كَسْرَة).' },
+      { ar: 'عَلَى', role: 'harf_jarr', status: 'mabnee', mark: 'none', explain: '«عَلَى» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ).' },
+      { ar: 'السَّرِيرِ', role: 'ism_majroor', status: 'majroor', mark: 'kasrah', explain: '«السَّرِيرِ» is een zelfstandig naamwoord na een voorzetsel (اِسْم مَجْرُور): genitief (مَجْرُور met كَسْرَة).' }
+    ]
+  },
+  {
+    id: 'off_3',
+    category: 'official',
+    categoryTitle: 'Officieel Examen · Vraag 7.3',
+    sentence: 'قَمِيصُ الْوَلَدِ الصَّغِيرِ فِي الْغُرْفَةِ',
+    nl: 'Het hemd van de kleine jongen is in de kamer.',
+    words: [
+      { ar: 'قَمِيصُ', role: 'mubtada_mudaf', status: 'marfoo', mark: 'dammah', explain: '«قَمِيصُ» is مُبْتَدَأ وَهُوَ مُضَاف: nominatief (مَرْفُوع met één ضَمَّة).' },
+      { ar: 'الْوَلَدِ', role: 'mudaf_ilayhi', status: 'majroor', mark: 'kasrah', explain: '«الْوَلَدِ» is de bezitter (مُضَاف إِلَيْهِ): altijd genitief (مَجْرُور met كَسْرَة).' },
+      { ar: 'الصَّغِيرِ', role: 'naat', status: 'majroor', mark: 'kasrah', explain: '«الصَّغِيرِ» is het bijvoeglijk naamwoord (نَعْت) bij الْوَلَدِ: volgt in de genitief (مَجْرُور met كَسْرَة).' },
+      { ar: 'فِي', role: 'harf_jarr', status: 'mabnee', mark: 'none', explain: '«فِي» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ).' },
+      { ar: 'الْغُرْفَةِ', role: 'ism_majroor', status: 'majroor', mark: 'kasrah', explain: '«الْغُرْفَةِ» is een اِسْم مَجْرُور na فِي: genitief (مَجْرُور met كَسْرَة).' }
+    ]
+  },
+  {
+    id: 'off_4',
+    category: 'official',
+    categoryTitle: 'Officieel Examen · Vraag 7.4',
+    sentence: 'الْفَلَّاحُ الْغَنِيُّ مِنَ السُّوقِ',
+    nl: 'De rijke boer komt van de markt.',
+    words: [
+      { ar: 'الْفَلَّاحُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الْفَلَّاحُ» is het onderwerp (مُبْتَدَأ): nominatief (مَرْفُوع met ضَمَّة).' },
+      { ar: 'الْغَنِيُّ', role: 'naat', status: 'marfoo', mark: 'dammah', explain: '«الْغَنِيُّ» is een bijvoeglijk naamwoord (نَعْت) bij الْفَلَّاحُ: volgt in de nominatief (مَرْفُوع met ضَمَّة).' },
+      { ar: 'مِنَ', role: 'harf_jarr', status: 'mabnee', mark: 'none', explain: '«مِنَ» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ).' },
+      { ar: 'السُّوقِ', role: 'ism_majroor', status: 'majroor', mark: 'kasrah', explain: '«السُّوقِ» is een zelfstandig naamwoord na een voorzetsel (اِسْم مَجْرُور): genitief (مَجْرُور met كَسْرَة).' }
+    ]
+  },
+  {
+    id: 'prac_1',
+    category: 'practice',
+    categoryTitle: 'Oefenexamen · Vraag 7.1',
+    sentence: 'كِتَابُ الطَّالِبِ جَدِيدٌ',
+    nl: 'Het boek van de student is nieuw.',
+    words: [
+      { ar: 'كِتَابُ', role: 'mubtada_mudaf', status: 'marfoo', mark: 'dammah', explain: '«كِتَابُ» is het onderwerp (مُبْتَدَأ) én bezit (مُضَاف): nominatief (مَرْفُوع met één ضَمَّة, geen tanwīn).' },
+      { ar: 'الطَّالِبِ', role: 'mudaf_ilayhi', status: 'majroor', mark: 'kasrah', explain: '«الطَّالِبِ» is de bezitter (مُضَاف إِلَيْهِ): genitief (مَجْرُور met كَسْرَة).' },
+      { ar: 'جَدِيدٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«جَدِيدٌ» is het onbepaalde gezegde (خَبَر): nominatief (مَرْفُوع met تَنْوِين ضَمّ).' }
+    ]
+  },
+  {
+    id: 'prac_2',
+    category: 'practice',
+    categoryTitle: 'Oefenexamen · Vraag 7.2',
+    sentence: 'قَلَمُ الْأُسْتَاذِ عَلَى الطَّاوِلَةِ',
+    nl: 'De pen van de leraar ligt op de tafel.',
+    words: [
+      { ar: 'قَلَمُ', role: 'mubtada_mudaf', status: 'marfoo', mark: 'dammah', explain: '«قَلَمُ» is مُبْتَدَأ وَهُوَ مُضَاف: nominatief (مَرْفُوع met één ضَمَّة).' },
+      { ar: 'الْأُسْتَاذِ', role: 'mudaf_ilayhi', status: 'majroor', mark: 'kasrah', explain: '«الْأُسْتَاذِ» is de bezitter (مُضَاف إِلَيْهِ): genitief (مَجْرُور met كَسْرَة).' },
+      { ar: 'عَلَى', role: 'harf_jarr', status: 'mabnee', mark: 'none', explain: '«عَلَى» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ).' },
+      { ar: 'الطَّاوِلَةِ', role: 'ism_majroor', status: 'majroor', mark: 'kasrah', explain: '«الطَّاوِلَةِ» is een اِسْم مَجْرُور na عَلَى: genitief (مَجْرُور met كَسْرَة).' }
+    ]
+  },
+  {
+    id: 'prac_3',
+    category: 'practice',
+    categoryTitle: 'Oefenexamen · Vraag 7.3',
+    sentence: 'كِتَابُ الطَّالِبِ الْجَدِيدِ عَلَى الْمَكْتَبِ',
+    nl: 'Het boek van de nieuwe student ligt op het bureau.',
+    words: [
+      { ar: 'كِتَابُ', role: 'mubtada_mudaf', status: 'marfoo', mark: 'dammah', explain: '«كِتَابُ» is مُبْتَدَأ وَهُوَ مُضَاف: nominatief (مَرْفُوع met één ضَمَّة).' },
+      { ar: 'الطَّالِبِ', role: 'mudaf_ilayhi', status: 'majroor', mark: 'kasrah', explain: '«الطَّالِبِ» is de bezitter (مُضَاف إِلَيْهِ): genitief (مَجْرُور met كَسْرَة).' },
+      { ar: 'الْجَدِيدِ', role: 'naat', status: 'majroor', mark: 'kasrah', explain: '«الْجَدِيدِ» is een bijvoeglijk naamwoord (نَعْت) bij الطَّالِبِ (de nieuwe student): genitief (مَجْرُور met كَسْرَة).' },
+      { ar: 'عَلَى', role: 'harf_jarr', status: 'mabnee', mark: 'none', explain: '«عَلَى» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ).' },
+      { ar: 'الْمَكْتَبِ', role: 'ism_majroor', status: 'majroor', mark: 'kasrah', explain: '«الْمَكْتَبِ» is een اِسْم مَجْرُور na عَلَى: genitief (مَجْرُور met كَسْرَة).' }
+    ]
+  },
+  {
+    id: 'prac_4',
+    category: 'practice',
+    categoryTitle: 'Oefenexamen · Vraag 7.4',
+    sentence: 'الطَّالِبُ مُجْتَهِدٌ',
+    nl: 'De student is ijverig.',
+    words: [
+      { ar: 'الطَّالِبُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الطَّالِبُ» is het bepaalde onderwerp (مُبْتَدَأ): nominatief (مَرْفُوع met één ضَمَّة).' },
+      { ar: 'مُجْتَهِدٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«مُجْتَهِدٌ» is het onbepaalde gezegde (خَبَر): nominatief (مَرْفُوع met تَنْوِين ضَمّ).' }
+    ]
+  },
+  {
+    id: 'med_1',
+    category: 'medina',
+    categoryTitle: 'Medina Les 1 Basis',
+    sentence: 'هَذَا كِتَابٌ',
+    nl: 'Dit is een boek.',
+    words: [
+      { ar: 'هَذَا', role: 'mubtada', status: 'mabnee', mark: 'none', explain: '«هَذَا» is een aanwijzend voornaamwoord dat fungeert als het onderwerp (مُبْتَدَأ). Aanwijzers zijn onveranderlijk (مَبْنِيّ).' },
+      { ar: 'كِتَابٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«كِتَابٌ» is het onbepaalde gezegde (خَبَر): nominatief (مَرْفُوع met تَنْوِين ضَمّ).' }
+    ]
+  },
+  {
+    id: 'med_2',
+    category: 'medina',
+    categoryTitle: 'Medina Les 3 Basis',
+    sentence: 'الْبَيْتُ مَفْتُوحٌ',
+    nl: 'Het huis is open.',
+    words: [
+      { ar: 'الْبَيْتُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الْبَيْتُ» is het bepaalde onderwerp (مُبْتَدَأ): nominatief (مَرْفُوع met één ضَمَّة).' },
+      { ar: 'مَفْتُوحٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«مَفْتُوحٌ» is het onbepaalde gezegde (خَبَر): nominatief (مَرْفُوع met تَنْوِين ضَمّ).' }
+    ]
+  },
+  {
+    id: 'med_3',
+    category: 'medina',
+    categoryTitle: 'Medina Les 4 Diptoot',
+    sentence: 'الرَّسُولُ مِنْ مَكَّةَ',
+    nl: 'De Boodschapper komt uit Mekka.',
+    words: [
+      { ar: 'الرَّسُولُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الرَّسُولُ» is het onderwerp (مُبْتَدَأ): nominatief (مَرْفُوع met ضَمَّة).' },
+      { ar: 'مِنْ', role: 'harf_jarr', status: 'mabnee', mark: 'none', explain: '«مِنْ» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ).' },
+      { ar: 'مَكَّةَ', role: 'ism_majroor', status: 'majroor', mark: 'fathah', explain: '«مَكَّةَ» is een diptoot (مَمْنُوع مِنَ الصَّرْف) en krijgt in de genitief een fatha (ـَ) in plaats van een kasrah!' }
+    ]
+  }
+];
+
+function checkRoleMatch(chosen, target){
+  if(chosen === target) return true;
+  if((chosen === 'mubtada' && target === 'mubtada_mudaf') || (chosen === 'mubtada_mudaf' && target === 'mubtada')) return true;
+  return false;
+}
+function checkMarkMatch(chosen, target){
+  if(chosen === target) return true;
+  return false;
+}
+
+function getParseSession(key, words){
+  const s = S();
+  if(!s.parseState || s.parseState.key !== key){
+    s.parseState = {
+      key: key,
+      wi: 0,
+      selRole: null,
+      selStatus: null,
+      selMark: null,
+      wordsDone: {},
+      feedback: null,
+      complete: false
+    };
+  }
+  return s.parseState;
+}
+
+function renderInteractiveParse(s, kicker, x){
+  const d = x.d;
+  const words = d.words || [];
+  const ps = getParseSession(x.ref || d.sentence, words);
+  const doneCount = s.total - s.queue.length;
+  const prog = `<div class="g2-qprog"><span>${E(kicker)}</span><span>${Math.min(doneCount+1,s.total)} / ${s.total}</span></div><div class="g2-lbar"><i style="width:${s.total?Math.round(100*doneCount/s.total):0}%"></i></div>`;
+  const curWord = words[ps.wi] || words[0] || {};
+  const canCheck = !!(ps.selRole && ps.selStatus && ps.selMark);
+
+  // Woord-pillen bovenaan
+  const wordTabsHtml = words.map((w, idx) => {
+    const isDone = !!ps.wordsDone[idx];
+    const isCur = idx === ps.wi && !ps.complete;
+    return `<button type="button" class="g2-parse-tab ${isCur ? 'active' : ''} ${isDone ? 'done' : ''}" data-act="g2-parse-select-w" data-wi="${idx}">
+      <span class="ptab-num">${idx + 1}</span>
+      <span class="ar ptab-ar" lang="ar">${arHtml(w.ar)}</span>
+      ${isDone ? '<span class="ptab-chk">✓</span>' : ''}
+    </button>`;
+  }).join('');
+
+  // Zin weergave met highlights
+  const sentenceDisplay = words.map((w, idx) => {
+    const isDone = !!ps.wordsDone[idx];
+    const isCur = idx === ps.wi && !ps.complete;
+    return `<span class="g2-tok-pill ${isDone ? 'done' : ''} ${isCur ? 'active' : ''}">${arHtml(w.ar)}${isDone ? '<i class="tok-chk">✓</i>' : ''}</span>`;
+  }).join(' ');
+
+  // Analyzer block
+  let analyzerBody = '';
+  if(!ps.complete){
+    analyzerBody = `<div class="g2-parse-card">
+      <div class="g2-parse-focus-head">
+        <div>
+          <span class="focus-label">Ontleed woord <b>${ps.wi + 1}</b> van <b>${words.length}</b></span>
+          <div class="ar focus-word" lang="ar">«${arHtml(curWord.ar)}»</div>
+        </div>
+        ${spk(curWord.ar, '🔊')}
+      </div>
+
+      <div class="g2-parse-section">
+        <div class="g2-parse-sec-title">1. Grammaticale Functie (الْوَظِيفَة النَّحْوِيَّة)</div>
+        <div class="g2-parse-chips">
+          ${IRAB_ROLES.map(r => `
+            <button type="button" class="g2-parse-chip ${ps.selRole === r.id ? 'active' : ''}" data-act="g2-parse-pick" data-cat="role" data-val="${r.id}">
+              <b class="ar" lang="ar">${r.ar}</b>
+              <small>${r.nl}</small>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="g2-parse-section">
+        <div class="g2-parse-sec-title">2. Naamvalsstatus (الْحَالَة الْإِعْرَابِيَّة)</div>
+        <div class="g2-parse-chips">
+          ${IRAB_STATUSES.map(st => `
+            <button type="button" class="g2-parse-chip ${ps.selStatus === st.id ? 'active' : ''}" data-act="g2-parse-pick" data-cat="status" data-val="${st.id}">
+              <b class="ar" lang="ar">${st.ar}</b>
+              <small>${st.nl}</small>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="g2-parse-section">
+        <div class="g2-parse-sec-title">3. Klinkerteken (الْعَلَامَة / الْحَرَكَة)</div>
+        <div class="g2-parse-chips">
+          ${IRAB_MARKS.map(m => `
+            <button type="button" class="g2-parse-chip ${ps.selMark === m.id ? 'active' : ''}" data-act="g2-parse-pick" data-cat="mark" data-val="${m.id}">
+              <b class="ar" lang="ar">${m.ar}</b>
+              <small>${m.nl}</small>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="g2-parse-submit">
+        <button type="button" class="btn btn-primary btn-block g2-parse-check-btn" data-act="g2-parse-check-word" ${canCheck ? '' : 'disabled'}>
+          ${canCheck ? `Controleer «${arHtml(curWord.ar)}» ✓` : 'Kies functie, status én klinkerteken'}
+        </button>
+      </div>
+
+      ${ps.feedback ? `
+        <div class="g2-parse-fb ${ps.feedback.ok ? 'ok' : 'bad'}">
+          <b>${ps.feedback.ok ? 'Goed!' : 'Nog niet juist:'}</b>
+          <p>${mix(ps.feedback.msg)}</p>
+        </div>
+      ` : ''}
+    </div>`;
+  } else {
+    analyzerBody = `<div class="g2-parse-card g2-parse-complete-card">
+      <div class="parse-complete-badge">${ICO.check} Volledige zin correct ontleed!</div>
+      <h3 class="ar" lang="ar" dir="rtl">${arHtml(d.sentence)}</h3>
+      <p class="g2-sub">${mix(d.nl || '')}</p>
+      <div class="g2-actions" style="margin-top:16px;">
+        <button class="btn btn-primary" data-act="g2-next" data-gl="next">${s.queue.length > 1 ? 'Volgende vraag →' : 'Bekijk resultaat →'}</button>
+      </div>
+    </div>`;
+  }
+
+  // Live I'rab Table
+  const liveTable = `<div class="g2-parse-table-card">
+    <div class="g2-table-header">Live Iʿrāb-tabel van de zin:</div>
+    <div class="g2-table-responsive">
+      <table class="g2-irab-table">
+        <thead>
+          <tr>
+            <th>Woord</th>
+            <th>1. Functie</th>
+            <th>2. Status</th>
+            <th>3. Harakah</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${words.map((w, idx) => {
+            const done = ps.wordsDone[idx];
+            const isCur = idx === ps.wi && !ps.complete;
+            if(done){
+              const rObj = IRAB_ROLES.find(x => x.id === done.role);
+              const sObj = IRAB_STATUSES.find(x => x.id === done.status);
+              const mObj = IRAB_MARKS.find(x => x.id === done.mark);
+              return `<tr class="irab-row-done">
+                <td class="ar cell-tok" lang="ar"><b>${arHtml(w.ar)}</b></td>
+                <td><span class="irab-badge role ar">${arHtml(rObj ? rObj.ar : done.role)}</span></td>
+                <td><span class="irab-badge status ar">${arHtml(sObj ? sObj.ar : done.status)}</span></td>
+                <td><span class="irab-badge mark ar">${arHtml(mObj ? mObj.ar : done.mark)}</span></td>
+              </tr>`;
+            } else if(isCur){
+              return `<tr class="irab-row-cur">
+                <td class="ar cell-tok active" lang="ar"><strong>${arHtml(w.ar)}</strong></td>
+                <td colspan="3" class="cell-status-cur">Bezig met ontleden...</td>
+              </tr>`;
+            } else {
+              return `<tr class="irab-row-wait">
+                <td class="ar cell-tok muted" lang="ar">${arHtml(w.ar)}</td>
+                <td colspan="3" class="cell-status-wait">—</td>
+              </tr>`;
+            }
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+
+  return `<div class="g2-card g2-parse-engine">
+    ${prog}
+    <div class="g2-parse-badge">${ICO.check} Zinsontleding · Iʿrāb Coach (MVP)</div>
+    <div class="g2-parse-sentence-card">
+      <div class="g2-parse-sentence ar" lang="ar" dir="rtl">${sentenceDisplay} ${spk(d.sentence)}</div>
+      <div class="g2-parse-sub">${mix(d.nl || '')}</div>
+    </div>
+    <div class="g2-parse-tabs">${wordTabsHtml}</div>
+    ${analyzerBody}
+    ${liveTable}
+  </div>`;
+}
+
+function renderIrabStudio(){
+  const s = S();
+  s.irabCategory = s.irabCategory || 'all';
+  s.irabSentIdx = typeof s.irabSentIdx === 'number' ? s.irabSentIdx : 0;
+  P.irabDone = P.irabDone || {};
+
+  let sents = ALL_IRAB_SENTENCES;
+  if(s.irabCategory !== 'all'){
+    sents = ALL_IRAB_SENTENCES.filter(item => item.category === s.irabCategory);
+  }
+  if(s.irabSentIdx >= sents.length) s.irabSentIdx = 0;
+  const curSent = sents[s.irabSentIdx] || ALL_IRAB_SENTENCES[0];
+  const words = curSent.words || [];
+
+  const ps = getParseSession('studio_' + curSent.id, words);
+  const doneTotal = Object.keys(P.irabDone).length;
+  const totalSentCount = ALL_IRAB_SENTENCES.length;
+  const pct = Math.round(100 * doneTotal / totalSentCount);
+  const canCheck = !!(ps.selRole && ps.selStatus && ps.selMark);
+
+  // Woord-pillen
+  const wordTabsHtml = words.map((w, idx) => {
+    const isDone = !!ps.wordsDone[idx];
+    const isCur = idx === ps.wi && !ps.complete;
+    return `<button type="button" class="g2-parse-tab ${isCur ? 'active' : ''} ${isDone ? 'done' : ''}" data-act="g2-studio-select-w" data-wi="${idx}">
+      <span class="ptab-num">${idx + 1}</span>
+      <span class="ar ptab-ar" lang="ar">${arHtml(w.ar)}</span>
+      ${isDone ? '<span class="ptab-chk">✓</span>' : ''}
+    </button>`;
+  }).join('');
+
+  // Zin weergave
+  const sentenceDisplay = words.map((w, idx) => {
+    const isDone = !!ps.wordsDone[idx];
+    const isCur = idx === ps.wi && !ps.complete;
+    return `<span class="g2-tok-pill ${isDone ? 'done' : ''} ${isCur ? 'active' : ''}">${arHtml(w.ar)}${isDone ? '<i class="tok-chk">✓</i>' : ''}</span>`;
+  }).join(' ');
+
+  const curWord = words[ps.wi] || words[0] || {};
+
+  // Analyzer block
+  let analyzerBody = '';
+  if(!ps.complete){
+    analyzerBody = `<div class="g2-parse-card">
+      <div class="g2-parse-focus-head">
+        <div>
+          <span class="focus-label">Ontleed woord <b>${ps.wi + 1}</b> van <b>${words.length}</b></span>
+          <div class="ar focus-word" lang="ar">«${arHtml(curWord.ar)}»</div>
+        </div>
+        ${spk(curWord.ar, '🔊')}
+      </div>
+
+      <div class="g2-parse-section">
+        <div class="g2-parse-sec-title">1. Grammaticale Functie (الْوَظِيفَة النَّحْوِيَّة)</div>
+        <div class="g2-parse-chips">
+          ${IRAB_ROLES.map(r => `
+            <button type="button" class="g2-parse-chip ${ps.selRole === r.id ? 'active' : ''}" data-act="g2-studio-pick" data-cat="role" data-val="${r.id}">
+              <b class="ar" lang="ar">${r.ar}</b>
+              <small>${r.nl}</small>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="g2-parse-section">
+        <div class="g2-parse-sec-title">2. Naamvalsstatus (الْحَالَة الْإِعْرَابِيَّة)</div>
+        <div class="g2-parse-chips">
+          ${IRAB_STATUSES.map(st => `
+            <button type="button" class="g2-parse-chip ${ps.selStatus === st.id ? 'active' : ''}" data-act="g2-studio-pick" data-cat="status" data-val="${st.id}">
+              <b class="ar" lang="ar">${st.ar}</b>
+              <small>${st.nl}</small>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="g2-parse-section">
+        <div class="g2-parse-sec-title">3. Klinkerteken (الْعَلَامَة / الْحَرَكَة)</div>
+        <div class="g2-parse-chips">
+          ${IRAB_MARKS.map(m => `
+            <button type="button" class="g2-parse-chip ${ps.selMark === m.id ? 'active' : ''}" data-act="g2-studio-pick" data-cat="mark" data-val="${m.id}">
+              <b class="ar" lang="ar">${m.ar}</b>
+              <small>${m.nl}</small>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="g2-parse-submit">
+        <button type="button" class="btn btn-primary btn-block g2-parse-check-btn" data-act="g2-studio-check-word" ${canCheck ? '' : 'disabled'}>
+          ${canCheck ? `Controleer «${arHtml(curWord.ar)}» ✓` : 'Kies functie, status én klinkerteken'}
+        </button>
+      </div>
+
+      ${ps.feedback ? `
+        <div class="g2-parse-fb ${ps.feedback.ok ? 'ok' : 'bad'}">
+          <b>${ps.feedback.ok ? 'Goed!' : 'Nog niet juist:'}</b>
+          <p>${mix(ps.feedback.msg)}</p>
+        </div>
+      ` : ''}
+    </div>`;
+  } else {
+    analyzerBody = `<div class="g2-parse-card g2-parse-complete-card">
+      <div class="parse-complete-badge">${ICO.check} Zin ${s.irabSentIdx + 1} compleet ontleed!</div>
+      <h3 class="ar" lang="ar" dir="rtl">${arHtml(curSent.sentence)}</h3>
+      <p class="g2-sub">${mix(curSent.nl || '')}</p>
+      <div class="g2-actions" style="margin-top:16px;">
+        <button type="button" class="btn btn-secondary" data-act="g2-studio-reset">Opnieuw ontleden</button>
+        ${s.irabSentIdx + 1 < sents.length ? `
+          <button type="button" class="btn btn-primary" data-act="g2-studio-next-sent">Volgende zin (${s.irabSentIdx + 2}/${sents.length}) →</button>
+        ` : `
+          <button type="button" class="btn btn-primary" data-act="g2-hub">Klaar · Terug naar lessen</button>
+        `}
+      </div>
+    </div>`;
+  }
+
+  // Live Table
+  const liveTable = `<div class="g2-parse-table-card">
+    <div class="g2-table-header">Live Iʿrāb-tabel van de zin:</div>
+    <div class="g2-table-responsive">
+      <table class="g2-irab-table">
+        <thead>
+          <tr>
+            <th>Woord</th>
+            <th>1. Functie</th>
+            <th>2. Status</th>
+            <th>3. Harakah</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${words.map((w, idx) => {
+            const done = ps.wordsDone[idx];
+            const isCur = idx === ps.wi && !ps.complete;
+            if(done){
+              const rObj = IRAB_ROLES.find(x => x.id === done.role);
+              const sObj = IRAB_STATUSES.find(x => x.id === done.status);
+              const mObj = IRAB_MARKS.find(x => x.id === done.mark);
+              return `<tr class="irab-row-done">
+                <td class="ar cell-tok" lang="ar"><b>${arHtml(w.ar)}</b></td>
+                <td><span class="irab-badge role ar">${arHtml(rObj ? rObj.ar : done.role)}</span></td>
+                <td><span class="irab-badge status ar">${arHtml(sObj ? sObj.ar : done.status)}</span></td>
+                <td><span class="irab-badge mark ar">${arHtml(mObj ? mObj.ar : done.mark)}</span></td>
+              </tr>`;
+            } else if(isCur){
+              return `<tr class="irab-row-cur">
+                <td class="ar cell-tok active" lang="ar"><strong>${arHtml(w.ar)}</strong></td>
+                <td colspan="3" class="cell-status-cur">Bezig met ontleden...</td>
+              </tr>`;
+            } else {
+              return `<tr class="irab-row-wait">
+                <td class="ar cell-tok muted" lang="ar">${arHtml(w.ar)}</td>
+                <td colspan="3" class="cell-status-wait">—</td>
+              </tr>`;
+            }
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+
+  return `<div class="desktop-narrow g2 irab-studio-wrap">
+    <div class="g2-top">
+      <button class="back" data-act="g2-hub" style="margin:0"><span>←</span> Alle lessen</button>
+      <span class="grow"></span>
+      <span class="g2-stat-pill"><b>${doneTotal}</b> / ${totalSentCount} zinnen ontleed</span>
+    </div>
+
+    <div class="g2-head">
+      <div class="g2-eyebrow">Interactieve Trainer (MVP) · Al-Manarah & Medina</div>
+      <h1>Zinsontleder · Iʿrāb Studio</h1>
+      <p>Ontleed stap voor stap alle 8 examenzinnen woord voor woord op de 3 pijlers: <b>1. Functie</b>, <b>2. Status</b> en <b>3. Harakah</b>.</p>
+    </div>
+
+    <!-- Category selector tabs -->
+    <div class="g2-studio-cat-tabs">
+      <button type="button" class="g2-tab ${s.irabCategory === 'all' ? 'active' : ''}" data-act="g2-studio-cat" data-cat="all">Alle (${ALL_IRAB_SENTENCES.length})</button>
+      <button type="button" class="g2-tab ${s.irabCategory === 'official' ? 'active' : ''}" data-act="g2-studio-cat" data-cat="official">Officieel Examen (4)</button>
+      <button type="button" class="g2-tab ${s.irabCategory === 'practice' ? 'active' : ''}" data-act="g2-studio-cat" data-cat="practice">Oefenexamen (4)</button>
+      <button type="button" class="g2-tab ${s.irabCategory === 'medina' ? 'active' : ''}" data-act="g2-studio-cat" data-cat="medina">Medina Basis (3)</button>
+    </div>
+
+    <!-- Sentence Stepper list -->
+    <div class="g2-studio-sentence-chips">
+      ${sents.map((item, idx) => {
+        const isDone = !!P.irabDone[item.id];
+        const isSel = idx === s.irabSentIdx;
+        return `<button type="button" class="g2-studio-sent-btn ${isSel ? 'active' : ''} ${isDone ? 'done' : ''}" data-act="g2-studio-select-sent" data-si="${idx}">
+          <span class="sent-num">${idx + 1}</span>
+          <span class="ar sent-ar" lang="ar">${arHtml(item.sentence)}</span>
+          ${isDone ? '<span class="sent-chk">✓</span>' : ''}
+        </button>`;
+      }).join('')}
+    </div>
+
+    <!-- Main parse engine for selected sentence -->
+    <div class="g2-card g2-parse-engine">
+      <div class="g2-parse-badge">${ICO.check} ${E(curSent.categoryTitle)}</div>
+      <div class="g2-parse-sentence-card">
+        <div class="g2-parse-sentence ar" lang="ar" dir="rtl">${sentenceDisplay} ${spk(curSent.sentence)}</div>
+        <div class="g2-parse-sub">${mix(curSent.nl || '')}</div>
+      </div>
+      <div class="g2-parse-tabs">${wordTabsHtml}</div>
+      ${analyzerBody}
+      ${liveTable}
+    </div>
+  </div>`;
+}
+
 function nodes(n){
   const g=L[n]; if(!g) return [];
   const out=[];
@@ -157,6 +715,7 @@ function testPool(n){
 function validDrill(d){
   if(!d||!d.type) return false;
   if(d.type==='order') return Array.isArray(d.words)&&d.words.length>=2;
+  if(d.type==='parse') return (Array.isArray(d.words)&&d.words.length>=1) || (Array.isArray(d.options)&&d.options.length>=2);
   return Array.isArray(d.options)&&d.options.length>=2&&typeof d.answer==='number'&&d.answer>=0&&d.answer<d.options.length;
 }
 function findDrill(ref){
@@ -201,7 +760,7 @@ function prepDrill(){
   const ref=s.queue&&s.queue[0]; if(!ref){ s.cur=null; return; }
   const x=findDrill(ref); s.cur=x;
   if(x&&x.d.type==='order') s.bank=shuf(x.d.words.map((w,i)=>({w,i})));
-  if(x&&x.d.type!=='order') s.optOrder=x.d.options.map((_,i)=>i);
+  if(x && x.d.type!=='order' && Array.isArray(x.d.options)) s.optOrder=x.d.options.map((_,i)=>i);
 }
 
 /* ---------- renderers ---------- */
@@ -246,13 +805,13 @@ function pillarPct(p){
 
 const SHORT_TITLES = {
   0: "Klinkertekens & Symbolen",
-  1: "Aanwijzer هَذَا & Vragen met أَ",
+  1: "Nominale Zin & Aanwijzer هَذَا",
   2: "Aanwijzer ذَلِكَ & Voegwoord وَ",
-  3: "Bepaald lidwoord الْ & Zonneletters",
+  3: "Lidwoord الْ & Zonneletters",
   4: "Voorzetsels (حُرُوفُ الْجَرِّ)",
-  5: "De Bezitsconstructie (الْإِضَافَةُ)",
+  5: "De Bezitsconstructie (Idāfah)",
   6: "Vrouwelijk (هَذِهِ & Taa' Marboetah)",
-  7: "Verwijzen op Afstand (تِلْكَ)",
+  7: "Aanwijzer تِلْكَ & Na't",
   8: "Aanwijzer met Bepaling (Badal)",
   9: "Bijvoeglijk Naamwoord (النَّعْت)",
   10: "Bezittelijke Voornaamwoorden",
@@ -261,7 +820,7 @@ const SHORT_TITLES = {
   13: "Het Meervoud (الْجَمْعُ)",
   14: "Meervoud Aanspreken (أَنْتُمْ)",
   15: "Vrouwelijk Meervoud (أَنْتُنَّ)",
-  16: "Niet-menselijk Meervoud (Ghayr 'Āqil)",
+  16: "Niet-menselijk Meervoud",
   17: "Toepassing Meervouden",
   18: "Het Tweevoud (الْمُثَنَّى)",
   19: "Getallen 3–10 (Mannelijk)",
@@ -269,11 +828,12 @@ const SHORT_TITLES = {
   21: "Mijn School (مَدْرَسَتِي)",
   22: "Diptoten (الْمَمْنُوعُ مِنَ الصَّرْفِ)",
   23: "Diptoten in de Genitief",
-  24: "Bijwoorden van Tijd & Plaats (Reader 8)"
+  24: "Bijwoorden van Tijd & Plaats"
 };
 
 function renderHub(){
   const s=S();
+  if(s.view === 'irab_studio') return renderIrabStudio();
   s.hubFilter = (s.hubFilter==='busy'||s.hubFilter==='done') ? s.hubFilter : 'all';
   s.hubSearch = s.hubSearch || '';
 
@@ -333,6 +893,7 @@ function renderHub(){
     </div>
     <div class="g2-cta-row">
       ${nextN!==undefined?`<button type="button" class="g2-cta primary" data-act="g2-open" data-l="${nextN}"><span>Ga verder</span><b>${nextN===0?'Inleiding':'Les '+nextN} · ${E(SHORT_TITLES[nextN] || L[nextN].title)}</b></button>`:''}
+      <button type="button" class="g2-cta irab" data-act="g2-open-irab"><span>Interactief · MVP</span><b>Zinsontleder · Iʿrāb Studio</b></button>
       <button type="button" class="g2-cta" data-act="nav" data-v="exam"><span>Examen</span><b>Al-Manarah · Les 1 t/m 7 (100 punten)</b></button>
     </div>
     <div class="g2-hub-toolbar">
@@ -469,7 +1030,10 @@ function renderStep(n){
 
 function renderDrill(s, kicker){
   const x=s.cur; if(!x) return '';
-  const d=x.d; const done=s.total-s.queue.length;
+  const d=x.d;
+  if(d.type==='parse' && Array.isArray(d.words) && d.words.length){
+    return renderInteractiveParse(s, kicker, x);
+  } const done=s.total-s.queue.length;
   const prog=`<div class="g2-qprog"><span>${E(kicker)}</span><span>${Math.min(done+1,s.total)} / ${s.total}</span></div><div class="g2-lbar"><i style="width:${s.total?Math.round(100*done/s.total):0}%"></i></div>`;
   const src = x.instr?`<div class="g2-src">${ICO.book} ${mix(x.instr)}${x.page?' · blz. '+E(x.page):''}</div>`:(x.page?`<div class="g2-src">Bron: blz. ${E(x.page)}</div>`:'');
   let q='', opts='';
@@ -528,13 +1092,8 @@ function renderDrill(s, kicker){
     const correct = d.type==='order' ? d.words.join(' ') : d.options[d.answer];
     const autoOn = P.autoAdvance !== false;
     let timerActionHtml = '';
-    if(autoOn){
-      timerActionHtml = `<button type="button" class="g2-timer-btn ${s.timerPaused ? 'paused' : (ok ? 't-2s' : 't-3s')}" data-act="g2-toggle-timer" title="${s.timerPaused ? 'Klik om timer te hervatten' : 'Klik om timer te pauzeren en rustig te lezen'}">
-        <span class="g2-timer-label">${s.timerPaused ? 'Gepauzeerd' : (ok ? '2s...' : '3s...')}</span>
-        <span class="g2-auto-timer ${s.timerPaused ? 'paused' : (ok ? 't-2s' : 't-3s')}"><i class="g2-auto-bar"></i></span>
-      </button>`;
-    } else {
-      timerActionHtml = `<span class="g2-manual-hint">Druk op Enter of klik verder</span>`;
+    if(!ok && autoOn){
+      timerActionHtml = `<span class="g2-manual-hint">Druk op Enter of klik op 'Volgende vraag'</span>`;
     }
     fb=`<div class="g2-fb ${ok?'ok':'bad'}">
       <b>${ok?'Goed!':'Nog niet goed'}</b>
@@ -585,7 +1144,9 @@ function renderVocab(n){
 }
 
 function renderLesson(){
-  const n=Number(state.bookLesson); const s=S();
+  const s=S();
+  if(s.view === 'irab_studio') return renderIrabStudio();
+  const n=Number(state.bookLesson);
   if(!L[n]) return `<div class="desktop-narrow"><div class="empty">Les niet gevonden.</div></div>`;
   if(s.n!==n || s.view!=='node') return renderLessonMap(n);
   if(s.kind==='step') return renderStep(n);
@@ -609,7 +1170,7 @@ function scheduleG2AutoNext(ok){
   const s = S();
   s.timerPaused = false;
   if(P.autoAdvance === false) return;
-  const delay = ok ? 500 : 3000; // juist: bijna meteen door, fout: 3s op de achtergrond
+  const delay = ok ? 400 : 3500; // juist: direct op achtergrond door (400ms), fout: 3.5s of handmatig
   _g2AutoTimer = setTimeout(()=>{
     _g2AutoTimer = null;
     const curState = S();
@@ -703,6 +1264,131 @@ document.addEventListener('click', e=>{
   e.stopImmediatePropagation();
   const s=S();
   if(act==='g2-hub'){ clearG2AutoTimer(); state.view='book'; state.bookLesson=null; s.view='map'; render(); scrollTop(); return; }
+  if(act==='g2-open-irab'){
+    clearG2AutoTimer();
+    state.path='grammar'; state.view='book'; S().view='irab_studio';
+    render(); scrollTop(); return;
+  }
+  if(act==='g2-studio-cat'){
+    S().irabCategory = btn.dataset.cat;
+    S().irabSentIdx = 0;
+    render(); return;
+  }
+  if(act==='g2-studio-select-sent'){
+    S().irabSentIdx = +btn.dataset.si;
+    render(); return;
+  }
+  if(act==='g2-studio-select-w'){
+    const ps = S().parseState;
+    if(ps){ ps.wi = +btn.dataset.wi; ps.feedback = null; }
+    render(); return;
+  }
+  if(act==='g2-studio-pick'){
+    const ps = S().parseState;
+    if(!ps) return;
+    const cat = btn.dataset.cat, val = btn.dataset.val;
+    if(cat==='role') ps.selRole = (ps.selRole===val ? null : val);
+    if(cat==='status') ps.selStatus = (ps.selStatus===val ? null : val);
+    if(cat==='mark') ps.selMark = (ps.selMark===val ? null : val);
+    ps.feedback = null;
+    render(); return;
+  }
+  if(act==='g2-studio-check-word'){
+    const s = S();
+    const curSent = (s.irabCategory==='all' ? ALL_IRAB_SENTENCES : ALL_IRAB_SENTENCES.filter(x=>x.category===s.irabCategory))[s.irabSentIdx];
+    if(!curSent) return;
+    const words = curSent.words;
+    const ps = getParseSession('studio_' + curSent.id, words);
+    const w = words[ps.wi];
+    if(!w || !ps.selRole || !ps.selStatus || !ps.selMark) return;
+
+    const rOk = checkRoleMatch(ps.selRole, w.role);
+    const sOk = ps.selStatus === w.status;
+    const mOk = checkMarkMatch(ps.selMark, w.mark);
+
+    if(rOk && sOk && mOk){
+      ps.wordsDone[ps.wi] = { role: ps.selRole, status: ps.selStatus, mark: ps.selMark, ok: true };
+      try{ playSfx(true); }catch(e){}
+      ps.selRole = null; ps.selStatus = null; ps.selMark = null; ps.feedback = null;
+      if(ps.wi + 1 < words.length){
+        ps.wi++;
+      } else {
+        ps.complete = true;
+        P.irabDone = P.irabDone || {};
+        P.irabDone[curSent.id] = true;
+        save();
+      }
+    } else {
+      let hint = '';
+      if(!rOk) hint = 'Kijk goed naar de grammaticale rol (functie) van dit woord.';
+      else if(!sOk) hint = 'Kijk goed naar de naamvalsstatus (nominatief of genitief).';
+      else if(!mOk) hint = 'Kijk goed naar het juiste klinkerteken (harakah/tashkīl).';
+      ps.feedback = { ok: false, msg: w.explain || hint };
+      try{ playSfx(false); }catch(e){}
+    }
+    render(); return;
+  }
+  if(act==='g2-studio-reset'){
+    const s = S();
+    const curSent = (s.irabCategory==='all' ? ALL_IRAB_SENTENCES : ALL_IRAB_SENTENCES.filter(x=>x.category===s.irabCategory))[s.irabSentIdx];
+    if(curSent) delete s.parseState;
+    render(); return;
+  }
+  if(act==='g2-studio-next-sent'){
+    const s = S();
+    s.irabSentIdx++;
+    delete s.parseState;
+    render(); scrollTop(); return;
+  }
+  if(act==='g2-parse-select-w'){
+    const ps = S().parseState;
+    if(ps){ ps.wi = +btn.dataset.wi; ps.feedback = null; }
+    render(); return;
+  }
+  if(act==='g2-parse-pick'){
+    const ps = S().parseState;
+    if(!ps) return;
+    const cat = btn.dataset.cat, val = btn.dataset.val;
+    if(cat==='role') ps.selRole = (ps.selRole===val ? null : val);
+    if(cat==='status') ps.selStatus = (ps.selStatus===val ? null : val);
+    if(cat==='mark') ps.selMark = (ps.selMark===val ? null : val);
+    ps.feedback = null;
+    render(); return;
+  }
+  if(act==='g2-parse-check-word'){
+    const s = S();
+    const x = s.cur;
+    if(!x || !x.d || !x.d.words) return;
+    const words = x.d.words;
+    const ps = getParseSession(x.ref || x.d.sentence, words);
+    const w = words[ps.wi];
+    if(!w || !ps.selRole || !ps.selStatus || !ps.selMark) return;
+
+    const rOk = checkRoleMatch(ps.selRole, w.role);
+    const sOk = ps.selStatus === w.status;
+    const mOk = checkMarkMatch(ps.selMark, w.mark);
+
+    if(rOk && sOk && mOk){
+      ps.wordsDone[ps.wi] = { role: ps.selRole, status: ps.selStatus, mark: ps.selMark, ok: true };
+      try{ playSfx(true); }catch(e){}
+      ps.selRole = null; ps.selStatus = null; ps.selMark = null; ps.feedback = null;
+      if(ps.wi + 1 < words.length){
+        ps.wi++;
+      } else {
+        ps.complete = true;
+        s.ans = 1;
+        answer(true);
+      }
+    } else {
+      let hint = '';
+      if(!rOk) hint = 'Kijk goed naar de grammaticale rol (functie) van dit woord.';
+      else if(!sOk) hint = 'Kijk goed naar de naamvalsstatus (nominatief of genitief).';
+      else if(!mOk) hint = 'Kijk goed naar het juiste klinkerteken (harakah/tashkīl).';
+      ps.feedback = { ok: false, msg: w.explain || hint };
+      try{ playSfx(false); }catch(e){}
+    }
+    render(); return;
+  }
   if(act==='g2-open'){
     clearG2AutoTimer();
     const n=parseInt(btn.dataset.l,10);
@@ -786,6 +1472,6 @@ document.addEventListener('input', e=>{
 window.renderBook = renderHub;
 window.renderBookLesson = renderLesson;
 try { renderBook = renderHub; renderBookLesson = renderLesson; } catch(e){}
-window.G2 = {L, P, nodes, testPool, bookItems, stepDrills, startNode, lessonOpen, lessonPassed, save, S};
+window.G2 = {L, P, nodes, testPool, bookItems, stepDrills, startNode, prepDrill, lessonOpen, lessonPassed, save, S};
 if(typeof render==='function') try{ render(); }catch(e){}
 })();
