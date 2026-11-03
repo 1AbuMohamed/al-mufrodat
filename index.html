@@ -5217,90 +5217,110 @@ function renderExam(){
     }).join('')}
   </div>`;
 
-  const questionsHtml = visibleParts.map(p => {
-    const qCards = p.questions.map((q) => {
-      const picked = ansMap[q.id];
-      const isAnswered = picked !== undefined;
-      const showFb = isAnswered && (state.examInstant || state.examSubmitted);
-      const isRight = isAnswered && picked === q.ans;
-      return `<div class="exam-q-card ${showFb ? (isRight ? 'correct' : 'wrong') : ''}">
-        <div class="exam-q-top">
-          <div class="exam-q-title">${exAr(q.q)}</div>
-          <span class="exam-q-pts">${q.pts} ${q.pts===1?'pt':'pt'}</span>
-        </div>
-        ${q.audio ? `<div class="exam-q-audio">
-          <button type="button" class="btn btn-primary btn-sm" data-act="speak-text" data-text="${esc(q.audio)}">${GL_ICO_SPK} Beluister dictee-woord</button>
-          <span class="exam-q-audio-hint">Luister goed naar de klinkers, shaddah en tanwīn</span>
-        </div>` : ''}
-        ${q.ar ? `<div class="exam-q-ar-row">
-          <div class="exam-q-ar ar" lang="ar" dir="rtl">${esc(q.ar)}</div>
-          <button type="button" class="btn btn-secondary btn-sm" data-act="speak-text" data-text="${esc(q.ar.replace(/___+/g,''))}" title="Beluister">${GL_ICO_SPK}</button>
-        </div>` : ''}
-        <div class="exam-opts">
-          ${examOrder(q).map((oi, pos) => {
-            const opt = q.opts[oi];
-            let cls = 'exam-opt';
-            if(picked === oi) cls += ' selected';
-            if(showFb){
-              if(oi === q.ans) cls += ' is-correct';
-              else if(picked === oi && picked !== q.ans) cls += ' is-wrong';
-            }
-            const hasAr = /[\u0600-\u06FF]/.test(opt);
-            return `<button type="button" class="${cls}" data-act="exam-ans" data-qid="${q.id}" data-oi="${oi}">
-              <span class="exam-opt-letter">${String.fromCharCode(65+pos)}</span>
-              ${/^[op]10_/.test(q.id) ? `<span class="exam-opt-lines">${opt.split(/\s·\s(?![^()]*\))/).map(seg=>`<span class="exam-opt-line ar" lang="ar" dir="rtl">${esc(seg)}</span>`).join('')}</span>` : `<span class="exam-opt-text">${exAr(opt)}</span>`}
-            </button>`;
-          }).join('')}
-        </div>
-        ${showFb ? `<div class="exam-q-fb ${isRight?'ok':'err'}">
-          <strong>${isRight ? ('Goed! (+' + q.pts + ' pt)') : ('Juiste antwoord: ' + exAr(q.opts[q.ans]))}</strong>
-          ${q.note ? `<div>${exAr(q.note)}</div>` : ''}
-        </div>` : ''}
-      </div>`;
-    }).join('');
+  const flat = [];
+  visibleParts.forEach(p => p.questions.forEach(q => flat.push({p, q})));
+  const cur = Math.max(0, Math.min(state.examIdx || 0, flat.length - 1));
+  state.examIdx = cur;
+  const cp = flat[cur].p;
+  const q = flat[cur].q;
+  const picked = ansMap[q.id];
+  const isAnswered = picked !== undefined;
+  const showFb = isAnswered && (state.examInstant || state.examSubmitted);
+  const isRight = isAnswered && picked === q.ans;
+  const firstOfPart = cur === 0 || flat[cur-1].p.num !== cp.num;
+  const isLast = cur === flat.length - 1;
+  const pctDone = Math.round(100 * (cur + 1) / flat.length);
 
-    return `<section class="exam-part-section">
-      <div class="exam-part-header">
-        <span class="exam-part-badge">Deel ${p.num} · ${p.pts} punten</span>
-        <h2>${esc(p.title)}</h2>
-        <p>${esc(p.desc)}</p>
-      </div>
-      <div class="exam-q-list">${qCards}</div>
-    </section>`;
-  }).join('');
+  const qCard = `<div class="exam-q-card ${showFb ? (isRight ? 'correct' : 'wrong') : ''}">
+    <div class="exam-q-top">
+      <div class="exam-q-title">${exAr(q.q)}</div>
+      <span class="exam-q-pts">${q.pts} pt</span>
+    </div>
+    ${q.audio ? `<div class="exam-q-audio">
+      <button type="button" class="btn btn-primary btn-sm" data-act="speak-text" data-text="${esc(q.audio)}">${GL_ICO_SPK} Beluister het woord</button>
+      <span class="exam-q-audio-hint">Let op klinkers, shaddah en tanwīn</span>
+    </div>` : ''}
+    ${q.ar ? `<div class="exam-q-ar-row">
+      <div class="exam-q-ar ar" lang="ar" dir="rtl">${esc(q.ar)}</div>
+      <button type="button" class="btn btn-secondary btn-sm" data-act="speak-text" data-text="${esc(q.ar.replace(/___+/g,''))}" title="Beluister">${GL_ICO_SPK}</button>
+    </div>` : ''}
+    <div class="exam-opts">
+      ${examOrder(q).map((oi, pos) => {
+        const opt = q.opts[oi];
+        let cls = 'exam-opt';
+        if(picked === oi) cls += ' selected';
+        if(showFb){
+          if(oi === q.ans) cls += ' is-correct';
+          else if(picked === oi) cls += ' is-wrong';
+        }
+        return `<button type="button" class="${cls}" data-act="exam-ans" data-qid="${q.id}" data-oi="${oi}">
+          <span class="exam-opt-letter">${String.fromCharCode(65+pos)}</span>
+          ${/^[op]10_/.test(q.id) ? `<span class="exam-opt-lines">${opt.split(/\s·\s(?![^()]*\))/).map(seg=>`<span class="exam-opt-line ar" lang="ar" dir="rtl">${esc(seg)}</span>`).join('')}</span>` : `<span class="exam-opt-text">${exAr(opt)}</span>`}
+        </button>`;
+      }).join('')}
+    </div>
+    ${showFb ? `<div class="exam-q-fb ${isRight?'ok':'err'}">
+      <strong>${isRight ? ('Goed! (+' + q.pts + ' pt)') : ('Juiste antwoord: ' + exAr(q.opts[q.ans]))}</strong>
+      ${q.note ? `<div>${exAr(q.note)}</div>` : ''}
+    </div>` : ''}
+  </div>`;
+
+  const navHtml = visibleParts.map(p => `<div class="exam-nav-part">
+    <div class="exam-nav-label">Deel ${p.num} <span>${p.pts} pt</span></div>
+    <div class="exam-nav-grid">${p.questions.map(qq => {
+      const gi = flat.findIndex(f => f.q.id === qq.id);
+      const a = ansMap[qq.id];
+      let c = 'exam-nav-btn';
+      if(gi === cur) c += ' current';
+      if(a !== undefined){
+        c += ' answered';
+        if(state.examInstant || state.examSubmitted) c += (a === qq.ans ? ' ok' : ' bad');
+      }
+      return `<button type="button" class="${c}" data-act="exam-goto" data-i="${gi}" aria-label="Vraag ${gi+1}">${gi+1}</button>`;
+    }).join('')}</div>
+  </div>`).join('');
 
   return `<div class="desktop-page exam-page">
     <div class="exam-topbar">
-      <button type="button" class="btn btn-secondary btn-sm" data-act="exam-start" data-mode="hub">← Examenoverzicht</button>
+      <button type="button" class="btn btn-secondary btn-sm" data-act="exam-start" data-mode="hub">← Overzicht</button>
       <div class="exam-var-switch">
-        <button type="button" class="btn btn-sm ${exKey==='official'?'btn-primary':'btn-secondary'}" data-act="exam-start" data-mode="official">Officieel Examen</button>
+        <button type="button" class="btn btn-sm ${exKey==='official'?'btn-primary':'btn-secondary'}" data-act="exam-start" data-mode="official">Officieel</button>
         <button type="button" class="btn btn-sm ${exKey==='practice'?'btn-primary':'btn-secondary'}" data-act="exam-start" data-mode="practice">Oefenexamen</button>
       </div>
       <div class="exam-controls">
-        <button type="button" class="btn btn-sm ${state.examInstant?'btn-primary':'btn-secondary'}" data-act="exam-check-instant">Direct nakijken: ${state.examInstant?'Aan':'Uit'}</button>
+        <button type="button" class="btn btn-sm ${state.examInstant?'btn-primary':'btn-secondary'}" data-act="exam-check-instant">Direct nakijken: ${state.examInstant?'aan':'uit'}</button>
         <button type="button" class="btn btn-sm btn-secondary" data-act="exam-sheet" data-var="${exKey}">Antwoordmodel</button>
         <button type="button" class="btn btn-sm btn-secondary" data-act="exam-reset">Opnieuw</button>
       </div>
     </div>
 
-    <div class="exam-status-strip">
-      <div><strong>${esc(ex.title)}</strong> · Beantwoord: <strong>${answeredQs}/${totalQs}</strong></div>
-      <div>${(state.examInstant || state.examSubmitted) ? `Huidige score: <strong>${earnedPts} / 100 pt</strong>` : 'Examenmodus (score na inleveren)'}</div>
-    </div>
-
     ${resultBanner}
     ${partsNav}
-    ${questionsHtml}
 
-    <div class="card exam-submit-bar">
-      <div>
-        <strong>Klaar met ${state.examPart==='all'?'het examen':('Deel '+state.examPart)}?</strong>
-        <p style="font-size:13px;color:var(--muted);margin-top:2px">${answeredQs} van ${totalQs} vragen beantwoord.</p>
+    <div class="exam-run">
+      <div class="exam-run-main">
+        <div class="exam-prog">
+          <div class="exam-prog-top"><strong>Vraag ${cur+1} van ${flat.length}</strong><span>Deel ${cp.num} · beantwoord ${answeredQs}/${totalQs}${(state.examInstant||state.examSubmitted)?' · score '+earnedPts+' pt':''}</span></div>
+          <div class="progress"><i style="width:${pctDone}%"></i></div>
+        </div>
+        <details class="exam-desc" ${firstOfPart?'open':''}>
+          <summary><span class="exam-part-badge">Deel ${cp.num} · ${cp.pts} pt</span> ${esc(cp.title.replace(/^Deel \d+: /,''))}</summary>
+          <p>${exAr(cp.desc)}</p>
+        </details>
+        ${qCard}
+        <div class="exam-stepnav">
+          <button type="button" class="btn btn-secondary" data-act="exam-prev" ${cur===0?'disabled':''}>← Vorige</button>
+          ${isLast
+            ? `<button type="button" class="btn btn-primary" data-act="exam-submit">Inleveren en nakijken</button>`
+            : `<button type="button" class="btn ${isAnswered?'btn-primary':'btn-secondary'}" data-act="exam-next">Volgende →</button>`}
+        </div>
       </div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px">
-        ${state.examPart!=='all' ? `<button type="button" class="btn btn-secondary" data-act="exam-part" data-part="all">Toon alle 7 delen</button>` : ''}
-        <button type="button" class="btn btn-primary" data-act="exam-submit">Lever examen in & bereken eindcijfer (100 pt)</button>
-      </div>
+      <aside class="exam-run-aside">
+        <div class="exam-aside-head">Vragenoverzicht</div>
+        ${navHtml}
+        <div class="exam-legend"><span><i class="lg answered"></i>beantwoord</span><span><i class="lg ok"></i>goed</span><span><i class="lg bad"></i>fout</span></div>
+        <button type="button" class="btn btn-primary btn-block" data-act="exam-submit">Inleveren (${answeredQs}/${totalQs} beantwoord)</button>
+      </aside>
     </div>
   </div>`;
 }
@@ -5415,6 +5435,7 @@ document.addEventListener('click',e=>{
     state.view='exam';
     state.path='exam';
     state.examMode=m;
+    state.examIdx=0;
     state.examSubmitted=false;
     render();
     (document.getElementById("app")||window).scrollTop=0;
@@ -5427,7 +5448,20 @@ document.addEventListener('click',e=>{
     render();
     (document.getElementById("app")||window).scrollTop=0;
   }
+  else if(act==='exam-goto'){
+    state.examIdx = parseInt(btn.dataset.i,10)||0;
+    render(); window.scrollTo(0,0);
+  }
+  else if(act==='exam-prev'){
+    state.examIdx = Math.max(0,(state.examIdx||0)-1);
+    render(); window.scrollTo(0,0);
+  }
+  else if(act==='exam-next'){
+    state.examIdx = (state.examIdx||0)+1;
+    render(); window.scrollTo(0,0);
+  }
   else if(act==='exam-part'){
+    state.examIdx = 0;
     state.examPart = btn.dataset.part || 'all';
     render();
     (document.getElementById("app")||window).scrollTop=0;
@@ -5455,6 +5489,7 @@ document.addEventListener('click',e=>{
     if(state.examAnswers) state.examAnswers[exKey] = {};
     try{ localStorage.setItem('alm_exam_ans', JSON.stringify(state.examAnswers||{})); }catch(e){}
     state.examSubmitted = false;
+    state.examIdx = 0;
     render();
     (document.getElementById("app")||window).scrollTop=0;
   }

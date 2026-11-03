@@ -111,6 +111,7 @@ function nodeDone(n,nd){
   return false;
 }
 function nodeOpen(n,idx){
+  return true;
   if(P.unlockAll) return true;
   const ns=nodes(n);
   for(let j=0;j<idx;j++){ if(ns[j].k==='review') continue; if(!nodeDone(n,ns[j])) return false; }
@@ -118,6 +119,7 @@ function nodeOpen(n,idx){
 }
 function lessonPassed(n){ const p=lp(n); return !!(p.test&&p.test.passed) || (!testPool(n).length && nodes(n).every(nd=>nodeDone(n,nd))); }
 function lessonOpen(n){
+  return true;
   if(P.unlockAll) return true;
   const i=KEYS.indexOf(Number(n));
   return i<=0 || lessonPassed(KEYS[i-1]);
@@ -203,7 +205,6 @@ function head(n, sub){
     <button type="button" class="g2-pill-btn ${sfxOn?'active':''}" data-act="g2-toggle-sfx" title="${sfxOn?'Geluidseffect staat aan — klik om te dempen':'Geluidseffect is gedempt — klik om aan te zetten'}">
       ${sfxOn?'Geluid: aan':'Geluid: uit'}
     </button>
-    ${typeof wordsFor==='function'&&wordsFor(n).length?`<button class="btn btn-secondary btn-sm" data-act="start-learn" data-l="${n}">Woorden oefenen</button>`:''}
   </div>
   <div class="g2-head">
     <div class="g2-eyebrow">${n===24?'Madinah Arabic Reader 8':'Medina Deel 1'} · ${n===0?'Inleiding':'Les '+n} · blz. ${E(g.pages||'')}</div>
@@ -221,7 +222,8 @@ const PILLARS = [
   { id: 'p5', name: 'Meervoud & Tweevoud', lessons: [13, 14, 15, 16, 17, 18], desc: 'جَمْع مُذَكَّر/مُؤَنَّث/تَكْسِير · مُثَنَّى' },
   { id: 'p6', name: 'Getallen 3–10', lessons: [19, 20], desc: 'تَمْيِيز الْعَدَد (mannelijk & vrouwelijk)' },
   { id: 'p7', name: 'Diptoten (Zonder Tanwīn)', lessons: [22, 23], desc: 'مَمْنُوع مِنَ الصَّرْف (Fathah i.p.v. Kasrah)' },
-  { id: 'p8', name: 'Madinah Reader 8', lessons: [24], desc: 'الْمَفْعُولُ فِيهِ · لَوْ الشَّرْطِيَّةُ · قَبْلُ' }
+  { id: 'p8', name: 'Madinah Reader 8', lessons: [24], desc: 'الْمَفْعُولُ فِيهِ · لَوْ الشَّرْطِيَّةُ · قَبْلُ' },
+  { id: 'p9', name: 'Toepassing', lessons: [11, 21], desc: 'فِيهِ · فِيهَا · مَدْرَسَتِي' }
 ];
 
 function pillarPct(p){
@@ -259,7 +261,7 @@ const SHORT_TITLES = {
 
 function renderHub(){
   const s=S();
-  s.hubFilter = s.hubFilter || 'all';
+  s.hubFilter = (s.hubFilter==='busy'||s.hubFilter==='done') ? s.hubFilter : 'all';
   s.hubSearch = s.hubSearch || '';
 
   const done=KEYS.filter(lessonPassed).length;
@@ -267,113 +269,119 @@ function renderHub(){
   let nextN=KEYS.find(n=>!lessonPassed(n)); if(nextN===undefined) nextN=KEYS[KEYS.length-1];
 
   let filteredKeys = KEYS;
-  let activePillar = null;
-  if(s.hubFilter && s.hubFilter.startsWith('p')){
-    activePillar = PILLARS.find(p => p.id === s.hubFilter);
-    if(activePillar) filteredKeys = filteredKeys.filter(n => activePillar.lessons.includes(n));
-  } else if(s.hubFilter === 'done'){
-    filteredKeys = filteredKeys.filter(n => lessonPassed(n));
-  } else if(s.hubFilter === 'busy'){
-    filteredKeys = filteredKeys.filter(n => !lessonPassed(n) && (lessonOpen(n) || lessonPct(n) > 0));
-  }
+  if(s.hubFilter === 'done') filteredKeys = filteredKeys.filter(n => lessonPassed(n));
+  else if(s.hubFilter === 'busy') filteredKeys = filteredKeys.filter(n => !lessonPassed(n));
   if(s.hubSearch){
     const q = s.hubSearch.toLowerCase().trim();
     filteredKeys = filteredKeys.filter(n => {
       const g = L[n] || {};
       const title = (SHORT_TITLES[n] || g.title || '').toLowerCase();
       const sum = (g.summary || '').toLowerCase();
-      const num = String(n);
-      return title.includes(q) || sum.includes(q) || num === q;
+      return title.includes(q) || sum.includes(q) || String(n) === q;
     });
   }
 
-  const items=filteredKeys.map(n=>{
-    const g=L[n], open=lessonOpen(n), passed=lessonPassed(n), p=lessonPct(n);
-    const cls=passed?'done':!open?'locked':p>0?'busy':'new';
-    const lbl=passed?'Afgerond':!open?'Vergrendeld':p>0?p+'%':'Nieuw';
+  const item = n => {
+    const g=L[n], passed=lessonPassed(n), p=lessonPct(n);
+    const cls=passed?'done':p>0?'busy':'new';
+    const lbl=passed?'Afgerond':n===nextN?'Aanbevolen':p>0?p+'%':'Nieuw';
     const cleanTitle = SHORT_TITLES[n] || g.title || '';
-    return `<button type="button" class="g2-lesson ${cls} ${n===nextN?'next':''}" data-act="g2-open" data-l="${n}" ${open?'':'aria-disabled="true"'}>
-      <span class="g2-num">${passed?ICO.check:!open?ICO.lock:String(n).padStart(2,'0')}</span>
+    return `<button type="button" class="g2-lesson ${cls} ${n===nextN&&!passed?'next':''}" data-act="g2-open" data-l="${n}">
+      <span class="g2-num">${passed?ICO.check:String(n).padStart(2,'0')}</span>
       <span class="g2-lbody">
         <span class="g2-lmeta">${n===0?'Inleiding':n===24?'Reader 8':'Les '+n} · blz. ${E(g.pages||'')} · ${lbl}</span>
         <span class="g2-ltitle">${E(cleanTitle)}</span>
         <span class="g2-lbar"><i style="width:${p}%"></i></span>
       </span>
+      <span class="g2-nchev">›</span>
     </button>`;
+  };
+
+  const groups = PILLARS.map(pl=>{
+    const ks = filteredKeys.filter(n=>pl.lessons.includes(n));
+    if(!ks.length) return '';
+    return `<section class="g2-group">
+      <div class="g2-group-head">
+        <div><h3>${E(pl.name)}</h3><span class="g2-group-desc ar" lang="ar">${E(pl.desc)}</span></div>
+        <span class="g2-group-pct">${pillarPct(pl)}%</span>
+      </div>
+      <div class="g2-list">${ks.map(item).join('')}</div>
+    </section>`;
   }).join('');
+
   return `<div class="desktop-page g2">
     <div class="g2-hero">
       <div>
         <div class="g2-eyebrow">Grammatica · leerpad</div>
         <h1>Medina Deel 1 + Reader 8</h1>
-        <p>Elke les volgt het boek letterlijk, regel voor regel: <b>lees de regel</b>, <b>bekijk de voorbeelden</b>, <b>pas hem meteen toe</b>, maak daarna <b>de oefeningen uit het boek</b> en sluit af met een <b>eindtoets</b>. Fouten komen in latere lessen terug als herhaling.</p>
+        <p>Per les: <b>leer de regel</b>, <b>bekijk voorbeelden</b>, <b>oefen direct</b>, maak de <b>boekoefeningen</b> en sluit af met een <b>eindtoets</b>. Alles staat open: volg de aanbevolen volgorde of spring naar wat je nodig hebt.</p>
       </div>
-      <div class="g2-hero-stat"><b>${done}</b><span>/ ${KEYS.length} lessen</span><div class="g2-lbar"><i style="width:${pct}%"></i></div></div>
+      <div class="g2-hero-stat"><b>${done}</b><span>/ ${KEYS.length} lessen afgerond</span><div class="g2-lbar"><i style="width:${pct}%"></i></div></div>
     </div>
-    ${nextN!==undefined?`<button type="button" class="g2-resume" data-act="g2-open" data-l="${nextN}"><span>Ga verder</span><b>${nextN===0?'Inleiding':'Les '+nextN} · ${E(SHORT_TITLES[nextN] || L[nextN].title)}</b><span>→</span></button>`:''}
-    <button type="button" class="g2-resume g2-exam-banner" data-act="nav" data-v="exam">
-      <span>Examen</span>
-      <b>Al-Manarah Examen · Les 1 t/m 7 (100 punten · Oefenexamen & Officiële Toets)</b>
-      <span>Start →</span>
-    </button>
-    <div class="g2-pillars">
-      <div class="g2-pillar-head">
-        <h3>Voortgang per grammaticale pijler</h3>
-        <span>${PILLARS.filter(p => pillarPct(p) === 100).length} / 8 pijlers beheerst</span>
-      </div>
-      <div class="g2-pillar-grid">
-        ${PILLARS.map(p => {
-          const pct = pillarPct(p);
-          const isDone = pct === 100;
-          const isSelected = s.hubFilter === p.id;
-          return `<button type="button" class="g2-pillar-card ${isDone ? 'done' : pct > 0 ? 'busy' : ''} ${isSelected ? 'selected' : ''}" data-act="g2-pillar" data-pid="${p.id}" title="Klik om lessen van deze pijler te filteren">
-            <div class="g2-pillar-top">
-              <span class="g2-pillar-name">${E(p.name)}</span>
-              <span class="g2-pillar-pct">${isDone ? ICO.check : pct + '%'}</span>
-            </div>
-            <div class="g2-pillar-desc">${E(p.desc)}</div>
-            <div class="g2-lbar"><i style="width:${pct}%"></i></div>
-          </button>`;
-        }).join('')}
-      </div>
+    <div class="g2-cta-row">
+      ${nextN!==undefined?`<button type="button" class="g2-cta primary" data-act="g2-open" data-l="${nextN}"><span>Ga verder</span><b>${nextN===0?'Inleiding':'Les '+nextN} · ${E(SHORT_TITLES[nextN] || L[nextN].title)}</b></button>`:''}
+      <button type="button" class="g2-cta" data-act="nav" data-v="exam"><span>Examen</span><b>Al-Manarah · Les 1 t/m 7 (100 punten)</b></button>
     </div>
     <div class="g2-hub-toolbar">
       <div class="g2-hub-tabs">
         <button type="button" class="g2-tab ${s.hubFilter==='all'?'active':''}" data-act="g2-hub-filter" data-f="all">Alle (${KEYS.length})</button>
-        <button type="button" class="g2-tab ${s.hubFilter==='busy'?'active':''}" data-act="g2-hub-filter" data-f="busy">Open / Bezig</button>
-        <button type="button" class="g2-tab ${s.hubFilter==='done'?'active':''}" data-act="g2-hub-filter" data-f="done">Beheerst (${done})</button>
-        ${activePillar ? `<span class="g2-filter-pill">Pijler: ${E(activePillar.name)} <button type="button" data-act="g2-hub-filter" data-f="all" title="Filter wissen">×</button></span>` : ''}
+        <button type="button" class="g2-tab ${s.hubFilter==='busy'?'active':''}" data-act="g2-hub-filter" data-f="busy">Nog te doen (${KEYS.length-done})</button>
+        <button type="button" class="g2-tab ${s.hubFilter==='done'?'active':''}" data-act="g2-hub-filter" data-f="done">Afgerond (${done})</button>
       </div>
       <div class="g2-hub-search-wrap">
-        <input type="search" class="g2-search-input" placeholder="Zoek op onderwerp (bijv. Badal, Diptoot)..." value="${E(s.hubSearch||'')}" data-act="g2-hub-search">
+        <input type="search" class="g2-search-input" placeholder="Zoek een onderwerp..." value="${E(s.hubSearch||'')}" data-act="g2-hub-search">
         ${s.hubSearch ? `<button type="button" class="g2-search-clear" data-act="g2-hub-clear-search">×</button>` : ''}
       </div>
     </div>
-    <div class="g2-list">${items.length ? items : `<div class="g2-empty-state"><p>Geen lessen gevonden voor deze selectie.</p><button type="button" class="btn btn-secondary btn-sm" data-act="g2-hub-reset">Toon alle lessen</button></div>`}</div>
-    <label class="g2-unlock"><input type="checkbox" data-act="g2-unlock" ${P.unlockAll?'checked':''}> Alle lessen en stappen vrij openen (zonder volgorde)</label>
+    ${groups || `<div class="g2-empty-state"><p>Geen lessen gevonden voor deze selectie.</p><button type="button" class="btn btn-secondary btn-sm" data-act="g2-hub-reset">Toon alle lessen</button></div>`}
   </div>`;
 }
 
 function renderLessonMap(n){
+  const g=L[n]||{};
   const ns=nodes(n);
-  const rows=ns.map((nd,i)=>{
-    const done=nodeDone(n,nd), open=nodeOpen(n,i);
-    const cls=done?'done':open?'open':'locked';
-    return `<button type="button" class="g2-node ${cls} k-${nd.k}" data-act="g2-node" data-i="${i}" ${open?'':'disabled'}>
-      <span class="g2-dot">${done?ICO.check:!open?ICO.lock:(nd.k==='step'?nd.i+1:nd.k==='book'?ICO.book:nd.k==='test'?'T':nd.k==='vocab'?'W':'H')}</span>
-      <span class="g2-ntext"><b>${E(nd.t)}</b><small>${E(nd.s)}</small></span>
-    </button>`;
-  }).join('');
-  const p=lp(n);
+  const real=ns.map((nd,i)=>({nd,i})).filter(x=>x.nd.k!=='review');
+  const doneCt=real.filter(x=>nodeDone(n,x.nd)).length;
+  const rec=real.find(x=>!nodeDone(n,x.nd));
   const passed=lessonPassed(n);
-  const i=KEYS.indexOf(n), nx=KEYS[i+1];
-  const testInfo=p.test?`<div class="g2-note">Beste score eindtoets: <b>${Math.round(100*p.test.best)}%</b>${p.test.passed?' · afgerond':''}</div>`:'';
-  const congrats=passed?`<div class="g2-success-banner">${ICO.check} <div><b>Gefeliciteerd!</b> Je beheerst deze les volledig.</div>${nx!==undefined?`<button class="btn btn-primary btn-sm" data-act="g2-open" data-l="${nx}">Volgende les (${nx}) →</button>`:''}</div>`:'';
+  const i0=KEYS.indexOf(n), nx=KEYS[i0+1];
+  const p=lp(n);
+
+  const row=x=>{
+    const {nd,i}=x; const done=nodeDone(n,nd); const isRec=rec&&rec.i===i;
+    const dot=done?ICO.check:(nd.k==='step'?nd.i+1:nd.k==='book'?ICO.book:nd.k==='test'?'T':nd.k==='vocab'?'W':'H');
+    return `<button type="button" class="g2-node ${done?'done':''} ${isRec?'rec':''} k-${nd.k}" data-act="g2-node" data-i="${i}">
+      <span class="g2-dot">${dot}</span>
+      <span class="g2-ntext"><b>${E(nd.t)}</b><small>${E(nd.s)}${isRec?' · aanbevolen':''}</small></span>
+      <span class="g2-nchev">›</span>
+    </button>`;
+  };
+  const section=(title,sub,list)=>list.length?`<section class="g2-msec"><div class="g2-msec-head"><h3>${title}</h3><span>${sub}</span></div><div class="g2-path">${list.map(row).join('')}</div></section>`:'';
+
+  const review=ns.map((nd,i)=>({nd,i})).filter(x=>x.nd.k==='review');
+  const steps=real.filter(x=>x.nd.k==='step');
+  const practice=real.filter(x=>x.nd.k==='vocab'||x.nd.k==='book');
+  const test=real.filter(x=>x.nd.k==='test');
+  const stepsDone=steps.filter(x=>nodeDone(n,x.nd)).length;
+
+  const pctAll=lessonPct(n);
+  const summary=`<div class="g2-lsum">
+    <div class="g2-lsum-top"><div><b>${doneCt}</b> van <b>${real.length}</b> onderdelen klaar</div><span>${pctAll}%</span></div>
+    <div class="g2-lbar big"><i style="width:${pctAll}%"></i></div>
+    ${passed
+      ? `<div class="g2-success-banner">${ICO.check} <div><b>Les afgerond.</b> Je beheerst deze les.</div>${nx!==undefined?`<button class="btn btn-primary btn-sm" data-act="g2-open" data-l="${nx}">Volgende les →</button>`:''}</div>`
+      : rec ? `<button type="button" class="g2-cta primary" data-act="g2-node" data-i="${rec.i}"><span>${doneCt?'Ga verder':'Start deze les'}</span><b>${E(rec.nd.t)}</b></button>` : ''}
+    ${p.test?`<div class="g2-note">Beste score eindtoets: <b>${Math.round(100*p.test.best)}%</b>${p.test.passed?' · gehaald':' · 80% nodig'}</div>`:''}
+    ${typeof wordsFor==='function'&&wordsFor(n).length?`<button class="btn btn-secondary btn-sm" data-act="start-learn" data-l="${n}">Woorden van deze les oefenen</button>`:''}
+  </div>`;
+
   return `<div class="desktop-page g2">
-    ${head(n, `<div class="g2-lbar big"><i style="width:${lessonPct(n)}%"></i></div>`)}
-    ${congrats}
-    ${testInfo}
-    <div class="g2-path">${rows}</div>
+    ${head(n)}
+    ${summary}
+    ${section('Herhaling','fouten uit eerdere lessen',review)}
+    ${section('1 · Leerstof',`${stepsDone} van ${steps.length} regels`,steps)}
+    ${section('2 · Oefenen','woorden en boekoefeningen',practice)}
+    ${section('3 · Eindtoets','80% nodig',test)}
     ${passed&&nx!==undefined?`<div style="text-align:center;margin-top:20px"><button class="btn btn-primary" data-act="g2-open" data-l="${nx}">Door naar les ${nx} →</button></div>`:''}
   </div>`;
 }
@@ -400,7 +408,7 @@ function renderExamples(list, hideNl){
 }
 
 function phaseBar(s){
-  const ph=['rule','see','do']; const lbl={rule:'1 · Regel',see:'2 · Zien',do:'3 · Doen'};
+  const ph=['rule','see','do']; const lbl={rule:'1 · Leren',see:'2 · Voorbeelden',do:'3 · Oefenen'};
   const cur=ph.indexOf(s.phase);
   return `<div class="g2-phases">${ph.map((p,i)=>`<span class="${i===cur?'on':i<cur?'done':''}">${lbl[p]}</span>`).join('')}</div>`;
 }
@@ -437,8 +445,10 @@ function renderStep(n){
       <div class="g2-actions"><button class="btn btn-primary" data-act="g2-finish" data-gl="next">Verder in de les →</button></div>
     </div>`;
   }
+  const dots=L[n].steps.map((_,i)=>`<button type="button" class="g2-sdot ${i===s.si?'on':lp(n).steps[i]?'done':''}" data-act="g2-node" data-i="${nodes(n).findIndex(x=>x.k==='step'&&x.i===i)}" aria-label="Regel ${i+1}">${i+1}</button>`).join('');
   return `<div class="desktop-narrow g2">
     ${head(n)}
+    <div class="g2-stepper"><span>Regel ${s.si+1} van ${nTot}</span><div class="g2-sdots">${dots}</div></div>
     ${phaseBar(s)}
     ${body}
   </div>`;
