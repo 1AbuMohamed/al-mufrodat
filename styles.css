@@ -1854,3 +1854,11 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
   .path-card p{white-space:normal;flex-basis:100%;order:3}
   .path-card h3{flex:1}
 }
+
+.ar-run{font-family:var(--ar);font-size:1.3em;line-height:1.5;unicode-bidi:isolate;direction:rtl;display:inline-block;font-weight:700;color:var(--forest)}
+.exam-opt-text{font-family:var(--font)}
+.exam-sheet-ans strong{font-family:var(--font)}
+.path-alts{gap:6px;justify-content:space-between}
+.path-alts button{padding:3px 4px;font-size:12px;white-space:nowrap}
+.path-alts{flex-wrap:wrap}.path-alts button{min-width:0}
+.path-alts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px}.path-alts button{justify-content:center;font-size:11.5px;gap:4px}

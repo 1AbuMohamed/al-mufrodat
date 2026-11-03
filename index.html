@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
@@ -2365,7 +2365,7 @@ function renderVocabHub(){
         <button class="btn btn-primary btn-sm" data-act="start-learn" data-l="${n}">${p>=100?'Herhaal hoofdstuk':'Start oefenen'}</button>
         <div class="path-alts">
           <button type="button" data-act="start-flash" data-l="${n}">${GL_ICO_CARDS} Kaarten</button>
-          <button type="button" data-act="start-zeg" data-l="${n}">${GL_ICO_MIC} Zeg & Harakaat</button>
+          <button type="button" data-act="start-zeg" data-l="${n}">${GL_ICO_MIC} Uitspraak</button>
           <button type="button" data-act="open-book" data-l="${n}">${GL_ICO_BOOK} Grammatica</button>
         </div>
       </div>
@@ -4962,6 +4962,10 @@ const EXAM_IRAB_TABLES = {
   ]
 };
 
+function exAr(s){
+  return esc(s).replace(/[\u0600-\u06FF\u064B-\u0652]+(?:\s[\u0600-\u06FF\u064B-\u0652]+)*/g, m=>'<span class="ar-run" lang="ar">'+m+'</span>');
+}
+
 function examOrder(q){
   let s=5;
   for(const c of q.id) s=(s*31+c.charCodeAt(0))>>>0;
@@ -5111,16 +5115,16 @@ function renderExam(){
           <div class="exam-sheet-q">
             <span class="exam-sheet-num">${idx+1}</span>
             <div class="exam-sheet-qbody">
-              <div class="exam-sheet-qtitle">${esc(q.q)}</div>
+              <div class="exam-sheet-qtitle">${exAr(q.q)}</div>
               ${q.ar ? `<div class="exam-sheet-qar ar" lang="ar" dir="rtl">${esc(q.ar)}</div>` : ''}
             </div>
             ${spkTarget ? `<button type="button" class="btn btn-sm btn-secondary" data-act="speak-text" data-text="${esc(spkTarget)}" title="Beluister">${GL_ICO_SPK}</button>` : ''}
           </div>
           <div class="exam-sheet-ans">
             <span class="exam-ans-badge">Antwoord</span>
-            <strong>${esc(ansText)}</strong>
+            <strong>${exAr(ansText)}</strong>
           </div>
-          ${q.note ? `<div class="exam-sheet-note">${esc(q.note)}</div>` : ''}
+          ${q.note ? `<div class="exam-sheet-note">${exAr(q.note)}</div>` : ''}
         </div>`;
       }).join('');
       return `<section class="card exam-sheet-part">
@@ -5221,7 +5225,7 @@ function renderExam(){
       const isRight = isAnswered && picked === q.ans;
       return `<div class="exam-q-card ${showFb ? (isRight ? 'correct' : 'wrong') : ''}">
         <div class="exam-q-top">
-          <div class="exam-q-title">${esc(q.q)}</div>
+          <div class="exam-q-title">${exAr(q.q)}</div>
           <span class="exam-q-pts">${q.pts} ${q.pts===1?'pt':'pt'}</span>
         </div>
         ${q.audio ? `<div class="exam-q-audio">
@@ -5244,13 +5248,13 @@ function renderExam(){
             const hasAr = /[\u0600-\u06FF]/.test(opt);
             return `<button type="button" class="${cls}" data-act="exam-ans" data-qid="${q.id}" data-oi="${oi}">
               <span class="exam-opt-letter">${String.fromCharCode(65+pos)}</span>
-              ${/^[op]10_/.test(q.id) ? `<span class="exam-opt-lines">${opt.split(/\s·\s(?![^()]*\))/).map(seg=>`<span class="exam-opt-line ar" lang="ar" dir="rtl">${esc(seg)}</span>`).join('')}</span>` : `<span class="exam-opt-text ${hasAr?'has-ar':''}">${esc(opt)}</span>`}
+              ${/^[op]10_/.test(q.id) ? `<span class="exam-opt-lines">${opt.split(/\s·\s(?![^()]*\))/).map(seg=>`<span class="exam-opt-line ar" lang="ar" dir="rtl">${esc(seg)}</span>`).join('')}</span>` : `<span class="exam-opt-text">${exAr(opt)}</span>`}
             </button>`;
           }).join('')}
         </div>
         ${showFb ? `<div class="exam-q-fb ${isRight?'ok':'err'}">
-          <strong>${isRight ? ('Goed! (+' + q.pts + ' pt)') : ('Juiste antwoord: ' + esc(q.opts[q.ans]))}</strong>
-          ${q.note ? `<div>${esc(q.note)}</div>` : ''}
+          <strong>${isRight ? ('Goed! (+' + q.pts + ' pt)') : ('Juiste antwoord: ' + exAr(q.opts[q.ans]))}</strong>
+          ${q.note ? `<div>${exAr(q.note)}</div>` : ''}
         </div>` : ''}
       </div>`;
     }).join('');
