@@ -720,7 +720,7 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 .mini-btn{width:36px;height:36px;border-radius:9px;border:1px solid var(--line);background:var(--surface);font-size:15px;padding:0;display:grid;place-items:center}
 .mini-btn.on{background:var(--forest);color:var(--on-forest);border-color:var(--forest)}
 
-.path-cards{display:grid;grid-template-columns:1fr;gap:10px;margin:12px 0}
+.path-cards{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin:12px 0}
 .path-card{
   border:1px solid var(--line);background:var(--surface);border-radius:14px;
   padding:15px 16px;cursor:pointer;text-align:left;transition:.15s;
@@ -1844,4 +1844,13 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
     font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em;
     color: var(--muted); text-align: left; flex-shrink: 0;
   }
+}
+
+.exam-opt-lines{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.exam-opt-line{display:block;font-size:19px;line-height:1.6;text-align:right;padding:2px 0;border-bottom:1px dashed var(--line)}
+.exam-opt-line:last-child{border-bottom:0}
+@media (max-width:699px){
+  .path-card{flex-wrap:wrap}
+  .path-card p{white-space:normal;flex-basis:100%;order:3}
+  .path-card h3{flex:1}
 }
