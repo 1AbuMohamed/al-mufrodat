@@ -2401,3 +2401,462 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
     font-size: 18px;
   }
 }
+
+/* =====================================================================
+   Inline Classroom Zinsontleder (Moebtada / Gabr / Moedaf / etc.)
+   ===================================================================== */
+.g2-exitem {
+  border-bottom: 1px solid var(--line);
+}
+.g2-exitem:last-child {
+  border-bottom: 0;
+}
+.g2-exitem .g2-exrow {
+  border-bottom: 0;
+}
+.g2-exitem.irab-open {
+  background: var(--paper);
+  border-radius: 12px;
+  padding: 4px 10px 12px;
+  margin: 6px 0;
+  border: 1px solid var(--line-strong);
+}
+
+.g2-irab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  align-self: flex-start;
+  transition: all 0.15s ease;
+}
+.g2-exitem.irab-open .g2-irab-btn {
+  display: none;
+}
+.g2-tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.g2-irab-btn .ar {
+  font-size: 14px;
+  color: var(--forest);
+  font-weight: 700;
+}
+.g2-irab-btn:hover {
+  border-color: var(--gold);
+  background: var(--gold-pale);
+  color: var(--ink);
+}
+.g2-irab-btn.active {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: var(--on-forest);
+}
+.g2-irab-btn.active .ar {
+  color: var(--gold-soft);
+}
+
+.conv-act-btn.conv-irab-btn {
+  width: auto;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+.conv-act-btn.conv-irab-btn .ar {
+  color: var(--forest);
+}
+.conv-act-btn.conv-irab-btn.active {
+  background: var(--forest);
+  color: var(--on-forest);
+  border-color: var(--forest);
+}
+.conv-act-btn.conv-irab-btn.active .ar {
+  color: var(--on-forest) !important;
+}
+
+.g2-drill-irab-wrap {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line-strong);
+}
+.g2-drill-irab-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.iirab-bar-lbl {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.iirab-bar-btns {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.iirab-badge-ar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 9px;
+  border-radius: 6px;
+  background: var(--gold-pale);
+  border: 1px solid var(--gold);
+  color: var(--forest);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.inline-irab-box {
+  margin-top: 10px;
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1.5px solid var(--line-strong);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+.iirab-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.iirab-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.iirab-modes {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.iirab-mode-btn {
+  padding: 5px 11px;
+  border-radius: 8px;
+  border: 1px solid var(--line-strong);
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.iirab-mode-btn:hover {
+  border-color: var(--forest);
+  color: var(--ink);
+}
+.iirab-mode-btn.active {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: var(--on-forest);
+}
+.iirab-close-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.iirab-close-btn:hover {
+  color: var(--ink);
+  border-color: var(--line-strong);
+}
+
+.iirab-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+  gap: 8px;
+  direction: rtl;
+}
+.iirab-word-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  padding: 10px 8px;
+  border-radius: 10px;
+  background: var(--paper);
+  border: 1.5px solid var(--line-strong);
+  border-top-width: 4px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+  position: relative;
+}
+.iirab-word-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+}
+.iirab-word-card.selected {
+  box-shadow: 0 0 0 2px var(--gold);
+  background: var(--surface);
+}
+.iirab-word-card.rc-mubtada {
+  border-top-color: #1F6E50;
+}
+.iirab-word-card.rc-khabar {
+  border-top-color: #2B6CB0;
+}
+.iirab-word-card.rc-jarr {
+  border-top-color: #C79238;
+}
+.iirab-word-card.rc-idafah {
+  border-top-color: #6B46C1;
+}
+.iirab-word-card.rc-naat {
+  border-top-color: #0D9488;
+}
+.iirab-word-card.rc-other {
+  border-top-color: #64748B;
+}
+
+.iirab-w-ar {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.4;
+}
+.iirab-w-role-ar {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--forest-soft);
+  color: var(--forest);
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.iirab-w-role-nl {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  line-height: 1.3;
+  direction: ltr;
+}
+.iirab-w-meta {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 2px;
+  padding-top: 4px;
+  border-top: 1px dashed var(--line);
+  width: 100%;
+}
+.iirab-w-chk {
+  position: absolute;
+  top: 5px;
+  left: 7px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--ok);
+}
+.iirab-w-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--paper-deep);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.iirab-word-card.quiz-pending {
+  border-top-color: var(--line-strong);
+  justify-content: center;
+  min-height: 92px;
+}
+.iirab-word-card.quiz-pending.active-target {
+  border-color: var(--forest);
+  border-top-width: 4px;
+  background: var(--gold-pale);
+  box-shadow: 0 0 0 2px rgba(30, 74, 56, 0.16);
+}
+.iirab-w-qbadge {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--forest);
+  direction: ltr;
+}
+
+.iirab-explain-box {
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: var(--paper);
+  border-left: 3px solid var(--gold);
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+.iirab-hint-line {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+}
+.iirab-teacher-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: var(--ok-soft);
+  border: 1px solid var(--ok);
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.iirab-teacher-note svg {
+  color: var(--ok);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.iirab-quiz-area {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 4px;
+}
+.iirab-quiz-prompt {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.iirab-quiz-prompt .ar {
+  font-size: 18px;
+  color: var(--forest);
+}
+.iirab-quiz-prompt small {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.iirab-role-pills {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+  gap: 7px;
+}
+.iirab-role-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 8px 10px;
+  border-radius: 9px;
+  border: 1.5px solid var(--line-strong);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.14s ease;
+  text-align: center;
+}
+.iirab-role-pill:hover {
+  border-color: var(--forest);
+  background: var(--surface);
+  transform: translateY(-1px);
+}
+.iirab-role-pill b {
+  font-size: 15px;
+  color: var(--forest);
+  line-height: 1.3;
+}
+.iirab-role-pill small {
+  font-size: 11px;
+  color: var(--ink-soft);
+  font-weight: 600;
+  line-height: 1.25;
+}
+.iirab-fb {
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.iirab-fb.ok {
+  background: var(--ok-soft);
+  border-left: 3px solid var(--ok);
+  color: var(--ink);
+}
+.iirab-fb.bad {
+  background: var(--clay-soft);
+  border-left: 3px solid var(--clay);
+  color: var(--ink);
+}
+.iirab-complete-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: var(--ok-soft);
+  border: 1px solid var(--ok);
+  font-size: 13.5px;
+  color: var(--ink);
+}
+
+@media (max-width: 699px) {
+  .iirab-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .iirab-role-pills {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .g2-drill-irab-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .iirab-bar-btns {
+    width: 100%;
+  }
+  .iirab-bar-btns .btn {
+    flex: 1;
+    justify-content: center;
+  }
+}

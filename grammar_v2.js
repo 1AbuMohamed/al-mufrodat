@@ -16,11 +16,12 @@ const LS_KEY = 'alm_g2_v1';
 /* ---------- opslag ---------- */
 let P;
 try{ P = JSON.parse(localStorage.getItem(LS_KEY)||'null'); }catch(e){ P=null; }
-if(!P||typeof P!=='object') P = {lessons:{}, mistakes:[], unlockAll:false, autoAdvance:true, sfx:true};
+if(!P||typeof P!=='object') P = {lessons:{}, mistakes:[], unlockAll:false, autoAdvance:true, sfx:true, inlineIrab:false};
 if(!P.lessons) P.lessons={};
 if(!Array.isArray(P.mistakes)) P.mistakes=[];
 if(P.autoAdvance===undefined) P.autoAdvance=true;
 if(P.sfx===undefined) P.sfx=true;
+if(P.inlineIrab===undefined) P.inlineIrab=false;
 function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(P)); }catch(e){} }
 function lp(n){ if(!P.lessons[n]) P.lessons[n]={steps:{},vocab:false,book:null,test:null,review:false}; return P.lessons[n]; }
 
@@ -107,13 +108,13 @@ function shortTitle(t){
 
 /* ---------- Interactieve MVP Zinsontleder (Iʿrāb Coach & Studio) ---------- */
 const IRAB_ROLES = [
-  { id: 'mubtada', ar: 'مُبْتَدَأ', nl: 'Onderwerp' },
-  { id: 'mubtada_mudaf', ar: 'مُبْتَدَأ (مُضَاف)', nl: 'Onderwerp & Bezit' },
-  { id: 'khabar', ar: 'خَبَر', nl: 'Gezegde' },
-  { id: 'harf_jarr', ar: 'حَرْف جَرّ', nl: 'Voorzetsel' },
-  { id: 'ism_majroor', ar: 'اِسْم مَجْرُور', nl: 'Na voorzetsel' },
-  { id: 'mudaf_ilayhi', ar: 'مُضَاف إِلَيْهِ', nl: 'Bezitter' },
-  { id: 'naat', ar: 'نَعْت', nl: 'Bijvoeglijk nw.' }
+  { id: 'mubtada', ar: 'مُبْتَدَأ', nl: 'Moebtada (Onderwerp)' },
+  { id: 'mubtada_mudaf', ar: 'مُبْتَدَأ (مُضَاف)', nl: 'Moebtada & Moedaf' },
+  { id: 'khabar', ar: 'خَبَر', nl: 'Gabr / Khabar (Gezegde)' },
+  { id: 'harf_jarr', ar: 'حَرْف جَرّ', nl: 'Harf Djarr (Voorzetsel)' },
+  { id: 'ism_majroor', ar: 'اِسْم مَجْرُور', nl: 'Ism Madjroer (Na voorz.)' },
+  { id: 'mudaf_ilayhi', ar: 'مُضَاف إِلَيْهِ', nl: 'Moedaf Ilayh (Bezitter)' },
+  { id: 'naat', ar: 'نَعْت', nl: 'Naʿt (Bijv. nw.)' }
 ];
 
 const IRAB_STATUSES = [
@@ -269,6 +270,810 @@ const ALL_IRAB_SENTENCES = [
     ]
   }
 ];
+
+/* ---------- Inline Classroom Zinsontleder (Moebtada / Gabr / Moedaf / etc.) ---------- */
+function cleanWordForIrab(w) {
+  return String(w || '')
+    .replace(/\([^)]*\)/g, '')
+    .replace(/[.,،؟?!:;"'«»\[\]←→–—]/g, '')
+    .trim();
+}
+
+function stripHarakatForIrab(s) {
+  return String(s || '')
+    .replace(/[\u064B-\u065F\u0670\u0640]/g, '')
+    .replace(/[أإآٱ]/g, 'ا');
+}
+
+function getEndingInfoForIrab(rawWord) {
+  const w = cleanWordForIrab(rawWord);
+  for (let i = w.length - 1; i >= 0; i--) {
+    const c = w.charCodeAt(i);
+    if (c === 0x064C) return { mark: 'tanween_damm', markAr: 'تَنْوِين ضَمّ (ـٌ)', status: 'marfoo', statusAr: 'مَرْفُوع' };
+    if (c === 0x064D) return { mark: 'tanween_kasr', markAr: 'تَنْوِين كَسْر (ـٍ)', status: 'majroor', statusAr: 'مَجْرُور' };
+    if (c === 0x064B) return { mark: 'tanween_fath', markAr: 'تَنْوِين فَتْح (ـً)', status: 'mansoob', statusAr: 'مَنْصُوب' };
+    if (c === 0x064F) return { mark: 'dammah', markAr: 'ضَمَّة (ـُ)', status: 'marfoo', statusAr: 'مَرْفُوع' };
+    if (c === 0x0650) return { mark: 'kasrah', markAr: 'كَسْرَة (ـِ)', status: 'majroor', statusAr: 'مَجْرُور' };
+    if (c === 0x064E) return { mark: 'fathah', markAr: 'فَتْحَة (ـَ)', status: 'mansoob', statusAr: 'مَنْصُوب' };
+    if (c === 0x0652) return { mark: 'sukoon', markAr: 'سُكُون (ـْ)', status: 'mabnee', statusAr: 'مَبْنِيّ' };
+    if (c >= 0x0621 && c <= 0x064A && c !== 0x0627 && c !== 0x0648 && c !== 0x064A && c !== 0x0649) {
+      break;
+    }
+  }
+  return { mark: 'none', markAr: '—', status: 'mabnee', statusAr: 'مَبْنِيّ' };
+}
+
+const _DEM_SET = new Set(['هذا', 'هذه', 'ذلك', 'تلك', 'هؤلاء', 'اولئك']);
+const _DUAL_DEM_SET = new Set(['هذان', 'هاتان']);
+const _PRON_SET = new Set(['هو', 'هي', 'انا', 'انت', 'نحن', 'انتم', 'انتن', 'هم', 'هن']);
+const _PREP_SET = new Set(['في', 'على', 'الى', 'عن']);
+const _ZARF_SET = new Set(['تحت', 'امام', 'خلف', 'فوق', 'عند', 'قبل', 'بعد', 'مع']);
+const _Q_SET = new Set(['ما', 'اين', 'كيف', 'متى', 'كم', 'اي', 'لمن', 'لماذا']);
+const _PARTICLES_SET = new Set(['نعم', 'لا', 'ايضا', 'جدا', 'الان', 'هنا', 'هناك', 'قط', 'امس', 'ثم', 'ثمة', 'اليس', 'الم', 'فقط', 'بلى']);
+const _VERB_SET = new Set([
+  'ذهب', 'ذهبت', 'ذهبوا', 'ذهبنا', 'ذهبن',
+  'خرج', 'خرجت', 'خرجوا', 'خرجنا', 'خرجن',
+  'جلس', 'جلست', 'جلسوا', 'جلسنا',
+  'دخل', 'دخلت', 'رجع', 'رجعت',
+  'احب', 'تحب', 'نحب', 'اتحب', 'سافرنا', 'تسافر', 'اسافر',
+  'وصلت', 'بقيت', 'اجلس', 'افاجلس', 'شئت', 'مشيت', 'لبثت', 'عرفت', 'تاتي', 'لاستقبلتك', 'اكله', 'لمرضوا', 'رايت', 'سمعت', 'قرات', 'كتبت', 'شربت', 'اكلت'
+]);
+const _DIPTOTE_SET = new Set([
+  'مكة', 'مصر', 'امنة', 'فاطمة', 'خديجة', 'عائشة', 'مريم', 'زينب', 'سعاد',
+  'ابراهيم', 'اسماعيل', 'اسحاق', 'يعقوب', 'يوسف', 'وليم', 'لندن', 'باريس',
+  'باكستان', 'بغداد', 'دمشق', 'جدة', 'كسلان', 'جوعان', 'عطشان', 'غضبان',
+  'ملان', 'تعبان', 'احمر', 'ابيض', 'اسود', 'اخضر', 'ازرق', 'اصفر', 'مساجد', 'دفاتر', 'فنادق', 'مكاتب', 'مدارس', 'كراسي', 'دقائق', 'زملاء', 'اطباء', 'اغنياء', 'فقراء', 'وزراء', 'علماء', 'اصدقاء', 'اقوياء', 'انكلترا', 'اندونيسيا', 'امريكا', 'المانيا', 'سويسرا', 'فرنسا'
+]);
+
+function analyzeArabicSentence(rawSentence) {
+  if (!rawSentence) return null;
+  if (/[←→+]/.test(rawSentence)) return null;
+
+  const cleanedSent = String(rawSentence)
+    .replace(/\([^)]*\)/g, '')
+    .trim();
+
+  const rawChunks = cleanedSent.split(/\s+/).filter(Boolean);
+  const rawTokens = rawChunks.map(t => cleanWordForIrab(t)).filter(Boolean);
+  if (rawTokens.length < 2) return null;
+
+  // Special case 1: Indefinite vs Definite contrast pair like "مَسْجِدٌ وَالْمَسْجِدُ"
+  if (rawTokens.length === 2) {
+    const b0 = stripHarakatForIrab(rawTokens[0]);
+    const b1 = stripHarakatForIrab(rawTokens[1]).replace(/^و/, '');
+    if (!b0.startsWith('ال') && b1 === 'ال' + b0) {
+      return {
+        words: [
+          {
+            ar: rawTokens[0],
+            role: 'mubtada',
+            roleAr: 'اِسْم نَكِرَة (مَرْفُوع)',
+            roleNl: 'Onbepaald naamwoord (met tanwīn)',
+            status: 'marfoo',
+            statusAr: 'مَرْفُوع',
+            mark: 'tanween_damm',
+            markAr: 'تَنْوِين ضَمّ (ـٌ)',
+            explain: `«${rawTokens[0]}» heeft géén الـ en is dus onbepaald (نَكِرَة): het eindigt op tanwīn dammah (ـٌ).`
+          },
+          {
+            ar: rawTokens[1],
+            role: 'khabar',
+            roleAr: 'اِسْم مَعْرِفَة (بِالْـ)',
+            roleNl: 'Bepaald naamwoord (met الْـ)',
+            status: 'marfoo',
+            statusAr: 'مَرْفُوع',
+            mark: 'dammah',
+            markAr: 'ضَمَّة (ـُ) zonder tanwīn',
+            explain: `«${rawTokens[1]}» heeft het lidwoord الـ en is dus bepaald (مَعْرِفَة): de tanwīn vervalt en er blijft één dammah (ـُ) over.`
+          }
+        ],
+        note: 'Uitleg leerkracht: Vergelijking tussen onbepaald (نَكِرَة met tanwīn ـٌ) en bepaald (مَعْرِفَة met الْـ en één dammah ـُ).'
+      };
+    }
+  }
+
+  // Special case 2: Contrast between standalone noun and prepositional phrase like "الْمَسْجِدُ، فِي الْمَسْجِدِ"
+  if (rawTokens.length === 3 && /[،,]/.test(rawChunks[0])) {
+    const b1 = stripHarakatForIrab(rawTokens[1]);
+    if (_PREP_SET.has(b1) || b1 === 'من') {
+      return {
+        words: [
+          {
+            ar: rawTokens[0],
+            role: 'mubtada',
+            roleAr: 'اِسْم مَرْفُوع (الأَصْل)',
+            roleNl: 'Los naamwoord (Standaardvorm)',
+            status: 'marfoo',
+            statusAr: 'مَرْفُوع',
+            mark: 'dammah',
+            markAr: 'ضَمَّة (ـُ)',
+            explain: `Zonder voorzetsel staat «${rawTokens[0]}» standaard in de nominatief (مَرْفُوع met dammah ـُ).`
+          },
+          {
+            ar: rawTokens[1],
+            role: 'harf_jarr',
+            roleAr: 'حَرْف جَرّ',
+            roleNl: 'Harf Djarr (Voorzetsel)',
+            status: 'mabnee',
+            statusAr: 'مَبْنِيّ',
+            mark: 'none',
+            markAr: '—',
+            explain: `«${rawTokens[1]}» is een voorzetsel (حَرْف جَرّ) en zorgt ervoor dat het woord erna een kasrah krijgt.`
+          },
+          {
+            ar: rawTokens[2],
+            role: 'ism_majroor',
+            roleAr: 'اِسْم مَجْرُور',
+            roleNl: 'Ism Madjroer (Na voorzetsel)',
+            status: 'majroor',
+            statusAr: 'مَجْرُور',
+            mark: 'kasrah',
+            markAr: 'كَسْرَة (ـِ)',
+            explain: `Door het voorzetsel «${rawTokens[1]}» verandert de uitgang van «${rawTokens[2]}» van dammah (ـُ) naar kasrah (ـِ): اِسْم مَجْرُور.`
+          }
+        ],
+        note: 'Uitleg leerkracht: Vergelijking tussen de standaardvorm met dammah (ـُ) en de vorm ná een voorzetsel (حَرْف جَرّ + اِسْم مَجْرُور met kasrah ـِ).'
+      };
+    }
+  }
+
+  const words = [];
+  let hasMubtada = false;
+  let hasKhabar = false;
+  let hasVerb = false;
+  let hasPrepPhraseAfterMubtada = false;
+  let prevRole = null;
+  let clauseStart = true;
+
+  for (let i = 0; i < rawTokens.length; i++) {
+    let tok = rawTokens[i];
+    const origChunk = rawChunks[i] || '';
+    const prevOrigChunk = i > 0 ? (rawChunks[i - 1] || '') : '';
+
+    if (i > 0 && /[.,،؟?!;]/.test(prevOrigChunk)) {
+      clauseStart = true;
+      hasMubtada = false;
+      hasKhabar = false;
+      hasVerb = false;
+      prevRole = null;
+    }
+
+    let base = stripHarakatForIrab(tok);
+    const nextTok = rawTokens[i + 1] || '';
+    const nextBase = stripHarakatForIrab(nextTok);
+    const nextEnd = nextTok ? getEndingInfoForIrab(nextTok) : null;
+    const end = getEndingInfoForIrab(tok);
+
+    if (base.length > 2 && tok.startsWith('وَ') && !['وَلَدٌ', 'وَاقِفٌ', 'وَاحِدٌ', 'وَرَقٌ', 'وَسِخٌ', 'وَجْهٌ', 'وَلِيمُ', 'وُزَرَاءُ', 'وَصَلْتُ', 'وَرْدَةٌ'].includes(tok)) {
+      const strippedWa = base.slice(1);
+      base = strippedWa;
+      clauseStart = true;
+      hasMubtada = false;
+      hasKhabar = false;
+      hasVerb = false;
+      prevRole = null;
+    }
+
+    if ((i === 0 || clauseStart) && tok.startsWith('أَ') && base.length > 2 && !['انا', 'انت', 'انتم', 'انتن', 'انف', 'امام', 'امس', 'اين', 'اي', 'اب', 'اخ', 'ام', 'اخت', 'اذن', 'اولئك', 'امريكا', 'المانيا', 'احب', 'احمد', 'انكلترا', 'اربعة', 'اربع', 'اقلام', 'ابواب', 'ايام', 'اصدقاء', 'اطباء', 'اغنياء', 'اقوياء', 'امم', 'امهات', 'اهلا'].includes(base)) {
+      base = base.slice(1);
+    }
+
+    // 1. Vocative يا
+    if (base === 'يا') {
+      words.push({
+        ar: tok, role: 'harf', roleAr: 'حَرْف نِدَاء', roleNl: 'Roeppartikel (Yā)',
+        status: 'mabnee', statusAr: 'مَبْنِيّ', mark: 'none', markAr: '—',
+        explain: `«${tok}» is een roeppartikel (حَرْف نِدَاء). Het woord erna (مُنَادَى) krijgt één dammah zonder tanwīn.`
+      });
+      prevRole = 'harf_nida';
+      continue;
+    }
+    if (prevRole === 'harf_nida') {
+      words.push({
+        ar: tok, role: 'munada', roleAr: 'مُنَادَى', roleNl: 'Moenādā (Aangesprokene)',
+        status: 'mabnee', statusAr: 'مَبْنِيّ عَلَى الضَّمّ', mark: 'dammah', markAr: 'ضَمَّة (ـُ)',
+        explain: `Na «يَا» is «${tok}» de aangesprokene (مُنَادَى) met één dammah zonder tanwīn.`
+      });
+      prevRole = null;
+      clauseStart = true;
+      continue;
+    }
+
+    // 2. Yes/No/Adverb particles
+    if (_PARTICLES_SET.has(base)) {
+      words.push({
+        ar: tok, role: 'harf', roleAr: 'حَرْف / ظَرْف', roleNl: 'Partikel / Bijwoord',
+        status: 'mabnee', statusAr: 'مَبْنِيّ', mark: 'none', markAr: '—',
+        explain: `«${tok}» is een onveranderlijk partikel of bijwoord (مَبْنِيّ).`
+      });
+      continue;
+    }
+
+    // 3. Distinguish مِنْ / مِنَ (preposition) vs مَنْ (question word "wie")
+    if (base === 'من') {
+      const isPrepMin = tok.startsWith('مِ') || prevRole === 'fil' || prevRole === 'khabar' || (hasMubtada && !clauseStart && prevRole !== 'mudaf' && prevRole !== 'mubtada_mudaf');
+      if (isPrepMin) {
+        words.push({
+          ar: tok, role: 'harf_jarr', roleAr: 'حَرْف جَرّ', roleNl: 'Harf Djarr (Voorzetsel)',
+          status: 'mabnee', statusAr: 'مَبْنِيّ', mark: 'none', markAr: '—',
+          explain: `«${tok}» is een voorzetsel (حَرْف جَرّ = uit/van); het woord erna wordt اِسْم مَجْرُور met kasrah.`
+        });
+        prevRole = 'harf_jarr';
+        if (hasMubtada && !hasKhabar) hasPrepPhraseAfterMubtada = true;
+        continue;
+      } else if (prevRole === 'mubtada_mudaf' || prevRole === 'mudaf') {
+        words.push({
+          ar: tok, role: 'mudaf_ilayhi', roleAr: 'مُضَاف إِلَيْهِ', roleNl: 'Moedaf Ilayh ("van wie")',
+          status: 'mabnee', statusAr: 'مَبْنِيّ فِي مَحَلِّ جَرّ', mark: 'none', markAr: '—',
+          explain: `«${tok}» (wie) staat hier als tweede deel van de bezitsconstructie (مُضَاف إِلَيْهِ).`
+        });
+        prevRole = 'mudaf_ilayhi';
+        continue;
+      } else {
+        words.push({
+          ar: tok, role: 'khabar', roleAr: 'خَبَر مُقَدَّم (اِسْم اِسْتِفْهَام)', roleNl: 'Gabr / Khabar (Vraagwoord "Wie")',
+          status: 'mabnee', statusAr: 'مَبْنِيّ فِي مَحَلِّ رَفْع', mark: 'none', markAr: '—',
+          explain: `«${tok}» (wie?) is een vraagwoord en vormt hier het vooropgeplaatste gezegde (خَبَر مُقَدَّم / Gabr).`
+        });
+        hasKhabar = true;
+        prevRole = 'istifham';
+        continue;
+      }
+    }
+
+    // 4. Prepositions (فِي، عَلَى، إِلَى، عَنْ)
+    if (_PREP_SET.has(base)) {
+      words.push({
+        ar: tok, role: 'harf_jarr', roleAr: 'حَرْف جَرّ', roleNl: 'Harf Djarr (Voorzetsel)',
+        status: 'mabnee', statusAr: 'مَبْنِيّ', mark: 'none', markAr: '—',
+        explain: `«${tok}» is een voorzetsel (حَرْف جَرّ); het woord erna staat in de genitief (اِسْم مَجْرُور).`
+      });
+      prevRole = 'harf_jarr';
+      if (hasMubtada && !hasKhabar) hasPrepPhraseAfterMubtada = true;
+      continue;
+    }
+
+    // 5. Question words (مَا، أَيْنَ، كَمْ، لِمَنْ، أَيُّ، كَيْفَ، مَتَى)
+    if (_Q_SET.has(base)) {
+      if (base === 'لمن') {
+        words.push({
+          ar: tok, role: 'khabar', roleAr: 'خَبَر مُقَدَّم (جَارّ وَمَجْرُور)', roleNl: 'Gabr / Khabar ("Van wie")',
+          status: 'mabnee', statusAr: 'فِي مَحَلِّ رَفْع', mark: 'none', markAr: '—',
+          explain: `«${tok}» (لِ + مَنْ = van wie?) vormt het vooropgeplaatste gezegde (خَبَر مُقَدَّم / Gabr).`
+        });
+        hasKhabar = true;
+        prevRole = 'khabar_muqaddam';
+        continue;
+      }
+      if (base === 'اي') {
+        words.push({
+          ar: tok, role: 'mubtada_mudaf', roleAr: 'اِسْم اِسْتِفْهَام (مُضَاف)', roleNl: 'Vraagwoord & Moedaf ("Welke")',
+          status: 'marfoo', statusAr: 'مَرْفُوع', mark: 'dammah', markAr: 'ضَمَّة (ـُ)',
+          explain: `«${tok}» is een vraagwoord én مُضَاف (Moedaf); het woord erna is altijd مُضَاف إِلَيْهِ met kasrah.`
+        });
+        prevRole = 'mudaf';
+        continue;
+      }
+      if (prevRole === 'harf_jarr') {
+        words.push({
+          ar: tok, role: 'ism_majroor', roleAr: 'اِسْم مَجْرُور (اِسْتِفْهَام)', roleNl: 'Ism Madjroer (Vraagwoord na voorzetsel)',
+          status: 'mabnee', statusAr: 'مَبْنِيّ فِي مَحَلِّ جَرّ', mark: 'none', markAr: '—',
+          explain: `«${tok}» volgt op het voorzetsel مِنْ («waarvandaan?»). Samen vormen zij het vooropgeplaatste gezegde (خَبَر مُقَدَّم / Gabr).`
+        });
+        hasKhabar = true;
+        prevRole = 'istifham';
+        continue;
+      }
+      words.push({
+        ar: tok, role: 'khabar', roleAr: 'خَبَر مُقَدَّم (اِسْم اِسْتِفْهَام)', roleNl: 'Gabr / Khabar (Vraagwoord)',
+        status: 'mabnee', statusAr: 'مَبْنِيّ فِي مَحَلِّ رَفْع', mark: 'none', markAr: '—',
+        explain: `«${tok}» is een vraagwoord en vormt hier het vooropgeplaatste gezegde (خَبَر مُقَدَّم / Gabr).`
+      });
+      hasKhabar = true;
+      prevRole = 'istifham';
+      continue;
+    }
+
+    // 6. Attached preposition لِـ or preposition+pronoun (like لِبِلَالٍ، لِلَّهِ، لِي، لَكَ، عَلَيْكُمْ، فِيهِ، فِيهَا، مِنْهُ، بِهِ)
+    const isPrepPronoun = ['لي', 'لك', 'له', 'لها', 'لنا', 'لكم', 'عليكم', 'عليك', 'عليه', 'عليها', 'فيه', 'فيها', 'منه', 'منها', 'اليه', 'اليها', 'به', 'بها', 'بك', 'بكم'].includes(base);
+    if ((tok.startsWith('لِ') && base.length > 2 && !['لبثت', 'لذيذ', 'لذيذة', 'لقاء'].includes(base)) || isPrepPronoun) {
+      const isStart = (i === 0 || clauseStart);
+      words.push({
+        ar: tok,
+        role: isStart ? 'khabar' : 'ism_majroor',
+        roleAr: isStart ? 'جَارّ وَمَجْرُور (خَبَر مُقَدَّم)' : 'جَارّ وَمَجْرُور (خَبَر)',
+        roleNl: isStart ? 'Gabr / Khabar (Voorzetselgroep)' : 'Gabr / Khabar (Voorzetsel + Naamwoord)',
+        status: isPrepPronoun ? 'mabnee' : 'majroor',
+        statusAr: isPrepPronoun ? 'فِي مَحَلِّ رَفْع خَبَر' : 'مَجْرُور / فِي مَحَلِّ رَفْع',
+        mark: isPrepPronoun ? 'none' : (end.mark === 'none' ? 'kasrah' : end.mark),
+        markAr: isPrepPronoun ? '— (مَبْنِيّ · Voornaamwoord)' : (end.markAr === '—' ? 'كَسْرَة (ـِ)' : end.markAr),
+        explain: `«${tok}» bestaat uit een voorzetsel + ${isPrepPronoun ? 'vastgehecht voornaamwoord (ضَمِير مُتَّصِل)' : 'naamwoord'} (جَارّ وَمَجْرُور). Samen vormt dit het gezegde (خَبَر / Gabr).`
+      });
+      if (isStart) hasKhabar = true;
+      else { hasKhabar = true; hasPrepPhraseAfterMubtada = true; }
+      prevRole = 'ism_majroor';
+      continue;
+    }
+
+    // 7. Word after preposition -> ism_majroor
+    if (prevRole === 'harf_jarr') {
+      const isDip = _DIPTOTE_SET.has(base) && !base.startsWith('ال');
+      const m = isDip ? 'fathah' : (end.mark === 'tanween_kasr' ? 'tanween_kasr' : 'kasrah');
+      const mAr = isDip ? 'فَتْحَة (ـَ) · diptoot' : (m === 'tanween_kasr' ? 'تَنْوِين كَسْر (ـٍ)' : 'كَسْرَة (ـِ)');
+      words.push({
+        ar: tok, role: 'ism_majroor', roleAr: 'اِسْم مَجْرُور', roleNl: 'Ism Madjroer (Na voorzetsel)',
+        status: 'majroor', statusAr: 'مَجْرُور', mark: m, markAr: mAr,
+        explain: isDip
+          ? `«${tok}» staat na een voorzetsel (اِسْم مَجْرُور), maar krijgt als diptoot (مَمْنُوع مِنَ الصَّرْف) een fathah i.p.v. kasrah!`
+          : `«${tok}» volgt op een voorzetsel en staat daarom in de genitief (اِسْم مَجْرُور met كَسْرَة).`
+      });
+      prevRole = 'ism_majroor';
+      continue;
+    }
+
+    // 8. Adverbs of place/time
+    if (_ZARF_SET.has(base) || ['عندي', 'عندك', 'عنده', 'عندها', 'عندنا'].includes(base)) {
+      if (['عندي', 'عندك', 'عنده', 'عندها', 'عندنا'].includes(base)) {
+        const isStart = (i === 0 || clauseStart);
+        words.push({
+          ar: tok,
+          role: isStart ? 'khabar' : 'zarf',
+          roleAr: isStart ? 'ظَرْف (خَبَر مُقَدَّم)' : 'ظَرْف (خَبَر)',
+          roleNl: isStart ? 'Gabr / Khabar ("Bij mij / ik heb")' : 'Zarf & Gabr (Plaatsbepaling)',
+          status: 'mansoob',
+          statusAr: 'فِي مَحَلِّ رَفْع خَبَر',
+          mark: 'none',
+          markAr: '—',
+          explain: `«${tok}» bestaat uit عِنْدَ (bij) + voornaamwoord en vormt hier het gezegde (خَبَر / Gabr).`
+        });
+        hasKhabar = true;
+        prevRole = 'khabar_muqaddam';
+        continue;
+      }
+      words.push({
+        ar: tok, role: 'zarf', roleAr: 'ظَرْف (وَهُوَ مُضَاف)', roleNl: 'Zarf & Moedaf (Plaats/tijd)',
+        status: 'mansoob', statusAr: 'مَنْصُوب', mark: 'fathah', markAr: 'فَتْحَة (ـَ)',
+        explain: `«${tok}» is een plaats-/tijdsbepaling (ظَرْف) en werkt als Moedaf (مُضَاف): het woord erna krijgt een kasrah.`
+      });
+      prevRole = 'zarf';
+      if (hasMubtada && !hasKhabar) hasPrepPhraseAfterMubtada = true;
+      continue;
+    }
+
+    // 9. Word after zarf or mudaf -> mudaf_ilayhi
+    if (prevRole === 'zarf' || prevRole === 'mudaf' || prevRole === 'mubtada_mudaf' || prevRole === 'khabar_mudaf') {
+      const isDip = _DIPTOTE_SET.has(base) && !base.startsWith('ال');
+      const m = isDip ? 'fathah' : (end.mark === 'tanween_kasr' ? 'tanween_kasr' : 'kasrah');
+      const mAr = isDip ? 'فَتْحَة (ـَ) · diptoot' : (m === 'tanween_kasr' ? 'تَنْوِين كَسْر (ـٍ)' : 'كَسْرَة (ـِ)');
+      words.push({
+        ar: tok, role: 'mudaf_ilayhi', roleAr: 'مُضَاف إِلَيْهِ', roleNl: 'Moedaf Ilayh (Bezitter)',
+        status: 'majroor', statusAr: 'مَجْرُور', mark: m, markAr: mAr,
+        explain: `«${tok}» is het tweede deel van de bezitsconstructie (مُضَاف إِلَيْهِ / Moedaf Ilayh) en staat altijd in de genitief (مَجْرُور).`
+      });
+      prevRole = 'mudaf_ilayhi';
+      continue;
+    }
+
+    // 10. Verbs
+    if (_VERB_SET.has(base)) {
+      words.push({
+        ar: tok, role: 'fil', roleAr: 'فِعْل', roleNl: 'Fiʿl (Werkwoord)',
+        status: 'mabnee', statusAr: 'مَبْنِيّ', mark: end.mark, markAr: end.markAr,
+        explain: `«${tok}» is een werkwoord (فِعْل).`
+      });
+      hasVerb = true;
+      prevRole = 'fil';
+      continue;
+    }
+
+    if (prevRole === 'fil') {
+      if (end.status === 'mansoob') {
+        words.push({
+          ar: tok, role: 'mafool', roleAr: 'مَفْعُول بِهِ', roleNl: 'Mafʿoel Bihi (Lijdend voorwerp)',
+          status: 'mansoob', statusAr: 'مَنْصُوب', mark: 'fathah', markAr: 'فَتْحَة (ـَ)',
+          explain: `«${tok}» is het lijdend voorwerp (مَفْعُول بِهِ) van het werkwoord en staat in de accusatief (مَنْصُوب met fathah).`
+        });
+        prevRole = 'mafool';
+        continue;
+      }
+      words.push({
+        ar: tok, role: 'fail', roleAr: 'فَاعِل', roleNl: 'Fāʿil (Onderwerp van werkwoord)',
+        status: 'marfoo', statusAr: 'مَرْفُوع', mark: end.mark === 'none' ? 'dammah' : end.mark, markAr: end.markAr === '—' ? 'ضَمَّة (ـُ)' : end.markAr,
+        explain: `«${tok}» verricht de handeling van het werkwoord en is dus de Fāʿil (فَاعِل · nominatief met dammah).`
+      });
+      prevRole = 'fail';
+      continue;
+    }
+
+    // 11. Demonstratives
+    if (_DEM_SET.has(base) || _DUAL_DEM_SET.has(base)) {
+      const isDelayedMubtada = hasKhabar && !hasMubtada;
+      const role = (!hasMubtada) ? 'mubtada' : 'khabar';
+      if (role === 'mubtada') hasMubtada = true;
+      words.push({
+        ar: tok,
+        role: role,
+        roleAr: isDelayedMubtada ? 'مُبْتَدَأ مُؤَخَّر (اِسْم إِشَارَة)' : (role === 'mubtada' ? 'مُبْتَدَأ (اِسْم إِشَارَة)' : 'خَبَر (اِسْم إِشَارَة)'),
+        roleNl: isDelayedMubtada ? 'Moebtada (Achtergeplaatst Onderwerp)' : (role === 'mubtada' ? 'Moebtada (Onderwerp · Aanwijzer)' : 'Gabr / Khabar (Gezegde)'),
+        status: _DUAL_DEM_SET.has(base) ? 'marfoo' : 'mabnee',
+        statusAr: _DUAL_DEM_SET.has(base) ? 'مَرْفُوع بِالْأَلِف' : 'مَبْنِيّ فِي مَحَلِّ رَفْع',
+        mark: 'none',
+        markAr: '— (Onveranderlijk)',
+        explain: `«${tok}» is een aanwijzend voornaamwoord (اِسْم إِشَارَة) dat hier de functie van ${role === 'mubtada' ? 'Moebtada (مُبْتَدَأ · onderwerp)' : 'Gabr / Khabar (خَبَر · gezegde)'} vervult.`
+      });
+      prevRole = 'dem_' + role;
+      clauseStart = false;
+      continue;
+    }
+
+    // 12. Personal Pronouns
+    if (_PRON_SET.has(base)) {
+      words.push({
+        ar: tok,
+        role: 'mubtada',
+        roleAr: hasKhabar && !hasMubtada ? 'مُبْتَدَأ مُؤَخَّر (ضَمِير)' : 'مُبْتَدَأ (ضَمِير)',
+        roleNl: 'Moebtada (Onderwerp · Voornaamwoord)',
+        status: 'mabnee',
+        statusAr: 'مَبْنِيّ فِي مَحَلِّ رَفْع',
+        mark: 'none',
+        markAr: '— (Onveranderlijk)',
+        explain: `«${tok}» is een los persoonlijk voornaamwoord (ضَمِير مُنْفَصِل) en vormt de Moebtada (مُبْتَدَأ · het onderwerp).`
+      });
+      hasMubtada = true;
+      prevRole = 'mubtada';
+      clauseStart = false;
+      continue;
+    }
+
+    // 13. Definite noun immediately after a Demonstrative -> Badal (بَدَل)
+    if ((prevRole === 'dem_mubtada' || prevRole === 'dem_khabar') && base.startsWith('ال')) {
+      words.push({
+        ar: tok,
+        role: 'badal',
+        roleAr: 'بَدَل (مُطَابِق)',
+        roleNl: 'Badal (Bepaling na aanwijzer)',
+        status: 'marfoo',
+        statusAr: 'مَرْفُوع',
+        mark: 'dammah',
+        markAr: 'ضَمَّة (ـُ)',
+        explain: `Omdat «${tok}» het lidwoord الـ heeft direct na een aanwijzend voornaamwoord, vormt het een Badal (بَدَل · verduidelijking van het onderwerp) met dammah.`
+      });
+      prevRole = 'badal';
+      continue;
+    }
+
+    // 14. Check for Na't (bijvoeglijk naamwoord)
+    const prevWordObj = words[words.length - 1];
+    const prevWasDef = prevWordObj && stripHarakatForIrab(prevWordObj.ar).replace(/^و/, '').startsWith('ال');
+    if (prevWordObj && prevWasDef && base.startsWith('ال') && ['mubtada', 'khabar', 'ism_majroor', 'mudaf_ilayhi', 'badal'].includes(prevWordObj.role)) {
+      const st = prevWordObj.status === 'majroor' ? 'majroor' : 'marfoo';
+      const stAr = st === 'majroor' ? 'مَجْرُور' : 'مَرْفُوع';
+      const mk = st === 'majroor' ? 'kasrah' : 'dammah';
+      const mkAr = st === 'majroor' ? 'كَسْرَة (ـِ)' : 'ضَمَّة (ـُ)';
+      words.push({
+        ar: tok,
+        role: 'naat',
+        roleAr: 'نَعْت (صِفَة)',
+        roleNl: `Naʿt (Bijv. nw. bij ${prevWordObj.ar})`,
+        status: st,
+        statusAr: stAr,
+        mark: mk,
+        markAr: mkAr,
+        explain: `«${tok}» is een Naʿt (نَعْت · bijvoeglijk naamwoord) bij «${prevWordObj.ar}» en volgt in bepaaldheid (الـ), geslacht én naamval (${stAr} met ${mkAr}).`
+      });
+      prevRole = 'naat';
+      continue;
+    }
+
+    if (prevWordObj && prevWordObj.role === 'khabar' && !prevWasDef && !base.startsWith('ال') && (end.mark === 'tanween_damm' || end.mark === 'dammah')) {
+      words.push({
+        ar: tok,
+        role: 'naat',
+        roleAr: 'نَعْت (صِفَة)',
+        roleNl: `Naʿt (Bijv. nw. bij ${prevWordObj.ar})`,
+        status: 'marfoo',
+        statusAr: 'مَرْفُوع',
+        mark: end.mark,
+        markAr: end.markAr,
+        explain: `«${tok}» is een onbepaald bijvoeglijk naamwoord (نَعْت / Naʿt) dat «${prevWordObj.ar}» beschrijft en meegaat in de nominatief (مَرْفُوع).`
+      });
+      prevRole = 'naat';
+      continue;
+    }
+
+    // 15. Check for Idāfah (Mudaf)
+    const isMudafCandidate = !base.startsWith('ال') && end.mark === 'dammah' && !_DIPTOTE_SET.has(base) && nextTok && (nextEnd.status === 'majroor' || nextBase.startsWith('ال') || _DIPTOTE_SET.has(nextBase) || nextBase === 'من');
+    if (isMudafCandidate) {
+      if (!hasMubtada) {
+        hasMubtada = true;
+        words.push({
+          ar: tok,
+          role: 'mubtada_mudaf',
+          roleAr: 'مُبْتَدَأ وَهُوَ مُضَاف',
+          roleNl: 'Moebtada & Moedaf (Onderwerp & Bezit)',
+          status: 'marfoo',
+          statusAr: 'مَرْفُوع',
+          mark: 'dammah',
+          markAr: 'ضَمَّة (ـُ) zonder tanwīn',
+          explain: `«${tok}» is de Moebtada (مُبْتَدَأ · onderwerp) én Moedaf (مُضَاف · eerste deel van bezitsconstructie): één dammah zonder tanwīn en geen الـ.`
+        });
+        prevRole = 'mubtada_mudaf';
+      } else {
+        hasKhabar = true;
+        words.push({
+          ar: tok,
+          role: 'khabar',
+          roleAr: 'خَبَر وَهُوَ مُضَاف',
+          roleNl: 'Gabr / Khabar & Moedaf (Gezegde & Bezit)',
+          status: 'marfoo',
+          statusAr: 'مَرْفُوع',
+          mark: 'dammah',
+          markAr: 'ضَمَّة (ـُ) zonder tanwīn',
+          explain: `«${tok}» is de Gabr / Khabar (خَبَر · gezegde) én Moedaf (مُضَاف · bezit): één dammah zonder tanwīn.`
+        });
+        prevRole = 'khabar_mudaf';
+      }
+      clauseStart = false;
+      continue;
+    }
+
+    // 16. Standard Mubtada' vs Khabar
+    if (!hasMubtada) {
+      hasMubtada = true;
+      const isDelayed = hasKhabar;
+      const mk = end.mark === 'none' ? 'dammah' : end.mark;
+      const mkAr = end.markAr === '—' ? 'ضَمَّة (ـُ)' : end.markAr;
+      words.push({
+        ar: tok,
+        role: 'mubtada',
+        roleAr: isDelayed ? 'مُبْتَدَأ مُؤَخَّر' : 'مُبْتَدَأ',
+        roleNl: isDelayed ? 'Moebtada (Achtergeplaatst Onderwerp)' : 'Moebtada (Onderwerp)',
+        status: 'marfoo',
+        statusAr: 'مَرْفُوع',
+        mark: mk,
+        markAr: mkAr,
+        explain: `«${tok}» is de Moebtada (مُبْتَدَأ · het onderwerp waar de zin over gaat) en staat in de nominatief (مَرْفُوع).`
+      });
+      prevRole = 'mubtada';
+      clauseStart = false;
+      continue;
+    }
+
+    if (!hasKhabar) {
+      hasKhabar = true;
+      const isDip = _DIPTOTE_SET.has(base) && !base.startsWith('ال');
+      const mk = end.mark === 'none' ? (isDip ? 'dammah' : 'tanween_damm') : end.mark;
+      const mkAr = end.markAr === '—' ? (isDip ? 'ضَمَّة (ـُ)' : 'تَنْوِين ضَمّ (ـٌ)') : end.markAr;
+      words.push({
+        ar: tok,
+        role: 'khabar',
+        roleAr: 'خَبَر',
+        roleNl: 'Gabr / Khabar (Gezegde)',
+        status: 'marfoo',
+        statusAr: 'مَرْفُوع',
+        mark: mk,
+        markAr: mkAr,
+        explain: `«${tok}» vertelt iets over het onderwerp en is dus de Gabr / Khabar (خَبَر · het gezegde), in de nominatief (مَرْفُوع).`
+      });
+      prevRole = 'khabar';
+      continue;
+    }
+
+    words.push({
+      ar: tok,
+      role: end.status === 'majroor' ? 'ism_majroor' : 'khabar',
+      roleAr: end.status === 'majroor' ? 'مَجْرُور' : 'خَبَر / تَابِع',
+      roleNl: end.status === 'majroor' ? 'Ism Madjroer (Genitief)' : 'Gabr / Khabar (Aanvulling)',
+      status: end.status,
+      statusAr: end.statusAr,
+      mark: end.mark,
+      markAr: end.markAr,
+      explain: `«${tok}» staat in status ${end.statusAr} met ${end.markAr}.`
+    });
+  }
+
+  let note = '';
+  if (hasMubtada && !hasKhabar && hasPrepPhraseAfterMubtada) {
+    note = 'Uitleg leerkracht: De voorzetselgroep / plaatsbepaling (شِبْهُ جُمْلَة) vormt hier samen de Gabr / Khabar (خَبَر · het gezegde) van de zin.';
+  }
+
+  return { words, note };
+}
+
+function getSolvedSentenceFromDrill(d) {
+  if (!d) return '';
+  if (d.type === 'parse') return d.sentence || '';
+  if (d.type === 'order' && Array.isArray(d.words)) return d.words.join(' ');
+  const ansOpt = (Array.isArray(d.options) && typeof d.answer === 'number') ? String(d.options[d.answer] || '') : '';
+  if (d.type === 'fill' && d.ar) {
+    const parts = String(d.ar).split('_');
+    const optParts = ansOpt.includes(' / ') ? ansOpt.split(' / ') : [ansOpt, ansOpt, ansOpt, ansOpt];
+    let out = '';
+    parts.forEach((p, idx) => {
+      if (idx < parts.length - 1) {
+        let rep = (optParts[idx] || ansOpt).trim();
+        if (/^ـ[\u064B-\u0652]+$/.test(rep)) {
+          out += p.replace(/\s+$/, '') + rep.slice(1);
+        } else {
+          out += p + rep;
+        }
+      } else {
+        out += p;
+      }
+    });
+    return out.trim();
+  }
+  if (d.type === 'transform') {
+    if (/[\u0600-\u06FF]/.test(ansOpt) && ansOpt.trim().split(/\s+/).length >= 2) return ansOpt.trim();
+    if (d.from && d.from.trim().split(/\s+/).length >= 2 && !d.from.includes('+')) return d.from.trim();
+  }
+  if (d.type === 'mc') {
+    if (/[\u0600-\u06FF]/.test(ansOpt) && !/[a-zA-Z]{3,}/.test(ansOpt) && ansOpt.trim().split(/\s+/).length >= 2) {
+      return ansOpt.trim();
+    }
+    const m = String(d.q || '').match(/«([^»]*[\u0600-\u06FF][^»]*)»/);
+    if (m && m[1].trim().split(/\s+/).length >= 2) return m[1].trim();
+  }
+  return '';
+}
+
+const CLASSROOM_ROLES = [
+  { id: 'mubtada', ar: 'مُبْتَدَأ', nl: 'Moebtada · Onderwerp', core: true },
+  { id: 'khabar', ar: 'خَبَر', nl: 'Gabr / Khabar · Gezegde', core: true },
+  { id: 'harf_jarr', ar: 'حَرْف جَرّ', nl: 'Harf Djarr · Voorzetsel', core: true },
+  { id: 'ism_majroor', ar: 'اِسْم مَجْرُور', nl: 'Ism Madjroer · Na voorz.', core: true },
+  { id: 'mudaf', ar: 'مُضَاف', nl: 'Moedaf · Bezit', core: true },
+  { id: 'mudaf_ilayhi', ar: 'مُضَاف إِلَيْهِ', nl: 'Moedaf Ilayh · Bezitter', core: true },
+  { id: 'naat', ar: 'نَعْت', nl: 'Naʿt · Bijv. nw.', core: true },
+  { id: 'badal', ar: 'بَدَل', nl: 'Badal · Bepaling na aanwijzer', core: false },
+  { id: 'zarf', ar: 'ظَرْف', nl: 'Zarf · Plaats / tijd', core: false },
+  { id: 'fil', ar: 'فِعْل', nl: 'Fiʿl · Werkwoord', core: false },
+  { id: 'fail', ar: 'فَاعِل', nl: 'Fāʿil · Doener', core: false },
+  { id: 'mafool', ar: 'مَفْعُول بِهِ', nl: 'Mafʿoel Bihi · Lijdend vw.', core: false },
+  { id: 'munada', ar: 'مُنَادَى', nl: 'Moenādā · Aangesprokene', core: false },
+  { id: 'harf', ar: 'حَرْف', nl: 'Harf · Partikel', core: false }
+];
+
+function matchClassroomRole(pickedId, wordObj) {
+  if (!wordObj) return false;
+  const target = wordObj.role;
+  if (pickedId === target) return true;
+  if (target === 'mubtada_mudaf' && (pickedId === 'mubtada' || pickedId === 'mudaf')) return true;
+  if (target === 'khabar' && String(wordObj.roleAr || '').includes('مُضَاف') && pickedId === 'mudaf') return true;
+  if (String(wordObj.roleAr || '').includes('جَارّ وَمَجْرُور') && (pickedId === 'khabar' || pickedId === 'ism_majroor' || pickedId === 'harf_jarr')) return true;
+  if (target === 'zarf' && pickedId === 'mudaf') return true;
+  return false;
+}
+
+function roleColorClass(role) {
+  if (role === 'mubtada' || role === 'mubtada_mudaf') return 'rc-mubtada';
+  if (role === 'khabar') return 'rc-khabar';
+  if (role === 'harf_jarr' || role === 'ism_majroor') return 'rc-jarr';
+  if (role === 'mudaf' || role === 'mudaf_ilayhi') return 'rc-idafah';
+  if (role === 'naat' || role === 'badal') return 'rc-naat';
+  return 'rc-other';
+}
+
+window._inlineIrabState = window._inlineIrabState || {};
+function getInlineIrabSession(key, defaultMode) {
+  if (!window._inlineIrabState[key]) {
+    window._inlineIrabState[key] = {
+      open: false,
+      mode: defaultMode || 'view',
+      wi: 0,
+      done: {},
+      fb: null,
+      complete: false,
+      selWord: null
+    };
+  }
+  return window._inlineIrabState[key];
+}
+
+function renderInlineIrab(rawSentence, key, defaultMode) {
+  const parsed = analyzeArabicSentence(rawSentence);
+  if (!parsed || !parsed.words || parsed.words.length < 2) return '';
+  const st = getInlineIrabSession(key, defaultMode || 'view');
+  const words = parsed.words;
+  if (st.wi >= words.length) st.wi = 0;
+
+  const topBar = `<div class="iirab-top">
+    <div class="iirab-title">
+      <span class="iirab-badge-ar ar" lang="ar">إعراب</span>
+      <span>Zinsontleding · <b>Moebtada &amp; Gabr</b></span>
+    </div>
+    <div class="iirab-modes">
+      <button type="button" class="iirab-mode-btn ${st.mode === 'view' ? 'active' : ''}" data-act="iirab-mode" data-key="${E(key)}" data-mode="view">Overzicht</button>
+      <button type="button" class="iirab-mode-btn ${st.mode === 'quiz' ? 'active' : ''}" data-act="iirab-mode" data-key="${E(key)}" data-mode="quiz">Zelf ontleden</button>
+      <button type="button" class="iirab-close-btn" data-act="iirab-close" data-key="${E(key)}" title="Sluit ontleding" aria-label="Sluiten">×</button>
+    </div>
+  </div>`;
+
+  if (st.mode === 'view') {
+    const cardsHtml = words.map((w, idx) => {
+      const isSel = st.selWord === idx;
+      return `<button type="button" class="iirab-word-card ${roleColorClass(w.role)} ${isSel ? 'selected' : ''}" data-act="iirab-word-info" data-key="${E(key)}" data-wi="${idx}">
+        <span class="iirab-w-ar ar" lang="ar">${arHtml(w.ar)}</span>
+        <span class="iirab-w-role-ar ar" lang="ar">${arHtml(w.roleAr)}</span>
+        <span class="iirab-w-role-nl">${E(w.roleNl)}</span>
+        <span class="iirab-w-meta"><b class="ar" lang="ar">${arHtml(w.statusAr)}</b> · <span class="ar" lang="ar">${arHtml(w.markAr)}</span></span>
+      </button>`;
+    }).join('');
+
+    const selW = (st.selWord !== null && words[st.selWord]) ? words[st.selWord] : null;
+    const explainBox = selW
+      ? `<div class="iirab-explain-box"><b>Uitleg bij «<span class="ar" lang="ar">${arHtml(selW.ar)}</span>»:</b> ${mix(selW.explain)}</div>`
+      : `<div class="iirab-hint-line">Tik op een woordkaartje voor de uitgebreide uitleg van de leerkracht.</div>`;
+
+    const noteHtml = parsed.note
+      ? `<div class="iirab-teacher-note">${ICO.check} <span>${mix(parsed.note)}</span></div>`
+      : '';
+
+    return `<div class="inline-irab-box" data-key="${E(key)}">
+      ${topBar}
+      <div class="iirab-cards" dir="rtl">${cardsHtml}</div>
+      ${explainBox}
+      ${noteHtml}
+    </div>`;
+  }
+
+  // Mode === 'quiz' (Zelf ontleden zoals met de leerkracht)
+  const cardsHtml = words.map((w, idx) => {
+    const isDone = !!st.done[idx];
+    const isCur = idx === st.wi && !st.complete;
+    if (isDone) {
+      return `<button type="button" class="iirab-word-card ${roleColorClass(w.role)} done" data-act="iirab-select-quiz-w" data-key="${E(key)}" data-wi="${idx}">
+        <span class="iirab-w-chk">✓</span>
+        <span class="iirab-w-ar ar" lang="ar">${arHtml(w.ar)}</span>
+        <span class="iirab-w-role-ar ar" lang="ar">${arHtml(w.roleAr)}</span>
+        <span class="iirab-w-role-nl">${E(w.roleNl)}</span>
+        <span class="iirab-w-meta"><b class="ar" lang="ar">${arHtml(w.statusAr)}</b> · <span class="ar" lang="ar">${arHtml(w.markAr)}</span></span>
+      </button>`;
+    }
+    return `<button type="button" class="iirab-word-card quiz-pending ${isCur ? 'active-target' : ''}" data-act="iirab-select-quiz-w" data-key="${E(key)}" data-wi="${idx}">
+      <span class="iirab-w-num">${idx + 1}</span>
+      <span class="iirab-w-ar ar" lang="ar">${arHtml(w.ar)}</span>
+      <span class="iirab-w-qbadge">${isCur ? 'Welke rol?' : 'Tik om te kiezen'}</span>
+    </button>`;
+  }).join('');
+
+  const curW = words[st.wi] || words[0];
+  const presentRoles = new Set(words.map(w => w.role));
+  const roleChoices = CLASSROOM_ROLES.filter(r => r.core || presentRoles.has(r.id));
+
+  let quizBody = '';
+  if (!st.complete) {
+    quizBody = `<div class="iirab-quiz-area">
+      <div class="iirab-quiz-prompt">
+        <span>Wat is de rol van <b class="ar" lang="ar">«${arHtml(curW.ar)}»</b> in deze zin?</span>
+        <small>Woord ${st.wi + 1} van ${words.length}</small>
+      </div>
+      <div class="iirab-role-pills">
+        ${roleChoices.map(r => `<button type="button" class="iirab-role-pill" data-act="iirab-pick-role" data-key="${E(key)}" data-sent="${E(rawSentence)}" data-role="${r.id}">
+          <b class="ar" lang="ar">${r.ar}</b>
+          <small>${E(r.nl)}</small>
+        </button>`).join('')}
+      </div>
+      ${st.fb ? `<div class="iirab-fb ${st.fb.ok ? 'ok' : 'bad'}">${mix(st.fb.msg)}</div>` : ''}
+    </div>`;
+  } else {
+    quizBody = `<div class="iirab-complete-bar">
+      <div>${ICO.check} <b>Goed gedaan!</b> Alle woorden van deze zin zijn ontleed.</div>
+      <button type="button" class="btn btn-secondary btn-sm" data-act="iirab-reset" data-key="${E(key)}">Opnieuw oefenen</button>
+    </div>
+    ${parsed.note ? `<div class="iirab-teacher-note">${ICO.check} <span>${mix(parsed.note)}</span></div>` : ''}`;
+  }
+
+  return `<div class="inline-irab-box mode-quiz" data-key="${E(key)}">
+    ${topBar}
+    <div class="iirab-cards" dir="rtl">${cardsHtml}</div>
+    ${quizBody}
+  </div>`;
+}
+
+window.analyzeArabicSentence = analyzeArabicSentence;
+window.renderInlineIrab = renderInlineIrab;
+window.getInlineIrabSession = getInlineIrabSession;
 
 function checkRoleMatch(chosen, target){
   if(chosen === target) return true;
@@ -768,10 +1573,14 @@ function head(n, sub){
   const g=L[n]||{};
   const autoOn = P.autoAdvance !== false;
   const sfxOn = P.sfx !== false;
+  const irabOn = !!P.inlineIrab;
   return `<div class="g2-top">
     <button class="back" data-act="g2-hub" style="margin:0"><span>←</span> Alle lessen</button>
     <span class="grow"></span>
-    <button type="button" class="g2-pill-btn ${autoOn?'active':''}" data-act="g2-toggle-auto" title="${autoOn?'Auto-doorgaan is actief (2s/3s) — klik om handmatig te maken':'Auto-doorgaan staat uit — klik om aan te zetten'}">
+    <button type="button" class="g2-pill-btn ${irabOn?'active':''}" data-act="g2-toggle-irab" title="Toon automatisch zinsontleding (Moebtada / Gabr) bij oefeningen">
+      ${irabOn?'Ontleden: aan':'Ontleden: uit'}
+    </button>
+    <button type="button" class="g2-pill-btn ${autoOn?'active':''}" data-act="g2-toggle-auto" title="${autoOn?'Auto-doorgaan is actief — klik om handmatig te maken':'Auto-doorgaan staat uit — klik om aan te zetten'}">
       ${autoOn?'Auto: aan':'Auto: uit'}
     </button>
     <button type="button" class="g2-pill-btn ${sfxOn?'active':''}" data-act="g2-toggle-sfx" title="${sfxOn?'Geluidseffect staat aan — klik om te dempen':'Geluidseffect is gedempt — klik om aan te zetten'}">
@@ -973,12 +1782,22 @@ function renderTable(t){
   return `<div class="g2-table-wrap"><table class="g2-table">${th?`<thead><tr>${th}</tr></thead>`:''}<tbody>${tr}</tbody></table></div>`;
 }
 
-function renderExamples(list, hideNl){
-  return `<div class="g2-ex">${list.map((e,i)=>`<div class="g2-exrow">
-      ${spk(e.ar)}
-      <span class="g2-exar ar" lang="ar">${arHtml(e.ar)}</span>
-      <span class="g2-exnl ${hideNl?'hid':''}" ${hideNl?`data-act="g2-reveal" data-i="${i}"`:''}>${hideNl?'tik om te tonen':mix(e.nl||'')}</span>
-    </div>`).join('')}</div>`;
+function renderExamples(list, hideNl, prefixKey){
+  return `<div class="g2-ex">${list.map((e,i)=>{
+    const itemKey = prefixKey ? `${prefixKey}_${i}` : '';
+    const parsed = prefixKey ? analyzeArabicSentence(e.ar) : null;
+    const st = parsed ? getInlineIrabSession(itemKey, 'view') : null;
+    const isOpen = !!(st && st.open);
+    return `<div class="g2-exitem ${isOpen?'irab-open':''}">
+      <div class="g2-exrow">
+        ${spk(e.ar)}
+        <span class="g2-exar ar" lang="ar">${arHtml(e.ar)}</span>
+        <span class="g2-exnl ${hideNl?'hid':''}" ${hideNl?`data-act="g2-reveal" data-i="${i}"`:''}>${hideNl?'tik om te tonen':mix(e.nl||'')}</span>
+        ${parsed ? `<button type="button" class="g2-irab-btn ${isOpen?'active':''}" data-act="iirab-toggle" data-key="${E(itemKey)}" data-sent="${E(e.ar)}" title="Zinsontleding (Moebtada / Gabr)"><span class="ar" lang="ar">إعراب</span> <span>${isOpen?'Sluit':'Ontleed'}</span></button>` : ''}
+      </div>
+      ${isOpen ? renderInlineIrab(e.ar, itemKey, st.mode) : ''}
+    </div>`;
+  }).join('')}</div>`;
 }
 
 function phaseBar(s){
@@ -1001,12 +1820,20 @@ function renderStep(n){
     </div>`;
   }else if(s.phase==='see'){
     const ex=st.examples||[];
+    const prefixKey = `ex_${n}_${s.si}`;
+    const hasParseableEx = ex.some(e => !!analyzeArabicSentence(e.ar));
     body=`<div class="g2-card">
-      <div class="g2-kicker">Voorbeelden uit het boek · blz. ${E(st.page||'')}</div>
+      <div class="g2-kicker">Voorbeelden &amp; Leesoefening · blz. ${E(st.page||'')}</div>
       <h2>${E(shortTitle(st.title))}</h2>
-      <p class="g2-hint">Lees hardop en luister. Verberg de vertaling om jezelf te testen.</p>
-      <div class="g2-tools"><button class="btn btn-ghost btn-sm" data-act="g2-hide">${s.hideNl?'Toon vertalingen':'Verberg vertalingen'}</button></div>
-      ${renderExamples(ex, s.hideNl)}
+      <p class="g2-hint">Lees hardop, luister en ontleed de zinnen zoals in de les (Moebtada, Gabr/Khabar, Moedaf, Voorzetsel).</p>
+      <div class="g2-tools">
+        <button type="button" class="btn btn-ghost btn-sm" data-act="g2-hide">${s.hideNl?'Toon vertalingen':'Verberg vertalingen'}</button>
+        ${hasParseableEx ? `
+          <button type="button" class="btn ${s.exIrabMode==='view'?'btn-primary':'btn-secondary'} btn-sm" data-act="g2-ex-irab-all" data-prefix="${E(prefixKey)}" data-mode="view"><span class="ar" lang="ar">إعراب</span> · ${s.exIrabMode==='view'?'Verberg ontledingen':'Toon alle ontledingen'}</button>
+          <button type="button" class="btn ${s.exIrabMode==='quiz'?'btn-primary':'btn-secondary'} btn-sm" data-act="g2-ex-irab-all" data-prefix="${E(prefixKey)}" data-mode="quiz">Zelf ontleden (Oefenmodus)</button>
+        ` : ''}
+      </div>
+      ${renderExamples(ex, s.hideNl, prefixKey)}
       <div class="g2-actions">
         <button class="btn btn-secondary" data-act="g2-phase" data-p="rule">← Regel</button>
         <button class="btn btn-primary" data-act="g2-phase" data-p="do" data-gl="next">${s.queue.length?'Pas de regel toe →':'Stap afronden →'}</button>
@@ -1090,11 +1917,6 @@ function renderDrill(s, kicker){
   if(answered){
     const ok=s.lastOk;
     const correct = d.type==='order' ? d.words.join(' ') : d.options[d.answer];
-    const autoOn = P.autoAdvance !== false;
-    let timerActionHtml = '';
-    if(!ok && autoOn){
-      timerActionHtml = `<span class="g2-manual-hint">Druk op Enter of klik op 'Volgende vraag'</span>`;
-    }
     fb=`<div class="g2-fb ${ok?'ok':'bad'}">
       <b>${ok?'Goed!':'Nog niet goed'}</b>
       ${ok?'':`<div class="g2-correct">Juist: <span class="ar" lang="ar">${isAr(correct)?arHtml(correct):mix(correct)}</span>${isAr(correct)?spk(correct):''}</div>`}
@@ -1105,7 +1927,30 @@ function renderDrill(s, kicker){
       </div>
     </div>`;
   }
-  return `<div class="g2-card">${prog}${src}${q}${fb}</div>`;
+
+  let irabHtml = '';
+  const solvedSent = getSolvedSentenceFromDrill(d);
+  const parsedSent = analyzeArabicSentence(solvedSent);
+  if(parsedSent && (s.kind !== 'test' || answered)){
+    const dKey = 'drill_' + (x.ref || s.qi);
+    const irabSt = getInlineIrabSession(dKey, 'view');
+    const isIrabOpen = !!(irabSt.open || (answered && P.inlineIrab && irabSt.userClosed !== true));
+    if(isIrabOpen) irabSt.open = true;
+    irabHtml = `<div class="g2-drill-irab-wrap">
+      ${!isIrabOpen ? `<div class="g2-drill-irab-bar">
+        <div class="iirab-bar-lbl">
+          <span class="iirab-badge-ar ar" lang="ar">إعراب</span>
+          <span>Zinsontleding · <b>Moebtada &amp; Gabr</b></span>
+        </div>
+        <div class="iirab-bar-btns">
+          <button type="button" class="btn btn-sm btn-secondary" data-act="iirab-open" data-key="${E(dKey)}" data-sent="${E(solvedSent)}" data-mode="quiz">Zelf ontleden</button>
+          <button type="button" class="btn btn-sm btn-ghost" data-act="iirab-open" data-key="${E(dKey)}" data-sent="${E(solvedSent)}" data-mode="view">Toon ontleding</button>
+        </div>
+      </div>` : renderInlineIrab(solvedSent, dKey, irabSt.mode)}
+    </div>`;
+  }
+
+  return `<div class="g2-card">${prog}${src}${q}${irabHtml}${fb}</div>`;
 }
 
 function renderSimpleRun(n, title){
@@ -1168,6 +2013,12 @@ function clearG2AutoTimer(){
 function scheduleG2AutoNext(ok){
   clearG2AutoTimer();
   const s = S();
+  const dKey = s.cur ? ('drill_' + (s.cur.ref || s.qi)) : '';
+  const irabOpen = !!(P.inlineIrab || (dKey && window._inlineIrabState && window._inlineIrabState[dKey] && window._inlineIrabState[dKey].open));
+  if(irabOpen){
+    s.timerPaused = true;
+    return;
+  }
   s.timerPaused = false;
   if(P.autoAdvance === false) return;
   const delay = ok ? 400 : 3500; // juist: direct op achtergrond door (400ms), fout: 3.5s of handmatig
@@ -1180,6 +2031,12 @@ function scheduleG2AutoNext(ok){
       scrollTop();
     }
   }, delay);
+}
+function toggleInlineIrabPref(){
+  P.inlineIrab = !P.inlineIrab;
+  save();
+  if(P.inlineIrab) clearG2AutoTimer();
+  render();
 }
 function toggleAutoAdvance(){
   P.autoAdvance = (P.autoAdvance === false) ? true : false;
@@ -1259,6 +2116,87 @@ document.addEventListener('click', e=>{
     state.path='grammar'; state.view='book-lesson'; state.bookLesson=n; S().view='map'; S().n=n;
     try{ lastGrammar=n; saveG(); }catch(err){}
     render(); scrollTop(); return;
+  }
+  if(act.startsWith('iirab-')){
+    clearG2AutoTimer();
+    if(state.g2) state.g2.timerPaused = true;
+    e.stopImmediatePropagation();
+    const key = btn.dataset.key || '';
+    const st = getInlineIrabSession(key, btn.dataset.mode || 'view');
+    if(act === 'iirab-toggle'){
+      st.open = !st.open;
+      st.userClosed = !st.open;
+      render(); return;
+    }
+    if(act === 'iirab-open'){
+      const m = btn.dataset.mode || 'view';
+      if(st.open && st.mode === m){
+        st.open = false;
+        st.userClosed = true;
+      } else {
+        st.open = true;
+        st.userClosed = false;
+        st.mode = m;
+      }
+      render(); return;
+    }
+    if(act === 'iirab-close'){
+      st.open = false;
+      st.userClosed = true;
+      render(); return;
+    }
+    if(act === 'iirab-mode'){
+      st.mode = btn.dataset.mode || 'view';
+      st.fb = null;
+      render(); return;
+    }
+    if(act === 'iirab-word-info'){
+      const wi = +btn.dataset.wi;
+      st.selWord = (st.selWord === wi) ? null : wi;
+      render(); return;
+    }
+    if(act === 'iirab-select-quiz-w'){
+      const wi = +btn.dataset.wi;
+      st.wi = wi;
+      st.fb = null;
+      if(st.complete && !st.done[wi]) st.complete = false;
+      render(); return;
+    }
+    if(act === 'iirab-pick-role'){
+      const sent = btn.dataset.sent || '';
+      const role = btn.dataset.role || '';
+      const parsed = analyzeArabicSentence(sent);
+      if(!parsed || !parsed.words) return;
+      const w = parsed.words[st.wi];
+      if(!w) return;
+      if(matchClassroomRole(role, w)){
+        st.done[st.wi] = true;
+        try{ playSfx(true); }catch(err){}
+        st.fb = { ok: true, msg: `Juist! ${w.explain}` };
+        let nextWi = -1;
+        for(let k = 0; k < parsed.words.length; k++){
+          const cand = (st.wi + 1 + k) % parsed.words.length;
+          if(!st.done[cand]){ nextWi = cand; break; }
+        }
+        if(nextWi >= 0){
+          st.wi = nextWi;
+        } else {
+          st.complete = true;
+        }
+      } else {
+        try{ playSfx(false); }catch(err){}
+        st.fb = { ok: false, msg: `Let op: ${w.explain}` };
+      }
+      render(); return;
+    }
+    if(act === 'iirab-reset'){
+      st.done = {};
+      st.wi = 0;
+      st.complete = false;
+      st.fb = null;
+      render(); return;
+    }
+    return;
   }
   if(!act.startsWith('g2-')) return;
   e.stopImmediatePropagation();
@@ -1410,6 +2348,28 @@ document.addEventListener('click', e=>{
   if(act==='g2-hub-clear-search'||act==='g2-hub-reset'){
     s.hubSearch = '';
     s.hubFilter = 'all';
+    render(); return;
+  }
+  if(act==='g2-toggle-irab'){ toggleInlineIrabPref(); return; }
+  if(act==='g2-ex-irab-all'){
+    const mode = btn.dataset.mode || 'view';
+    const prefix = btn.dataset.prefix || `ex_${s.n}_${s.si}`;
+    const st = L[s.n] && L[s.n].steps && L[s.n].steps[s.si];
+    const list = (st && st.examples) || [];
+    if(s.exIrabMode === mode){
+      s.exIrabMode = null;
+      list.forEach((_, idx) => {
+        const sess = getInlineIrabSession(`${prefix}_${idx}`, mode);
+        sess.open = false;
+      });
+    } else {
+      s.exIrabMode = mode;
+      list.forEach((_, idx) => {
+        const sess = getInlineIrabSession(`${prefix}_${idx}`, mode);
+        sess.open = true;
+        sess.mode = mode;
+      });
+    }
     render(); return;
   }
   if(act==='g2-toggle-auto'){ toggleAutoAdvance(); return; }

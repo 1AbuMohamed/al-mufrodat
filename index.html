@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
@@ -4437,6 +4437,10 @@ function renderConvUnit(){
     const spkIdx=spkList.indexOf(line.who);
     const spkRole=(spkIdx>=0?spkIdx:li)%2===0?'a':'b';
     const initial=(line.who||'').replace(/[\u064B-\u065F\u0670\u0640\s]/g,'')[0]||(li+1);
+    const irabKey=`conv_${n}_${di}_${li}`;
+    const canIrab=!!(window.analyzeArabicSentence && window.analyzeArabicSentence(line.ar));
+    const irabSess=canIrab && window.getInlineIrabSession ? window.getInlineIrabSession(irabKey, 'view') : null;
+    const irabOpen=!!(irabSess && irabSess.open);
 
     lines+=`<div class="book-line conv-line ${open?'open':''} ${state.convShowAll?'show-all':''} spk-${spkRole}" data-act="toggle-line" data-id="${id}">
       <div class="conv-line-inner">
@@ -4449,6 +4453,7 @@ function renderConvUnit(){
             </div>
           </div>
           <div class="line-actions conv-line-actions">
+            ${canIrab?`<button type="button" class="conv-act-btn conv-irab-btn ${irabOpen?'active':''}" data-act="iirab-toggle" data-key="${esc(irabKey)}" data-sent="${esc(line.ar)}" title="Zinsontleding (Moebtada & Gabr)"><span class="ar" lang="ar">إعراب</span></button>`:''}
             <button type="button" class="conv-act-btn" data-act="speak-line" data-text="${esc(line.ar)}" data-who="${esc(line.who||'')}" title="Beluister zin" aria-label="Hoor">${GL_ICO_SPK}</button>
             <button type="button" class="conv-act-btn mic-btn" data-act="practice-speak" data-text="${esc(line.ar)}" data-who="${esc(line.who||'')}" title="Nazeggen met microfoon" aria-label="Nazeggen">${GL_ICO_MIC}</button>
           </div>
@@ -4457,6 +4462,7 @@ function renderConvUnit(){
           <div class="ar ar-mark conv-ar" lang="ar">${markAr(line.ar, hideText?'wait':'plain')}</div>
           <div class="nl conv-nl">${esc(line.nl)}</div>
         </div>
+        ${irabOpen && window.renderInlineIrab ? window.renderInlineIrab(line.ar, irabKey, irabSess.mode) : ''}
       </div>
     </div>`;
   });
@@ -4504,6 +4510,7 @@ function renderConvUnit(){
         <button class="btn btn-secondary btn-sm conv-ctrl-btn" data-act="practice-dialogue" data-u="${n}" data-di="${di}">${GL_ICO_MIC} Oefen dialoog</button>
       </div>
       <div class="conv-ctrl-right">
+        <button class="btn ${state.convShowIrab?'btn-primary':'btn-ghost'} btn-sm conv-ctrl-btn" data-act="toggle-conv-irab"><span class="ar" lang="ar">إعراب</span> · ${state.convShowIrab?'Ontleding uit':'Ontleed zinnen'}</button>
         <button class="btn btn-ghost btn-sm conv-ctrl-btn" data-act="toggle-all-trans">${state.convShowAll?'Vertaling uit':'Vertaling aan'}</button>
         <button class="btn btn-ghost btn-sm conv-ctrl-btn" data-act="toggle-hide">${hideText?'Tekst aan':'Verberg'}</button>
       </div>
@@ -5632,6 +5639,20 @@ document.addEventListener('click',e=>{
       if(!state.convOpen)state.convOpen={};
       (c&&c.dialogues||[]).forEach((d,di)=>{(d.lines||[]).forEach((_,li)=>{state.convOpen[di+'-'+li]=true})});
     }else{state.convOpen={}}
+    render();
+  }
+  else if(act==='toggle-conv-irab'){
+    state.convShowIrab=!state.convShowIrab;
+    const n=String(state.convUnit||'');
+    const c=CONVERSATIONS[n]||CONVERSATIONS[Number(n)];
+    const di=state.convDi|0;
+    const d=(c&&c.dialogues&&c.dialogues[di])||null;
+    if(d && d.lines && window.getInlineIrabSession){
+      d.lines.forEach((line, li)=>{
+        const sess=window.getInlineIrabSession(`conv_${n}_${di}_${li}`, 'view');
+        sess.open=!!state.convShowIrab;
+      });
+    }
     render();
   }
   else if(act==='open-conv'){
