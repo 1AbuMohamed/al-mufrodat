@@ -428,6 +428,11 @@ let sharedAudio=null;
 function stopPlayLines(){
   playLinesGen++;
   try{if(playLinesTimer){clearTimeout(playLinesTimer);playLinesTimer=null}}catch(e){}
+  try{
+    if(typeof document!=='undefined'&&document.querySelectorAll){
+      document.querySelectorAll('.book-dialogue .book-line').forEach(el=>el.classList.remove('line-active'));
+    }
+  }catch(e){}
 }
 function stopAllMedia(){
   audioMuted=true;
@@ -819,7 +824,14 @@ function playLines(lines,i){
   const gen=playLinesGen;
   if(audioMuted)return;
   if(gen!==playLinesGen)return;
-  if(!lines||i>=lines.length)return;
+  if(!lines||i>=lines.length){
+    try{
+      if(typeof document!=='undefined'&&document.querySelectorAll){
+        document.querySelectorAll('.book-dialogue .book-line').forEach(el=>el.classList.remove('line-active'));
+      }
+    }catch(e){}
+    return;
+  }
   const item=lines[i];
   const t=String(item&&item.ar!=null?item.ar:item||'').trim();
   const who=item&&item.who||'';
@@ -829,6 +841,18 @@ function playLines(lines,i){
     const src=localLineSrc(String(nxt&&nxt.ar!=null?nxt.ar:nxt||'').trim(), nxt&&nxt.who||'');
     if(src){try{const pre=new Audio(); pre.preload='auto'; pre.src=src}catch(e){}}
   }
+  try{
+    if(typeof document!=='undefined'&&document.querySelectorAll){
+      const lineEls=document.querySelectorAll('.book-dialogue .book-line');
+      lineEls.forEach((el, idx)=>{
+        const isActive=idx===i;
+        el.classList.toggle('line-active', isActive);
+        if(isActive&&el.scrollIntoView){
+          el.scrollIntoView({behavior:'smooth', block:'nearest'});
+        }
+      });
+    }
+  }catch(e){}
   speakDialogueLine(t, who, ()=>{
     if(gen!==playLinesGen)return;
     playLinesTimer=setTimeout(()=>{
@@ -4355,21 +4379,37 @@ function renderConv(){
   let items='';
   for(const [n,c] of units){
     const nDlg=(c.dialogues||[]).length;
-    const nPhr=(c.phrases||[]).length;
-    items+=`<button type="button" class="mvp-row" data-act="open-conv" data-u="${n}">
-      <div class="path-num" style="margin-inline-end:4px">${n}</div>
-      <div style="flex:1;text-align:start">
-        <div class="mvp-title">${esc(c.titleNl)}</div>
-        <div class="mvp-ar ar" lang="ar">${esc(c.titleAr)}</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:2px">${nDlg} ${nDlg===1?'dialoog':'dialogen'} · ${nPhr} kernzinnen</div>
+    const allSpks=[];
+    (c.dialogues||[]).forEach(d=>{
+      (d.lines||[]).forEach(l=>{
+        if(l.who && !allSpks.includes(l.who)) allSpks.push(l.who);
+      });
+    });
+    const spkPreview = allSpks.slice(0, 3).map(s => {
+      const phon = namePhonetic(s);
+      return `<span class="conv-spk-tag">${esc(s)}${phon?` <small>${esc(phon)}</small>`:''}</span>`;
+    }).join('');
+
+    items+=`<button type="button" class="conv-unit-card" data-act="open-conv" data-u="${n}">
+      <div class="conv-card-top">
+        <span class="conv-card-badge">Eenheid ${n}</span>
+        <span class="conv-card-scenes">${nDlg} ${nDlg===1?'scène':'scènes'}</span>
       </div>
-      <span class="mvp-meta">Open →</span>
+      <div class="conv-card-body">
+        <div class="conv-card-ar ar" lang="ar">${esc(c.titleAr)}</div>
+        <div class="conv-card-title">${esc(c.titleNl)}</div>
+        ${spkPreview?`<div class="conv-card-speakers">${spkPreview}</div>`:''}
+      </div>
+      <div class="conv-card-footer">
+        <span class="conv-card-cta">Start gesprek</span>
+        <span class="conv-card-arrow">→</span>
+      </div>
     </button>`;
   }
   let cont='';
   if(lastConv&&lastConv.u&&CONVERSATIONS[lastConv.u]){
     const cu=CONVERSATIONS[lastConv.u];
-    cont=`<button type="button" class="resume-row" data-act="open-conv" data-u="${lastConv.u}">
+    cont=`<button type="button" class="resume-row conv-resume-hero" data-act="open-conv" data-u="${lastConv.u}">
       <span class="resume-k">Verder</span>
       <span class="resume-t">Eenheid ${lastConv.u} · ${esc(cu.titleNl||'')}</span>
       <span class="resume-m">Open dialoog →</span>
@@ -4401,6 +4441,10 @@ function renderConvUnit(){
   state.convDi=di;
   const d=dialogs[di];
   const colorMap={};
+  const spkList=[];
+  (d.lines||[]).forEach(l=>{
+    if(l.who && !spkList.includes(l.who)) spkList.push(l.who);
+  });
   let lines='';
   (d.lines||[]).forEach((line,li)=>{
     const id=`${di}-${li}`;
@@ -4408,71 +4452,97 @@ function renderConvUnit(){
     const spk=line.who||('s'+li);
     if(!colorMap[spk])colorMap[spk]=palette[Object.keys(colorMap).length%palette.length];
     const col=colorMap[spk];
-    lines+=`<div class="book-line ${open?'open':''} ${state.convShowAll?'show-all':''}" data-act="toggle-line" data-id="${id}">
-      <div>
-        <div class="who-row">
-          <span class="who" style="background:${col}">${esc(line.who||'')}</span>
-          ${namePhonetic(line.who)?`<span class="who-phon">${esc(namePhonetic(line.who))}</span>`:''}
-        </div>
-        <div class="ar-row">
-          <div class="line-actions">
-            <button type="button" data-act="speak-line" data-text="${esc(line.ar)}" data-who="${esc(line.who||'')}" aria-label="Hoor">${GL_ICO_SPK}</button>
-            <button type="button" class="mic-btn" data-act="practice-speak" data-text="${esc(line.ar)}" data-who="${esc(line.who||'')}" aria-label="Nazeggen">${GL_ICO_MIC}</button>
+    const spkIdx=spkList.indexOf(line.who);
+    const spkRole=(spkIdx>=0?spkIdx:li)%2===0?'a':'b';
+    const initial=(line.who||'').replace(/[\u064B-\u065F\u0670\u0640\s]/g,'')[0]||(li+1);
+
+    lines+=`<div class="book-line conv-line ${open?'open':''} ${state.convShowAll?'show-all':''} spk-${spkRole}" data-act="toggle-line" data-id="${id}">
+      <div class="conv-line-inner">
+        <div class="conv-line-header">
+          <div class="conv-spk-badge">
+            <span class="conv-spk-avatar" style="background:${col}">${esc(initial)}</span>
+            <div class="conv-spk-info">
+              <span class="conv-spk-name ar" lang="ar">${esc(line.who||'')}</span>
+              ${namePhonetic(line.who)?`<span class="conv-spk-phon">${esc(namePhonetic(line.who))}</span>`:''}
+            </div>
           </div>
-          <div class="ar ar-mark" lang="ar" style="color:${col}">${markAr(line.ar, hideText?'wait':'plain')}</div>
+          <div class="line-actions conv-line-actions">
+            <button type="button" class="conv-act-btn" data-act="speak-line" data-text="${esc(line.ar)}" data-who="${esc(line.who||'')}" title="Beluister zin" aria-label="Hoor">${GL_ICO_SPK}</button>
+            <button type="button" class="conv-act-btn mic-btn" data-act="practice-speak" data-text="${esc(line.ar)}" data-who="${esc(line.who||'')}" title="Nazeggen met microfoon" aria-label="Nazeggen">${GL_ICO_MIC}</button>
+          </div>
         </div>
-        <div class="nl">${esc(line.nl)}</div>
+        <div class="conv-line-body">
+          <div class="ar ar-mark conv-ar" lang="ar">${markAr(line.ar, hideText?'wait':'plain')}</div>
+          <div class="nl conv-nl">${esc(line.nl)}</div>
+        </div>
       </div>
     </div>`;
   });
+
   const bannerSrc=(showPics&&(d.image||c.image))?(d.image||c.image):'';
   const banner=bannerSrc?`<div class="conv-banner"><img src="${bannerSrc}" alt="" loading="lazy" referrerpolicy="no-referrer"/><div class="conv-banner-fade"></div></div>`:'';
   const dots=dialogs.map((_,i)=>`<button type="button" class="conv-dot ${i===di?'on':''}" data-act="conv-di" data-dir="set" data-i="${i}" aria-label="Dialoog ${i+1}"></button>`).join('');
-  return`<div class="desktop-narrow">
-    <button class="back" data-act="nav" data-v="conv" style="margin-bottom:8px"><span>←</span> Terug</button>
-    ${banner}
-    <div class="hub-toolbar">
-      <div>
-        <div class="mvp-kicker">Eenheid ${n} · ${di+1}/${total}</div>
-        <h2 class="mvp-h" style="margin:0">${esc(d.titleNl||c.titleNl)}</h2>
-      </div>
-      <span class="grow"></span>
-      <button class="btn btn-secondary btn-sm" data-act="toggle-all-trans">${state.convShowAll?'NL uit':'NL aan'}</button>
+
+  const sceneTabs=total>1?`
+    <div class="conv-scene-tabs" role="tablist">
+      ${dialogs.map((dg, i)=>{
+        const isCur=i===di;
+        const spks=Array.from(new Set((dg.lines||[]).map(l=>l.who).filter(Boolean)));
+        const spkStr=spks.slice(0, 2).map(s=>namePhonetic(s)||s).join(' & ');
+        let label=dg.titleNl||`Scène ${i+1}`;
+        label=label.replace(/^Hoofdstuk\s*\d+\s*-\s*Dialoog\s*\d+\s*/i,'').replace(/^Dialoog\s*-\s*/i,'').replace(/\s*–\s*/g,' – ');
+        return `<button type="button" class="conv-scene-tab ${isCur?'active':''}" data-act="conv-di" data-dir="set" data-i="${i}" role="tab" aria-selected="${isCur}">
+          <span class="conv-tab-num">Scène ${i+1}</span>
+          <span class="conv-tab-label">${esc(label || spkStr || `Deel ${i+1}`)}</span>
+        </button>`;
+      }).join('')}
+    </div>`:'';
+
+  return`<div class="desktop-narrow conv-unit-view">
+    <div class="conv-top-bar">
+      <button class="back" data-act="nav" data-v="conv"><span>←</span> Terug naar Dialogen</button>
+      <div class="conv-top-unit-tag">Eenheid ${n} · ${di+1} van ${total}</div>
     </div>
+
+    <div class="conv-hero-card">
+      ${banner}
+      <div class="conv-hero-content">
+        <div class="conv-hero-kicker">Eenheid ${n} · Conversatieles</div>
+        <h1 class="conv-hero-ar ar" lang="ar">${esc(c.titleAr)}</h1>
+        <div class="conv-hero-nl">${esc(d.titleNl||c.titleNl)}</div>
+        ${d.instruction?`<div class="conv-instruction"><span class="conv-inst-icon">ℹ️</span> <span class="ar" lang="ar">${esc(d.instruction)}</span> <span class="conv-inst-sub">(Kijk, luister en herhaal)</span></div>`:''}
+      </div>
+    </div>
+
+    ${sceneTabs}
+
+    <div class="conv-control-bar">
+      <div class="conv-ctrl-left">
+        <button class="btn btn-primary btn-sm conv-ctrl-btn" data-act="speak-dialogue" data-u="${n}" data-di="${di}">${GL_ICO_SPK} Beluister gesprek</button>
+        <button class="btn btn-secondary btn-sm conv-ctrl-btn" data-act="practice-dialogue" data-u="${n}" data-di="${di}">${GL_ICO_MIC} Oefen dialoog</button>
+      </div>
+      <div class="conv-ctrl-right">
+        <button class="btn btn-ghost btn-sm conv-ctrl-btn" data-act="toggle-all-trans">${state.convShowAll?'🇳🇱 NL uit':'🇳🇱 NL aan'}</button>
+        <button class="btn btn-ghost btn-sm conv-ctrl-btn" data-act="toggle-hide">${hideText?'Tekst aan':'Verberg'}</button>
+      </div>
+    </div>
+
     <div class="book-dialogue-wrap">
       <div class="book-dialogue ${hideText?'hide-ar':''}">
-        ${lines}
-        <div class="mvp-actions">
-          <button class="btn btn-primary btn-sm" data-act="speak-dialogue" data-u="${n}" data-di="${di}">Beluister</button>
-          <button class="btn btn-secondary btn-sm" data-act="practice-dialogue" data-u="${n}" data-di="${di}">Oefen</button>
-          <button class="btn btn-ghost btn-sm" data-act="toggle-hide">${hideText?'Tekst aan':'Verberg'}</button>
+        <div class="conv-lines-stack">
+          ${lines}
         </div>
-        <div class="dlg-practice-result" style="width:100%;margin-top:6px"></div>
+        <div class="dlg-practice-result" style="width:100%;margin-top:12px"></div>
         ${tarteelLeg()}
       </div>
     </div>
+
     <div class="conv-nav">
-      <button class="btn btn-secondary" data-act="conv-di" data-dir="prev" ${di<=0?'disabled':''}>← Vorige</button>
+      <button class="btn btn-secondary" data-act="conv-di" data-dir="prev" ${di<=0?'disabled':''}>← Vorige scène</button>
       <div class="conv-dots">${dots}</div>
-      <button class="btn btn-primary" data-act="conv-di" data-dir="next" ${di>=total-1?'disabled':''}>Volgende →</button>
+      <button class="btn btn-primary" data-act="conv-di" data-dir="next" ${di>=total-1?'disabled':''}>Volgende scène →</button>
     </div>
-    ${(c.phrases&&c.phrases.length)?`
-    <div class="card" style="margin-top:16px">
-      <h3 style="font-size:15px;font-weight:700;margin-bottom:4px">Kernzinnen uit deze eenheid</h3>
-      <p style="font-size:12px;color:var(--muted);margin-bottom:8px">Tik op een zin voor de vertaling · klik op de luidspreker om te luisteren</p>
-      <div class="book-phrases">
-        ${c.phrases.map((ph,pi)=>{
-          const pOpen=!!(state.convOpen&&state.convOpen['p-'+pi])||!!state.convShowAll;
-          return `<div class="row ${pOpen?'open':''}" data-act="toggle-line" data-id="p-${pi}">
-            <div>
-              <div class="ar ar-mark" lang="ar">${markAr(ph.ar,'plain')}</div>
-              <div class="nl">${esc(ph.nl)}</div>
-            </div>
-            <button type="button" class="icon-btn" style="width:34px;height:34px" data-act="speak-text" data-text="${esc(ph.ar)}" aria-label="Hoor">${GL_ICO_SPK}</button>
-          </div>`;
-        }).join('')}
-      </div>
-    </div>`:''}</div>`;
+  </div>`;
 }
 
 
