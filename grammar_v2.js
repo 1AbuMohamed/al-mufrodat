@@ -1138,7 +1138,7 @@ function renderInteractiveParse(s, kicker, x){
           <span class="focus-label">Ontleed woord <b>${ps.wi + 1}</b> van <b>${words.length}</b></span>
           <div class="ar focus-word" lang="ar">«${arHtml(curWord.ar)}»</div>
         </div>
-        ${spk(curWord.ar, '🔊')}
+        ${spk(curWord.ar)}
       </div>
 
       <div class="g2-parse-section">
@@ -1307,7 +1307,7 @@ function renderIrabStudio(){
           <span class="focus-label">Ontleed woord <b>${ps.wi + 1}</b> van <b>${words.length}</b></span>
           <div class="ar focus-word" lang="ar">«${arHtml(curWord.ar)}»</div>
         </div>
-        ${spk(curWord.ar, '🔊')}
+        ${spk(curWord.ar)}
       </div>
 
       <div class="g2-parse-section">
@@ -1427,9 +1427,14 @@ function renderIrabStudio(){
     </div>
 
     <div class="g2-head">
-      <div class="g2-eyebrow">Interactieve Trainer (MVP) · Al-Manarah & Medina</div>
+      <div class="g2-eyebrow">Interactieve Trainer (MVP) · Al-Manarah &amp; Medina</div>
       <h1>Zinsontleder · Iʿrāb Studio</h1>
-      <p>Ontleed stap voor stap alle 8 examenzinnen woord voor woord op de 3 pijlers: <b>1. Functie</b>, <b>2. Status</b> en <b>3. Harakah</b>.</p>
+      <p>Ontleed stap voor stap alle ${ALL_IRAB_SENTENCES.length} examenzinnen woord voor woord op de 3 pijlers: <b>1. Functie</b>, <b>2. Status</b> en <b>3. Harakah</b>.</p>
+      <div class="g2-studio-guide">
+        <div class="g2-sguide-step"><span>1</span><div><b>Functie (الْوَظِيفَة)</b><small>Wat doet het woord? (bv. Moebtada, Gabr, Moedaf)</small></div></div>
+        <div class="g2-sguide-step"><span>2</span><div><b>Status (الْحَالَة)</b><small>Welke naamval? (Marfūʿ = nom., Majrūr = gen.)</small></div></div>
+        <div class="g2-sguide-step"><span>3</span><div><b>Harakah (الْحَرَكَة)</b><small>Welk klinkerteken staat op de laatste letter?</small></div></div>
+      </div>
     </div>
 
     <!-- Category selector tabs -->
@@ -1569,13 +1574,44 @@ function prepDrill(){
 }
 
 /* ---------- renderers ---------- */
+function renderLessonNavBar(n){
+  const s = S();
+  if(s.view !== 'node') return '';
+  const ns = nodes(n);
+  return `<nav class="g2-lnav" aria-label="Onderdelen van deze les">
+    <button type="button" class="g2-lnav-pill ${s.view==='map'?'on':''}" data-act="g2-map">Overzicht</button>
+    ${ns.map((nd, idx) => {
+      const isCur = s.view === 'node' && s.node === idx;
+      const isDone = nodeDone(n, nd);
+      const shortLbl = nd.k === 'step' ? `Regel ${nd.i + 1}` : (nd.k === 'vocab' ? 'Woorden' : nd.k === 'book' ? 'Boekoef.' : nd.k === 'test' ? 'Eindtoets' : 'Herhaling');
+      return `<button type="button" class="g2-lnav-pill ${isCur?'on':''} ${isDone?'done':''}" data-act="g2-node" data-i="${idx}" title="${E(nd.t)}">
+        ${isDone && !isCur ? '<span class="lnav-chk">✓</span>' : ''}${E(shortLbl)}
+      </button>`;
+    }).join('')}
+  </nav>`;
+}
+
 function head(n, sub){
   const g=L[n]||{};
+  const s=S();
+  const isNode = (s.n === Number(n) && s.view === 'node');
   const autoOn = P.autoAdvance !== false;
   const sfxOn = P.sfx !== false;
   const irabOn = !!P.inlineIrab;
+  const i0 = KEYS.indexOf(Number(n));
+  const prevL = i0 > 0 ? KEYS[i0 - 1] : undefined;
+  const nextL = i0 >= 0 && i0 + 1 < KEYS.length ? KEYS[i0 + 1] : undefined;
+
   return `<div class="g2-top">
-    <button class="back" data-act="g2-hub" style="margin:0"><span>←</span> Alle lessen</button>
+    ${isNode
+      ? `<button type="button" class="back" data-act="g2-map" style="margin:0"><span>←</span> ${n===0?'Inleiding':'Les '+n}</button>
+         <button type="button" class="g2-crumb-btn" data-act="g2-hub">Alle lessen</button>`
+      : `<button type="button" class="back" data-act="g2-hub" style="margin:0"><span>←</span> Alle lessen</button>
+         <div class="g2-prevnext-les">
+           ${prevL!==undefined ? `<button type="button" class="g2-crumb-btn" data-act="g2-open" data-l="${prevL}">‹ ${prevL===0?'Inl.':'Les '+prevL}</button>` : ''}
+           ${nextL!==undefined ? `<button type="button" class="g2-crumb-btn" data-act="g2-open" data-l="${nextL}">${nextL===24?'Reader 8':'Les '+nextL} ›</button>` : ''}
+         </div>`
+    }
     <span class="grow"></span>
     <button type="button" class="g2-pill-btn ${irabOn?'active':''}" data-act="g2-toggle-irab" title="Toon automatisch zinsontleding (Moebtada / Gabr) bij oefeningen">
       ${irabOn?'Ontleden: aan':'Ontleden: uit'}
@@ -1588,10 +1624,15 @@ function head(n, sub){
     </button>
   </div>
   <div class="g2-head">
-    <div class="g2-eyebrow">${n===24?'Madinah Arabic Reader 8':'Medina Deel 1'} · ${n===0?'Inleiding':'Les '+n} · blz. ${E(g.pages||'')}</div>
-    <h1>${E(SHORT_TITLES[n]||shortTitle(g.title||''))}</h1>
-    ${g.titleAr?`<div class="g2-titlear ar" lang="ar">${arHtml(g.titleAr)}</div>`:''}
+    <div class="g2-head-row">
+      <div>
+        <div class="g2-eyebrow">${n===24?'Madinah Arabic Reader 8':'Medina Deel 1'} · ${n===0?'Inleiding':'Les '+n} · blz. ${E(g.pages||'')}</div>
+        <h1>${E(SHORT_TITLES[n]||shortTitle(g.title||''))}</h1>
+      </div>
+      ${g.titleAr?`<div class="g2-titlear ar" lang="ar">${arHtml(g.titleAr)}</div>`:''}
+    </div>
     ${sub||''}
+    ${renderLessonNavBar(n)}
   </div>`;
 }
 
@@ -1643,7 +1684,8 @@ const SHORT_TITLES = {
 function renderHub(){
   const s=S();
   if(s.view === 'irab_studio') return renderIrabStudio();
-  s.hubFilter = (s.hubFilter==='busy'||s.hubFilter==='done') ? s.hubFilter : 'all';
+  const validPillars = PILLARS.map(p=>p.id);
+  if(s.hubFilter!=='busy' && s.hubFilter!=='done' && !validPillars.includes(s.hubFilter)) s.hubFilter = 'all';
   s.hubSearch = s.hubSearch || '';
 
   const done=KEYS.filter(lessonPassed).length;
@@ -1653,6 +1695,10 @@ function renderHub(){
   let filteredKeys = KEYS;
   if(s.hubFilter === 'done') filteredKeys = filteredKeys.filter(n => lessonPassed(n));
   else if(s.hubFilter === 'busy') filteredKeys = filteredKeys.filter(n => !lessonPassed(n));
+  else if(validPillars.includes(s.hubFilter)){
+    const plObj = PILLARS.find(p => p.id === s.hubFilter);
+    if(plObj) filteredKeys = filteredKeys.filter(n => plObj.lessons.includes(n));
+  }
   if(s.hubSearch){
     const q = s.hubSearch.toLowerCase().trim();
     filteredKeys = filteredKeys.filter(n => {
@@ -1668,11 +1714,16 @@ function renderHub(){
     const cls=passed?'done':p>0?'busy':'new';
     const lbl=passed?'Afgerond':n===nextN?'Aanbevolen':p>0?p+'%':'Nieuw';
     const cleanTitle = SHORT_TITLES[n] || g.title || '';
+    const stepCt = (g.steps||[]).length;
+    const vocCt = (g.vocab||[]).length;
     return `<button type="button" class="g2-lesson ${cls} ${n===nextN&&!passed?'next':''}" data-act="g2-open" data-l="${n}">
       <span class="g2-num">${passed?ICO.check:String(n).padStart(2,'0')}</span>
       <span class="g2-lbody">
-        <span class="g2-lmeta">${n===0?'Inleiding':n===24?'Reader 8':'Les '+n} · blz. ${E(g.pages||'')} · ${lbl}</span>
-        <span class="g2-ltitle">${E(cleanTitle)}</span>
+        <span class="g2-lmeta">${n===0?'Inleiding':n===24?'Reader 8':'Les '+n} · blz. ${E(g.pages||'')} · ${stepCt} ${stepCt===1?'regel':'regels'}${vocCt?' · '+vocCt+' woorden':''} · <b>${lbl}</b></span>
+        <span class="g2-ltitle-row">
+          <span class="g2-ltitle">${E(cleanTitle)}</span>
+          ${g.titleAr?`<span class="g2-lar-badge ar" lang="ar">${arHtml(g.titleAr)}</span>`:''}
+        </span>
         <span class="g2-lbar"><i style="width:${p}%"></i></span>
       </span>
       <span class="g2-nchev">›</span>
@@ -1691,20 +1742,63 @@ function renderHub(){
     </section>`;
   }).join('');
 
+  const refSheet = `<details class="g2-ref-sheet" ${s.hubRefOpen?'open':''}>
+    <summary class="g2-ref-summary" data-act="g2-toggle-ref">
+      <div>
+        <span class="g2-kicker" style="margin:0">Altijd bij de hand · Spiekkaart</span>
+        <strong>De 6 Grammatica-Kernregels (Moebtada, Gabr, Idāfah, Voorzetsels, Naʿt &amp; Diptoot)</strong>
+      </div>
+      <span class="g2-ref-toggle-lbl">Overzicht tonen / sluiten ▾</span>
+    </summary>
+    <div class="g2-ref-grid">
+      <div class="g2-ref-card rc-mubtada">
+        <div class="g2-ref-top"><span class="ar" lang="ar">١. الْمُبْتَدَأ</span><b>Moebtada (Onderwerp)</b></div>
+        <p>Het naamwoord waarmee een nominale zin begint. Is vrijwel altijd <b>bepaald</b> en staat in <b>Marfūʿ (-u)</b>.</p>
+        <div class="g2-ref-ex"><span class="ar" lang="ar"><b>الْبَيْتُ</b> كَبِيرٌ</span><small>Het huis is groot</small></div>
+      </div>
+      <div class="g2-ref-card rc-khabar">
+        <div class="g2-ref-top"><span class="ar" lang="ar">٢. الْخَبَر</span><b>Gabr / Khabar (Gezegde)</b></div>
+        <p>Vertelt iets over de Moebtada (wat het onderwerp is). Is meestal <b>onbepaald</b> en staat in <b>Marfūʿ (-un)</b>.</p>
+        <div class="g2-ref-ex"><span class="ar" lang="ar">الْبَيْتُ <b>كَبِيرٌ</b></span><small>krijgt tanwīn dammah (-un)</small></div>
+      </div>
+      <div class="g2-ref-card rc-idafah">
+        <div class="g2-ref-top"><span class="ar" lang="ar">٣. الْإِضَافَة</span><b>Moedaf &amp; Moedaf Ilayh (Bezit)</b></div>
+        <p>1e woord (<b>Moedaf</b>): géén <span class="ar" lang="ar">الْ</span> en géén tanwīn. 2e woord (<b>Moedaf Ilayh</b>): altijd <b>Majrūr (-i / -in)</b>.</p>
+        <div class="g2-ref-ex"><span class="ar" lang="ar"><b>كِتَابُ</b> <b>الْمُدَرِّسِ</b></span><small>het boek van de leraar</small></div>
+      </div>
+      <div class="g2-ref-card rc-jarr">
+        <div class="g2-ref-top"><span class="ar" lang="ar">٤. حَرْفُ جَرٍّ</span><b>Voorzetsel + Ism Majrūr</b></div>
+        <p>Na voorzetsels (<span class="ar" lang="ar">فِي، عَلَى، مِنْ، إِلَى</span>) eindigt het woord erachter altijd op een <b>Kasrah (-i)</b>.</p>
+        <div class="g2-ref-ex"><span class="ar" lang="ar">فِي <b>الْمَسْجِدِ</b></span><small>in de moskee (-i)</small></div>
+      </div>
+      <div class="g2-ref-card rc-naat">
+        <div class="g2-ref-top"><span class="ar" lang="ar">٥. النَّعْت وَالْمَنْعُوت</span><b>Bijvoeglijk Naamwoord</b></div>
+        <p>Het bijvoeglijk naamwoord (<b>Naʿt</b>) komt ná het zelfstandig naamwoord en volgt het in lidwoord, geslacht, getal én naamval.</p>
+        <div class="g2-ref-ex"><span class="ar" lang="ar">بَيْتٌ <b>جَدِيدٌ</b> · الْبَيْتُ <b>الْجَدِيدُ</b></span><small>volgt in alles</small></div>
+      </div>
+      <div class="g2-ref-card rc-other">
+        <div class="g2-ref-top"><span class="ar" lang="ar">٦. الْمَمْنُوعُ مِنَ الصَّرْفِ</span><b>Diptoot (Zonder Tanwīn)</b></div>
+        <p>Bepaalde namen en meervouden krijgen <b>nooit tanwīn</b> en krijgen in de genitief een <b>Fathah (-a)</b> i.p.v. kasrah.</p>
+        <div class="g2-ref-ex"><span class="ar" lang="ar">مِنْ <b>مَكَّةَ</b> · فِي <b>مَسَاجِدَ</b></span><small>fathah (-a) na voorzetsel</small></div>
+      </div>
+    </div>
+  </details>`;
+
   return `<div class="desktop-page g2">
     <div class="g2-hero">
       <div>
         <div class="g2-eyebrow">Grammatica · leerpad</div>
         <h1>Medina Deel 1 + Reader 8</h1>
-        <p>Per les: <b>leer de regel</b>, <b>bekijk voorbeelden</b>, <b>oefen direct</b>, maak de <b>boekoefeningen</b> en sluit af met een <b>eindtoets</b>. Alles staat open: volg de aanbevolen volgorde of spring naar wat je nodig hebt.</p>
+        <p>Per les: <b>1. Leer de regel</b>, <b>2. Bekijk &amp; ontleed voorbeelden</b>, <b>3. Oefen direct</b>, maak de <b>boekoefeningen</b> en sluit af met een <b>eindtoets</b>.</p>
       </div>
       <div class="g2-hero-stat"><b>${done}</b><span>/ ${KEYS.length} lessen afgerond</span><div class="g2-lbar"><i style="width:${pct}%"></i></div></div>
     </div>
     <div class="g2-cta-row">
       ${nextN!==undefined?`<button type="button" class="g2-cta primary" data-act="g2-open" data-l="${nextN}"><span>Ga verder</span><b>${nextN===0?'Inleiding':'Les '+nextN} · ${E(SHORT_TITLES[nextN] || L[nextN].title)}</b></button>`:''}
       <button type="button" class="g2-cta irab" data-act="g2-open-irab"><span>Interactief · MVP</span><b>Zinsontleder · Iʿrāb Studio</b></button>
-      <button type="button" class="g2-cta" data-act="nav" data-v="exam"><span>Examen</span><b>Al-Manarah · Les 1 t/m 7 (100 punten)</b></button>
+      <button type="button" class="g2-cta" data-act="nav" data-v="exam"><span>Examen</span><b>Al-Manarah · Les 1 t/m 7 (100 pt)</b></button>
     </div>
+    ${refSheet}
     <div class="g2-hub-toolbar">
       <div class="g2-hub-tabs">
         <button type="button" class="g2-tab ${s.hubFilter==='all'?'active':''}" data-act="g2-hub-filter" data-f="all">Alle (${KEYS.length})</button>
@@ -1712,9 +1806,12 @@ function renderHub(){
         <button type="button" class="g2-tab ${s.hubFilter==='done'?'active':''}" data-act="g2-hub-filter" data-f="done">Afgerond (${done})</button>
       </div>
       <div class="g2-hub-search-wrap">
-        <input type="search" class="g2-search-input" placeholder="Zoek een onderwerp..." value="${E(s.hubSearch||'')}" data-act="g2-hub-search">
+        <input type="search" class="g2-search-input" placeholder="Zoek op les of onderwerp (bv. idafah, meervoud)..." value="${E(s.hubSearch||'')}" data-act="g2-hub-search">
         ${s.hubSearch ? `<button type="button" class="g2-search-clear" data-act="g2-hub-clear-search">×</button>` : ''}
       </div>
+    </div>
+    <div class="g2-pillar-bar">
+      ${PILLARS.map(pl => `<button type="button" class="g2-pillar-chip ${s.hubFilter===pl.id?'active':''}" data-act="g2-pillar" data-pid="${pl.id}">${E(pl.name)} <small>(${pl.lessons.length})</small></button>`).join('')}
     </div>
     ${groups || `<div class="g2-empty-state"><p>Geen lessen gevonden voor deze selectie.</p><button type="button" class="btn btn-secondary btn-sm" data-act="g2-hub-reset">Toon alle lessen</button></div>`}
   </div>`;
@@ -1790,36 +1887,148 @@ function renderExamples(list, hideNl, prefixKey){
     const isOpen = !!(st && st.open);
     return `<div class="g2-exitem ${isOpen?'irab-open':''}">
       <div class="g2-exrow">
-        ${spk(e.ar)}
-        <span class="g2-exar ar" lang="ar">${arHtml(e.ar)}</span>
-        <span class="g2-exnl ${hideNl?'hid':''}" ${hideNl?`data-act="g2-reveal" data-i="${i}"`:''}>${hideNl?'tik om te tonen':mix(e.nl||'')}</span>
-        ${parsed ? `<button type="button" class="g2-irab-btn ${isOpen?'active':''}" data-act="iirab-toggle" data-key="${E(itemKey)}" data-sent="${E(e.ar)}" title="Zinsontleding (Moebtada / Gabr)"><span class="ar" lang="ar">إعراب</span> <span>${isOpen?'Sluit':'Ontleed'}</span></button>` : ''}
+        <div class="g2-ex-main">
+          ${spk(e.ar)}
+          <span class="g2-exar ar" lang="ar" dir="rtl">${arHtml(e.ar)}</span>
+        </div>
+        <div class="g2-ex-sub">
+          <span class="g2-exnl ${hideNl?'hid':''}" ${hideNl?`data-act="g2-reveal" data-i="${i}"`:''}>${hideNl?'Tik om vertaling te tonen':mix(e.nl||'')}</span>
+          ${parsed ? `<button type="button" class="g2-irab-btn ${isOpen?'active':''}" data-act="iirab-toggle" data-key="${E(itemKey)}" data-sent="${E(e.ar)}" title="Zinsontleding (Moebtada / Gabr)"><span class="ar" lang="ar">إعراب</span> <span>${isOpen?'Sluit':'Ontleed'}</span></button>` : ''}
+        </div>
       </div>
       ${isOpen ? renderInlineIrab(e.ar, itemKey, st.mode) : ''}
     </div>`;
   }).join('')}</div>`;
 }
 
-function phaseBar(s){
-  const ph=['rule','see','do']; const lbl={rule:'1 · Leren',see:'2 · Voorbeelden',do:'3 · Oefenen'};
-  const cur=ph.indexOf(s.phase);
-  return `<div class="g2-phases">${ph.map((p,i)=>`<span class="${i===cur?'on':i<cur?'done':''}">${lbl[p]}</span>`).join('')}</div>`;
+function phaseBar(s, st){
+  const hasEx = st && Array.isArray(st.examples) && st.examples.length > 0;
+  const drillCt = stepDrills(s.n, s.si).length;
+  const ph = hasEx ? ['rule','see','do'] : ['rule','do'];
+  const lbl = {
+    rule: '1 · Uitleg & Regel',
+    see: `2 · Voorbeelden (${(st.examples||[]).length})`,
+    do: `${hasEx?'3':'2'} · Oefenen (${drillCt})`
+  };
+  const cur = ph.indexOf(s.phase);
+  return `<div class="g2-phases" style="grid-template-columns:repeat(${ph.length},1fr)">${ph.map((p,i)=>`<button type="button" class="g2-phase-btn ${i===cur?'on':i<cur?'done':''}" data-act="g2-phase" data-p="${p}">${lbl[p]}</button>`).join('')}</div>`;
+}
+
+function renderStructuredRuleText(st, n, si){
+  let rawList = Array.isArray(st.text) ? st.text.slice() : [];
+  if(Number(n) === 1 && si === 0 && rawList.length <= 1){
+    rawList = [
+      'In deze eerste les leer je korte Arabische nominale zinnen maken met het aanwijzend voornaamwoord «هٰذَا» (dit / deze) voor mannelijk enkelvoud dichtbij.',
+      '1. «هٰذَا بَيْتٌ» (Dit is een huis): «هٰذَا» is het onderwerp (مُبْتَدَأ · Moebtada) en «بَيْتٌ» is het gezegde (خَبَر · Gabr/Khabar) met tanwīn dammah (-un).',
+      '2. «مَا هٰذَا؟» (Wat is dit?): gebruik «مَا» om te vragen naar dingen of voorwerpen.',
+      '3. «مَنْ هٰذَا؟» (Wie is dit?): gebruik «مَنْ» om te vragen naar personen.',
+      '4. «أَهٰذَا بَيْتٌ؟» (Is dit een huis?): zet «أَ» vóór de zin om er een ja/nee-vraag van te maken. Antwoord met «نَعَمْ» (ja) of «لَا» (nee).'
+    ];
+  }
+
+  const blocks = [];
+  let leadUsed = false;
+  let curSteps = [];
+  let curBullets = [];
+
+  const flushSteps = () => {
+    if(curSteps.length){
+      blocks.push(`<div class="g2-rule-steps">${curSteps.join('')}</div>`);
+      curSteps = [];
+    }
+  };
+  const flushBullets = () => {
+    if(curBullets.length){
+      blocks.push(`<div class="g2-rule-bullets">${curBullets.join('')}</div>`);
+      curBullets = [];
+    }
+  };
+
+  for(const raw of rawList){
+    const p = String(raw || '').trim();
+    if(!p) continue;
+    if(/^(?:Merk op|Voorbeeld|Voorbeelden|In deze les leren we het volgende)\s*:?\s*$/i.test(p)) continue;
+
+    if(isAr(p)){
+      flushSteps(); flushBullets();
+      blocks.push(`<div class="g2-arp ar" lang="ar" dir="rtl">${arHtml(p)} ${spk(p)}</div>`);
+      continue;
+    }
+
+    const numMatch = p.match(/^(\d+)[.)]\s+([\s\S]+)$/);
+    if(numMatch){
+      flushBullets();
+      curSteps.push(`<div class="g2-rule-step">
+        <span class="g2-rstep-num">${E(numMatch[1])}</span>
+        <div class="g2-rstep-body">${mix(numMatch[2])}</div>
+      </div>`);
+      continue;
+    }
+
+    const bulMatch = p.match(/^[•\-]\s*([\s\S]+)$/);
+    if(bulMatch){
+      flushSteps();
+      curBullets.push(`<div class="g2-rule-bullet">
+        <span class="g2-rbul-dot">◆</span>
+        <div class="g2-rbul-body">${mix(bulMatch[1])}</div>
+      </div>`);
+      continue;
+    }
+
+    flushSteps(); flushBullets();
+
+    if(/^(?:Voetnoot|Belangrijke regel|Let goed op|Let op)/i.test(p) || p.includes('NOOIT')){
+      blocks.push(`<div class="g2-rule-callout">
+        <span class="g2-callout-tag">Let op · Kernregel</span>
+        <div class="g2-callout-body">${mix(p)}</div>
+      </div>`);
+      continue;
+    }
+
+    if(!leadUsed){
+      leadUsed = true;
+      blocks.push(`<div class="g2-rule-lead">${mix(p)}</div>`);
+    } else {
+      blocks.push(`<p class="g2-rule-p">${mix(p)}</p>`);
+    }
+  }
+  flushSteps();
+  flushBullets();
+  return `<div class="g2-rule-content">${blocks.join('')}</div>`;
 }
 
 function renderStep(n){
   const s=S(), st=L[n].steps[s.si];
   const nTot=L[n].steps.length;
+  const ex = st.examples || [];
+  const drillCt = stepDrills(n, s.si).length;
   let body='';
   if(s.phase==='rule'){
+    const showInlineEx = ex.length > 0;
+    const previewEx = (st.table && ex.length > 3) ? ex.slice(0, 3) : ex;
+    const hasMoreEx = ex.length > previewEx.length;
+    const prefixKey = `rex_${n}_${s.si}`;
     body=`<div class="g2-card">
       <div class="g2-kicker">Regel ${s.si+1} van ${nTot} · blz. ${E(st.page||'')}</div>
       <h2>${E(shortTitle(st.title))}</h2>
-      ${(st.text||[]).map(p=>isAr(p)?`<p class="g2-arp ar" lang="ar">${arHtml(p)}</p>`:`<p>${mix(p)}</p>`).join('')}
+      ${renderStructuredRuleText(st, n, s.si)}
       ${renderTable(st.table)}
-      <div class="g2-actions"><button class="btn btn-primary" data-act="g2-phase" data-p="${(st.examples||[]).length?'see':'do'}" data-gl="next">${(st.examples||[]).length?'Bekijk de voorbeelden →':'Pas de regel toe →'}</button></div>
+      ${showInlineEx ? `<div class="g2-rule-ex-preview">
+        <div class="g2-rule-ex-head">
+          <div>
+            <span class="g2-kicker" style="margin:0">Directe toepassing in zinnen</span>
+            <h4>Voorbeelden bij deze regel ${hasMoreEx ? `(${previewEx.length} van ${ex.length})` : `(${ex.length})`}</h4>
+          </div>
+          ${hasMoreEx ? `<button type="button" class="btn btn-secondary btn-sm" data-act="g2-phase" data-p="see">Alle ${ex.length} voorbeelden →</button>` : ''}
+        </div>
+        ${renderExamples(previewEx, false, prefixKey)}
+      </div>` : ''}
+      <div class="g2-actions">
+        ${ex.length ? `<button type="button" class="btn btn-secondary" data-act="g2-phase" data-p="see">Voorbeelden &amp; Zinsontleding (${ex.length})</button>` : ''}
+        <button type="button" class="btn btn-primary" data-act="g2-phase" data-p="${drillCt?'do':(ex.length?'see':'do')}" data-gl="next">${drillCt?`Oefen deze regel (${drillCt} vragen) →`:(ex.length?'Bekijk voorbeelden →':'Stap afronden →')}</button>
+      </div>
     </div>`;
   }else if(s.phase==='see'){
-    const ex=st.examples||[];
     const prefixKey = `ex_${n}_${s.si}`;
     const hasParseableEx = ex.some(e => !!analyzeArabicSentence(e.ar));
     body=`<div class="g2-card">
@@ -1827,7 +2036,7 @@ function renderStep(n){
       <h2>${E(shortTitle(st.title))}</h2>
       <p class="g2-hint">Lees hardop, luister en ontleed de zinnen zoals in de les (Moebtada, Gabr/Khabar, Moedaf, Voorzetsel).</p>
       <div class="g2-tools">
-        <button type="button" class="btn btn-ghost btn-sm" data-act="g2-hide">${s.hideNl?'Toon vertalingen':'Verberg vertalingen'}</button>
+        <button type="button" class="btn ${s.hideNl?'btn-primary':'btn-secondary'} btn-sm" data-act="g2-hide">${s.hideNl?'Toon vertalingen':'Verberg vertalingen'}</button>
         ${hasParseableEx ? `
           <button type="button" class="btn ${s.exIrabMode==='view'?'btn-primary':'btn-secondary'} btn-sm" data-act="g2-ex-irab-all" data-prefix="${E(prefixKey)}" data-mode="view"><span class="ar" lang="ar">إعراب</span> · ${s.exIrabMode==='view'?'Verberg ontledingen':'Toon alle ontledingen'}</button>
           <button type="button" class="btn ${s.exIrabMode==='quiz'?'btn-primary':'btn-secondary'} btn-sm" data-act="g2-ex-irab-all" data-prefix="${E(prefixKey)}" data-mode="quiz">Zelf ontleden (Oefenmodus)</button>
@@ -1835,8 +2044,8 @@ function renderStep(n){
       </div>
       ${renderExamples(ex, s.hideNl, prefixKey)}
       <div class="g2-actions">
-        <button class="btn btn-secondary" data-act="g2-phase" data-p="rule">← Regel</button>
-        <button class="btn btn-primary" data-act="g2-phase" data-p="do" data-gl="next">${s.queue.length?'Pas de regel toe →':'Stap afronden →'}</button>
+        <button class="btn btn-secondary" data-act="g2-phase" data-p="rule">← Terug naar uitleg</button>
+        <button class="btn btn-primary" data-act="g2-phase" data-p="do" data-gl="next">${drillCt?`Oefen deze regel (${drillCt}) →`:'Stap afronden →'}</button>
       </div>
     </div>`;
   }else{
@@ -1846,12 +2055,95 @@ function renderStep(n){
       <div class="g2-actions"><button class="btn btn-primary" data-act="g2-finish" data-gl="next">Verder in de les →</button></div>
     </div>`;
   }
-  const dots=L[n].steps.map((_,i)=>`<button type="button" class="g2-sdot ${i===s.si?'on':lp(n).steps[i]?'done':''}" data-act="g2-node" data-i="${nodes(n).findIndex(x=>x.k==='step'&&x.i===i)}" aria-label="Regel ${i+1}">${i+1}</button>`).join('');
   return `<div class="desktop-narrow g2">
     ${head(n)}
-    <div class="g2-stepper"><span>Regel ${s.si+1} van ${nTot}</span><div class="g2-sdots">${dots}</div></div>
-    ${phaseBar(s)}
+    ${phaseBar(s, st)}
     ${body}
+  </div>`;
+}
+
+const HARAKAH_MAP = {
+  '\u064F': { sym: 'ـُ', name: 'Dammah (-u)', arName: 'ضَمَّة', hint: '1 dammah · zonder tanwīn' },
+  '\u064C': { sym: 'ـٌ', name: 'Tanwīn dammah (-un)', arName: 'تَنْوِين ضَمّ', hint: '2 dammah\'s · onbepaald' },
+  '\u0650': { sym: 'ـِ', name: 'Kasrah (-i)', arName: 'كَسْرَة', hint: '1 kasrah · genitief (majrūr)' },
+  '\u064D': { sym: 'ـٍ', name: 'Tanwīn kasrah (-in)', arName: 'تَنْوِين كَسْر', hint: '2 kasrah\'s · onbepaald genitief' },
+  '\u064E': { sym: 'ـَ', name: 'Fathah (-a)', arName: 'فَتْحَة', hint: '1 fathah' },
+  '\u064B': { sym: 'ـً', name: 'Tanwīn fathah (-an)', arName: 'تَنْوِين فَتْح', hint: '2 fathah\'s · onbepaald' },
+  '\u0652': { sym: 'ـْ', name: 'Sukūn', arName: 'سُكُون', hint: 'rustteken (geen klinker)' },
+  '\u0651\u064E': { sym: 'ـَّ', name: 'Shaddah + Fathah (-a)', arName: 'شَدَّة وَفَتْحَة', hint: 'verdubbeling met -a' },
+  '\u064E\u0651': { sym: 'ـَّ', name: 'Shaddah + Fathah (-a)', arName: 'شَدَّة وَفَتْحَة', hint: 'verdubbeling met -a' },
+  '\u0651\u064F': { sym: 'ـُّ', name: 'Shaddah + Dammah (-u)', arName: 'شَدَّة وَضَمَّة', hint: 'verdubbeling met -u' },
+  '\u064F\u0651': { sym: 'ـُّ', name: 'Shaddah + Dammah (-u)', arName: 'شَدَّة وَضَمَّة', hint: 'verdubbeling met -u' },
+  '\u0651\u0650': { sym: 'ـِّ', name: 'Shaddah + Kasrah (-i)', arName: 'شَدَّة وَكَسْرَة', hint: 'verdubbeling met -i' },
+  '\u0650\u0651': { sym: 'ـِّ', name: 'Shaddah + Kasrah (-i)', arName: 'شَدَّة وَكَسْرَة', hint: 'verdubbeling met -i' }
+};
+
+function isHarakahOnly(str){
+  const s = String(str || '').trim();
+  return s.length > 0 && /^[\u0640\u064B-\u0652\s\/]+$/.test(s);
+}
+
+function getHarakahItem(rawPart){
+  const clean = String(rawPart || '').replace(/[\u0640\s]/g, '');
+  return HARAKAH_MAP[clean] || { sym: 'ـ' + clean, name: clean, arName: '', hint: 'klinkerteken' };
+}
+
+function formatHarakahOption(o){
+  const parts = String(o || '').split('/').map(x => x.trim()).filter(Boolean);
+  if(parts.length === 1){
+    const info = getHarakahItem(parts[0]);
+    return `<span class="g2-harakah-opt">
+      <span class="g2-harakah-sym ar" lang="ar">${arHtml(info.sym)}</span>
+      <span class="g2-harakah-lbl">
+        <b>${E(info.name)} ${info.arName ? `<span class="ar" lang="ar">· ${arHtml(info.arName)}</span>` : ''}</b>
+        <small>${E(info.hint)}</small>
+      </span>
+    </span>`;
+  }
+  const items = parts.map(getHarakahItem);
+  const symStr = items.map(it => it.sym).join(' / ');
+  const nameStr = items.map((it, idx) => `${idx + 1}e woord: ${it.name}`).join(' · ');
+  const subStr = items.map(it => it.arName || it.hint).join(' + ');
+  return `<span class="g2-harakah-opt">
+    <span class="g2-harakah-sym pair ar" lang="ar" dir="rtl">${arHtml(symStr)}</span>
+    <span class="g2-harakah-lbl">
+      <b>${E(nameStr)}</b>
+      <small>${E(subStr)}</small>
+    </span>
+  </span>`;
+}
+
+function formatHarakahInline(o){
+  const parts = String(o || '').split('/').map(x => x.trim()).filter(Boolean);
+  const items = parts.map(getHarakahItem);
+  return items.map(it => `<span class="ar" lang="ar">${arHtml(it.sym)}</span> (${E(it.name)})`).join(' / ');
+}
+
+function renderCheatSheetBox(s){
+  const g = L[s.n];
+  if(!g) return '';
+  if(s.kind === 'step' && g.steps && g.steps[s.si]){
+    const st = g.steps[s.si];
+    return `<div class="g2-cheat-box">
+      <div class="g2-cheat-head">
+        <span>Spiekbriefje · Regel ${s.si + 1}: <b>${E(shortTitle(st.title))}</b></span>
+        <button type="button" class="btn btn-ghost btn-sm" data-act="g2-toggle-cheat">Sluiten ×</button>
+      </div>
+      ${renderStructuredRuleText(st, s.n, s.si)}
+      ${renderTable(st.table)}
+    </div>`;
+  }
+  const steps = g.steps || [];
+  return `<div class="g2-cheat-box">
+    <div class="g2-cheat-head">
+      <span>Spiekbriefje · Alle regels van ${s.n===0?'Inleiding':'Les '+s.n}</span>
+      <button type="button" class="btn btn-ghost btn-sm" data-act="g2-toggle-cheat">Sluiten ×</button>
+    </div>
+    ${steps.map((st, idx) => `<div class="g2-cheat-sec">
+      <h4>${idx + 1}. ${E(shortTitle(st.title))}</h4>
+      ${renderStructuredRuleText(st, s.n, idx)}
+      ${renderTable(st.table)}
+    </div>`).join('')}
   </div>`;
 }
 
@@ -1860,19 +2152,30 @@ function renderDrill(s, kicker){
   const d=x.d;
   if(d.type==='parse' && Array.isArray(d.words) && d.words.length){
     return renderInteractiveParse(s, kicker, x);
-  } const done=s.total-s.queue.length;
-  const prog=`<div class="g2-qprog"><span>${E(kicker)}</span><span>${Math.min(done+1,s.total)} / ${s.total}</span></div><div class="g2-lbar"><i style="width:${s.total?Math.round(100*done/s.total):0}%"></i></div>`;
+  }
+  const done=s.total-s.queue.length;
+  const canShowCheat = s.kind !== 'test';
+  const prog=`<div class="g2-qprog">
+      <span>${E(kicker)}</span>
+      <div class="g2-qprog-right">
+        ${canShowCheat ? `<button type="button" class="g2-cheat-btn ${s.showCheat?'active':''}" data-act="g2-toggle-cheat">${s.showCheat?'Sluit regel':'Spiekbriefje · Regel'}</button>` : ''}
+        <span>Vraag <b>${Math.min(done+1,s.total)}</b> van <b>${s.total}</b></span>
+      </div>
+    </div>
+    <div class="g2-lbar"><i style="width:${s.total?Math.round(100*done/s.total):0}%"></i></div>
+    ${canShowCheat && s.showCheat ? renderCheatSheetBox(s) : ''}`;
   const src = x.instr?`<div class="g2-src">${ICO.book} ${mix(x.instr)}${x.page?' · blz. '+E(x.page):''}</div>`:(x.page?`<div class="g2-src">Bron: blz. ${E(x.page)}</div>`:'');
   let q='', opts='';
   const answered = s.ans!==null;
   if(d.type==='order'){
-    const builtWords=s.built.map(i=>s.bank[i]?s.bank[i].w:'').filter(Boolean);
+    const builtItems=s.built.map((bankIdx, bPos)=>s.bank[bankIdx]?{w:s.bank[bankIdx].w, bPos}:null).filter(Boolean);
     q=`<div class="g2-q">${d.nl?mix(d.nl):'Zet de woorden in de juiste volgorde'}</div>
-      <div class="g2-build ar" lang="ar" dir="rtl">${builtWords.length?builtWords.map(w=>`<span>${arHtml(w)}</span>`).join(''):'<em>Tik de woorden in de juiste volgorde (van rechts naar links)</em>'}</div>
+      <div class="g2-build ar" lang="ar" dir="rtl">${builtItems.length?builtItems.map(it=>`<button type="button" class="g2-built-word ar" lang="ar" data-act="g2-unpick" data-bi="${it.bPos}" ${answered?'disabled':''} title="Tik om dit woord weg te halen">${arHtml(it.w)}</button>`).join(''):'<em>Tik op de woorden hieronder in de juiste volgorde (van rechts naar links)</em>'}</div>
       <div class="g2-bank" dir="rtl">${s.bank.map((b,i)=>`<button class="g2-chip ar" lang="ar" data-act="g2-pick" data-i="${i}" ${s.built.includes(i)||answered?'disabled':''}>${arHtml(b.w)}</button>`).join('')}</div>
       ${answered?'':`<div class="g2-actions"><button class="btn btn-ghost btn-sm" data-act="g2-undo" ${s.built.length?'':'disabled'}>Wis laatste</button><button class="btn btn-primary" data-act="g2-check" ${s.built.length===s.bank.length?'':'disabled'}>Controleer</button></div>`}`;
   }else{
     let prompt='';
+    const allHarakahOpts = Array.isArray(d.options) && d.options.length > 0 && d.options.every(isHarakahOnly);
     if(d.type==='fill'){
       const parts=String(d.ar||'').split('_');
       const optText=answered?String(d.options[d.answer]||''):'';
@@ -1881,11 +2184,25 @@ function renderDrill(s, kicker){
       parts.forEach((p,pIdx)=>{
         fillHtml+=arHtml(p);
         if(pIdx<parts.length-1){
-          const fillVal=answered?arHtml(optParts[pIdx]||optText):'&nbsp;؟&nbsp;';
-          fillHtml+=`<span class="g2-gap">${fillVal}</span>`;
+          const rawVal = (optParts[pIdx]||optText).trim();
+          let fillVal = '&nbsp;؟&nbsp;';
+          if(answered){
+            if(isHarakahOnly(rawVal)){
+              fillVal = arHtml(getHarakahItem(rawVal).sym);
+            } else {
+              fillVal = arHtml(rawVal);
+            }
+          } else if(allHarakahOpts){
+            fillVal = 'ـ؟';
+          }
+          fillHtml+=`<span class="g2-gap ${allHarakahOpts?'g2-gap-harakah':''}">${fillVal}</span>`;
         }
       });
-      prompt=`<div class="g2-fill ar" lang="ar" dir="rtl">${fillHtml}</div>${d.nl?`<div class="g2-sub">${mix(d.nl)}</div>`:''}<div class="g2-q">Kies wat op de open ${parts.length>2?'plekken hoort':'plek hoort'}</div>`;
+      const solvedForAudio = getSolvedSentenceFromDrill(d);
+      const qPromptText = allHarakahOpts
+        ? `Kies het juiste klinkerteken (harakah) voor ${parts.length>2?'de open plekken':'de laatste letter'}:`
+        : `Kies wat op de open ${parts.length>2?'plekken hoort':'plek hoort'}:`;
+      prompt=`<div class="g2-fill ar" lang="ar" dir="rtl">${fillHtml} ${answered && isSpeakable(solvedForAudio) ? spk(solvedForAudio) : ''}</div>${d.nl?`<div class="g2-sub">${mix(d.nl)}</div>`:''}<div class="g2-q">${qPromptText}</div>`;
     }else if(d.type==='transform'){
       prompt=`<div class="g2-q">${mix(d.prompt||'')}</div><div class="g2-from ar" lang="ar">${arHtml(d.from||'')} ${spk(d.from||'')}</div>`;
     }else if(d.type==='parse'){
@@ -1907,9 +2224,14 @@ function renderDrill(s, kicker){
       prompt=`<div class="g2-q">${mix(d.q||'')}</div>`;
     }
     opts=`<div class="g2-opts">${s.optOrder.map((oi,k)=>{
-      const o=d.options[oi]; let c='g2-opt'+(isAr(o)?' ar':'');
+      const o=d.options[oi];
+      const harakahMode = isHarakahOnly(o);
+      let c='g2-opt'+(harakahMode?' g2-opt-harakah':(isAr(o)?' ar':''));
       if(answered){ if(oi===d.answer) c+=' ok'; else if(oi===s.ans) c+=' bad'; }
-      return `<button class="${c}" data-act="g2-ans" data-oi="${oi}" ${answered?'disabled':''}><span class="g2-key">${k+1}</span>${isAr(o)?`<span lang="ar">${arHtml(o)}</span>`:mix(o)}</button>`;
+      const inner = harakahMode
+        ? formatHarakahOption(o)
+        : (isAr(o)?`<span lang="ar">${arHtml(o)}</span>`:mix(o));
+      return `<button class="${c}" data-act="g2-ans" data-oi="${oi}" ${answered?'disabled':''}><span class="g2-key">${k+1}</span>${inner}</button>`;
     }).join('')}</div>`;
     q=prompt+opts;
   }
@@ -1917,9 +2239,12 @@ function renderDrill(s, kicker){
   if(answered){
     const ok=s.lastOk;
     const correct = d.type==='order' ? d.words.join(' ') : d.options[d.answer];
+    const correctDisplay = isHarakahOnly(correct)
+      ? formatHarakahInline(correct)
+      : `<span class="ar" lang="ar">${isAr(correct)?arHtml(correct):mix(correct)}</span>${isAr(correct)?spk(correct):''}`;
     fb=`<div class="g2-fb ${ok?'ok':'bad'}">
       <b>${ok?'Goed!':'Nog niet goed'}</b>
-      ${ok?'':`<div class="g2-correct">Juist: <span class="ar" lang="ar">${isAr(correct)?arHtml(correct):mix(correct)}</span>${isAr(correct)?spk(correct):''}</div>`}
+      ${ok?'':`<div class="g2-correct">Juist: ${correctDisplay}</div>`}
       ${d.explain?`<p>${mix(d.explain)}</p>`:''}
       ${!ok&&s.kind==='step'?'<p class="g2-hint">Deze vraag komt aan het einde van deze stap terug.</p>':''}
       <div class="g2-fb-actions">
@@ -1979,12 +2304,32 @@ function renderSimpleRun(n, title){
 
 function renderVocab(n){
   const s=S(); const v=L[n].vocab||[];
+  const hasLearnWords = typeof wordsFor==='function' && wordsFor(n).length > 0;
+  const grid = `<div class="g2-vocab-grid">${v.map((item, i) => `
+    <div class="g2-vocab-card">
+      <div class="g2-vc-top">
+        ${spk(item.ar)}
+        <span class="g2-vc-ar ar" lang="ar" dir="rtl">${arHtml(item.ar)}</span>
+      </div>
+      <div class="g2-vc-nl ${s.hideNl?'hid':''}" ${s.hideNl?`data-act="g2-reveal" data-i="${i}"`:''}>${s.hideNl?'Tik om vertaling te tonen':mix(item.nl||'')}</div>
+    </div>
+  `).join('')}</div>`;
   return `<div class="desktop-narrow g2">${head(n)}<div class="g2-card">
-    <div class="g2-kicker">Woordenlijst uit de les</div>
-    <p class="g2-hint">Luister naar elk woord en zeg het na. Verberg de vertaling om jezelf te overhoren. Oefen de woorden daarna in het woordenschat-leerpad.</p>
-    <div class="g2-tools"><button class="btn btn-ghost btn-sm" data-act="g2-hide">${s.hideNl?'Toon vertalingen':'Verberg vertalingen'}</button></div>
-    ${renderExamples(v, s.hideNl)}
-    <div class="g2-actions"><button class="btn btn-primary" data-act="g2-finish" data-gl="next">Woordenlijst gezien →</button></div>
+    <div class="g2-vocab-head">
+      <div>
+        <div class="g2-kicker">Woordenlijst uit de les (${v.length} woorden)</div>
+        <h2>Nieuwe woorden · ${n===0?'Inleiding':'Les '+n}</h2>
+        <p class="g2-hint" style="margin:0">Luister naar elk woord en zeg het hardop na. Gebruik de overhoormodus om jezelf te testen.</p>
+      </div>
+      <div class="g2-tools" style="margin:0">
+        <button type="button" class="btn ${s.hideNl?'btn-primary':'btn-secondary'} btn-sm" data-act="g2-hide">${s.hideNl?'Toon alle vertalingen':'Overhoormodus (verberg NL)'}</button>
+      </div>
+    </div>
+    ${grid}
+    <div class="g2-actions">
+      ${hasLearnWords ? `<button type="button" class="btn btn-secondary" data-act="start-learn" data-l="${n}">Oefen met Flashcards &amp; Quiz</button>` : ''}
+      <button type="button" class="btn btn-primary" data-act="g2-finish" data-gl="next">Woordenlijst afronden →</button>
+    </div>
   </div></div>`;
 }
 
@@ -2375,14 +2720,52 @@ document.addEventListener('click', e=>{
   if(act==='g2-toggle-auto'){ toggleAutoAdvance(); return; }
   if(act==='g2-toggle-sfx'){ toggleSfx(); return; }
   if(act==='g2-toggle-timer'){ toggleDrillTimer(); return; }
+  if(act==='g2-toggle-cheat'){
+    clearG2AutoTimer();
+    s.showCheat = !s.showCheat;
+    render(); return;
+  }
+  if(act==='g2-toggle-ref'){
+    e.preventDefault();
+    s.hubRefOpen = !s.hubRefOpen;
+    render(); return;
+  }
   if(act==='g2-map'){ clearG2AutoTimer(); s.view='map'; render(); scrollTop(); return; }
   if(act==='g2-node'){ clearG2AutoTimer(); startNode(state.bookLesson, +btn.dataset.i); render(); scrollTop(); return; }
-  if(act==='g2-phase'){ clearG2AutoTimer(); s.phase=btn.dataset.p; s.hideNl=false; render(); scrollTop(); return; }
+  if(act==='g2-phase'){
+    clearG2AutoTimer();
+    const targetP = btn.dataset.p;
+    if(targetP === 'do'){
+      const drills = stepDrills(s.n, s.si);
+      if(!drills.length){
+        finishNode();
+        render(); scrollTop(); return;
+      }
+      if(!s.queue || !s.queue.length){
+        s.queue = drills.map(x => x.ref);
+        s.total = s.queue.length;
+        s.retry = {};
+        prepDrill();
+      }
+    }
+    s.phase = targetP;
+    s.hideNl = false;
+    render(); scrollTop(); return;
+  }
   if(act==='g2-hide'){ s.hideNl=!s.hideNl; s.shown={}; render(); return; }
   if(act==='g2-reveal'){ btn.classList.remove('hid'); btn.removeAttribute('data-act'); 
     const st=s.kind==='vocab'?L[s.n].vocab:L[s.n].steps[s.si].examples; const it=st[+btn.dataset.i]; if(it) btn.innerHTML=mix(it.nl||''); return; }
   if(act==='g2-ans'){ if(s.ans!==null) return; s.ans=+btn.dataset.oi; answer(s.ans===s.cur.d.answer); render(); return; }
   if(act==='g2-pick'){ if(s.ans!==null) return; s.built.push(+btn.dataset.i); render(); return; }
+  if(act==='g2-unpick'){
+    if(s.ans!==null) return;
+    const bi = +btn.dataset.bi;
+    if(!isNaN(bi) && bi >= 0 && bi < s.built.length){
+      s.built.splice(bi, 1);
+      render();
+    }
+    return;
+  }
   if(act==='g2-undo'){ s.built.pop(); render(); return; }
   if(act==='g2-check'){
     if(s.ans!==null) return;
@@ -2432,6 +2815,6 @@ document.addEventListener('input', e=>{
 window.renderBook = renderHub;
 window.renderBookLesson = renderLesson;
 try { renderBook = renderHub; renderBookLesson = renderLesson; } catch(e){}
-window.G2 = {L, P, nodes, testPool, bookItems, stepDrills, startNode, prepDrill, lessonOpen, lessonPassed, save, S};
+window.G2 = {L, P, SHORT_TITLES, nodes, testPool, bookItems, stepDrills, startNode, prepDrill, lessonOpen, lessonPassed, save, S};
 if(typeof render==='function') try{ render(); }catch(e){}
 })();

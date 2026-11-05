@@ -2150,8 +2150,11 @@ applySbCollapsed();
 function renderSidebar(){
   const path = currentPath();
   const totalW = ALL.length, mastW = mastered(ALL);
-  const gKeys = Object.keys(GRAMMAR);
-  const doneG = gKeys.filter(k => getGram(k).done || gramPct(k)>=100).length;
+  const g2Keys = (window.G2 && window.G2.L) ? Object.keys(window.G2.L).map(Number).sort((a,b)=>a-b) : null;
+  const gKeys = g2Keys || Object.keys(GRAMMAR);
+  const doneG = g2Keys
+    ? g2Keys.filter(k => window.G2.lessonPassed(k)).length
+    : gKeys.filter(k => getGram(k).done || gramPct(k)>=100).length;
   const totalItems = totalW + gKeys.length * 10;
   const doneItems = mastW + doneG * 10;
   const overallPct = totalItems ? Math.round(100 * doneItems / totalItems) : 0;
@@ -2160,8 +2163,9 @@ function renderSidebar(){
   const gramOpen = !!sbMenuState.gram;
   const convOpen = !!sbMenuState.conv;
 
-  const gramLinks = lessonNums().map(n => {
-    const title = (LESSON_META[n]||['',''])[0];
+  const gramListNums = g2Keys || lessonNums();
+  const gramLinks = gramListNums.map(n => {
+    const title = (window.G2 && window.G2.SHORT_TITLES && window.G2.SHORT_TITLES[n]) || (LESSON_META[n]||['',''])[0] || (n===0?'Klinkertekens & Symbolen':'Les '+n);
     const active = state.view==='book-lesson' && Number(state.bookLesson)===Number(n);
     const num = String(n).padStart(2,'0');
     return `<button type="button" class="${active?'active':''}" data-act="open-book" data-l="${n}"><span>${num}</span>${esc(title)}</button>`;
@@ -2446,7 +2450,7 @@ function renderHome(){
   const nws=wordsFor(next); const nm=mastered(nws);
   const meta=next==='all'?['Alle hoofdstukken','Herhaal']:LESSON_META[next]||[hoofdstuk(next),''];
   const st=streak.last===today()||streak.last===new Date(Date.now()-864e5).toISOString().slice(0,10)?streak.count:0;
-  const gCount=Object.keys(GRAMMAR).length;
+  const gCount=(window.G2 && window.G2.L) ? Object.keys(window.G2.L).length : Object.keys(GRAMMAR).length;
   const cCount=Object.keys(CONVERSATIONS).length;
   const mkCount=mistakeStats().length;
 

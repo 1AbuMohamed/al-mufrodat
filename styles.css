@@ -1937,7 +1937,7 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
 .g2-sdot.on{background:var(--forest);border-color:var(--forest);color:var(--on-forest)}
 @media (max-width:699px){
   .g2-cta-row{grid-template-columns:1fr}
-  .g2-card .g2-actions{position:sticky;bottom:calc(66px + env(safe-area-inset-bottom,0px));background:var(--surface);padding:10px 0;margin-top:14px;border-top:1px solid var(--line);z-index:5;justify-content:stretch}
+  .g2-card .g2-actions{position:static;background:transparent;padding:12px 0 0;margin-top:16px;border-top:1px solid var(--line);justify-content:stretch}
   .g2-card .g2-actions .btn{flex:1}
   .g2-top .g2-pill-btn{padding:5px 9px;font-size:11.5px}
 }
@@ -2445,7 +2445,7 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
 .g2-tools {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 8px;
   flex-wrap: wrap;
   margin-bottom: 12px;
@@ -2859,4 +2859,833 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
     flex: 1;
     justify-content: center;
   }
+}
+
+/* =====================================================================
+   LOOP 1 · Navigatie, Voorbeelden-rijen & Mobiele Layout-herstel
+   ===================================================================== */
+.g2-head-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.g2-head-row .g2-titlear {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--forest);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.g2-crumb-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.g2-crumb-btn:hover {
+  border-color: var(--gold);
+  background: var(--surface);
+  color: var(--ink);
+}
+.g2-prevnext-les {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.g2-lnav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 12px 0 2px;
+  margin-top: 10px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.g2-lnav::-webkit-scrollbar {
+  display: none;
+}
+.g2-lnav-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.g2-lnav-pill:hover {
+  border-color: var(--gold);
+  color: var(--ink);
+  background: var(--surface);
+}
+.g2-lnav-pill.done {
+  border-color: var(--ok);
+  background: var(--ok-soft);
+  color: var(--ok);
+}
+.g2-lnav-pill.on {
+  border-color: var(--forest);
+  background: var(--forest);
+  color: var(--on-forest);
+  box-shadow: 0 2px 6px rgba(23, 59, 63, 0.18);
+}
+.lnav-chk {
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.g2-phases {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.g2-phase-btn {
+  text-align: center;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1.5px solid var(--line-strong);
+  background: var(--surface);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.g2-phase-btn:hover {
+  border-color: var(--forest);
+  color: var(--ink);
+  background: var(--paper);
+}
+.g2-phase-btn.on {
+  border-color: var(--gold);
+  background: var(--gold-pale);
+  color: var(--ink);
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(196, 154, 69, 0.15);
+}
+.g2-phase-btn.done {
+  border-color: var(--ok);
+  color: var(--ok);
+  background: var(--ok-soft);
+}
+
+.g2-ex {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0;
+}
+.g2-exitem {
+  border-bottom: 0;
+}
+.g2-exrow {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--line-strong);
+  background: var(--paper);
+  transition: border-color 0.15s ease;
+}
+.g2-exrow:hover {
+  border-color: var(--gold);
+}
+.g2-ex-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+.g2-exar {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ink);
+  flex: 1;
+  text-align: right;
+  line-height: 1.65;
+}
+.g2-ex-sub {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding-top: 7px;
+  border-top: 1px dashed var(--line);
+  flex-wrap: wrap;
+}
+.g2-exnl {
+  font-size: 14px;
+  color: var(--ink-soft);
+  flex: 1;
+  text-align: left;
+  line-height: 1.45;
+  min-width: 150px;
+}
+.g2-exnl.hid {
+  color: var(--forest);
+  font-weight: 600;
+  font-style: italic;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 680px) {
+  .g2-head-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .g2-head-row .g2-titlear {
+    align-self: flex-end;
+    font-size: 24px;
+  }
+  .g2-phase-btn {
+    padding: 8px 6px;
+    font-size: 11.5px;
+  }
+  .g2-exrow {
+    padding: 11px 12px;
+  }
+  .g2-exar {
+    font-size: 22px;
+    line-height: 1.65;
+  }
+}
+
+/* =====================================================================
+   LOOP 2 · Gestructureerde Uitleg, Regels & Directe Voorbeelden
+   ===================================================================== */
+.g2-rule-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.g2-rule-lead {
+  padding: 13px 16px;
+  border-radius: 12px;
+  background: var(--forest-soft);
+  border-left: 4px solid var(--forest);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.g2-rule-p {
+  font-size: 15px;
+  line-height: 1.68;
+  color: var(--ink-soft);
+  margin: 0;
+}
+.g2-rule-steps {
+  display: grid;
+  gap: 10px;
+}
+.g2-rule-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 15px;
+  border-radius: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+}
+.g2-rstep-num {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: var(--forest);
+  color: var(--on-forest);
+  font-size: 12.5px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.g2-rstep-body {
+  font-size: 14.5px;
+  line-height: 1.62;
+  color: var(--ink);
+  flex: 1;
+}
+.g2-rule-bullets {
+  display: grid;
+  gap: 8px;
+  padding: 12px 15px;
+  border-radius: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+.g2-rule-bullet {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.g2-rbul-dot {
+  color: var(--gold);
+  font-size: 11px;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+.g2-rbul-body {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--ink);
+  flex: 1;
+}
+.g2-rule-callout {
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--gold-pale);
+  border: 1.5px solid var(--gold);
+}
+.g2-callout-tag {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--forest);
+  margin-bottom: 4px;
+}
+.g2-callout-body {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+.g2-rule-ex-preview {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1.5px dashed var(--line-strong);
+}
+.g2-rule-ex-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.g2-rule-ex-head h4 {
+  font-family: var(--serif);
+  font-size: 17px;
+  color: var(--ink);
+  margin: 2px 0 0;
+}
+
+/* =====================================================================
+   LOOP 3 · Oefenengine: Duidelijke Harakah-Opties, Spiekbriefje & Zinsbouw
+   ===================================================================== */
+.g2-qprog {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.g2-qprog-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.g2-cheat-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--gold);
+  background: var(--gold-pale);
+  color: var(--ink);
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.g2-cheat-btn:hover,
+.g2-cheat-btn.active {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: var(--on-forest);
+}
+.g2-cheat-box {
+  margin: 10px 0 16px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--paper);
+  border: 1.5px solid var(--gold);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+.g2-cheat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--line-strong);
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.g2-cheat-sec {
+  margin-bottom: 14px;
+}
+.g2-cheat-sec:last-child {
+  margin-bottom: 0;
+}
+.g2-cheat-sec h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--forest);
+  margin-bottom: 6px;
+}
+
+.g2-opt.g2-opt-harakah {
+  font-family: var(--font);
+  padding: 10px 14px;
+  align-items: center;
+}
+.g2-harakah-opt {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  min-width: 0;
+}
+.g2-harakah-sym {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 62px;
+  height: 54px;
+  padding: 6px 14px 0;
+  border-radius: 10px;
+  background: var(--paper-deep);
+  border: 1.5px solid var(--line-strong);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--forest);
+  line-height: 1.55;
+  flex-shrink: 0;
+}
+.g2-harakah-sym.pair {
+  min-width: 104px;
+  font-size: 24px;
+}
+.g2-opt.ok .g2-harakah-sym {
+  background: #fff;
+  border-color: var(--ok);
+  color: var(--ok);
+}
+.g2-opt.bad .g2-harakah-sym {
+  background: #fff;
+  border-color: var(--clay);
+  color: var(--clay);
+}
+.g2-harakah-lbl {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+  min-width: 0;
+}
+.g2-harakah-lbl b {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.g2-harakah-lbl b .ar {
+  font-size: 16px;
+  color: var(--forest);
+}
+.g2-harakah-lbl small {
+  font-size: 12.5px;
+  color: var(--muted);
+  font-weight: 500;
+  line-height: 1.35;
+}
+.g2-gap-harakah {
+  min-width: 44px;
+  padding: 0 8px;
+  margin: 0 2px;
+  font-size: 28px;
+  background: var(--gold-pale);
+  border-radius: 6px;
+  border-bottom: 2.5px solid var(--gold);
+}
+.g2-built-word {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1.5px solid var(--forest);
+  color: var(--ink);
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.g2-built-word:hover:not(:disabled) {
+  background: var(--clay-soft);
+  border-color: var(--clay);
+}
+
+/* =====================================================================
+   LOOP 4 · Grammatica Hub: 3-koloms CTA, Spiekkaart & Pijler-filters
+   ===================================================================== */
+.g2-cta-row {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+@media (max-width: 860px) {
+  .g2-cta-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.g2-ref-sheet {
+  margin-bottom: 18px;
+  border-radius: 14px;
+  border: 1.5px solid var(--line-strong);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.g2-ref-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  cursor: pointer;
+  list-style: none;
+  background: linear-gradient(135deg, var(--gold-pale) 0%, var(--surface) 100%);
+}
+.g2-ref-summary::-webkit-details-marker {
+  display: none;
+}
+.g2-ref-summary strong {
+  display: block;
+  font-size: 15px;
+  color: var(--ink);
+  margin-top: 2px;
+}
+.g2-ref-toggle-lbl {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--forest);
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.g2-ref-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 16px 18px;
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+}
+@media (max-width: 860px) {
+  .g2-ref-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 580px) {
+  .g2-ref-summary {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .g2-ref-grid {
+    grid-template-columns: 1fr;
+    padding: 12px;
+  }
+}
+.g2-ref-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-top-width: 4px;
+}
+.g2-ref-card.rc-mubtada { border-top-color: #1F6E50; }
+.g2-ref-card.rc-khabar { border-top-color: #2B6CB0; }
+.g2-ref-card.rc-idafah { border-top-color: #6B46C1; }
+.g2-ref-card.rc-jarr { border-top-color: #C79238; }
+.g2-ref-card.rc-naat { border-top-color: #0D9488; }
+.g2-ref-card.rc-other { border-top-color: #64748B; }
+.g2-ref-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.g2-ref-top .ar {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--forest);
+}
+.g2-ref-top b {
+  font-size: 13px;
+  color: var(--ink);
+}
+.g2-ref-card p {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  margin: 0;
+}
+.g2-ref-ex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--paper);
+  border: 1px dashed var(--line-strong);
+}
+.g2-ref-ex .ar {
+  font-size: 17px;
+  color: var(--ink);
+}
+.g2-ref-ex .ar b {
+  color: var(--forest);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.g2-ref-ex small {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.g2-pillar-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 0 0 14px;
+  margin-top: -4px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.g2-pillar-bar::-webkit-scrollbar {
+  display: none;
+}
+.g2-pillar-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.g2-pillar-chip small {
+  font-weight: 600;
+  color: var(--muted);
+}
+.g2-pillar-chip:hover {
+  border-color: var(--gold);
+  color: var(--ink);
+}
+.g2-pillar-chip.active {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: var(--on-forest);
+}
+.g2-pillar-chip.active small {
+  color: var(--gold-soft);
+}
+
+.g2-ltitle-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.g2-lar-badge {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--forest);
+  flex-shrink: 0;
+}
+
+/* =====================================================================
+   LOOP 5 · Iʿrāb Studio Polish & 2-Koloms Woordenlijst Grid
+   ===================================================================== */
+.focus-word {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--forest);
+  line-height: 1.65;
+  margin-top: 4px;
+}
+.g2-studio-cat-tabs,
+.g2-studio-sentence-chips,
+.g2-parse-tabs {
+  scrollbar-width: none;
+}
+.g2-studio-cat-tabs .g2-tab {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.g2-studio-cat-tabs::-webkit-scrollbar,
+.g2-studio-sentence-chips::-webkit-scrollbar,
+.g2-parse-tabs::-webkit-scrollbar {
+  display: none;
+}
+.g2-studio-guide {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 14px;
+}
+.g2-sguide-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+}
+.g2-sguide-step > span {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--forest);
+  color: var(--on-forest);
+  font-size: 11.5px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.g2-sguide-step b {
+  display: block;
+  font-size: 12.5px;
+  color: var(--ink);
+}
+.g2-sguide-step small {
+  display: block;
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.35;
+  margin-top: 2px;
+}
+@media (max-width: 680px) {
+  .g2-studio-guide {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+
+.g2-vocab-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.g2-vocab-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 14px 0;
+}
+@media (max-width: 600px) {
+  .g2-vocab-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.g2-vocab-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  transition: border-color 0.15s ease;
+}
+.g2-vocab-card:hover {
+  border-color: var(--gold);
+}
+.g2-vc-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.g2-vc-ar {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.6;
+  text-align: right;
+  flex: 1;
+}
+.g2-vc-nl {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  padding-top: 6px;
+  border-top: 1px dashed var(--line);
+  line-height: 1.4;
+}
+.g2-vc-nl.hid {
+  color: var(--forest);
+  font-weight: 600;
+  font-style: italic;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
