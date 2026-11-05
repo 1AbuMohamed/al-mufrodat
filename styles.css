@@ -3689,3 +3689,131 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+
+/* =====================================================================
+   BOEKOEFENING-WEERGAVE · Grote Opdracht, Rustig Boekkader & Duidelijke Keuzes
+   ===================================================================== */
+.g2-head.g2-head-compact {
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+.g2-head.g2-head-compact .g2-lnav {
+  padding-top: 2px;
+  margin-top: 0;
+}
+
+.g2-opdracht-box {
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: var(--forest-soft);
+  border-left: 4px solid var(--forest);
+  margin: 10px 0 16px;
+}
+.g2-opdracht-lbl {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--forest);
+  margin-bottom: 4px;
+}
+.g2-opdracht-title {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.4;
+}
+.g2-opdracht-sub {
+  font-size: 15px;
+  color: var(--ink-soft);
+  margin-top: 6px;
+  line-height: 1.45;
+}
+.g2-opdracht-sub b {
+  color: var(--forest);
+}
+
+.g2-book-paper {
+  padding: 20px 18px;
+  border-radius: 14px;
+  background: var(--paper);
+  border: 1.5px solid var(--line-strong);
+  text-align: center;
+  margin-bottom: 18px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+.g2-book-paper .g2-fill,
+.g2-book-paper .g2-from,
+.g2-book-paper .g2-parse-sent {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  font-size: 32px;
+  line-height: 1.85;
+  color: var(--ink);
+}
+.g2-book-paper .g2-sub {
+  margin: 8px 0 0;
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+  font-size: 15px;
+  color: var(--ink-soft);
+}
+.g2-book-ul {
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 8px;
+  color: var(--forest);
+  font-weight: 700;
+  padding: 0 3px;
+}
+.g2-book-hl {
+  color: var(--forest);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: rgba(196, 154, 69, 0.55);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+.g2-book-opt-ar,
+.g2-opt.ar > span[lang="ar"] {
+  font-family: var(--ar);
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.65;
+  flex: 1;
+  text-align: right;
+  padding-right: 4px;
+}
+.g2-book-arrow {
+  display: inline-block;
+  margin: 0 10px;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+@media (max-width: 680px) {
+  .g2-opdracht-box {
+    padding: 12px 14px;
+  }
+  .g2-opdracht-title {
+    font-size: 17px;
+  }
+  .g2-book-paper {
+    padding: 16px 14px;
+    margin-bottom: 14px;
+  }
+  .g2-book-paper .g2-fill,
+  .g2-book-paper .g2-from,
+  .g2-book-paper .g2-parse-sent {
+    font-size: 27px;
+    line-height: 1.8;
+  }
+  .g2-book-opt-ar {
+    font-size: 22px;
+  }
+}

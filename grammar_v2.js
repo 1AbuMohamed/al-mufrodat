@@ -1595,6 +1595,7 @@ function head(n, sub){
   const g=L[n]||{};
   const s=S();
   const isNode = (s.n === Number(n) && s.view === 'node');
+  const isDrillMode = isNode && (s.kind === 'book' || s.kind === 'test' || s.kind === 'review' || (s.kind === 'step' && s.phase === 'do'));
   const autoOn = P.autoAdvance !== false;
   const sfxOn = P.sfx !== false;
   const irabOn = !!P.inlineIrab;
@@ -1623,15 +1624,15 @@ function head(n, sub){
       ${sfxOn?'Geluid: aan':'Geluid: uit'}
     </button>
   </div>
-  <div class="g2-head">
-    <div class="g2-head-row">
+  <div class="g2-head ${isDrillMode?'g2-head-compact':''}">
+    ${isDrillMode ? '' : `<div class="g2-head-row">
       <div>
         <div class="g2-eyebrow">${n===24?'Madinah Arabic Reader 8':'Medina Deel 1'} · ${n===0?'Inleiding':'Les '+n} · blz. ${E(g.pages||'')}</div>
         <h1>${E(SHORT_TITLES[n]||shortTitle(g.title||''))}</h1>
       </div>
       ${g.titleAr?`<div class="g2-titlear ar" lang="ar">${arHtml(g.titleAr)}</div>`:''}
     </div>
-    ${sub||''}
+    ${sub||''}`}
     ${renderLessonNavBar(n)}
   </div>`;
 }
@@ -2147,6 +2148,92 @@ function renderCheatSheetBox(s){
   </div>`;
 }
 
+function buildBookHarakahChoice(rawAr, opt){
+  let base = String(rawAr || '').trim();
+  if(base.includes('←')) base = base.split('←').pop().trim();
+  const parts = base.split('_');
+  const oParts = String(opt || '').includes('/')
+    ? String(opt).split('/').map(s => s.replace(/[\u0640\s]/g, ''))
+    : [String(opt || '').replace(/[\u0640\s]/g, '')];
+  let out = '';
+  for(let i = 0; i < parts.length; i++){
+    let p = parts[i];
+    const leadSp = /^\s/.test(p) ? ' ' : '';
+    if(i < parts.length - 1){
+      const h = oParts[i] || oParts[0] || '';
+      const pClean = p.replace(/[\u064B-\u0652]+$/, '');
+      if(parts[i + 1]) parts[i + 1] = parts[i + 1].replace(/^[\u064B-\u0652]+/, '');
+      const m = pClean.trim().match(/^(.*?\s+)?(\S+)$/);
+      if(m && m[1]){
+        out += leadSp + arHtml(m[1].trim()) + ' ' + `<b class="g2-book-hl">${arHtml(m[2] + h)}</b>`;
+      } else {
+        out += leadSp + `<b class="g2-book-hl">${arHtml(pClean.trim() + h)}</b>`;
+      }
+    } else {
+      const rest = p.replace(/\.$/, '').trim();
+      if(rest) out += leadSp + arHtml(rest);
+    }
+  }
+  return `<span class="ar g2-book-opt-ar" lang="ar" dir="rtl">${out.trim()}</span>`;
+}
+
+function buildBookHarakahPlain(rawAr, opt){
+  let base = String(rawAr || '').trim();
+  if(base.includes('←')) base = base.split('←').pop().trim();
+  const parts = base.split('_');
+  const oParts = String(opt || '').includes('/')
+    ? String(opt).split('/').map(s => s.replace(/[\u0640\s]/g, ''))
+    : [String(opt || '').replace(/[\u0640\s]/g, '')];
+  let out = '';
+  for(let i = 0; i < parts.length; i++){
+    let p = parts[i];
+    if(i < parts.length - 1){
+      const h = oParts[i] || oParts[0] || '';
+      const pClean = p.replace(/[\u064B-\u0652]+$/, '');
+      if(parts[i + 1]) parts[i + 1] = parts[i + 1].replace(/^[\u064B-\u0652]+/, '');
+      out += pClean + h;
+    } else {
+      out += p.replace(/\.$/, '');
+    }
+  }
+  return out.trim();
+}
+
+function buildBookUnvocalizedPrompt(rawAr){
+  const parts = String(rawAr || '').trim().split('_');
+  let out = '';
+  for(let i = 0; i < parts.length; i++){
+    let p = parts[i];
+    const leadSp = /^\s/.test(p) ? ' ' : '';
+    if(i < parts.length - 1){
+      const pClean = p.replace(/[\u064B-\u0652]+$/, '');
+      if(parts[i + 1]) parts[i + 1] = parts[i + 1].replace(/^[\u064B-\u0652]+/, '');
+      const m = pClean.trim().match(/^(.*?\s+)?(\S+)$/);
+      if(m && m[1]){
+        out += leadSp + arHtml(m[1].trim()) + ' ' + `<u class="g2-book-ul">${arHtml(m[2])}</u>`;
+      } else {
+        out += leadSp + `<u class="g2-book-ul">${arHtml(pClean.trim())}</u>`;
+      }
+    } else {
+      const rest = p.replace(/\.$/, '').trim();
+      if(rest) out += leadSp + arHtml(rest);
+    }
+  }
+  return out.trim();
+}
+
+function parseBookInstr(x){
+  const raw = String(x && x.instr || '').trim();
+  if(!raw) return { badge: '', title: '' };
+  const m = raw.match(/^([^:]+):\s*(.+)$/);
+  if(m){
+    const badge = m[1].trim();
+    const title = m[2].replace(/\s*\(Iqra'[^)]*\)/i, '').trim();
+    return { badge, title };
+  }
+  return { badge: '', title: raw };
+}
+
 function renderDrill(s, kicker){
   const x=s.cur; if(!x) return '';
   const d=x.d;
@@ -2155,56 +2242,86 @@ function renderDrill(s, kicker){
   }
   const done=s.total-s.queue.length;
   const canShowCheat = s.kind !== 'test';
+  const { badge: instrBadge, title: instrTitle } = parseBookInstr(x);
+  const topLabel = instrBadge || kicker;
+
   const prog=`<div class="g2-qprog">
-      <span>${E(kicker)}</span>
+      <span>${E(topLabel)}${x.page && !/blz/i.test(String(topLabel)) ? ' · blz. '+E(x.page) : ''}</span>
       <div class="g2-qprog-right">
-        ${canShowCheat ? `<button type="button" class="g2-cheat-btn ${s.showCheat?'active':''}" data-act="g2-toggle-cheat">${s.showCheat?'Sluit regel':'Spiekbriefje · Regel'}</button>` : ''}
-        <span>Vraag <b>${Math.min(done+1,s.total)}</b> van <b>${s.total}</b></span>
+        ${canShowCheat ? `<button type="button" class="g2-cheat-btn ${s.showCheat?'active':''}" data-act="g2-toggle-cheat">${s.showCheat?'Sluit uitleg':'Uitleg bij deze regel'}</button>` : ''}
+        <span><b>${Math.min(done+1,s.total)}</b> / ${s.total}</span>
       </div>
     </div>
     <div class="g2-lbar"><i style="width:${s.total?Math.round(100*done/s.total):0}%"></i></div>
     ${canShowCheat && s.showCheat ? renderCheatSheetBox(s) : ''}`;
-  const src = x.instr?`<div class="g2-src">${ICO.book} ${mix(x.instr)}${x.page?' · blz. '+E(x.page):''}</div>`:(x.page?`<div class="g2-src">Bron: blz. ${E(x.page)}</div>`:'');
+
   let q='', opts='';
   const answered = s.ans!==null;
   if(d.type==='order'){
     const builtItems=s.built.map((bankIdx, bPos)=>s.bank[bankIdx]?{w:s.bank[bankIdx].w, bPos}:null).filter(Boolean);
-    q=`<div class="g2-q">${d.nl?mix(d.nl):'Zet de woorden in de juiste volgorde'}</div>
-      <div class="g2-build ar" lang="ar" dir="rtl">${builtItems.length?builtItems.map(it=>`<button type="button" class="g2-built-word ar" lang="ar" data-act="g2-unpick" data-bi="${it.bPos}" ${answered?'disabled':''} title="Tik om dit woord weg te halen">${arHtml(it.w)}</button>`).join(''):'<em>Tik op de woorden hieronder in de juiste volgorde (van rechts naar links)</em>'}</div>
+    const mainTask = instrTitle || 'Zet de woorden in de juiste volgorde';
+    q=`<div class="g2-opdracht-box">
+        <span class="g2-opdracht-lbl">Opdracht</span>
+        <div class="g2-opdracht-title">${mix(mainTask)}</div>
+        ${d.nl ? `<div class="g2-opdracht-sub">Vertaal naar het Arabisch: <b>«${mix(d.nl)}»</b></div>` : ''}
+      </div>
+      <div class="g2-build ar" lang="ar" dir="rtl">${builtItems.length?builtItems.map(it=>`<button type="button" class="g2-built-word ar" lang="ar" data-act="g2-unpick" data-bi="${it.bPos}" ${answered?'disabled':''} title="Tik om dit woord weg te halen">${arHtml(it.w)}</button>`).join(''):'<em>Tik op de woorden hieronder (van rechts naar links)</em>'}</div>
       <div class="g2-bank" dir="rtl">${s.bank.map((b,i)=>`<button class="g2-chip ar" lang="ar" data-act="g2-pick" data-i="${i}" ${s.built.includes(i)||answered?'disabled':''}>${arHtml(b.w)}</button>`).join('')}</div>
       ${answered?'':`<div class="g2-actions"><button class="btn btn-ghost btn-sm" data-act="g2-undo" ${s.built.length?'':'disabled'}>Wis laatste</button><button class="btn btn-primary" data-act="g2-check" ${s.built.length===s.bank.length?'':'disabled'}>Controleer</button></div>`}`;
   }else{
     let prompt='';
     const allHarakahOpts = Array.isArray(d.options) && d.options.length > 0 && d.options.every(isHarakahOnly);
     if(d.type==='fill'){
-      const parts=String(d.ar||'').split('_');
-      const optText=answered?String(d.options[d.answer]||''):'';
-      const optParts=optText.includes(' / ')?optText.split(' / '):[optText,optText,optText];
-      let fillHtml='';
-      parts.forEach((p,pIdx)=>{
-        fillHtml+=arHtml(p);
-        if(pIdx<parts.length-1){
-          const rawVal = (optParts[pIdx]||optText).trim();
-          let fillVal = '&nbsp;؟&nbsp;';
-          if(answered){
-            if(isHarakahOnly(rawVal)){
-              fillVal = arHtml(getHarakahItem(rawVal).sym);
-            } else {
-              fillVal = arHtml(rawVal);
-            }
-          } else if(allHarakahOpts){
-            fillVal = 'ـ؟';
-          }
-          fillHtml+=`<span class="g2-gap ${allHarakahOpts?'g2-gap-harakah':''}">${fillVal}</span>`;
-        }
-      });
       const solvedForAudio = getSolvedSentenceFromDrill(d);
-      const qPromptText = allHarakahOpts
-        ? `Kies het juiste klinkerteken (harakah) voor ${parts.length>2?'de open plekken':'de laatste letter'}:`
-        : `Kies wat op de open ${parts.length>2?'plekken hoort':'plek hoort'}:`;
-      prompt=`<div class="g2-fill ar" lang="ar" dir="rtl">${fillHtml} ${answered && isSpeakable(solvedForAudio) ? spk(solvedForAudio) : ''}</div>${d.nl?`<div class="g2-sub">${mix(d.nl)}</div>`:''}<div class="g2-q">${qPromptText}</div>`;
+      if(allHarakahOpts){
+        const mainTask = instrTitle || 'Kies hoe je het onderstreepte woord in het boek leest (met het juiste klinkerteken):';
+        const bookSent = answered
+          ? arHtml(buildBookHarakahPlain(d.ar, d.options[d.answer]))
+          : buildBookUnvocalizedPrompt(d.ar);
+        prompt=`<div class="g2-opdracht-box">
+            <span class="g2-opdracht-lbl">Opdracht · Lees met de juiste klinker</span>
+            <div class="g2-opdracht-title">${mix(mainTask)}</div>
+          </div>
+          <div class="g2-book-paper">
+            <div class="g2-fill ar" lang="ar" dir="rtl">${bookSent} ${answered && isSpeakable(solvedForAudio) ? spk(solvedForAudio) : ''}</div>
+            ${d.nl?`<div class="g2-sub">${mix(d.nl)}</div>`:''}
+          </div>`;
+      } else {
+        const parts=String(d.ar||'').split('_');
+        const optText=answered?String(d.options[d.answer]||''):'';
+        const optParts=optText.includes(' / ')?optText.split(' / '):[optText,optText,optText];
+        let fillHtml='';
+        parts.forEach((p,pIdx)=>{
+          fillHtml+=arHtml(p);
+          if(pIdx<parts.length-1){
+            const rawVal = (optParts[pIdx]||optText).trim();
+            const fillVal = answered ? arHtml(rawVal) : '......';
+            fillHtml+=`<span class="g2-gap">${fillVal}</span>`;
+          }
+        });
+        const mainTask = instrTitle || `Vul het ontbrekende woord in op de stippellijn:`;
+        prompt=`<div class="g2-opdracht-box">
+            <span class="g2-opdracht-lbl">Opdracht · Invullen</span>
+            <div class="g2-opdracht-title">${mix(mainTask)}</div>
+          </div>
+          <div class="g2-book-paper">
+            <div class="g2-fill ar" lang="ar" dir="rtl">${fillHtml} ${answered && isSpeakable(solvedForAudio) ? spk(solvedForAudio) : ''}</div>
+            ${d.nl?`<div class="g2-sub">${mix(d.nl)}</div>`:''}
+          </div>`;
+      }
     }else if(d.type==='transform'){
-      prompt=`<div class="g2-q">${mix(d.prompt||'')}</div><div class="g2-from ar" lang="ar">${arHtml(d.from||'')} ${spk(d.from||'')}</div>`;
+      let cleanPrompt = String(d.prompt || '').trim();
+      if(d.from && cleanPrompt.includes(d.from)){
+        cleanPrompt = cleanPrompt.replace(d.from, '').replace(/:\s*$/, '').replace(/\bvan$/i, 'van deze woorden:').trim();
+      }
+      const mainTask = instrTitle || cleanPrompt || 'Pas de woorden aan volgens het voorbeeld uit het boek:';
+      prompt=`<div class="g2-opdracht-box">
+          <span class="g2-opdracht-lbl">Opdracht</span>
+          <div class="g2-opdracht-title">${mix(mainTask)}</div>
+        </div>
+        <div class="g2-book-paper">
+          <div class="g2-from ar" lang="ar" dir="rtl">${arHtml(d.from||'')} <span class="g2-book-arrow">⟵</span> <span class="g2-gap">......</span> ${spk(d.from||'')}</div>
+        </div>`;
     }else if(d.type==='parse'){
       const target=d.target||'';
       const sent=d.sentence||'';
@@ -2215,22 +2332,44 @@ function renderDrill(s, kicker){
       }else{
         sentHtml=arHtml(sent);
       }
-      prompt=`<div class="g2-parse-badge">${ICO.check} Zinsontleding · I'rāb Coach</div>
-        <div class="g2-parse-box">
+      prompt=`<div class="g2-opdracht-box">
+          <span class="g2-opdracht-lbl">Opdracht · Zinsontleding (إعراب)</span>
+          <div class="g2-opdracht-title">Wat is de grammaticale rol van <b class="ar" lang="ar">«${arHtml(target)}»</b> in deze zin?</div>
+        </div>
+        <div class="g2-book-paper">
           <div class="g2-parse-sent ar" lang="ar" dir="rtl">${sentHtml} ${spk(sent)}</div>
-          <div class="g2-sub">Wat is de grammaticale rol (إعراب) van <b class="ar" lang="ar">«${arHtml(target)}»</b> in deze zin?</div>
         </div>`;
     }else{
-      prompt=`<div class="g2-q">${mix(d.q||'')}</div>`;
+      const rawQ = String(d.q || '').trim();
+      const arParenMatch = rawQ.match(/^([\u0600-\u06FF\s؟،.]+)\s*\(([^)]+)\)$/);
+      if(arParenMatch){
+        const arPart = arParenMatch[1].trim();
+        const nlHint = arParenMatch[2].trim();
+        const mainTask = instrTitle || 'Beantwoord de Arabische vraag:';
+        prompt=`<div class="g2-opdracht-box">
+            <span class="g2-opdracht-lbl">Opdracht</span>
+            <div class="g2-opdracht-title">${mix(mainTask)}</div>
+            <div class="g2-opdracht-sub">Aanwijzing: <b>${mix(nlHint)}</b></div>
+          </div>
+          <div class="g2-book-paper">
+            <div class="g2-fill ar" lang="ar" dir="rtl">${arHtml(arPart)} ${spk(arPart)}</div>
+          </div>`;
+      } else {
+        prompt=`<div class="g2-opdracht-box">
+            <span class="g2-opdracht-lbl">${E(instrTitle || 'Vraag')}</span>
+            <div class="g2-opdracht-title">${mix(rawQ)}</div>
+          </div>`;
+      }
     }
     opts=`<div class="g2-opts">${s.optOrder.map((oi,k)=>{
       const o=d.options[oi];
-      const harakahMode = isHarakahOnly(o);
-      let c='g2-opt'+(harakahMode?' g2-opt-harakah':(isAr(o)?' ar':''));
+      const useBookHarakah = (d.type === 'fill' && allHarakahOpts);
+      const harakahMode = !useBookHarakah && isHarakahOnly(o);
+      let c='g2-opt'+((useBookHarakah || isAr(o))?' ar':'')+(harakahMode?' g2-opt-harakah':'');
       if(answered){ if(oi===d.answer) c+=' ok'; else if(oi===s.ans) c+=' bad'; }
-      const inner = harakahMode
-        ? formatHarakahOption(o)
-        : (isAr(o)?`<span lang="ar">${arHtml(o)}</span>`:mix(o));
+      const inner = useBookHarakah
+        ? buildBookHarakahChoice(d.ar, o)
+        : (harakahMode ? formatHarakahOption(o) : (isAr(o)?`<span lang="ar">${arHtml(o)}</span>`:mix(o)));
       return `<button class="${c}" data-act="g2-ans" data-oi="${oi}" ${answered?'disabled':''}><span class="g2-key">${k+1}</span>${inner}</button>`;
     }).join('')}</div>`;
     q=prompt+opts;
@@ -2238,7 +2377,10 @@ function renderDrill(s, kicker){
   let fb='';
   if(answered){
     const ok=s.lastOk;
-    const correct = d.type==='order' ? d.words.join(' ') : d.options[d.answer];
+    const allHarakahOpts = Array.isArray(d.options) && d.options.length > 0 && d.options.every(isHarakahOnly);
+    const correct = d.type==='order'
+      ? d.words.join(' ')
+      : (d.type==='fill' && allHarakahOpts ? buildBookHarakahPlain(d.ar, d.options[d.answer]) : d.options[d.answer]);
     const correctDisplay = isHarakahOnly(correct)
       ? formatHarakahInline(correct)
       : `<span class="ar" lang="ar">${isAr(correct)?arHtml(correct):mix(correct)}</span>${isAr(correct)?spk(correct):''}`;
@@ -2256,7 +2398,7 @@ function renderDrill(s, kicker){
   let irabHtml = '';
   const solvedSent = getSolvedSentenceFromDrill(d);
   const parsedSent = analyzeArabicSentence(solvedSent);
-  if(parsedSent && (s.kind !== 'test' || answered)){
+  if(parsedSent && (answered || P.inlineIrab)){
     const dKey = 'drill_' + (x.ref || s.qi);
     const irabSt = getInlineIrabSession(dKey, 'view');
     const isIrabOpen = !!(irabSt.open || (answered && P.inlineIrab && irabSt.userClosed !== true));
@@ -2265,17 +2407,16 @@ function renderDrill(s, kicker){
       ${!isIrabOpen ? `<div class="g2-drill-irab-bar">
         <div class="iirab-bar-lbl">
           <span class="iirab-badge-ar ar" lang="ar">إعراب</span>
-          <span>Zinsontleding · <b>Moebtada &amp; Gabr</b></span>
+          <span>Zinsontleding bekijken</span>
         </div>
         <div class="iirab-bar-btns">
-          <button type="button" class="btn btn-sm btn-secondary" data-act="iirab-open" data-key="${E(dKey)}" data-sent="${E(solvedSent)}" data-mode="quiz">Zelf ontleden</button>
           <button type="button" class="btn btn-sm btn-ghost" data-act="iirab-open" data-key="${E(dKey)}" data-sent="${E(solvedSent)}" data-mode="view">Toon ontleding</button>
         </div>
       </div>` : renderInlineIrab(solvedSent, dKey, irabSt.mode)}
     </div>`;
   }
 
-  return `<div class="g2-card">${prog}${src}${q}${irabHtml}${fb}</div>`;
+  return `<div class="g2-card">${prog}${q}${irabHtml}${fb}</div>`;
 }
 
 function renderSimpleRun(n, title){
