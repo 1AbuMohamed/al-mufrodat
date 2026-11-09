@@ -1,3 +1,37 @@
+/* Local Amiri font definitions */
+@font-face {
+  font-family: 'Amiri';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/amiri-regular-ar.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+08A0-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: 'Amiri';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/amiri-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Amiri';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('fonts/amiri-bold-ar.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+08A0-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: 'Amiri';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('fonts/amiri-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root{
   --paper:#F4EFE6; --paper-deep:#E7DFD0; --surface:#FFFFFF;
   --ink:#142224; --ink-soft:#344749; --muted:#5E7072;
@@ -4255,4 +4289,418 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
     font-size: 12px;
   }
 }
+
+/* ==========================================================================
+   Grammatica Medina Boek 1 (Opdracht A & C)
+   ========================================================================== */
+
+/* Overzicht & Les container */
+.gram-wrap {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 32px 20px 80px;
+}
+
+.gram-overview-wrap {
+  max-width: 760px;
+}
+
+.gram-overview-header {
+  margin-bottom: 24px;
+}
+
+/* Precies één titel per les */
+.gram-lesson-title {
+  font-size: clamp(26px, 3.5vw, 34px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 24px 0;
+  color: var(--ink);
+  line-height: 1.25;
+}
+
+/* Overzicht lijst */
+.gram-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gram-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  text-decoration: none;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.gram-list-item:hover {
+  border-color: var(--line-strong);
+  background: var(--paper-deep);
+  transform: translateY(-1px);
+}
+
+.gram-list-item.is-done {
+  border-left: 3px solid var(--ok);
+}
+
+.gram-list-item.is-extra {
+  border-style: dashed;
+}
+
+.gram-list-label {
+  font-weight: 600;
+}
+
+.gram-list-status {
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+}
+
+.gram-check {
+  color: var(--ok);
+  font-weight: 700;
+}
+
+.gram-chevron {
+  color: var(--muted);
+  font-size: 18px;
+}
+
+/* Grammatica inhoud */
+.gram-content {
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--ink);
+  margin-bottom: 32px;
+}
+
+.gram-p {
+  margin: 0 0 16px 0;
+  line-height: 1.75;
+}
+
+.gram-p.is-bold {
+  font-weight: 700;
+}
+
+.gram-rule {
+  background: var(--surface);
+  border-left: 3px solid var(--forest);
+  padding: 14px 18px;
+  border-radius: 0 8px 8px 0;
+  margin: 18px 0;
+  font-size: 15.5px;
+  line-height: 1.65;
+  border-top: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+/* Voorbeelden */
+.gram-ex-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+  padding: 12px 16px;
+  margin: 8px 0;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.gram-ar {
+  font-family: var(--ar);
+  font-size: 24px;
+  line-height: 1.85;
+  direction: rtl;
+  text-align: right;
+  color: var(--ink);
+  flex-shrink: 0;
+}
+
+.gram-nl {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  text-align: left;
+}
+
+.gram-sep {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .gram-ex-row {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 6px;
+  }
+  .gram-ar {
+    font-size: 22px;
+  }
+}
+
+/* Tabellen */
+.gram-tbl-wrap {
+  overflow-x: auto;
+  margin: 22px 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  -webkit-overflow-scrolling: touch;
+}
+
+.gram-tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  text-align: left;
+}
+
+.gram-tbl th,
+.gram-tbl td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.gram-tbl thead th {
+  background: var(--paper-deep);
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 14px;
+}
+
+.gram-tbl tr:last-child td {
+  border-bottom: 0;
+}
+
+.gram-cell-ar {
+  font-family: var(--ar);
+  font-size: 22px;
+  line-height: 1.8;
+  direction: rtl;
+  text-align: right;
+}
+
+/* Voetnoten */
+.gram-footnote {
+  font-size: 13.5px;
+  color: var(--muted);
+  font-style: italic;
+  margin: 12px 0 16px 0;
+  line-height: 1.55;
+}
+
+/* Dunne subtiele scheidingslijn vóór de oefeningen */
+.gram-divider {
+  border: 0;
+  height: 1px;
+  background: var(--line-strong);
+  margin: 40px 0 32px 0;
+}
+
+/* Oefeningen sectie */
+.gram-exercises {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.gram-exercise {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gram-ex-nr {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  padding-left: 2px;
+}
+
+/* Lichte kaart voor oefeningafbeelding (ook in donkere modus!) */
+.gram-ex-card {
+  background: #ffffff !important;
+  border: 1px solid #dcd3c3;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  text-align: center;
+  cursor: zoom-in;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .gram-ex-card {
+  border-color: #3b4e52;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.gram-ex-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 6px;
+}
+
+/* Notitievak per oefening */
+.gram-answer-box {
+  margin-top: 4px;
+}
+
+.gram-answer-details {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.gram-answer-summary {
+  padding: 8px 14px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  cursor: pointer;
+  user-select: none;
+}
+
+.gram-answer-summary:hover {
+  color: var(--ink);
+  background: var(--paper-deep);
+}
+
+.gram-answer-input {
+  width: 100%;
+  min-height: 72px;
+  padding: 10px 14px;
+  border: 0;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 14.5px;
+  font-family: inherit;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.gram-answer-input:focus {
+  outline: none;
+  background: var(--paper);
+}
+
+/* Navigatie onderaan les */
+.gram-bottom-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+.gram-nav-center {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.gram-overview-link {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+
+.gram-overview-link:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
+
+.gram-done-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14.5px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--ink-soft);
+  user-select: none;
+}
+
+.gram-done-toggle input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--ok);
+  cursor: pointer;
+}
+
+/* Lightbox overlay voor afbeeldingvergroting */
+.gram-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.82);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  padding: 16px;
+  cursor: zoom-out;
+  backdrop-filter: blur(2px);
+}
+
+.gram-lightbox.open {
+  display: flex;
+}
+
+.gram-lightbox-inner {
+  position: relative;
+  max-width: 96vw;
+  max-height: 94vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gram-lightbox-img {
+  max-width: 94vw;
+  max-height: 90vh;
+  object-fit: contain;
+  background: #ffffff;
+  padding: 14px;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+}
+
+.gram-lightbox-close {
+  position: absolute;
+  top: -16px;
+  right: -16px;
+  width: 36px;
+  height: 36px;
+  background: #111;
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
 

@@ -2,14 +2,13 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Al-Mufrodat — Medina Arabisch · Woordenschat, Grammatica & Dialogen</title>
 <meta name="theme-color" content="#F5F0E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<script src="lessons_v2.js"></script>
+<script src="grammar_v2.js"></script>
 </head>
 <body>
 <div id="sidebar-host"></div>
@@ -3384,8 +3383,8 @@ function render(){
   else if(state.view==='summary')html=renderSummary();
   else if(state.view==='words')html=renderWords();
   else if(state.view==='add')html=renderAdd();
-  else if(state.view==='book')html=renderBook();
-  else if(state.view==='book-lesson')html=renderBookLesson();
+  else if(state.view==='book')html=(window.renderBook?window.renderBook():renderBook());
+  else if(state.view==='book-lesson')html=(window.renderBookLesson?window.renderBookLesson():renderBookLesson());
   else if(state.view==='vocab')html=renderVocabHub();
   else if(state.view==='conv')html=renderConv();
   else if(state.view==='conv-unit')html=renderConvUnit();
@@ -3652,21 +3651,17 @@ document.addEventListener('click',e=>{
   else if(act==='dont-know'){handleDontKnow()}
   else if(act==='continue-learn'){clearVocabFbTimer();continueLearn()}
   else if(act==='book-list'){
-    state.path='grammar';state.view='book';state.bookLesson=null;state.bookTab='uitleg';render();(document.getElementById("app")||window).scrollTop=0;
+    state.path='grammar';state.view='book';state.bookLesson=null;
+    try{history.pushState(null,'','#/grammatica')}catch(e){}
+    render();(document.getElementById("app")||window).scrollTop=0;
   }
   else if(act==='open-book'){
     state.path='grammar';
     const n=parseInt(btn.dataset.l,10);
-    state.bookLesson=n;
-    lastGrammar=n;saveG();
-    const gp=getGram(n);
-    // restore where user left off
-    const tab0=btn.dataset.tab||gp.tab||'start';
-    state.gramIdx=gp.idx||0;
-    state.gramAnswers=Object.assign({},gp.answers||{});
-    state.glCard=gp.card|0; state.glEx=0; state.glRev=false; state.glFull=false;
+    state.bookLesson=isNaN(n)?1:n;
+    lastGrammar=state.bookLesson;saveG();
     state.view='book-lesson';
-    glGoto(tab0);
+    try{history.pushState(null,'','#/grammatica/'+state.bookLesson)}catch(e){}
     render();(document.getElementById("app")||window).scrollTop=0;
   }
   else if(act==='parse-sent'){state.parseShowSent=!state.parseShowSent;render();}
@@ -3958,7 +3953,5 @@ document.addEventListener('touchend',e=>{
 
 load();render();
 </script>
-<script src="lessons_v2.js"></script>
-<script src="grammar_v2.js"></script>
 </body>
 </html>
