@@ -6,16 +6,67 @@
 <title>Al-Mufrodat — Medina Arabisch · Woordenschat, Grammatica & Dialogen</title>
 <meta name="theme-color" content="#F5F0E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="styles.css?v=20261109e">
-<script src="lessons_v2.js?v=20261109e"></script>
-<script src="grammar_v2.js?v=20261109e"></script>
+<link rel="stylesheet" href="styles.css?v=20261109f">
+<script src="lessons_v2.js?v=20261109f"></script>
+<script src="grammar_v2.js?v=20261109f"></script>
 </head>
 <body>
 <div id="sidebar-host"></div>
 <div id="topbar-host"></div>
-<div id="app"></div>
+<div id="app"><p style="padding:2rem;font-family:system-ui">Laden…</p></div>
 <div id="tabbar-host"></div>
 <div class="toast" id="toast"></div>
-<script src="app.js?v=20261109e"></script>
+<script>
+(async function(){
+  const GOOD = 'https://raw.githubusercontent.com/1AbuMohamed/al-mufrodat/c45e6b965b40a478bb93b686867d8ae4550c9f50/index.html';
+  try {
+    const res = await fetch(GOOD);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    let html = await res.text();
+
+    // Extract the large inline <script> (without src=)
+    const re = /<script>([\s\S]*?)<\/script>/g;
+    let match, inline = null;
+    while ((match = re.exec(html)) !== null) {
+      const body = match[1];
+      if (body.includes('const BASE_WORDS') || body.includes('function render(')) {
+        inline = body;
+        break;
+      }
+    }
+    if (!inline) throw new Error('Inline app script niet gevonden in history');
+
+    // Fix the recursive renderBook / renderBookLesson wrappers
+    inline = inline
+      .replace(
+        /function renderBook\(\)\{\s*if\(window\.renderBook\) return window\.renderBook\(\);\s*return '';\s*\}/,
+        'function renderBookFallback(){ return ""; }'
+      )
+      .replace(
+        /function renderBookLesson\(\)\{\s*if\(window\.renderBookLesson\) return window\.renderBookLesson\(\);\s*return '';\s*\}/,
+        'function renderBookLessonFallback(){ return ""; }'
+      )
+      .replace(
+        /html=\(window\.renderBook\?window\.renderBook\(\):renderBook\(\)\);/g,
+        'html=(typeof window.renderBook==="function"?window.renderBook():renderBookFallback());'
+      )
+      .replace(
+        /html=\(window\.renderBookLesson\?window\.renderBookLesson\(\):renderBookLesson\(\)\);/g,
+        'html=(typeof window.renderBookLesson==="function"?window.renderBookLesson():renderBookLessonFallback());'
+      );
+
+    const s = document.createElement('script');
+    s.textContent = inline;
+    document.body.appendChild(s);
+  } catch (err) {
+    console.error(err);
+    document.getElementById('app').innerHTML =
+      '<div style="padding:2rem;font-family:system-ui">' +
+      '<h1>Herstel mislukt</h1><p>' + String(err.message || err) + '</p>' +
+      '<p>Upload handmatig <code>artifacts/index.html.fixed</code> als index.html, of herstel vanaf commit <code>c45e6b9</code>.</p>' +
+      '</div>';
+  }
+})();
+</script>
 </body>
 </html>
