@@ -6,9 +6,10 @@
 <title>Al-Mufrodat — Medina Arabisch · Woordenschat, Grammatica & Dialogen</title>
 <meta name="theme-color" content="#F5F0E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="styles.css?v=20261109i">
-<script src="lessons_v2.js?v=20261109i"></script>
-<script src="grammar_v2.js?v=20261109i"></script>
+<link rel="stylesheet" href="styles.css?v=20261109j">
+<script src="lessons_v2.js?v=20261109j"></script>
+<script src="grammar_v2.js?v=20261109j"></script>
+<script src="exercises_v2.js?v=20261109j"></script>
 <style>
 /* Simpele woordenschat-kaarten */
 .vocab-simple-list{display:flex;flex-direction:column;gap:8px;max-width:640px}
@@ -38,6 +39,10 @@
 .vocab-simple-tools .grow{flex:1}
 .sbn-course .sb-chevron{display:inline-block;transition:transform .15s ease}
 .sbn-course[aria-expanded="true"] .sb-chevron{transform:rotate(180deg)}
+/* Oefeningen-blokjes in lespagina */
+.ex-block{border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.ex-block h3{color:var(--ink)}
+.ex-answers summary{color:var(--forest)}
 </style>
 </head>
 <body>
@@ -57,7 +62,6 @@
       document.body.scrollTop = 0;
       const app = document.getElementById('app');
       if (app) app.scrollTop = 0;
-      // na render nogmaals (layout kan even later klaar zijn)
       requestAnimationFrame(function(){
         window.scrollTo(0, 0);
         document.documentElement.scrollTop = 0;
@@ -103,7 +107,7 @@
         'html=(typeof window.renderBookLesson==="function"?window.renderBookLesson():renderBookLessonFallback());'
       );
 
-    // 2) Grammatica-menu togglen
+    // 2) Grammatica-menu togglen + Oefeningen-menu
     inline = inline.replace(
       /if\(m==='gram'\)\{\s*sbMenuState\.gram = true;\s*state\.path='grammar';\s*if\(state\.view==='book-lesson'\)\{\s*state\.view='book';\s*state\.bookLesson=null;\s*try\{history\.pushState\(null,'','#\/grammatica'\)\}\s*catch\(e\)\{\}\s*\} else if\(state\.view!=='book'\)\{\s*state\.view='book';\s*state\.bookLesson=null;\s*try\{history\.pushState\(null,'','#\/grammatica'\)\}\s*catch\(e\)\{\}\s*\}\s*render\(\);\s*\(document\.getElementById\("app"\)\|\|window\)\.scrollTop=0;\s*return;\s*\}/,
       "if(m==='gram'){\n" +
@@ -119,21 +123,41 @@
       "      render();\n" +
       "      if(willOpen && window.__scrollPageTop) window.__scrollPageTop();\n" +
       "      return;\n" +
+      "    }\n" +
+      "    if(m==='ex'){\n" +
+      "      const willOpenEx = !sbMenuState.ex;\n" +
+      "      sbMenuState.ex = willOpenEx;\n" +
+      "      if(willOpenEx){\n" +
+      "        state.path='exercises';\n" +
+      "        if(state.view!=='ex' && state.view!=='ex-lesson'){\n" +
+      "          state.view='ex'; state.exLesson=null;\n" +
+      "          try{history.pushState(null,'','#/oefeningen')}catch(e){}\n" +
+      "        }\n" +
+      "      }\n" +
+      "      render();\n" +
+      "      if(willOpenEx && window.__scrollPageTop) window.__scrollPageTop();\n" +
+      "      return;\n" +
       "    }"
     );
 
-    // 3) gramOpen / convOpen alleen via toggle
+    // 3) gramOpen / convOpen alleen via toggle + exOpen
     inline = inline
       .replace(
         /const gramOpen = \(path === 'grammar'\) \|\| \(state\.view === 'book'\) \|\| \(state\.view === 'book-lesson'\) \|\| !!sbMenuState\.gram;/,
-        "const gramOpen = !!sbMenuState.gram;"
+        "const gramOpen = !!sbMenuState.gram;\n  const exOpen = !!sbMenuState.ex;"
       )
       .replace(
         /const convOpen = \(path === 'conv'\) \|\| \(state\.view === 'conv'\) \|\| \(state\.view === 'conv-unit'\) \|\| !!sbMenuState\.conv;/,
         "const convOpen = !!sbMenuState.conv;"
       );
 
-    // 4) open-book: submenu open + scroll naar boven (window, niet alleen #app)
+    // 3b) Init sbMenuState.ex
+    inline = inline.replace(
+      /let sbMenuState = \{ gram: false, conv: false \};/,
+      "let sbMenuState = { gram: false, conv: false, ex: false };\nwindow.sbMenuState = sbMenuState;"
+    );
+
+    // 4) open-book: submenu open + scroll naar boven
     inline = inline.replace(
       /else if\(act==='open-book'\)\{\s*state\.path='grammar';/,
       "else if(act==='open-book'){\n    sbMenuState.gram=true;\n    state.path='grammar';"
@@ -152,13 +176,90 @@
       "(window.__scrollPageTop?window.__scrollPageTop():window.scrollTo(0,0))"
     );
 
+    // 6) currentPath() uitbreiden voor exercises
+    inline = inline.replace(
+      /if\(\['book','book-lesson'\]\.includes\(state\.view\)\)return 'grammar';/,
+      "if(['book','book-lesson'].includes(state.view))return 'grammar';\n  if(['ex','ex-lesson'].includes(state.view))return 'exercises';"
+    );
+
+    // 7) In render(): oefeningen-views toevoegen
+    inline = inline.replace(
+      /else if\(state\.view==='book-lesson'\)html=\(typeof window\.renderBookLesson===\"function\"\?window\.renderBookLesson\(\):renderBookLessonFallback\(\)\);/,
+      "else if(state.view==='book-lesson')html=(typeof window.renderBookLesson===\"function\"?window.renderBookLesson():renderBookLessonFallback());\n" +
+      "  else if(state.view==='ex')html=(typeof window.renderExercises===\"function\"?window.renderExercises():'<p class=\"empty\">Oefeningen laden…</p>');\n" +
+      "  else if(state.view==='ex-lesson')html=(typeof window.renderExerciseLesson===\"function\"?window.renderExerciseLesson():'<p class=\"empty\">Oefening laden…</p>');"
+    );
+
+    // 8) viewLabels voor topbar
+    inline = inline.replace(
+      /book: 'Grammatica · Medina-boek',/,
+      "book: 'Grammatica · Medina-boek',\n    ex: 'Oefeningen',\n    'ex-lesson': 'Oefeningen',"
+    );
+
+    // 9) In renderSidebar: Oefeningen-menu toevoegen na Grammatica-submenu
+    inline = inline.replace(
+      /(<button type="button" class="sbn sbn-course \$\{path==='conv'\?'active':''\}" data-act="sb-menu" data-menu="conv"[\s\S]*?<\/div>\s*)\n\n\n\s*<button type="button" class="sbn \$\{state\.view==='words'/,
+      "$1\n\n      <button type=\"button\" class=\"sbn sbn-course ${path==='exercises'?'active':''}\" data-act=\"sb-menu\" data-menu=\"ex\" aria-expanded=\"${exOpen}\">\n" +
+      "        <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\"><path d=\"M9 11l3 3L22 4\"/><path d=\"M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11\"/></svg>\n" +
+      "        <span>Oefeningen</span>\n" +
+      "        <span class=\"sb-chevron\">⌄</span>\n" +
+      "      </button>\n" +
+      "      <div class=\"sb-course-menu ${exOpen?'open':''}\">\n" +
+      "        ${exLinks}\n" +
+      "      </div>\n\n      <button type=\"button\" class=\"sbn ${state.view==='words'"
+    );
+
+    // 10) Bouw exLinks in renderSidebar (vóór return)
+    inline = inline.replace(
+      /const convLinks = Object\.entries\(CONVERSATIONS\)\.map\(\(\[u, c\]\) => \{[\s\S]*?\}\)\.join\(''\);/,
+      "const convLinks = Object.entries(CONVERSATIONS).map(([u, c]) => {\n" +
+      "    const active = state.view==='conv-unit' && String(state.convUnit)===String(u);\n" +
+      "    const num = String(u).padStart(2,'0');\n" +
+      "    return `<button type=\"button\" class=\"${active?'active':''}\" data-act=\"open-conv\" data-u=\"${u}\"><span>${num}</span>${esc(c.titleNl)}</button>`;\n" +
+      "  }).join('');\n\n" +
+      "  const exListNums = [];\n" +
+      "  for (let i = 1; i <= 23; i++) exListNums.push(i);\n" +
+      "  const exLinks = exListNums.map(n => {\n" +
+      "    const active = state.view==='ex-lesson' && Number(state.exLesson)===Number(nn);\n" +
+      "    const num = String(n).padStart(2,'0');\n" +
+      "    const isDone = (window.EX2 && window.EX2.lessonDone) ? window.EX2.lessonDone(n) : false;\n" +
+      "    return `<button type=\"button\" class=\"${active?'active':''}\" data-act=\"open-ex\" data-l=\"${n}\"><span>${num}</span>Les ${n}${isDone?' ✓':''}</button>`;\n" +
+      "  }).join('');"
+    );
+
+    // 11) open-ex handler in de click-listener
+    inline = inline.replace(
+      /else if\(act==='open-book'\)\{/,
+      "else if(act==='open-ex'){\n" +
+      "    const n = parseInt(btn.dataset.l, 10);\n" +
+      "    if(isNaN(n)) return;\n" +
+      "    sbMenuState.ex = true;\n" +
+      "    state.path = 'exercises';\n" +
+      "    state.view = 'ex-lesson';\n" +
+      "    state.exLesson = n;\n" +
+      "    try{history.pushState(null,'','#/oefeningen/'+n)}catch(e){}\n" +
+      "    render();\n" +
+      "    if(window.__scrollPageTop) window.__scrollPageTop();\n" +
+      "    return;\n" +
+      "  }\n" +
+      "  else if(act==='open-book'){"
+    );
+
+    // 12) nav naar book/ex ook via data-v
+    inline = inline.replace(
+      /else if\(v==='book'\)\{state\.path='grammar';state\.view='book';state\.bookLesson=null;state\.bookTab='uitleg';if\(state\.g2\)state\.g2\.view='map';sbMenuState\.gram=true;try\{history\.pushState\(null,'','#\/grammatica'\)\}catch\(e\)\{\}\}/,
+      "else if(v==='book'){state.path='grammar';state.view='book';state.bookLesson=null;state.bookTab='uitleg';if(state.g2)state.g2.view='map';sbMenuState.gram=true;try{history.pushState(null,'','#/grammatica')}catch(e){}}\n" +
+      "    else if(v==='ex'||v==='oefeningen'){state.path='exercises';state.view='ex';state.exLesson=null;sbMenuState.ex=true;try{history.pushState(null,'','#/oefeningen')}catch(e){}}"
+    );
+
     const s = document.createElement('script');
     s.textContent = inline;
     document.body.appendChild(s);
 
     // Extra: bij hash-wisseling naar andere les altijd naar boven
     window.addEventListener('hashchange', function(){
-      if ((location.hash || '').indexOf('#/grammatica') === 0) {
+      const h = location.hash || '';
+      if (h.indexOf('#/grammatica') === 0 || h.indexOf('#/oefeningen') === 0) {
         scrollPageTop();
       }
     });
@@ -192,7 +293,7 @@
           '<span class="grow"></span>' +
           '<button class="btn btn-secondary btn-sm" data-act="start-learn" data-l="all">Alles oefenen</button>' +
           '<button class="btn btn-secondary btn-sm" data-act="nav" data-v="words">Lijst</button>' +
-        '</div>' +
+ vis        '</div>' +
         '<div class="vocab-simple-list">' + rows + '</div>' +
       '</div>';
     };
@@ -209,6 +310,26 @@
       '.lesson .status{display:none!important}'
     ].join('');
     document.head.appendChild(style);
+
+    // Zorg dat oefeningen-hash ook bij eerste load werkt
+    if ((location.hash || '').indexOf('#/oefeningen') === 0 && typeof window.render === 'function') {
+      setTimeout(function(){
+        if (window.state) {
+          window.state.path = 'exercises';
+          const parts = (location.hash || '').slice(1).split('/').filter(Boolean);
+          if (parts.length >= 2) {
+            window.state.view = 'ex-lesson';
+            window.state.exLesson = parseInt(parts[1], 10) || 1;
+          } else {
+            window.state.view = 'ex';
+            window.state.exLesson = null;
+          }
+          if (window.sbMenuState) window.sbMenuState.ex = true;
+          window.render();
+          scrollPageTop();
+        }
+      }, 80);
+    }
 
     if (typeof render === 'function' && window.state) {
       render();
