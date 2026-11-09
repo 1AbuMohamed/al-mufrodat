@@ -114,7 +114,8 @@ const IRAB_ROLES = [
   { id: 'harf_jarr', ar: 'حَرْف جَرّ', nl: 'Harf Djarr (Voorzetsel)' },
   { id: 'ism_majroor', ar: 'اِسْم مَجْرُور', nl: 'Ism Madjroer (Na voorz.)' },
   { id: 'mudaf_ilayhi', ar: 'مُضَاف إِلَيْهِ', nl: 'Moedaf Ilayh (Bezitter)' },
-  { id: 'naat', ar: 'نَعْت', nl: 'Naʿt (Bijv. nw.)' }
+  { id: 'naat', ar: 'نَعْت', nl: 'Naʿt (Bijv. nw.)' },
+  { id: 'badal', ar: 'بَدَل', nl: 'Badal (Bepaling na هَذَا/ذَلِكَ)' }
 ];
 
 const IRAB_STATUSES = [
@@ -139,10 +140,11 @@ const ALL_IRAB_SENTENCES = [
     categoryTitle: 'Officieel Examen · Vraag 7.1',
     sentence: 'الْإِمَامُ فِي الْمَسْجِدِ',
     nl: 'De imam is in de moskee.',
+    ruleSummary: 'Nominale zin (الْجُمْلَةُ الِاسْمِيَّةُ) met een voorzetselgroep (شِبْهُ جُمْلَةٍ) als gezegde.',
     words: [
       { ar: 'الْإِمَامُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الْإِمَامُ» is het onderwerp (مُبْتَدَأ) van de nominale zin: nominatief (مَرْفُوع met één ضَمَّة).' },
       { ar: 'فِي', role: 'harf_jarr', status: 'mabnee', mark: 'none', explain: '«فِي» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ).' },
-      { ar: 'الْمَسْجِدِ', role: 'ism_majroor', status: 'majroor', mark: 'kasrah', explain: '«الْمَسْجِدِ» volgt na een voorzetsel (اِسْم مَجْرُور): genitief (مَجْرُور met كَسْرَة).' }
+      { ar: 'الْمَسْجِدِ', role: 'ism_majroor', status: 'majroor', mark: 'kasrah', explain: '«الْمَسْجِدِ» volgt na een voorzetsel (اِسْم مَجْرُور): genitief (مَجْرُور met كَسْرَة). Samen vormt «فِي الْمَسْجِدِ» de Gabr (شِبْه جُمْلَة).' }
     ]
   },
   {
@@ -151,8 +153,9 @@ const ALL_IRAB_SENTENCES = [
     categoryTitle: 'Officieel Examen · Vraag 7.2',
     sentence: 'حَقِيبَةُ الطَّالِبِ عَلَى السَّرِيرِ',
     nl: 'De tas van de student ligt op het bed.',
+    ruleSummary: 'Bezitsconstructie (الْإِضَافَةُ · Les 5) als onderwerp, gevolgd door een voorzetselgroep (Les 4).',
     words: [
-      { ar: 'حَقِيبَةُ', role: 'mubtada_mudaf', status: 'marfoo', mark: 'dammah', explain: '«حَقِيبَةُ» is het onderwerp (مُبْتَدَأ) én bezit (مُضَاف): nominatief (مَرْفُوع met één ضَمَّة, geen tanwīn).' },
+      { ar: 'حَقِيبَةُ', role: 'mubtada_mudaf', status: 'marfoo', mark: 'dammah', explain: '«حَقِيبَةُ» is het onderwerp (مُبْتَدَأ) én bezit (مُضَاف): nominatief (مَرْفُوع met één ضَمَّة, geen tanwīn en geen الْ).' },
       { ar: 'الطَّالِبِ', role: 'mudaf_ilayhi', status: 'majroor', mark: 'kasrah', explain: '«الطَّالِبِ» is de bezitter (مُضَاف إِلَيْهِ): altijd genitief (مَجْرُور met كَسْرَة).' },
       { ar: 'عَلَى', role: 'harf_jarr', status: 'mabnee', mark: 'none', explain: '«عَلَى» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ).' },
       { ar: 'السَّرِيرِ', role: 'ism_majroor', status: 'majroor', mark: 'kasrah', explain: '«السَّرِيرِ» is een zelfstandig naamwoord na een voorzetsel (اِسْم مَجْرُور): genitief (مَجْرُور met كَسْرَة).' }
@@ -164,6 +167,7 @@ const ALL_IRAB_SENTENCES = [
     categoryTitle: 'Officieel Examen · Vraag 7.3',
     sentence: 'قَمِيصُ الْوَلَدِ الصَّغِيرِ فِي الْغُرْفَةِ',
     nl: 'Het hemd van de kleine jongen is in de kamer.',
+    ruleSummary: 'Combinatie van Idāfah (مُضَاف + مُضَاف إِلَيْهِ) met een bijvoeglijk naamwoord (نَعْت · Les 9) bij de bezitter.',
     words: [
       { ar: 'قَمِيصُ', role: 'mubtada_mudaf', status: 'marfoo', mark: 'dammah', explain: '«قَمِيصُ» is مُبْتَدَأ وَهُوَ مُضَاف: nominatief (مَرْفُوع met één ضَمَّة).' },
       { ar: 'الْوَلَدِ', role: 'mudaf_ilayhi', status: 'majroor', mark: 'kasrah', explain: '«الْوَلَدِ» is de bezitter (مُضَاف إِلَيْهِ): altijd genitief (مَجْرُور met كَسْرَة).' },
@@ -178,6 +182,7 @@ const ALL_IRAB_SENTENCES = [
     categoryTitle: 'Officieel Examen · Vraag 7.4',
     sentence: 'الْفَلَّاحُ الْغَنِيُّ مِنَ السُّوقِ',
     nl: 'De rijke boer komt van de markt.',
+    ruleSummary: 'Onderwerp (مُبْتَدَأ) met bijvoeglijk naamwoord (نَعْت) in de nominatief, gevolgd door voorzetsel + Ism Majrūr.',
     words: [
       { ar: 'الْفَلَّاحُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الْفَلَّاحُ» is het onderwerp (مُبْتَدَأ): nominatief (مَرْفُوع met ضَمَّة).' },
       { ar: 'الْغَنِيُّ', role: 'naat', status: 'marfoo', mark: 'dammah', explain: '«الْغَنِيُّ» is een bijvoeglijk naamwoord (نَعْت) bij الْفَلَّاحُ: volgt in de nominatief (مَرْفُوع met ضَمَّة).' },
@@ -191,6 +196,7 @@ const ALL_IRAB_SENTENCES = [
     categoryTitle: 'Oefenexamen · Vraag 7.1',
     sentence: 'كِتَابُ الطَّالِبِ جَدِيدٌ',
     nl: 'Het boek van de student is nieuw.',
+    ruleSummary: 'Bezitsconstructie (مُضَاف + مُضَاف إِلَيْهِ) als onderwerp met een onbepaald gezegde (خَبَر).',
     words: [
       { ar: 'كِتَابُ', role: 'mubtada_mudaf', status: 'marfoo', mark: 'dammah', explain: '«كِتَابُ» is het onderwerp (مُبْتَدَأ) én bezit (مُضَاف): nominatief (مَرْفُوع met één ضَمَّة, geen tanwīn).' },
       { ar: 'الطَّالِبِ', role: 'mudaf_ilayhi', status: 'majroor', mark: 'kasrah', explain: '«الطَّالِبِ» is de bezitter (مُضَاف إِلَيْهِ): genitief (مَجْرُور met كَسْرَة).' },
@@ -203,6 +209,7 @@ const ALL_IRAB_SENTENCES = [
     categoryTitle: 'Oefenexamen · Vraag 7.2',
     sentence: 'قَلَمُ الْأُسْتَاذِ عَلَى الطَّاوِلَةِ',
     nl: 'De pen van de leraar ligt op de tafel.',
+    ruleSummary: 'Bezitsconstructie (الْإِضَافَةُ) gevolgd door voorzetsel عَلَى + Ism Majrūr.',
     words: [
       { ar: 'قَلَمُ', role: 'mubtada_mudaf', status: 'marfoo', mark: 'dammah', explain: '«قَلَمُ» is مُبْتَدَأ وَهُوَ مُضَاف: nominatief (مَرْفُوع met één ضَمَّة).' },
       { ar: 'الْأُسْتَاذِ', role: 'mudaf_ilayhi', status: 'majroor', mark: 'kasrah', explain: '«الْأُسْتَاذِ» is de bezitter (مُضَاف إِلَيْهِ): genitief (مَجْرُور met كَسْرَة).' },
@@ -216,6 +223,7 @@ const ALL_IRAB_SENTENCES = [
     categoryTitle: 'Oefenexamen · Vraag 7.3',
     sentence: 'كِتَابُ الطَّالِبِ الْجَدِيدِ عَلَى الْمَكْتَبِ',
     nl: 'Het boek van de nieuwe student ligt op het bureau.',
+    ruleSummary: 'Idāfah met een bijvoeglijk naamwoord (نَعْت) dat met الطَّالِبِ meebuigt in de genitief (-i).',
     words: [
       { ar: 'كِتَابُ', role: 'mubtada_mudaf', status: 'marfoo', mark: 'dammah', explain: '«كِتَابُ» is مُبْتَدَأ وَهُوَ مُضَاف: nominatief (مَرْفُوع met één ضَمَّة).' },
       { ar: 'الطَّالِبِ', role: 'mudaf_ilayhi', status: 'majroor', mark: 'kasrah', explain: '«الطَّالِبِ» is de bezitter (مُضَاف إِلَيْهِ): genitief (مَجْرُور met كَسْرَة).' },
@@ -230,6 +238,7 @@ const ALL_IRAB_SENTENCES = [
     categoryTitle: 'Oefenexamen · Vraag 7.4',
     sentence: 'الطَّالِبُ مُجْتَهِدٌ',
     nl: 'De student is ijverig.',
+    ruleSummary: 'Basis nominale zin (Les 3): bepaald onderwerp (مُبْتَدَأ) + onbepaald gezegde (خَبَر).',
     words: [
       { ar: 'الطَّالِبُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الطَّالِبُ» is het bepaalde onderwerp (مُبْتَدَأ): nominatief (مَرْفُوع met één ضَمَّة).' },
       { ar: 'مُجْتَهِدٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«مُجْتَهِدٌ» is het onbepaalde gezegde (خَبَر): nominatief (مَرْفُوع met تَنْوِين ضَمّ).' }
@@ -238,9 +247,10 @@ const ALL_IRAB_SENTENCES = [
   {
     id: 'med_1',
     category: 'medina',
-    categoryTitle: 'Medina Les 1 Basis',
+    categoryTitle: 'Medina Les 1 · Aanwijzer هَذَا',
     sentence: 'هَذَا كِتَابٌ',
     nl: 'Dit is een boek.',
+    ruleSummary: 'Les 1: «هَذَا» (dit) is een aanwijzend voornaamwoord (اِسْمُ إِشَارَةٍ) dat fungeert als Moebtada, gevolgd door een onbepaalde Gabr.',
     words: [
       { ar: 'هَذَا', role: 'mubtada', status: 'mabnee', mark: 'none', explain: '«هَذَا» is een aanwijzend voornaamwoord dat fungeert als het onderwerp (مُبْتَدَأ). Aanwijzers zijn onveranderlijk (مَبْنِيّ).' },
       { ar: 'كِتَابٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«كِتَابٌ» is het onbepaalde gezegde (خَبَر): nominatief (مَرْفُوع met تَنْوِين ضَمّ).' }
@@ -249,24 +259,428 @@ const ALL_IRAB_SENTENCES = [
   {
     id: 'med_2',
     category: 'medina',
-    categoryTitle: 'Medina Les 3 Basis',
-    sentence: 'الْبَيْتُ مَفْتُوحٌ',
-    nl: 'Het huis is open.',
+    categoryTitle: 'Medina Les 1 · Nominale Zin',
+    sentence: 'هَذَا مَسْجِدٌ',
+    nl: 'Dit is een moskee.',
+    ruleSummary: 'Les 1: Aanwijzend voornaamwoord هَذَا (Moebtada) + onbepaald naamwoord met tanwīn dammah (Gabr).',
     words: [
-      { ar: 'الْبَيْتُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الْبَيْتُ» is het bepaalde onderwerp (مُبْتَدَأ): nominatief (مَرْفُوع met één ضَمَّة).' },
-      { ar: 'مَفْتُوحٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«مَفْتُوحٌ» is het onbepaalde gezegde (خَبَر): nominatief (مَرْفُوع met تَنْوِين ضَمّ).' }
+      { ar: 'هَذَا', role: 'mubtada', status: 'mabnee', mark: 'none', explain: '«هَذَا» is het onderwerp (مُبْتَدَأ): een onveranderlijk aanwijzend voornaamwoord (مَبْنِيّ).' },
+      { ar: 'مَسْجِدٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«مَسْجِدٌ» is het gezegde (خَبَر): onbepaald en nominatief (مَرْفُوع met تَنْوِين ضَمّ).' }
     ]
   },
   {
     id: 'med_3',
     category: 'medina',
-    categoryTitle: 'Medina Les 4 Diptoot',
+    categoryTitle: 'Medina Les 2 · Aanwijzer ذَلِكَ',
+    sentence: 'ذَلِكَ نَجْمٌ',
+    nl: 'Dat is een ster.',
+    ruleSummary: 'Les 2: «ذَلِكَ» (dat, voor veraf mannelijk) is de Moebtada; «نَجْمٌ» is de Gabr met tanwīn dammah (-un).',
+    words: [
+      { ar: 'ذَلِكَ', role: 'mubtada', status: 'mabnee', mark: 'none', explain: '«ذَلِكَ» is een aanwijzend voornaamwoord voor veraf en fungeert als onderwerp (مُبْتَدَأ, مَبْنِيّ).' },
+      { ar: 'نَجْمٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«نَجْمٌ» is het gezegde (خَبَر): nominatief (مَرْفُوع met تَنْوِين ضَمّ).' }
+    ]
+  },
+  {
+    id: 'med_4',
+    category: 'medina',
+    categoryTitle: 'Medina Les 3 · Lidwoord الْ',
+    sentence: 'الْبَيْتُ مَفْتُوحٌ',
+    nl: 'Het huis is open.',
+    ruleSummary: 'Les 3: Een woord met الْ krijgt géén tanwīn (slechts één dammah -u) en vormt de Moebtada; het onbepaalde woord (-un) is de Gabr.',
+    words: [
+      { ar: 'الْبَيْتُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الْبَيْتُ» is het bepaalde onderwerp (مُبْتَدَأ): nominatief (مَرْفُوع met één ضَمَّة vanwege الْ).' },
+      { ar: 'مَفْتُوحٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«مَفْتُوحٌ» is het onbepaalde gezegde (خَبَر): nominatief (مَرْفُوع met تَنْوِين ضَمّ).' }
+    ]
+  },
+  {
+    id: 'med_5',
+    category: 'medina',
+    categoryTitle: 'Medina Les 3 · Maan- en Zonneletters',
+    sentence: 'التَّاجِرُ غَنِيٌّ',
+    nl: 'De handelaar is rijk.',
+    ruleSummary: 'Les 3: De ت is een zonneletter (حَرْف شَمْسِيّ). «التَّاجِرُ» is bepaald (Moebtada, -u) en «غَنِيٌّ» is onbepaald (Gabr, -un).',
+    words: [
+      { ar: 'التَّاجِرُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«التَّاجِرُ» is het onderwerp (مُبْتَدَأ): nominatief (مَرْفُوع met één ضَمَّة).' },
+      { ar: 'غَنِيٌّ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«غَنِيٌّ» is het gezegde (خَبَر): nominatief (مَرْفُوع met تَنْوِين ضَمّ).' }
+    ]
+  },
+  {
+    id: 'med_6',
+    category: 'medina',
+    categoryTitle: 'Medina Les 3 · Nominale Zin',
+    sentence: 'الْمَاءُ بَارِدٌ',
+    nl: 'Het water is koud.',
+    ruleSummary: 'Les 3: Klassieke nominale zin: Moebtada met الْ (-u) + Gabr zonder الْ (-un).',
+    words: [
+      { ar: 'الْمَاءُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الْمَاءُ» is het bepaalde onderwerp (مُبْتَدَأ): nominatief (مَرْفُوع met één ضَمَّة).' },
+      { ar: 'بَارِدٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«بَارِدٌ» is het onbepaalde gezegde (خَبَر): nominatief (مَرْفُوع met تَنْوِين ضَمّ).' }
+    ]
+  },
+  {
+    id: 'med_7',
+    category: 'medina',
+    categoryTitle: 'Medina Les 4 · Voorzetsel فِي',
+    sentence: 'الطَّالِبُ فِي الْفَصْلِ',
+    nl: 'De student is in het klaslokaal.',
+    ruleSummary: 'Les 4: Na een voorzetsel (حَرْفُ جَرٍّ zoals فِي) staat het zelfstandig naamwoord altijd in de genitief (مَجْرُور met kasrah -i).',
+    words: [
+      { ar: 'الطَّالِبُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الطَّالِبُ» is het onderwerp (مُبْتَدَأ): nominatief (مَرْفُوع met ضَمَّة).' },
+      { ar: 'فِي', role: 'harf_jarr', status: 'mabnee', mark: 'none', explain: '«فِي» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ).' },
+      { ar: 'الْفَصْلِ', role: 'ism_majroor', status: 'majroor', mark: 'kasrah', explain: '«الْفَصْلِ» is een اِسْم مَجْرُور na فِي: genitief (مَجْرُور met كَسْرَة).' }
+    ]
+  },
+  {
+    id: 'med_8',
+    category: 'medina',
+    categoryTitle: 'Medina Les 4 · Voorzetsel عَلَى',
+    sentence: 'السَّاعَةُ عَلَى السَّرِيرِ',
+    nl: 'Het horloge ligt op het bed.',
+    ruleSummary: 'Les 4: Vrouwelijk onderwerp (السَّاعَةُ) in Marfūʿ (-u) gevolgd door عَلَى + Ism Majrūr (-i).',
+    words: [
+      { ar: 'السَّاعَةُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«السَّاعَةُ» is het onderwerp (مُبْتَدَأ): nominatief (مَرْفُوع met ضَمَّة).' },
+      { ar: 'عَلَى', role: 'harf_jarr', status: 'mabnee', mark: 'none', explain: '«عَلَى» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ).' },
+      { ar: 'السَّرِيرِ', role: 'ism_majroor', status: 'majroor', mark: 'kasrah', explain: '«السَّرِيرِ» volgt op عَلَى (اِسْم مَجْرُور): genitief (مَجْرُور met كَسْرَة).' }
+    ]
+  },
+  {
+    id: 'med_9',
+    category: 'medina',
+    categoryTitle: 'Medina Les 4 · Diptoot Plaatsnaam',
     sentence: 'الرَّسُولُ مِنْ مَكَّةَ',
     nl: 'De Boodschapper komt uit Mekka.',
+    ruleSummary: 'Les 4 & 22: Plaatsnaam مَكَّةَ is een diptoot (مَمْنُوعٌ مِنَ الصَّرْفِ) en krijgt na مِنْ een fathah (-a) i.p.v. een kasrah!',
     words: [
       { ar: 'الرَّسُولُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الرَّسُولُ» is het onderwerp (مُبْتَدَأ): nominatief (مَرْفُوع met ضَمَّة).' },
       { ar: 'مِنْ', role: 'harf_jarr', status: 'mabnee', mark: 'none', explain: '«مِنْ» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ).' },
       { ar: 'مَكَّةَ', role: 'ism_majroor', status: 'majroor', mark: 'fathah', explain: '«مَكَّةَ» is een diptoot (مَمْنُوع مِنَ الصَّرْف) en krijgt in de genitief een fatha (ـَ) in plaats van een kasrah!' }
+    ]
+  },
+  {
+    id: 'med_10',
+    category: 'medina',
+    categoryTitle: 'Medina Les 5 · Idāfah (Bezit)',
+    sentence: 'بَابُ الْمَسْجِدِ مَفْتُوحٌ',
+    nl: 'De deur van de moskee is open.',
+    ruleSummary: 'Les 5: De Moedaf («بَابُ») heeft géén الْ en géén tanwīn; de Moedaf Ilayh («الْمَسْجِدِ») staat in Majrūr (-i); «مَفْتُوحٌ» is de Gabr (-un).',
+    words: [
+      { ar: 'بَابُ', role: 'mubtada_mudaf', status: 'marfoo', mark: 'dammah', explain: '«بَابُ» is het onderwerp (مُبْتَدَأ) én het bezit (مُضَاف): nominatief met één ضَمَّة (geen tanwīn).' },
+      { ar: 'الْمَسْجِدِ', role: 'mudaf_ilayhi', status: 'majroor', mark: 'kasrah', explain: '«الْمَسْجِدِ» is de bezitter (مُضَاف إِلَيْهِ): altijd genitief (مَجْرُور met كَسْرَة).' },
+      { ar: 'مَفْتُوحٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«مَفْتُوحٌ» is het gezegde (خَبَر) bij بَابُ: nominatief (مَرْفُوع met تَنْوِين ضَمّ).' }
+    ]
+  },
+  {
+    id: 'med_11',
+    category: 'medina',
+    categoryTitle: 'Medina Les 5 · Idāfah met Eigennaam',
+    sentence: 'بَيْتُ حَامِدٍ قَرِيبٌ',
+    nl: 'Het huis van Hāmid is dichtbij.',
+    ruleSummary: 'Les 5: Mannelijke eigennaam «حَامِدٍ» als Moedaf Ilayh krijgt tanwīn kasrah (-in).',
+    words: [
+      { ar: 'بَيْتُ', role: 'mubtada_mudaf', status: 'marfoo', mark: 'dammah', explain: '«بَيْتُ» is مُبْتَدَأ وَهُوَ مُضَاف: nominatief met één ضَمَّة.' },
+      { ar: 'حَامِدٍ', role: 'mudaf_ilayhi', status: 'majroor', mark: 'tanween_kasr', explain: '«حَامِدٍ» is de bezitter (مُضَاف إِلَيْهِ): genitief (مَجْرُور met تَنْوِين كَسْر).' },
+      { ar: 'قَرِيبٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«قَرِيبٌ» is het gezegde (خَبَر): nominatief (مَرْفُوع met تَنْوِين ضَمّ).' }
+    ]
+  },
+  {
+    id: 'med_12',
+    category: 'medina',
+    categoryTitle: 'Medina Les 5 · Idāfah + Voorzetsel',
+    sentence: 'مِفْتَاحُ السَّيَّارَةِ عَلَى الْمَكْتَبِ',
+    nl: 'De sleutel van de auto ligt op het bureau.',
+    ruleSummary: 'Les 5: «مِفْتَاحُ السَّيَّارَةِ» is een Idāfah-constructie als onderwerp, gevolgd door voorzetsel عَلَى + Ism Majrūr.',
+    words: [
+      { ar: 'مِفْتَاحُ', role: 'mubtada_mudaf', status: 'marfoo', mark: 'dammah', explain: '«مِفْتَاحُ» is مُبْتَدَأ وَهُوَ مُضَاف: nominatief met één ضَمَّة.' },
+      { ar: 'السَّيَّارَةِ', role: 'mudaf_ilayhi', status: 'majroor', mark: 'kasrah', explain: '«السَّيَّارَةِ» is de bezitter (مُضَاف إِلَيْهِ): genitief met كَسْرَة.' },
+      { ar: 'عَلَى', role: 'harf_jarr', status: 'mabnee', mark: 'none', explain: '«عَلَى» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ).' },
+      { ar: 'الْمَكْتَبِ', role: 'ism_majroor', status: 'majroor', mark: 'kasrah', explain: '«الْمَكْتَبِ» volgt na عَلَى (اِسْم مَجْرُور): genitief met كَسْرَة.' }
+    ]
+  },
+  {
+    id: 'med_13',
+    category: 'medina',
+    categoryTitle: 'Medina Les 6 · Vrouwelijk (هَذِهِ & ة)',
+    sentence: 'هَذِهِ سَيَّارَةُ الطَّبِيبِ',
+    nl: 'Dit is de auto van de arts.',
+    ruleSummary: 'Les 6: Vrouwelijke aanwijzer «هَذِهِ» als Moebtada; «سَيَّارَةُ» is de Gabr én tegelijk Moedaf voor «الطَّبِيبِ».',
+    words: [
+      { ar: 'هَذِهِ', role: 'mubtada', status: 'mabnee', mark: 'none', explain: '«هَذِهِ» is het vrouwelijke aanwijzend voornaamwoord en fungeert als onderwerp (مُبْتَدَأ, مَبْنِيّ).' },
+      { ar: 'سَيَّارَةُ', role: 'khabar', status: 'marfoo', mark: 'dammah', explain: '«سَيَّارَةُ» is het gezegde (خَبَر) én bezit (مُضَاف): nominatief met één ضَمَّة.' },
+      { ar: 'الطَّبِيبِ', role: 'mudaf_ilayhi', status: 'majroor', mark: 'kasrah', explain: '«الطَّبِيبِ» is de bezitter (مُضَاف إِلَيْهِ): genitief met كَسْرَة.' }
+    ]
+  },
+  {
+    id: 'med_14',
+    category: 'medina',
+    categoryTitle: 'Medina Les 6 · Vrouwelijk Gezegde',
+    sentence: 'الْغُرْفَةُ صَغِيرَةٌ',
+    nl: 'De kamer is klein.',
+    ruleSummary: 'Les 6: Als de Moebtada vrouwelijk is (الْغُرْفَةُ met ة), moet de Gabr ook vrouwelijk zijn (صَغِيرَةٌ met ة).',
+    words: [
+      { ar: 'الْغُرْفَةُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الْغُرْفَةُ» is een vrouwelijk onderwerp (مُبْتَدَأ): nominatief met ضَمَّة.' },
+      { ar: 'صَغِيرَةٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«صَغِيرَةٌ» is het vrouwelijke gezegde (خَبَر): nominatief met تَنْوِين ضَمّ.' }
+    ]
+  },
+  {
+    id: 'med_15',
+    category: 'medina',
+    categoryTitle: 'Medina Les 6 · Lichaamsdelen in Paren',
+    sentence: 'الْعَيْنُ جَمِيلَةٌ',
+    nl: 'Het oog is mooi.',
+    ruleSummary: 'Les 6: Lichaamsdelen die in paren voorkomen (zoals الْعَيْنُ, الْيَدُ, الرِّجْلُ) zijn vrouwelijk en krijgen dus een vrouwelijke Gabr met ة.',
+    words: [
+      { ar: 'الْعَيْنُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الْعَيْنُ» (het oog) is vrouwelijk en fungeert als onderwerp (مُبْتَدَأ): nominatief met ضَمَّة.' },
+      { ar: 'جَمِيلَةٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«جَمِيلَةٌ» is het vrouwelijke gezegde (خَبَر): nominatief met تَنْوِين ضَمّ.' }
+    ]
+  },
+  {
+    id: 'med_16',
+    category: 'medina',
+    categoryTitle: 'Medina Les 7 · Aanwijzer تِلْكَ',
+    sentence: 'تِلْكَ مُمَرِّضَةٌ',
+    nl: 'Dat is een verpleegster.',
+    ruleSummary: 'Les 7: «تِلْكَ» is het aanwijzend voornaamwoord voor veraf vrouwelijk (Moebtada, مَبْنِيّ).',
+    words: [
+      { ar: 'تِلْكَ', role: 'mubtada', status: 'mabnee', mark: 'none', explain: '«تِلْكَ» is een vrouwelijk aanwijzend voornaamwoord voor veraf en fungeert als onderwerp (مُبْتَدَأ, مَبْنِيّ).' },
+      { ar: 'مُمَرِّضَةٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«مُمَرِّضَةٌ» is het gezegde (خَبَر): nominatief met تَنْوِين ضَمّ.' }
+    ]
+  },
+  {
+    id: 'med_17',
+    category: 'medina',
+    categoryTitle: 'Medina Les 7 · Vrouwelijk + Naʿt',
+    sentence: 'السَّاعَةُ الْجَدِيدَةُ جَمِيلَةٌ',
+    nl: 'Het nieuwe horloge is mooi.',
+    ruleSummary: 'Les 7 & 9: Vrouwelijk onderwerp (السَّاعَةُ) + vrouwelijk bijvoeglijk naamwoord (الْجَدِيدَةُ, Naʿt) + vrouwelijk gezegde (جَمِيلَةٌ, Gabr).',
+    words: [
+      { ar: 'السَّاعَةُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«السَّاعَةُ» is het onderwerp (مُبْتَدَأ): nominatief met ضَمَّة.' },
+      { ar: 'الْجَدِيدَةُ', role: 'naat', status: 'marfoo', mark: 'dammah', explain: '«الْجَدِيدَةُ» is een bijvoeglijk naamwoord (نَعْت) bij السَّاعَةُ: volgt in vrouwelijk, الْ en ضَمَّة.' },
+      { ar: 'جَمِيلَةٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«جَمِيلَةٌ» (zonder الْ) is het gezegde (خَبَر): nominatief met تَنْوِين ضَمّ.' }
+    ]
+  },
+  {
+    id: 'med_18',
+    category: 'medina',
+    categoryTitle: 'Medina Les 8 · Aanwijzer met الْ (Badal)',
+    sentence: 'هَذَا التَّاجِرُ غَنِيٌّ',
+    nl: 'Deze handelaar is rijk.',
+    ruleSummary: 'Les 8: Als direct na «هَذَا» een woord mét الْ volgt («التَّاجِرُ»), vormt dat één geheel ("deze handelaar"): «التَّاجِرُ» is een Badal (بَدَل).',
+    words: [
+      { ar: 'هَذَا', role: 'mubtada', status: 'mabnee', mark: 'none', explain: '«هَذَا» is het aanwijzend voornaamwoord als onderwerp (مُبْتَدَأ, مَبْنِيّ).' },
+      { ar: 'التَّاجِرُ', role: 'badal', status: 'marfoo', mark: 'dammah', explain: '«التَّاجِرُ» heeft الْ direct na هَذَا en is daarom een Badal (بَدَل): volgt de Moebtada in de nominatief (ضَمَّة).' },
+      { ar: 'غَنِيٌّ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«غَنِيٌّ» is het onbepaalde gezegde (خَبَر): nominatief met تَنْوِين ضَمّ.' }
+    ]
+  },
+  {
+    id: 'med_19',
+    category: 'medina',
+    categoryTitle: 'Medina Les 8 · ذَلِكَ + Badal',
+    sentence: 'ذَلِكَ الرَّجُلُ مُدَرِّسٌ',
+    nl: 'Die man is een leraar.',
+    ruleSummary: 'Les 8: «ذَلِكَ الرَّجُلُ» ("die man") = Moebtada + Badal; «مُدَرِّسٌ» (zonder الْ) = Gabr.',
+    words: [
+      { ar: 'ذَلِكَ', role: 'mubtada', status: 'mabnee', mark: 'none', explain: '«ذَلِكَ» is het onderwerp (مُبْتَدَأ, مَبْنِيّ).' },
+      { ar: 'الرَّجُلُ', role: 'badal', status: 'marfoo', mark: 'dammah', explain: '«الرَّجُلُ» heeft الْ na ذَلِكَ en is een Badal (بَدَل): nominatief met ضَمَّة.' },
+      { ar: 'مُدَرِّسٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«مُدَرِّسٌ» is het gezegde (خَبَر): nominatief met تَنْوِين ضَمّ.' }
+    ]
+  },
+  {
+    id: 'med_20',
+    category: 'medina',
+    categoryTitle: 'Medina Les 9 · Naʿt & Manʿūt (Bepaald)',
+    sentence: 'الطَّالِبُ الْجَدِيدُ فِي الْفَصْلِ',
+    nl: 'De nieuwe student is in het klaslokaal.',
+    ruleSummary: 'Les 9: «الْجَدِيدُ» heeft الْ net als «الطَّالِبُ» en is dus een bijvoeglijk naamwoord (نَعْت), géén Gabr! De Gabr is «فِي الْفَصْلِ».',
+    words: [
+      { ar: 'الطَّالِبُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الطَّالِبُ» is het onderwerp (مُبْتَدَأ): nominatief met ضَمَّة.' },
+      { ar: 'الْجَدِيدُ', role: 'naat', status: 'marfoo', mark: 'dammah', explain: '«الْجَدِيدُ» is een bijvoeglijk naamwoord (نَعْت) bij الطَّالِبُ: volgt in bepaaldheid (الْ) en nominatief (ضَمَّة).' },
+      { ar: 'فِي', role: 'harf_jarr', status: 'mabnee', mark: 'none', explain: '«فِي» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ).' },
+      { ar: 'الْفَصْلِ', role: 'ism_majroor', status: 'majroor', mark: 'kasrah', explain: '«الْفَصْلِ» volgt na فِي (اِسْم مَجْرُور): genitief met كَسْرَة.' }
+    ]
+  },
+  {
+    id: 'med_21',
+    category: 'medina',
+    categoryTitle: 'Medina Les 9 · Naʿt & Manʿūt (Onbepaald)',
+    sentence: 'هَذَا بَيْتٌ كَبِيرٌ',
+    nl: 'Dit is een groot huis.',
+    ruleSummary: 'Les 9: «بَيْتٌ» is een onbepaalde Gabr; «كَبِيرٌ» volgt als onbepaalde Naʿt met tanwīn dammah (-un).',
+    words: [
+      { ar: 'هَذَا', role: 'mubtada', status: 'mabnee', mark: 'none', explain: '«هَذَا» is het onderwerp (مُبْتَدَأ, مَبْنِيّ).' },
+      { ar: 'بَيْتٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«بَيْتٌ» is het gezegde (خَبَر): nominatief met تَنْوِين ضَمّ.' },
+      { ar: 'كَبِيرٌ', role: 'naat', status: 'marfoo', mark: 'tanween_damm', explain: '«كَبِيرٌ» is een bijvoeglijk naamwoord (نَعْت) bij بَيْتٌ: volgt in onbepaaldheid en تَنْوِين ضَمّ.' }
+    ]
+  },
+  {
+    id: 'med_22',
+    category: 'medina',
+    categoryTitle: 'Medina Les 9 · Naʿt in de Genitief',
+    sentence: 'الْعُصْفُورُ عَلَى الشَّجَرَةِ الْكَبِيرَةِ',
+    nl: 'De mus zit op de grote boom.',
+    ruleSummary: 'Les 9: Omdat «الشَّجَرَةِ» na عَلَى in de genitief staat (-i), krijgt het bijvoeglijk naamwoord «الْكَبِيرَةِ» óók een kasrah (-i).',
+    words: [
+      { ar: 'الْعُصْفُورُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الْعُصْفُورُ» is het onderwerp (مُبْتَدَأ): nominatief met ضَمَّة.' },
+      { ar: 'عَلَى', role: 'harf_jarr', status: 'mabnee', mark: 'none', explain: '«عَلَى» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ).' },
+      { ar: 'الشَّجَرَةِ', role: 'ism_majroor', status: 'majroor', mark: 'kasrah', explain: '«الشَّجَرَةِ» volgt op عَلَى (اِسْم مَجْرُور): genitief met كَسْرَة.' },
+      { ar: 'الْكَبِيرَةِ', role: 'naat', status: 'majroor', mark: 'kasrah', explain: '«الْكَبِيرَةِ» is een bijvoeglijk naamwoord (نَعْت) bij الشَّجَرَةِ: volgt in vrouwelijk, الْ en كَسْرَة.' }
+    ]
+  },
+  {
+    id: 'med_23',
+    category: 'medina',
+    categoryTitle: 'Medina Les 9 · Diptoot Bijvoeglijk Naamwoord',
+    sentence: 'الْمِنْدِيلُ وَسِخٌ وَالْوَلَدُ كَسْلَانُ',
+    nl: 'De zakdoek is vies.',
+    ruleSummary: 'Les 9: Bijvoeglijke naamwoorden op ـَانُ (zoals كَسْلَانُ, جَوْعَانُ, عَطْشَانُ) zijn diptoten en krijgen géén tanwīn (slechts één dammah).',
+    words: [
+      { ar: 'الْوَلَدُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الْوَلَدُ» is het onderwerp (مُبْتَدَأ): nominatief met ضَمَّة.' },
+      { ar: 'كَسْلَانُ', role: 'khabar', status: 'marfoo', mark: 'dammah', explain: '«كَسْلَانُ» (lui) is het gezegde (خَبَر). Woorden op ـَانُ zijn diptoot en krijgen één ضَمَّة zonder tanwīn!' }
+    ]
+  },
+  {
+    id: 'med_24',
+    category: 'medina',
+    categoryTitle: 'Medina Les 10 · Idāfah & Naʿt',
+    sentence: 'لُغَةُ الْقُرْآنِ سَهْلَةٌ',
+    nl: 'De taal van de Koran is makkelijk.',
+    ruleSummary: 'Les 10: Omdat de Moedaf «لُغَةُ» vrouwelijk is, moet het gezegde «سَهْلَةٌ» ook vrouwelijk zijn.',
+    words: [
+      { ar: 'لُغَةُ', role: 'mubtada_mudaf', status: 'marfoo', mark: 'dammah', explain: '«لُغَةُ» is het vrouwelijke onderwerp (مُبْتَدَأ) én bezit (مُضَاف): nominatief met één ضَمَّة.' },
+      { ar: 'الْقُرْآنِ', role: 'mudaf_ilayhi', status: 'majroor', mark: 'kasrah', explain: '«الْقُرْآنِ» is de bezitter (مُضَاف إِلَيْهِ): genitief met كَسْرَة.' },
+      { ar: 'سَهْلَةٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«سَهْلَةٌ» is het vrouwelijke gezegde (خَبَر) bij لُغَةُ: nominatief met تَنْوِين ضَمّ.' }
+    ]
+  },
+  {
+    id: 'med_25',
+    category: 'medina',
+    categoryTitle: 'Medina Les 11 · Voorzetsel + Naʿt',
+    sentence: 'الطَّبِيبُ فِي الْمُسْتَشْفَى الْكَبِيرِ',
+    nl: 'De arts is in het grote ziekenhuis.',
+    ruleSummary: 'Les 11: «الْكَبِيرِ» beschrijft «الْمُسْتَشْفَى» (Ism Majrūr) en staat daarom zichtbaar in de genitief met kasrah (-i).',
+    words: [
+      { ar: 'الطَّبِيبُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الطَّبِيبُ» is het onderwerp (مُبْتَدَأ): nominatief met ضَمَّة.' },
+      { ar: 'فِي', role: 'harf_jarr', status: 'mabnee', mark: 'none', explain: '«فِي» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ).' },
+      { ar: 'الْمُسْتَشْفَى', role: 'ism_majroor', status: 'majroor', mark: 'none', explain: '«الْمُسْتَشْفَى» eindigt op alif maqṣūrah (ى) en heeft daardoor een onzichtbare kasrah in de genitief (مَجْرُور).' },
+      { ar: 'الْكَبِيرِ', role: 'naat', status: 'majroor', mark: 'kasrah', explain: '«الْكَبِيرِ» is een bijvoeglijk naamwoord (نَعْت) bij الْمُسْتَشْفَى: genitief met een zichtbare كَسْرَة.' }
+    ]
+  },
+  {
+    id: 'med_26',
+    category: 'medina',
+    categoryTitle: 'Medina Les 12 · Vrouwelijk + Idāfah',
+    sentence: 'بِنْتُ الْمُدَرِّسِ فِي الْمَدْرَسَةِ',
+    nl: 'De dochter van de leraar is op school.',
+    ruleSummary: 'Les 12: «بِنْتُ الْمُدَرِّسِ» is een bezitsconstructie (Moedaf + Moedaf Ilayh) gevolgd door فِي + Ism Majrūr.',
+    words: [
+      { ar: 'بِنْتُ', role: 'mubtada_mudaf', status: 'marfoo', mark: 'dammah', explain: '«بِنْتُ» is مُبْتَدَأ وَهُوَ مُضَاف: nominatief met één ضَمَّة.' },
+      { ar: 'الْمُدَرِّسِ', role: 'mudaf_ilayhi', status: 'majroor', mark: 'kasrah', explain: '«الْمُدَرِّسِ» is de bezitter (مُضَاف إِلَيْهِ): genitief met كَسْرَة.' },
+      { ar: 'فِي', role: 'harf_jarr', status: 'mabnee', mark: 'none', explain: '«فِي» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ).' },
+      { ar: 'الْمَدْرَسَةِ', role: 'ism_majroor', status: 'majroor', mark: 'kasrah', explain: '«الْمَدْرَسَةِ» volgt na فِي (اِسْم مَجْرُور): genitief met كَسْرَة.' }
+    ]
+  },
+  {
+    id: 'med_27',
+    category: 'medina',
+    categoryTitle: 'Medina Les 13 · Meervoud Mensen (الْجَمْعُ)',
+    sentence: 'التُّجَّارُ الْكِبَارُ فِي السُّوقِ',
+    nl: 'De grote handelaren zijn op de markt.',
+    ruleSummary: 'Les 13: Gebroken meervoud voor mensen («التُّجَّارُ») krijgt een meervoudig bijvoeglijk naamwoord («الْكِبَارُ»).',
+    words: [
+      { ar: 'التُّجَّارُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«التُّجَّارُ» (de handelaren) is het onderwerp (مُبْتَدَأ): nominatief met ضَمَّة.' },
+      { ar: 'الْكِبَارُ', role: 'naat', status: 'marfoo', mark: 'dammah', explain: '«الْكِبَارُ» is het meervoudige bijvoeglijk naamwoord (نَعْت) bij التُّجَّارُ: nominatief met ضَمَّة.' },
+      { ar: 'فِي', role: 'harf_jarr', status: 'mabnee', mark: 'none', explain: '«فِي» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ).' },
+      { ar: 'السُّوقِ', role: 'ism_majroor', status: 'majroor', mark: 'kasrah', explain: '«السُّوقِ» volgt na فِي (اِسْم مَجْرُور): genitief met كَسْرَة.' }
+    ]
+  },
+  {
+    id: 'med_28',
+    category: 'medina',
+    categoryTitle: 'Medina Les 13 · Vrouwelijk Meervoud (-āt)',
+    sentence: 'الطَّالِبَاتُ مُجْتَهِدَاتٌ',
+    nl: 'De vrouwelijke studenten zijn ijverig.',
+    ruleSummary: 'Les 13: Regelmatig vrouwelijk meervoud (جَمْعُ الْمُؤَنَّثِ السَّالِمُ op ـَات) krijgt in de nominatief een dammah (-u / -un).',
+    words: [
+      { ar: 'الطَّالِبَاتُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الطَّالِبَاتُ» is het onderwerp (مُبْتَدَأ): nominatief met één ضَمَّة.' },
+      { ar: 'مُجْتَهِدَاتٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«مُجْتَهِدَاتٌ» is het gezegde (خَبَر): nominatief met تَنْوِين ضَمّ.' }
+    ]
+  },
+  {
+    id: 'med_29',
+    category: 'medina',
+    categoryTitle: 'Medina Les 14 · Idāfah met Meervoud',
+    sentence: 'بَيْتُ الْمُدَرِّسِ بَعِيدٌ',
+    nl: 'Het huis van de leraar is ver.',
+    ruleSummary: 'Les 14: Het gezegde («بَعِيدٌ») richt zich altijd naar de Moedaf («بَيْتُ»), niet naar de Moedaf Ilayh.',
+    words: [
+      { ar: 'بَيْتُ', role: 'mubtada_mudaf', status: 'marfoo', mark: 'dammah', explain: '«بَيْتُ» is مُبْتَدَأ وَهُوَ مُضَاف: nominatief met één ضَمَّة.' },
+      { ar: 'الْمُدَرِّسِ', role: 'mudaf_ilayhi', status: 'majroor', mark: 'kasrah', explain: '«الْمُدَرِّسِ» is de bezitter (مُضَاف إِلَيْهِ): genitief met كَسْرَة.' },
+      { ar: 'بَعِيدٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«بَعِيدٌ» is het gezegde (خَبَر) bij بَيْتُ: nominatief met تَنْوِين ضَمّ.' }
+    ]
+  },
+  {
+    id: 'med_30',
+    category: 'medina',
+    categoryTitle: 'Medina Les 16 · Niet-menselijk Meervoud',
+    sentence: 'الْبُيُوتُ كَبِيرَةٌ',
+    nl: 'De huizen zijn groot.',
+    ruleSummary: 'Les 16 Kernregel: Elk meervoud van niet-menselijke zaken (الْجَمْعُ لِغَيْرِ الْعَاقِلِ, zoals الْبُيُوتُ) wordt grammaticaal behandeld als vrouwelijk enkelvoud (كَبِيرَةٌ)!',
+    words: [
+      { ar: 'الْبُيُوتُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الْبُيُوتُ» (de huizen, niet-menselijk meervoud) is het onderwerp (مُبْتَدَأ): nominatief met ضَمَّة.' },
+      { ar: 'كَبِيرَةٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«كَبِيرَةٌ» is het gezegde (خَبَر) in vrouwelijk enkelvoud omdat الْبُيُوتُ een niet-menselijk meervoud is!' }
+    ]
+  },
+  {
+    id: 'med_31',
+    category: 'medina',
+    categoryTitle: 'Medina Les 16 · Niet-menselijk Meervoud + Naʿt',
+    sentence: 'الْكُتُبُ الْجَدِيدَةُ عَلَى الْمَكْتَبِ',
+    nl: 'De nieuwe boeken liggen op het bureau.',
+    ruleSummary: 'Les 16: «الْكُتُبُ» (boeken = niet-menselijk meervoud) krijgt een vrouwelijk enkelvoudig bijvoeglijk naamwoord («الْجَدِيدَةُ»).',
+    words: [
+      { ar: 'الْكُتُبُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الْكُتُبُ» (de boeken) is het onderwerp (مُبْتَدَأ): nominatief met ضَمَّة.' },
+      { ar: 'الْجَدِيدَةُ', role: 'naat', status: 'marfoo', mark: 'dammah', explain: '«الْجَدِيدَةُ» is een bijvoeglijk naamwoord (نَعْت) in vrouwelijk enkelvoud bij het niet-menselijke meervoud الْكُتُبُ.' },
+      { ar: 'عَلَى', role: 'harf_jarr', status: 'mabnee', mark: 'none', explain: '«عَلَى» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ).' },
+      { ar: 'الْمَكْتَبِ', role: 'ism_majroor', status: 'majroor', mark: 'kasrah', explain: '«الْمَكْتَبِ» volgt na عَلَى (اِسْم مَجْرُور): genitief met كَسْرَة.' }
+    ]
+  },
+  {
+    id: 'med_32',
+    category: 'medina',
+    categoryTitle: 'Medina Les 17 · Niet-menselijk Meervoud',
+    sentence: 'أَبْوَابُ الْمَسْجِدِ مَفْتُوحَةٌ',
+    nl: 'De deuren van de moskee zijn open.',
+    ruleSummary: 'Les 17: «أَبْوَابُ» (deuren = niet-menselijk meervoud) is Moedaf, waardoor het gezegde «مَفْتُوحَةٌ» vrouwelijk enkelvoud is.',
+    words: [
+      { ar: 'أَبْوَابُ', role: 'mubtada_mudaf', status: 'marfoo', mark: 'dammah', explain: '«أَبْوَابُ» is مُبْتَدَأ وَهُوَ مُضَاف: nominatief met één ضَمَّة.' },
+      { ar: 'الْمَسْجِدِ', role: 'mudaf_ilayhi', status: 'majroor', mark: 'kasrah', explain: '«الْمَسْجِدِ» is de bezitter (مُضَاف إِلَيْهِ): genitief met كَسْرَة.' },
+      { ar: 'مَفْتُوحَةٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«مَفْتُوحَةٌ» is het gezegde (خَبَر) in vrouwelijk enkelvoud bij het niet-menselijke meervoud أَبْوَابُ.' }
+    ]
+  },
+  {
+    id: 'med_33',
+    category: 'medina',
+    categoryTitle: 'Medina Les 21 · Uitgebreide Nominale Zin',
+    sentence: 'الْمَدْرَسَةُ قَرِيبَةٌ مِنَ الْمَسْجِدِ',
+    nl: 'De school is dicht bij de moskee.',
+    ruleSummary: 'Les 21: Vrouwelijk onderwerp (الْمَدْرَسَةُ) + vrouwelijk gezegde (قَرِيبَةٌ) + voorzetselgroep (مِنَ الْمَسْجِدِ).',
+    words: [
+      { ar: 'الْمَدْرَسَةُ', role: 'mubtada', status: 'marfoo', mark: 'dammah', explain: '«الْمَدْرَسَةُ» is het vrouwelijke onderwerp (مُبْتَدَأ): nominatief met ضَمَّة.' },
+      { ar: 'قَرِيبَةٌ', role: 'khabar', status: 'marfoo', mark: 'tanween_damm', explain: '«قَرِيبَةٌ» is het vrouwelijke gezegde (خَبَر): nominatief met تَنْوِين ضَمّ.' },
+      { ar: 'مِنَ', role: 'harf_jarr', status: 'mabnee', mark: 'none', explain: '«مِنَ» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ).' },
+      { ar: 'الْمَسْجِدِ', role: 'ism_majroor', status: 'majroor', mark: 'kasrah', explain: '«الْمَسْجِدِ» volgt na مِنَ (اِسْم مَجْرُور): genitief met كَسْرَة.' }
+    ]
+  },
+  {
+    id: 'med_34',
+    category: 'medina',
+    categoryTitle: 'Medina Les 23 · Diptoot in de Genitief',
+    sentence: 'كِتَابُ أَحْمَدَ فِي الْحَقِيبَةِ',
+    nl: 'Het boek van Ahmad zit in de tas.',
+    ruleSummary: 'Les 22 & 23: De eigennaam «أَحْمَدَ» (patroon أَفْعَلُ) is een diptoot (مَمْنُوعٌ مِنَ الصَّرْفِ) en krijgt als Moedaf Ilayh een fathah (-a) i.p.v. een kasrah!',
+    words: [
+      { ar: 'كِتَابُ', role: 'mubtada_mudaf', status: 'marfoo', mark: 'dammah', explain: '«كِتَابُ» is مُبْتَدَأ وَهُوَ مُضَاف: nominatief met één ضَمَّة.' },
+      { ar: 'أَحْمَدَ', role: 'mudaf_ilayhi', status: 'majroor', mark: 'fathah', explain: '«أَحْمَدَ» is de bezitter (مُضَاف إِلَيْهِ). Omdat أَحْمَدَ een diptoot is, staat hij in de genitief met een فَتْحَة (-a)!' },
+      { ar: 'فِي', role: 'harf_jarr', status: 'mabnee', mark: 'none', explain: '«فِي» is een voorzetsel (حَرْف جَرّ): onveranderlijk (مَبْنِيّ).' },
+      { ar: 'الْحَقِيبَةِ', role: 'ism_majroor', status: 'majroor', mark: 'kasrah', explain: '«الْحَقِيبَةِ» volgt na فِي (اِسْم مَجْرُور): genitief met كَسْرَة.' }
     ]
   }
 ];
@@ -1095,6 +1509,11 @@ function getParseSession(key, words){
       selStatus: null,
       selMark: null,
       wordsDone: {},
+      slots: {},
+      slotStatus: {},
+      tapRole: null,
+      activeSlot: 0,
+      dndMsg: null,
       feedback: null,
       complete: false
     };
@@ -1102,12 +1521,167 @@ function getParseSession(key, words){
   return s.parseState;
 }
 
+function renderDndParseBlock(ps, sentObj, words, isStudio, s, sents){
+  const allFilled = words.length > 0 && words.every((_, idx) => !!ps.slots[idx]);
+
+  const wordColsHtml = words.map((w, idx) => {
+    const placedRoleId = ps.slots[idx];
+    const rObj = placedRoleId ? IRAB_ROLES.find(r => r.id === placedRoleId) : null;
+    const st = ps.slotStatus && ps.slotStatus[idx];
+    const isTarget = !ps.complete && ps.activeSlot === idx && !placedRoleId;
+    let slotCls = 'g2-dnd-slot';
+    if(rObj) slotCls += ' slot-filled';
+    if(st === 'correct') slotCls += ' slot-correct';
+    if(st === 'wrong') slotCls += ' slot-wrong g2-shake';
+    if(ps.tapRole && !ps.complete) slotCls += ' slot-tap-ready';
+    if(isTarget) slotCls += ' slot-dragover';
+
+    let slotInner = '';
+    if(rObj){
+      slotInner = `
+        <span class="ar slot-role-ar" lang="ar">${arHtml(rObj.ar)}</span>
+        <span class="slot-role-nl">${E(rObj.nl)}</span>
+        ${!ps.complete ? `<span class="slot-clear-hint">✕ wijzig</span>` : `<span class="slot-clear-hint">✓ juist</span>`}
+      `;
+    } else {
+      slotInner = `<span class="slot-placeholder">${ps.tapRole ? 'Tik om hier te plaatsen' : (isTarget ? 'Kies of sleep rol hierheen' : 'Sleep of tik...')}</span>`;
+    }
+
+    return `<div class="g2-dnd-col">
+      <div class="g2-dnd-word-box">
+        <span class="ar g2-dnd-word-ar" lang="ar">${arHtml(w.ar)}</span>
+        ${spk(w.ar)}
+      </div>
+      <div class="g2-dnd-arrow">↓</div>
+      <div class="${slotCls}"
+           data-act="g2-dnd-slot"
+           data-wi="${idx}"
+           data-studio="${isStudio ? '1' : '0'}"
+           ondragover="window.g2IrabDragOver && window.g2IrabDragOver(event, ${idx})"
+           ondragleave="window.g2IrabDragLeave && window.g2IrabDragLeave(event, ${idx})"
+           ondrop="window.g2IrabDrop && window.g2IrabDrop(event, ${idx}, ${isStudio ? 'true' : 'false'})">
+        ${slotInner}
+      </div>
+    </div>`;
+  }).join('');
+
+  const roleChipsHtml = IRAB_ROLES.map(r => {
+    const isSelected = ps.tapRole === r.id;
+    return `<div class="g2-dnd-chip ${isSelected ? 'chip-selected' : ''}"
+                 draggable="true"
+                 ondragstart="window.g2IrabDragStart && window.g2IrabDragStart(event, '${r.id}')"
+                 data-act="g2-dnd-role"
+                 data-role="${r.id}"
+                 data-studio="${isStudio ? '1' : '0'}">
+      <span class="ar chip-ar" lang="ar">${arHtml(r.ar)}</span>
+      <span class="chip-nl">${E(r.nl)}</span>
+    </div>`;
+  }).join('');
+
+  let statusHtml = '';
+  if(ps.complete){
+    statusHtml = `<span class="g2-dnd-status status-ok">MāshāʾAllāh! Helemaal juist ontleed! 🎉</span>`;
+  } else if(ps.dndMsg){
+    const cls = ps.dndMsg.type === 'warn' ? 'status-warn' : 'status-err';
+    statusHtml = `<span class="g2-dnd-status ${cls}">${E(ps.dndMsg.text)}</span>`;
+  }
+
+  let explainHtml = '';
+  if(ps.complete){
+    explainHtml = `<div class="g2-dnd-explain-box">
+      <div class="g2-dnd-explain-title">📖 Verklaring uit het Medina Grammaticaboek:</div>
+      ${sentObj.ruleSummary ? `<p class="g2-dnd-rule-summary">${mix(sentObj.ruleSummary)}</p>` : ''}
+      <ul class="g2-dnd-explain-list">
+        ${words.map(w => {
+          const rObj = IRAB_ROLES.find(r => r.id === w.role);
+          const sObj = IRAB_STATUSES.find(st => st.id === w.status);
+          const mObj = IRAB_MARKS.find(m => m.id === w.mark);
+          return `<li>
+            <span class="ar exp-word" lang="ar">«${arHtml(w.ar)}»</span>
+            <span class="irab-badge role ar">${arHtml(rObj ? rObj.ar : w.role)}</span>
+            <span class="irab-badge status ar">${arHtml(sObj ? sObj.ar : w.status)}</span>
+            <span class="irab-badge mark ar">${arHtml(mObj ? mObj.ar : w.mark)}</span>
+            — ${mix(w.explain || '')}
+          </li>`;
+        }).join('')}
+      </ul>
+      <div class="g2-actions" style="margin-top:14px;">
+        ${isStudio ? `
+          <button type="button" class="btn btn-secondary" data-act="g2-dnd-reset" data-studio="1">Opnieuw ontleden ↺</button>
+          ${s.irabSentIdx + 1 < sents.length ? `
+            <button type="button" class="btn btn-primary" data-act="g2-studio-next-sent">Volgende zin (${s.irabSentIdx + 2}/${sents.length}) →</button>
+          ` : `
+            <button type="button" class="btn btn-primary" data-act="g2-hub">Klaar · Terug naar lessen</button>
+          `}
+        ` : `
+          <button type="button" class="btn btn-primary" data-act="g2-next" data-gl="next">${s.queue && s.queue.length > 1 ? 'Volgende vraag →' : 'Bekijk resultaat →'}</button>
+        `}
+      </div>
+    </div>`;
+  }
+
+  return `<div class="g2-dnd-card">
+    <div class="g2-dnd-sentence-bar">
+      <div>
+        <div class="g2-dnd-nl">"${E(sentObj.nl || '')}"</div>
+        <div class="g2-dnd-Instruction">Sleep een grammaticale rol naar het juiste woord, of <b>tik op een rol</b> om het gemarkeerde vakje direct in te vullen:</div>
+      </div>
+      ${spk(sentObj.sentence)}
+    </div>
+
+    <div class="g2-dnd-words-row" dir="rtl">
+      ${wordColsHtml}
+    </div>
+
+    ${!ps.complete ? `
+      <div class="g2-dnd-tray">
+        <div class="g2-dnd-tray-label">Beschikbare Grammaticale Rollen (sleep of tik):</div>
+        <div class="g2-dnd-chips-wrap">
+          ${roleChipsHtml}
+        </div>
+      </div>
+    ` : ''}
+
+    <div class="g2-dnd-actions">
+      ${!ps.complete ? `
+        <button type="button" class="btn btn-primary g2-dnd-check-btn" data-act="g2-dnd-check" data-studio="${isStudio ? '1' : '0'}">
+          Controleer ✓
+        </button>
+        <button type="button" class="btn btn-secondary" data-act="g2-dnd-reset" data-studio="${isStudio ? '1' : '0'}">
+          Herstel ↺
+        </button>
+      ` : ''}
+      ${statusHtml}
+    </div>
+
+    ${explainHtml}
+  </div>`;
+}
+
 function renderInteractiveParse(s, kicker, x){
   const d = x.d;
   const words = d.words || [];
   const ps = getParseSession(x.ref || d.sentence, words);
+  s.irabMode = s.irabMode || 'dnd';
   const doneCount = s.total - s.queue.length;
   const prog = `<div class="g2-qprog"><span>${E(kicker)}</span><span>${Math.min(doneCount+1,s.total)} / ${s.total}</span></div><div class="g2-lbar"><i style="width:${s.total?Math.round(100*doneCount/s.total):0}%"></i></div>`;
+
+  const modeBar = `<div class="g2-irab-mode-bar">
+    <div class="g2-parse-badge" style="margin:0">${ICO.check} Zinsontleding · Iʿrāb (${arHtml('إِعْرَاب')})</div>
+    <div class="g2-irab-mode-switch">
+      <button type="button" class="g2-mode-btn ${s.irabMode === 'dnd' ? 'active' : ''}" data-act="g2-irab-mode" data-mode="dnd">Sleep &amp; Plaats</button>
+      <button type="button" class="g2-mode-btn ${s.irabMode === 'pillars' ? 'active' : ''}" data-act="g2-irab-mode" data-mode="pillars">3-Pijlers (Diep)</button>
+    </div>
+  </div>`;
+
+  if(s.irabMode === 'dnd'){
+    return `<div class="g2-card g2-parse-engine">
+      ${prog}
+      ${modeBar}
+      ${renderDndParseBlock(ps, d, words, false, s, [])}
+    </div>`;
+  }
+
   const curWord = words[ps.wi] || words[0] || {};
   const canCheck = !!(ps.selRole && ps.selStatus && ps.selMark);
 
@@ -1247,7 +1821,7 @@ function renderInteractiveParse(s, kicker, x){
 
   return `<div class="g2-card g2-parse-engine">
     ${prog}
-    <div class="g2-parse-badge">${ICO.check} Zinsontleding · Iʿrāb Coach (MVP)</div>
+    ${modeBar}
     <div class="g2-parse-sentence-card">
       <div class="g2-parse-sentence ar" lang="ar" dir="rtl">${sentenceDisplay} ${spk(d.sentence)}</div>
       <div class="g2-parse-sub">${mix(d.nl || '')}</div>
@@ -1262,6 +1836,7 @@ function renderIrabStudio(){
   const s = S();
   s.irabCategory = s.irabCategory || 'all';
   s.irabSentIdx = typeof s.irabSentIdx === 'number' ? s.irabSentIdx : 0;
+  s.irabMode = s.irabMode || 'dnd';
   P.irabDone = P.irabDone || {};
 
   let sents = ALL_IRAB_SENTENCES;
@@ -1275,7 +1850,7 @@ function renderIrabStudio(){
   const ps = getParseSession('studio_' + curSent.id, words);
   const doneTotal = Object.keys(P.irabDone).length;
   const totalSentCount = ALL_IRAB_SENTENCES.length;
-  const pct = Math.round(100 * doneTotal / totalSentCount);
+  const medinaCount = ALL_IRAB_SENTENCES.filter(x => x.category === 'medina').length;
   const canCheck = !!(ps.selRole && ps.selStatus && ps.selMark);
 
   // Woord-pillen
@@ -1298,7 +1873,7 @@ function renderIrabStudio(){
 
   const curWord = words[ps.wi] || words[0] || {};
 
-  // Analyzer block
+  // Analyzer block for 3-pillars mode
   let analyzerBody = '';
   if(!ps.complete){
     analyzerBody = `<div class="g2-parse-card">
@@ -1427,14 +2002,9 @@ function renderIrabStudio(){
     </div>
 
     <div class="g2-head">
-      <div class="g2-eyebrow">Interactieve Trainer (MVP) · Al-Manarah &amp; Medina</div>
+      <div class="g2-eyebrow">Interactieve Zinsontleder (إِعْرَاب) · Medina Boek 1 &amp; Examen</div>
       <h1>Zinsontleder · Iʿrāb Studio</h1>
-      <p>Ontleed stap voor stap alle ${ALL_IRAB_SENTENCES.length} examenzinnen woord voor woord op de 3 pijlers: <b>1. Functie</b>, <b>2. Status</b> en <b>3. Harakah</b>.</p>
-      <div class="g2-studio-guide">
-        <div class="g2-sguide-step"><span>1</span><div><b>Functie (الْوَظِيفَة)</b><small>Wat doet het woord? (bv. Moebtada, Gabr, Moedaf)</small></div></div>
-        <div class="g2-sguide-step"><span>2</span><div><b>Status (الْحَالَة)</b><small>Welke naamval? (Marfūʿ = nom., Majrūr = gen.)</small></div></div>
-        <div class="g2-sguide-step"><span>3</span><div><b>Harakah (الْحَرَكَة)</b><small>Welk klinkerteken staat op de laatste letter?</small></div></div>
-      </div>
+      <p>Sleep de juiste grammaticale rol (Moebtada, Gabr, Moedaf, Moedaf Ilayh, Harf Djarr, Ism Madjroer, Naʿt of Badal) onder elk woord van de ${ALL_IRAB_SENTENCES.length} authentieke zinnen uit het Medina Grammaticaboek en de examens.</p>
     </div>
 
     <!-- Category selector tabs -->
@@ -1442,7 +2012,7 @@ function renderIrabStudio(){
       <button type="button" class="g2-tab ${s.irabCategory === 'all' ? 'active' : ''}" data-act="g2-studio-cat" data-cat="all">Alle (${ALL_IRAB_SENTENCES.length})</button>
       <button type="button" class="g2-tab ${s.irabCategory === 'official' ? 'active' : ''}" data-act="g2-studio-cat" data-cat="official">Officieel Examen (4)</button>
       <button type="button" class="g2-tab ${s.irabCategory === 'practice' ? 'active' : ''}" data-act="g2-studio-cat" data-cat="practice">Oefenexamen (4)</button>
-      <button type="button" class="g2-tab ${s.irabCategory === 'medina' ? 'active' : ''}" data-act="g2-studio-cat" data-cat="medina">Medina Basis (3)</button>
+      <button type="button" class="g2-tab ${s.irabCategory === 'medina' ? 'active' : ''}" data-act="g2-studio-cat" data-cat="medina">Medina Boek 1 (${medinaCount})</button>
     </div>
 
     <!-- Sentence Stepper list -->
@@ -1460,14 +2030,26 @@ function renderIrabStudio(){
 
     <!-- Main parse engine for selected sentence -->
     <div class="g2-card g2-parse-engine">
-      <div class="g2-parse-badge">${ICO.check} ${E(curSent.categoryTitle)}</div>
-      <div class="g2-parse-sentence-card">
-        <div class="g2-parse-sentence ar" lang="ar" dir="rtl">${sentenceDisplay} ${spk(curSent.sentence)}</div>
-        <div class="g2-parse-sub">${mix(curSent.nl || '')}</div>
+      <div class="g2-irab-mode-bar">
+        <div class="g2-parse-badge" style="margin:0">${ICO.check} ${E(curSent.categoryTitle)}</div>
+        <div class="g2-irab-mode-switch">
+          <button type="button" class="g2-mode-btn ${s.irabMode === 'dnd' ? 'active' : ''}" data-act="g2-irab-mode" data-mode="dnd">Sleep &amp; Plaats (Snel)</button>
+          <button type="button" class="g2-mode-btn ${s.irabMode === 'pillars' ? 'active' : ''}" data-act="g2-irab-mode" data-mode="pillars">3-Pijlers (Uitgebreid)</button>
+        </div>
       </div>
-      <div class="g2-parse-tabs">${wordTabsHtml}</div>
-      ${analyzerBody}
-      ${liveTable}
+
+      ${s.irabMode === 'dnd' ? `
+        ${renderDndParseBlock(ps, curSent, words, true, s, sents)}
+        ${liveTable}
+      ` : `
+        <div class="g2-parse-sentence-card">
+          <div class="g2-parse-sentence ar" lang="ar" dir="rtl">${sentenceDisplay} ${spk(curSent.sentence)}</div>
+          <div class="g2-parse-sub">${mix(curSent.nl || '')}</div>
+        </div>
+        <div class="g2-parse-tabs">${wordTabsHtml}</div>
+        ${analyzerBody}
+        ${liveTable}
+      `}
     </div>
   </div>`;
 }
@@ -2591,6 +3173,74 @@ function finishNode(){
 }
 function scrollTop(){ try{ (document.getElementById('app')||window).scrollTop=0; window.scrollTo(0,0); }catch(e){} }
 
+function getCurrentIrabContext(isStudio){
+  const s = S();
+  if(isStudio || s.view === 'irab_studio'){
+    const sents = s.irabCategory === 'all' ? ALL_IRAB_SENTENCES : ALL_IRAB_SENTENCES.filter(x => x.category === s.irabCategory);
+    const curSent = sents[s.irabSentIdx] || ALL_IRAB_SENTENCES[0];
+    if(!curSent) return null;
+    const words = curSent.words || [];
+    const ps = getParseSession('studio_' + curSent.id, words);
+    return { s, sentObj: curSent, words, ps, isStudio: true };
+  } else {
+    const x = s.cur;
+    if(!x || !x.d || !x.d.words) return null;
+    const words = x.d.words || [];
+    const ps = getParseSession(x.ref || x.d.sentence, words);
+    return { s, sentObj: x.d, words, ps, isStudio: false };
+  }
+}
+
+function advanceNextEmptySlot(ps, words, fromIdx){
+  for(let k = 0; k < words.length; k++){
+    const cand = (fromIdx + k) % words.length;
+    if(!ps.slots[cand]){
+      ps.activeSlot = cand;
+      return;
+    }
+  }
+  ps.activeSlot = null;
+}
+
+window.g2IrabDragStart = function(ev, roleId){
+  try {
+    ev.dataTransfer.setData('text/plain', roleId);
+    ev.dataTransfer.effectAllowed = 'copyMove';
+  } catch(e){}
+};
+
+window.g2IrabDragOver = function(ev, wi){
+  ev.preventDefault();
+  if(ev.currentTarget && ev.currentTarget.classList){
+    ev.currentTarget.classList.add('slot-dragover');
+  }
+};
+
+window.g2IrabDragLeave = function(ev, wi){
+  if(ev.currentTarget && ev.currentTarget.classList){
+    ev.currentTarget.classList.remove('slot-dragover');
+  }
+};
+
+window.g2IrabDrop = function(ev, wi, isStudio){
+  ev.preventDefault();
+  if(ev.currentTarget && ev.currentTarget.classList){
+    ev.currentTarget.classList.remove('slot-dragover');
+  }
+  let roleId = '';
+  try { roleId = ev.dataTransfer.getData('text/plain'); } catch(e){}
+  if(!roleId) return;
+  const ctx = getCurrentIrabContext(isStudio);
+  if(!ctx || ctx.ps.complete) return;
+  const { ps, words } = ctx;
+  ps.slots[wi] = roleId;
+  if(ps.slotStatus) delete ps.slotStatus[wi];
+  ps.tapRole = null;
+  ps.dndMsg = null;
+  advanceNextEmptySlot(ps, words, wi + 1);
+  render();
+};
+
 document.addEventListener('click', e=>{
   const btn=e.target.closest&&e.target.closest('[data-act]'); if(!btn) return;
   const act=btn.dataset.act;
@@ -2693,13 +3343,110 @@ document.addEventListener('click', e=>{
     state.path='grammar'; state.view='book'; S().view='irab_studio';
     render(); scrollTop(); return;
   }
+  if(act==='g2-irab-mode'){
+    S().irabMode = btn.dataset.mode || 'dnd';
+    render(); return;
+  }
+  if(act==='g2-dnd-role'){
+    const isStudio = btn.dataset.studio === '1';
+    const roleId = btn.dataset.role;
+    const ctx = getCurrentIrabContext(isStudio);
+    if(!ctx || ctx.ps.complete) return;
+    const { ps, words } = ctx;
+    if(typeof ps.activeSlot === 'number' && ps.activeSlot >= 0 && ps.activeSlot < words.length && !ps.slots[ps.activeSlot]){
+      const targetWi = ps.activeSlot;
+      ps.slots[targetWi] = roleId;
+      if(ps.slotStatus) delete ps.slotStatus[targetWi];
+      ps.tapRole = null;
+      ps.dndMsg = null;
+      advanceNextEmptySlot(ps, words, targetWi + 1);
+    } else {
+      ps.tapRole = (ps.tapRole === roleId) ? null : roleId;
+      ps.dndMsg = null;
+    }
+    render(); return;
+  }
+  if(act==='g2-dnd-slot'){
+    const isStudio = btn.dataset.studio === '1';
+    const wi = +btn.dataset.wi;
+    const ctx = getCurrentIrabContext(isStudio);
+    if(!ctx || ctx.ps.complete) return;
+    const { ps, words } = ctx;
+    if(ps.tapRole){
+      ps.slots[wi] = ps.tapRole;
+      if(ps.slotStatus) delete ps.slotStatus[wi];
+      ps.tapRole = null;
+      ps.dndMsg = null;
+      advanceNextEmptySlot(ps, words, wi + 1);
+    } else if(ps.slots[wi]){
+      delete ps.slots[wi];
+      if(ps.slotStatus) delete ps.slotStatus[wi];
+      delete ps.wordsDone[wi];
+      ps.activeSlot = wi;
+      ps.dndMsg = null;
+    } else {
+      ps.activeSlot = wi;
+      ps.dndMsg = null;
+    }
+    render(); return;
+  }
+  if(act==='g2-dnd-check'){
+    const isStudio = btn.dataset.studio === '1';
+    const ctx = getCurrentIrabContext(isStudio);
+    if(!ctx) return;
+    const { s, sentObj, words, ps } = ctx;
+    const allFilled = words.every((_, idx) => !!ps.slots[idx]);
+    if(!allFilled){
+      ps.dndMsg = { type: 'warn', text: 'Vul eerst alle vakjes in voordat je controleert!' };
+      try{ playSfx(false); }catch(err){}
+      render(); return;
+    }
+    let allCorrect = true;
+    words.forEach((w, idx) => {
+      const chosen = ps.slots[idx];
+      const ok = checkRoleMatch(chosen, w.role);
+      ps.slotStatus[idx] = ok ? 'correct' : 'wrong';
+      if(ok){
+        ps.wordsDone[idx] = { role: w.role, status: w.status, mark: w.mark, ok: true };
+      } else {
+        allCorrect = false;
+        delete ps.wordsDone[idx];
+      }
+    });
+    if(allCorrect){
+      ps.complete = true;
+      ps.dndMsg = null;
+      ps.tapRole = null;
+      try{ playSfx(true); }catch(err){}
+      if(ctx.isStudio){
+        P.irabDone = P.irabDone || {};
+        P.irabDone[sentObj.id] = true;
+        save();
+      } else {
+        s.ans = 1;
+        answer(true);
+      }
+    } else {
+      ps.dndMsg = { type: 'err', text: 'Nog niet helemaal goed. De rode vakjes kloppen nog niet — tik op een rood vakje om het te verbeteren!' };
+      try{ playSfx(false); }catch(err){}
+    }
+    render(); return;
+  }
+  if(act==='g2-dnd-reset'){
+    const isStudio = btn.dataset.studio === '1';
+    const s = S();
+    delete s.parseState;
+    render(); return;
+  }
   if(act==='g2-studio-cat'){
     S().irabCategory = btn.dataset.cat;
     S().irabSentIdx = 0;
+    delete S().parseState;
     render(); return;
   }
   if(act==='g2-studio-select-sent'){
     S().irabSentIdx = +btn.dataset.si;
+    delete S().parseState;
     render(); return;
   }
   if(act==='g2-studio-select-w'){
@@ -2732,6 +3479,8 @@ document.addEventListener('click', e=>{
 
     if(rOk && sOk && mOk){
       ps.wordsDone[ps.wi] = { role: ps.selRole, status: ps.selStatus, mark: ps.selMark, ok: true };
+      ps.slots[ps.wi] = w.role;
+      ps.slotStatus[ps.wi] = 'correct';
       try{ playSfx(true); }catch(e){}
       ps.selRole = null; ps.selStatus = null; ps.selMark = null; ps.feedback = null;
       if(ps.wi + 1 < words.length){

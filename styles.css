@@ -3817,3 +3817,442 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
     font-size: 22px;
   }
 }
+
+/* =====================================================================
+   DRAG & DROP ZINSONTLEDER (إِعْرَاب) · Desktop & Mobile Interactive UI
+   ===================================================================== */
+.g2-dnd-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.g2-dnd-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--forest);
+}
+.g2-dnd-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ok);
+  box-shadow: 0 0 0 3px var(--ok-soft);
+}
+.g2-dnd-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.g2-dnd-sent-pill {
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--paper-deep);
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+}
+.g2-dnd-reset-link {
+  background: none;
+  border: 0;
+  padding: 2px 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.g2-dnd-reset-link:hover {
+  color: var(--forest);
+}
+
+.g2-dnd-tip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--forest-soft);
+  border: 1px solid rgba(30, 74, 56, 0.22);
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-bottom: 16px;
+  line-height: 1.45;
+}
+.g2-dnd-tip b {
+  color: var(--forest);
+}
+
+.g2-dnd-board {
+  background: var(--paper);
+  border: 1.5px solid var(--line-strong);
+  border-radius: 14px;
+  padding: 18px 16px;
+  margin-bottom: 18px;
+  text-align: center;
+}
+.g2-dnd-translation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14.5px;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--ink-soft);
+  margin-bottom: 14px;
+}
+
+.g2-dnd-words-row {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: stretch;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 6px 0;
+}
+.g2-dnd-word-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 112px;
+  max-width: 180px;
+  flex: 1 1 118px;
+}
+.g2-dnd-word-ar {
+  font-family: var(--ar);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.6;
+  padding: 4px 10px;
+  color: var(--ink);
+  direction: rtl;
+}
+
+.g2-dnd-slot {
+  width: 100%;
+  min-height: 66px;
+  padding: 8px 8px;
+  border-radius: 12px;
+  border: 2px dashed var(--line-strong);
+  background: var(--surface);
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  user-select: none;
+}
+.g2-dnd-slot:hover {
+  border-color: var(--forest);
+  background: var(--forest-soft);
+}
+.g2-dnd-slot.tap-ready {
+  border-color: var(--gold);
+  background: var(--gold-pale);
+  color: var(--ink);
+}
+.g2-dnd-slot.drag-over {
+  transform: scale(1.04);
+  border-style: solid;
+  border-color: var(--forest) !important;
+  background: var(--forest-soft) !important;
+  box-shadow: 0 4px 12px rgba(30, 74, 56, 0.15);
+}
+.g2-dnd-slot.filled {
+  border-style: solid;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+.g2-dnd-slot.slot-correct {
+  border-style: solid !important;
+  border-color: var(--ok) !important;
+  background: var(--ok-soft) !important;
+}
+.g2-dnd-slot.slot-wrong {
+  border-style: solid !important;
+  border-color: var(--bad) !important;
+  background: var(--bad-soft) !important;
+}
+
+.g2-dnd-slot-empty {
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.78;
+  pointer-events: none;
+}
+.g2-dnd-slot-filled {
+  text-align: center;
+  width: 100%;
+  animation: g2PopIn 0.22s ease-out forwards;
+}
+.g2-dnd-slot-ar {
+  font-family: var(--ar);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
+  direction: rtl;
+}
+.g2-dnd-slot-nl {
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0.88;
+  margin-top: 1px;
+}
+.g2-dnd-slot-clear {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 1px 6px;
+  border-radius: 6px;
+  border: 0;
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--bad);
+  font-size: 10.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.g2-dnd-slot-clear:hover {
+  background: var(--bad-soft);
+}
+
+.g2-dnd-tray-wrap {
+  margin-bottom: 16px;
+}
+.g2-dnd-tray-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.g2-dnd-active-hint {
+  color: var(--forest);
+  text-transform: none;
+  font-size: 12.5px;
+  font-weight: 700;
+  background: var(--gold-pale);
+  border: 1px solid var(--gold);
+  padding: 2px 10px;
+  border-radius: 999px;
+}
+.g2-dnd-tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.g2-dnd-chip {
+  cursor: grab;
+  user-select: none;
+  touch-action: manipulation;
+  padding: 8px 13px;
+  border-radius: 10px;
+  border: 1.5px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.15s ease;
+}
+.g2-dnd-chip:hover {
+  transform: translateY(-1px);
+  border-color: var(--forest);
+}
+.g2-dnd-chip:active {
+  cursor: grabbing;
+  transform: scale(0.96);
+}
+.g2-dnd-chip.selected {
+  border-color: var(--forest) !important;
+  box-shadow: 0 0 0 3px rgba(30, 74, 56, 0.25);
+  transform: translateY(-2px);
+}
+.g2-dnd-chip-ar {
+  font-family: var(--ar);
+  font-size: 17px;
+  font-weight: 700;
+  direction: rtl;
+}
+.g2-dnd-chip-nl {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* Role Color Themes for Drag & Drop Chips and Slots */
+.g2-role-mubtada {
+  background: rgba(37, 99, 235, 0.1);
+  border-color: rgba(37, 99, 235, 0.38);
+  color: var(--ink);
+}
+.g2-role-mubtada_mudaf {
+  background: rgba(79, 70, 229, 0.11);
+  border-color: rgba(79, 70, 229, 0.38);
+  color: var(--ink);
+}
+.g2-role-khabar {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: var(--ink);
+}
+.g2-role-harf_jarr {
+  background: rgba(217, 119, 6, 0.12);
+  border-color: rgba(217, 119, 6, 0.4);
+  color: var(--ink);
+}
+.g2-role-ism_majroor {
+  background: rgba(234, 88, 12, 0.12);
+  border-color: rgba(234, 88, 12, 0.4);
+  color: var(--ink);
+}
+.g2-role-mudaf_ilayhi {
+  background: rgba(147, 51, 234, 0.11);
+  border-color: rgba(147, 51, 234, 0.38);
+  color: var(--ink);
+}
+.g2-role-naat {
+  background: rgba(225, 29, 72, 0.11);
+  border-color: rgba(225, 29, 72, 0.38);
+  color: var(--ink);
+}
+.g2-role-other {
+  background: rgba(100, 116, 139, 0.12);
+  border-color: rgba(100, 116, 139, 0.38);
+  color: var(--ink);
+}
+
+.g2-dnd-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.g2-dnd-fb-msg {
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.g2-dnd-fb-msg.ok {
+  color: var(--ok);
+}
+.g2-dnd-fb-msg.bad {
+  color: var(--bad);
+}
+
+.g2-dnd-explain-box {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--ok-soft);
+  border: 1.5px solid var(--ok);
+  color: var(--ink);
+  animation: g2PopIn 0.25s ease-out forwards;
+}
+.g2-dnd-explain-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--forest);
+  margin-bottom: 8px;
+}
+.g2-dnd-explain-summary {
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  color: var(--ink);
+}
+.g2-dnd-explain-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.g2-dnd-explain-list li {
+  margin-bottom: 4px;
+}
+
+.g2-studio-mode-switch {
+  display: inline-flex;
+  background: var(--paper-deep);
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 4px;
+}
+.g2-studio-mode-btn {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.g2-studio-mode-btn.active {
+  background: var(--forest);
+  color: var(--on-forest);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+@keyframes g2Shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+.g2-shake {
+  animation: g2Shake 0.4s ease-in-out;
+}
+@keyframes g2PopIn {
+  0% { opacity: 0; transform: scale(0.92); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 640px) {
+  .g2-dnd-words-row {
+    gap: 10px;
+  }
+  .g2-dnd-word-col {
+    min-width: 96px;
+    flex: 1 1 calc(50% - 10px);
+  }
+  .g2-dnd-word-ar {
+    font-size: 26px;
+  }
+  .g2-dnd-chip {
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+}
+

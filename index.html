@@ -2219,6 +2219,11 @@ function renderSidebar(){
         ${convLinks}
       </div>
 
+      <button type="button" class="sbn ${(state.view==='book'&&state.g2&&state.g2.view==='irab_studio')?'active':''}" data-act="g2-open-irab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 7h16"/><path d="M4 12h10"/><path d="M4 17h12"/><circle cx="18" cy="14.5" r="2.5"/></svg>
+        <span>Zinsontleder (إِعْرَاب)</span>
+      </button>
+
       <button type="button" class="sbn ${state.view==='exam'?'active':''}" data-act="nav" data-v="exam">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
         <span>Examen (Les 1–7)</span>
@@ -2465,6 +2470,7 @@ function renderHome(){
         <div class="hero-btns">
           <button type="button" class="btn btn-primary" data-act="start-learn" data-l="${next}">Start met leren · ${next==='all'?'Alles':hoofdstuk(next)} →</button>
           <button type="button" class="btn btn-secondary" data-act="nav" data-v="book">Grammatica & Regels</button>
+          <button type="button" class="btn btn-secondary" data-act="g2-open-irab">Zinsontleder (إِعْرَاب)</button>
           <button type="button" class="btn btn-secondary" data-act="nav" data-v="exam">Examen (Les 1–7)</button>
           <button type="button" class="btn btn-ghost" data-act="nav" data-v="conv">Dialogen</button>
         </div>
@@ -5433,7 +5439,7 @@ document.addEventListener('click',e=>{
     hideCompare();
     const v=btn.dataset.v;
     if(v==='vocab'){state.path='vocab';state.view='vocab';state.bookLesson=null}
-    else if(v==='book'){state.path='grammar';state.view='book';state.bookLesson=null;state.bookTab='uitleg';sbMenuState.gram=true;}
+    else if(v==='book'){state.path='grammar';state.view='book';state.bookLesson=null;state.bookTab='uitleg';if(state.g2)state.g2.view='map';sbMenuState.gram=true;}
     else if(v==='home'){state.path='home';state.view='home';state.bookLesson=null}
     else if(v==='conv'){state.path='conv';state.view='conv';state.convUnit=null;sbMenuState.conv=true;}
     else if(v==='exam'){state.path='exam';state.view='exam';if(!state.examMode)state.examMode='hub';}
