@@ -220,7 +220,7 @@
       "  const exListNums = [];\n" +
       "  for (let i = 1; i <= 23; i++) exListNums.push(i);\n" +
       "  const exLinks = exListNums.map(n => {\n" +
-      "    const active = state.view==='ex-lesson' && Number(state.exLesson)===Number(nn);\n" +
+      "    const active = state.view==='ex-lesson' && Number(state.exLesson)===Number(n);\n" +
       "    const num = String(n).padStart(2,'0');\n" +
       "    const isDone = (window.EX2 && window.EX2.lessonDone) ? window.EX2.lessonDone(n) : false;\n" +
       "    return `<button type=\"button\" class=\"${active?'active':''}\" data-act=\"open-ex\" data-l=\"${n}\"><span>${num}</span>Les ${n}${isDone?' ✓':''}</button>`;\n" +
@@ -293,7 +293,7 @@
           '<span class="grow"></span>' +
           '<button class="btn btn-secondary btn-sm" data-act="start-learn" data-l="all">Alles oefenen</button>' +
           '<button class="btn btn-secondary btn-sm" data-act="nav" data-v="words">Lijst</button>' +
- vis        '</div>' +
+        '</div>' +
         '<div class="vocab-simple-list">' + rows + '</div>' +
       '</div>';
     };
