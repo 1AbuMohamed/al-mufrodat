@@ -29,10 +29,10 @@ function saveNotes(){
 const E = s => {
   if(s === null || s === undefined) return '';
   return String(s)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
+    .replace(/&/g, '&')
+    .replace(/</g, '<')
+    .replace(/>/g, '>')
+    .replace(/"/g, '"')
     .replace(/'/g, '&#39;');
 };
 
@@ -364,15 +364,15 @@ window.addEventListener('hashchange', handleHashRoute);
 window.addEventListener('DOMContentLoaded', handleHashRoute);
 
 /* ---------- 6. Koppeling aan de applicatie ---------- */
-window.renderBook = function(){
-  // Zorg dat de URL netjes #/grammatica is indien nog geen hash
+// Echte implementaties onder vaste namen (niet overschrijfbaar door index.html)
+function g2RenderBook(){
   if(!window.location.hash || !window.location.hash.startsWith('#/grammatica')){
     try { history.replaceState(null, '', '#/grammatica'); } catch(e){}
   }
   return renderOverview();
-};
+}
 
-window.renderBookLesson = function(){
+function g2RenderBookLesson(){
   const n = (window.state && window.state.bookLesson !== null && window.state.bookLesson !== undefined)
     ? Number(window.state.bookLesson)
     : 1;
@@ -381,7 +381,10 @@ window.renderBookLesson = function(){
     try { history.replaceState(null, '', targetHash); } catch(e){}
   }
   return renderLesson(n);
-};
+}
+
+window.renderBook = g2RenderBook;
+window.renderBookLesson = g2RenderBookLesson;
 
 // Global helper voor voortgang & titels
 const shortTitles = {};
@@ -395,11 +398,25 @@ window.G2 = {
   lessonDone: function(n){ return !!doneLessons[n]; }
 };
 
-try {
-  renderBook = window.renderBook;
-  renderBookLesson = window.renderBookLesson;
-} catch(e){}
+// index.html laadt ná dit script en definieert function renderBook() die
+// per ongeluk window.renderBook overschrijft met een recursieve wrapper
+// (Maximum call stack size exceeded). Zet de juiste functies opnieuw vast.
+function rebindRenderBook(){
+  window.renderBook = g2RenderBook;
+  window.renderBookLesson = g2RenderBookLesson;
+  try {
+    renderBook = g2RenderBook;
+    renderBookLesson = g2RenderBookLesson;
+  } catch(e){}
+}
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', rebindRenderBook);
+} else {
+  rebindRenderBook();
+}
+setTimeout(rebindRenderBook, 0);
+setTimeout(rebindRenderBook, 50);
 
 // Start eventuele initiële hash-controle
-setTimeout(handleHashRoute, 10);
+setTimeout(handleHashRoute, 60);
 })();
