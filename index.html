@@ -6,9 +6,9 @@
 <title>Al-Mufrodat — Medina Arabisch · Woordenschat, Grammatica & Dialogen</title>
 <meta name="theme-color" content="#F5F0E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="styles.css?v=20261109g">
-<script src="lessons_v2.js?v=20261109g"></script>
-<script src="grammar_v2.js?v=20261109g"></script>
+<link rel="stylesheet" href="styles.css?v=20261109h">
+<script src="lessons_v2.js?v=20261109h"></script>
+<script src="grammar_v2.js?v=20261109h"></script>
 <style>
 /* Simpele woordenschat-kaarten */
 .vocab-simple-list{display:flex;flex-direction:column;gap:8px;max-width:640px}
@@ -36,6 +36,9 @@
 .vocab-simple-head p{font-size:13.5px;color:var(--muted);margin:0}
 .vocab-simple-tools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center}
 .vocab-simple-tools .grow{flex:1}
+/* Sidebar submenu chevron draait open/dicht */
+.sbn-course .sb-chevron{display:inline-block;transition:transform .15s ease}
+.sbn-course[aria-expanded="true"] .sb-chevron{transform:rotate(180deg)}
 </style>
 </head>
 <body>
@@ -63,7 +66,7 @@
     }
     if (!inline) throw new Error('Inline app script niet gevonden in history');
 
-    // Fix recursive renderBook
+    // 1) Fix recursive renderBook
     inline = inline
       .replace(
         /function renderBook\(\)\{\s*if\(window\.renderBook\) return window\.renderBook\(\);\s*return '';\s*\}/,
@@ -81,6 +84,42 @@
         /html=\(window\.renderBookLesson\?window\.renderBookLesson\(\):renderBookLesson\(\)\);/g,
         'html=(typeof window.renderBookLesson==="function"?window.renderBookLesson():renderBookLessonFallback());'
       );
+
+    // 2) Fix: grammatica-menu togglen (was altijd true → kon niet dicht)
+    inline = inline.replace(
+      /if\(m==='gram'\)\{\s*sbMenuState\.gram = true;\s*state\.path='grammar';\s*if\(state\.view==='book-lesson'\)\{\s*state\.view='book';\s*state\.bookLesson=null;\s*try\{history\.pushState\(null,'','#\/grammatica'\)\}\s*catch\(e\)\{\}\s*\} else if\(state\.view!=='book'\)\{\s*state\.view='book';\s*state\.bookLesson=null;\s*try\{history\.pushState\(null,'','#\/grammatica'\)\}\s*catch\(e\)\{\}\s*\}\s*render\(\);\s*\(document\.getElementById\("app"\)\|\|window\)\.scrollTop=0;\s*return;\s*\}/,
+      "if(m==='gram'){\n" +
+      "      const willOpen = !sbMenuState.gram;\n" +
+      "      sbMenuState.gram = willOpen;\n" +
+      "      if(willOpen){\n" +
+      "        state.path='grammar';\n" +
+      "        if(state.view!=='book' && state.view!=='book-lesson'){\n" +
+      "          state.view='book'; state.bookLesson=null;\n" +
+      "          try{history.pushState(null,'','#/grammatica')}catch(e){}\n" +
+      "        }\n" +
+      "      }\n" +
+      "      render();\n" +
+      "      if(willOpen) (document.getElementById('app')||window).scrollTop=0;\n" +
+      "      return;\n" +
+      "    }"
+    );
+
+    // 3) gramOpen / convOpen: alleen op basis van toggle-state (niet forceren door path)
+    inline = inline
+      .replace(
+        /const gramOpen = \(path === 'grammar'\) \|\| \(state\.view === 'book'\) \|\| \(state\.view === 'book-lesson'\) \|\| !!sbMenuState\.gram;/,
+        "const gramOpen = !!sbMenuState.gram;"
+      )
+      .replace(
+        /const convOpen = \(path === 'conv'\) \|\| \(state\.view === 'conv'\) \|\| \(state\.view === 'conv-unit'\) \|\| !!sbMenuState\.conv;/,
+        "const convOpen = !!sbMenuState.conv;"
+      );
+
+    // 4) Bij openen van een les: submenu open houden
+    inline = inline.replace(
+      /else if\(act==='open-book'\)\{\s*state\.path='grammar';/,
+      "else if(act==='open-book'){\n    sbMenuState.gram=true;\n    state.path='grammar';"
+    );
 
     const s = document.createElement('script');
     s.textContent = inline;
@@ -119,11 +158,9 @@
         '<div class="vocab-simple-list">' + rows + '</div>' +
       '</div>';
     };
-
-    // Overschrijf ook de lokale binding als die bestaat
     try { renderVocabHub = window.renderVocabHub; } catch (e) {}
 
-    // Vereenvoudig oefenscherm: minder labels in de learn-view via CSS
+    // Minder rommel in oefenschermen
     const style = document.createElement('style');
     style.textContent = [
       '.vl-phases{display:none!important}',
@@ -136,15 +173,14 @@
     ].join('');
     document.head.appendChild(style);
 
-    // Als we al op vocab zitten, opnieuw tekenen
-    if (typeof render === 'function' && window.state && (state.view === 'vocab' || state.view === 'home')) {
+    if (typeof render === 'function' && window.state) {
       render();
     }
   } catch (err) {
     console.error(err);
     document.getElementById('app').innerHTML =
       '<div style="padding:2rem;font-family:system-ui">' +
-      '<h1>Herstel mislukt</h1><p>' + String(err.message || err) + '</p></div>';
+      '<h1>Laden mislukt</h1><p>' + String(err.message || err) + '</p></div>';
   }
 })();
 </script>
