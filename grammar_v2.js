@@ -160,22 +160,22 @@ function renderLesson(n){
     });
   }
 
-  // 3. Dunne scheidingslijn, daarna de oefeningen onder elkaar met hun boeknummer
+  // 3. Tweede sectie: Oefeningen (100% letterlijk uit Madina_Book1_Arabic_Text.pdf)
   let exercisesHtml = '';
   const oefeningen = les.oefeningen || [];
   if(oefeningen.length > 0){
-    exercisesHtml += `<hr class="gram-divider">
-    <div class="gram-exercises">`;
+    exercisesHtml += `<section class="gram-section gram-sec-exercises">
+      <h2 class="gram-sec-title">Oefeningen</h2>
+      <div class="gram-exercises">`;
     
     oefeningen.forEach((oef, idx) => {
-      const exKey = `${n}_${oef.nr || idx}`;
-      const noteVal = userNotes[exKey] || '';
+      const exNrLabel = oef.nr ? `Oefening ${oef.nr}` : `Oefening ${idx + 1}`;
       
-      exercisesHtml += `<div class="gram-exercise" data-ex-key="${E(exKey)}">
-        <div class="gram-ex-nr">${E(oef.nr)}</div>
+      exercisesHtml += `<div class="gram-exercise">
+        <div class="gram-ex-nr">${E(exNrLabel)}</div>
         <div class="gram-ex-card">
           <img src="${E(oef.beeld)}" 
-               alt="${E(oef.alt || ('Les ' + n + ', oefening ' + oef.nr))}" 
+               alt="${E(oef.alt || ('Les ' + n + ', ' + exNrLabel))}" 
                width="${oef.breedte || ''}" 
                height="${oef.hoogte || ''}" 
                loading="lazy" 
@@ -183,18 +183,13 @@ function renderLesson(n){
                data-act="gram-zoom" 
                tabindex="0" 
                role="button" 
-               aria-label="Vergroot oefening ${E(oef.nr)}">
-        </div>
-        <div class="gram-answer-box">
-          <details class="gram-answer-details" ${noteVal ? 'open' : ''}>
-            <summary class="gram-answer-summary">Mijn antwoord (notitie)</summary>
-            <textarea class="gram-answer-input" placeholder="Typ hier optioneel je antwoorden..." data-ex-key="${E(exKey)}">${E(noteVal)}</textarea>
-          </details>
+               aria-label="Vergroot ${E(exNrLabel)}">
         </div>
       </div>`;
     });
     
-    exercisesHtml += `</div>`;
+    exercisesHtml += `</div>
+    </section>`;
   }
 
   // 4. Onderaan, klein: "Les afgerond" + navigatie
@@ -218,10 +213,16 @@ function renderLesson(n){
 
   return `<div class="gram-wrap gram-lesson-wrap">
     <h1 class="gram-lesson-title">${pageTitle}</h1>
-    <div class="gram-content">
-      ${contentHtml}
-    </div>
+    
+    <section class="gram-section gram-sec-theory">
+      <h2 class="gram-sec-title">Grammaticatheorie</h2>
+      <div class="gram-content">
+        ${contentHtml}
+      </div>
+    </section>
+
     ${exercisesHtml}
+
     ${navHtml}
   </div>`;
 }
@@ -269,17 +270,6 @@ document.addEventListener('click', e => {
     if(typeof renderSidebar === 'function') {
       const host = document.getElementById('sidebar-host');
       if(host) host.innerHTML = renderSidebar();
-    }
-  }
-});
-
-document.addEventListener('input', e => {
-  // Notities opslaan
-  if(e.target && e.target.classList.contains('gram-answer-input')){
-    const key = e.target.dataset.exKey;
-    if(key){
-      userNotes[key] = e.target.value;
-      saveNotes();
     }
   }
 });

@@ -4514,12 +4514,30 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
   line-height: 1.55;
 }
 
-/* Dunne subtiele scheidingslijn vóór de oefeningen */
-.gram-divider {
-  border: 0;
-  height: 1px;
-  background: var(--line-strong);
-  margin: 40px 0 32px 0;
+/* Secties & Titels binnen een les: precies twee hoofdtitels ("Grammaticatheorie" & "Oefeningen") */
+.gram-section {
+  margin-bottom: 40px;
+}
+
+.gram-sec-title {
+  font-size: clamp(20px, 2.4vw, 24px);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--forest);
+  margin: 36px 0 20px 0;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--line);
+  display: flex;
+  align-items: center;
+}
+
+[data-theme="dark"] .gram-sec-title {
+  color: #72c89f;
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.gram-sec-theory .gram-sec-title {
+  margin-top: 16px;
 }
 
 /* Oefeningen sectie */
@@ -4532,14 +4550,19 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
 .gram-exercise {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .gram-ex-nr {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--ink-soft);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--forest);
   padding-left: 2px;
+  letter-spacing: -0.01em;
+}
+
+[data-theme="dark"] .gram-ex-nr {
+  color: #72c89f;
 }
 
 /* Lichte kaart voor oefeningafbeelding (ook in donkere modus!) */
@@ -4565,51 +4588,6 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
   display: block;
   margin: 0 auto;
   border-radius: 6px;
-}
-
-/* Notitievak per oefening */
-.gram-answer-box {
-  margin-top: 4px;
-}
-
-.gram-answer-details {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--surface);
-  overflow: hidden;
-}
-
-.gram-answer-summary {
-  padding: 8px 14px;
-  font-size: 13.5px;
-  font-weight: 500;
-  color: var(--ink-soft);
-  cursor: pointer;
-  user-select: none;
-}
-
-.gram-answer-summary:hover {
-  color: var(--ink);
-  background: var(--paper-deep);
-}
-
-.gram-answer-input {
-  width: 100%;
-  min-height: 72px;
-  padding: 10px 14px;
-  border: 0;
-  border-top: 1px solid var(--line);
-  background: var(--surface);
-  color: var(--ink);
-  font-size: 14.5px;
-  font-family: inherit;
-  resize: vertical;
-  box-sizing: border-box;
-}
-
-.gram-answer-input:focus {
-  outline: none;
-  background: var(--paper);
 }
 
 /* Navigatie onderaan les */
