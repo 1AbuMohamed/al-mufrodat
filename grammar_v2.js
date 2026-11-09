@@ -59,7 +59,7 @@ function renderOverview(){
     const isReader8 = !!item.is_aanvulling || n === 24;
     const label = isReader8 ? 'Reader 8 (Aanvulling)' : ('Les ' + n);
     
-    rows += `<a href="#/grammatica/${n}" class="gram-list-item ${isDone ? 'is-done' : ''} ${isReader8 ? 'is-extra' : ''}" data-l="${n}">
+    rows += `<a href="#/grammatica/${n}" class="gram-list-item ${isDone ? 'is-done' : ''} ${isReader8 ? 'is-extra' : ''}" data-act="open-book" data-l="${n}">
       <span class="gram-list-label">${label}</span>
       <span class="gram-list-status">
         ${isDone ? '<span class="gram-check" title="Afgerond">✓</span>' : '<span class="gram-chevron">›</span>'}
@@ -195,11 +195,11 @@ function renderLesson(n){
   // 4. Onderaan, klein: "Les afgerond" + navigatie
   let navHtml = `<div class="gram-bottom-nav">
     <div class="gram-nav-prev">
-      ${prevLesson !== null ? `<a href="#/grammatica/${prevLesson}" class="btn btn-secondary btn-sm">‹ Les ${prevLesson}</a>` : ''}
+      ${prevLesson !== null ? `<a href="#/grammatica/${prevLesson}" class="btn btn-secondary btn-sm" data-act="open-book" data-l="${prevLesson}">‹ Les ${prevLesson}</a>` : ''}
     </div>
     
     <div class="gram-nav-center">
-      <a href="#/grammatica" class="gram-overview-link">Overzicht</a>
+      <a href="#/grammatica" class="gram-overview-link" data-act="nav" data-v="book">Overzicht</a>
       <label class="gram-done-toggle">
         <input type="checkbox" id="gram-done-cb" data-l="${n}" ${isDone ? 'checked' : ''}>
         <span>Les afgerond</span>
@@ -207,7 +207,7 @@ function renderLesson(n){
     </div>
     
     <div class="gram-nav-next">
-      ${nextLesson !== null ? `<a href="#/grammatica/${nextLesson}" class="btn btn-primary btn-sm">Les ${nextLesson} ›</a>` : ''}
+      ${nextLesson !== null ? `<a href="#/grammatica/${nextLesson}" class="btn btn-primary btn-sm" data-act="open-book" data-l="${nextLesson}">Les ${nextLesson} ›</a>` : ''}
     </div>
   </div>`;
 

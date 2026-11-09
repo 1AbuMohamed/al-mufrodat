@@ -1080,9 +1080,9 @@ h3 .ar-inline, h3 [lang="ar"],
   .home-section-link{color:var(--gold);font-size:13px;font-weight:700;cursor:pointer}
   .home-section-link:hover{text-decoration:underline}
 
-  .route-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-  @media (min-width:1080px){
-    .route-cards{grid-template-columns:repeat(4,1fr)}
+  .route-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media (max-width:860px){
+    .route-cards{grid-template-columns:repeat(1,1fr)}
   }
   .route-card{
     min-height:176px;padding:22px;border:1px solid var(--line);border-radius:12px;
