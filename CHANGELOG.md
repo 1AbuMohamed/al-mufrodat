@@ -4,6 +4,40 @@ Alle wijzigingen in het kader van het herstel en de herbouw van de grammatica, d
 
 ---
 
+## [Gebruikersverfijningen & Didactische Vereenvoudiging] – 2026-11-09
+
+### 1. Grammaticales zonder drie lagen tabs (Punt 1 & 2)
+- **Één doorlopende pagina per les:** Alle drie de tabbladlagen (Overzicht / Regel 1 / Regel 2 en Uitleg / Voorbeelden / Oefenen) en de 5 bovenste knoppen (Les 1, Alle lessen, Ontleden, Auto, Geluid) zijn definitief verwijderd.
+- **Precies één titel:** Elke lespagina begint direct met de titel `Les N` (of `Reader 8 (Aanvulling)`), met daaronder de uitleg, de regels, de tabellen, de voorbeelden en de boek-oefeningen overzichtelijk onder elkaar gestapeld.
+- **Eenvoudig overzicht:** Het grammatica-overzicht is één rustige, kale lijst van Les 0 t/m Les 23 + Reader 8, zonder groepen, zonder zoekbalk, zonder filters en zonder overbodige kaarten erboven.
+- **Opruiming oude code:** De oude 310 KB `GRAMMAR`-datastructuur en 950 regels dode stepper-/toetscode in `index.html` zijn verwijderd.
+
+### 2. Actief herinneren in de woordenschat (Punt 3)
+- **Geen passieve verkenningsfase meer:** Fase 01 (Verkennen met "Begrepen · volgende") is geschrapt. De student wordt vanaf de allereerste kaart meteen geprikkeld om het woord zelf te raden, te herkennen of te typen (active recall).
+- **Direct antwoord controleren:** Elke kaart toont direct een knop "weet ik niet · toon antwoord", waarna het woord met vertaling en transcriptie wordt onthuld.
+- **Rustige stappenteller:** De 4-fasen voortgangsbalk is vervangen door één heldere teller: `Vraag X van Y`.
+- **Gestandaardiseerde academische transcriptie:** Alle 364 basiswoorden gebruiken nu het officiële academische Medina-systeem met macrons (`ā`, `ī`, `ū`) en consonanten met onderpunt (`ḥ`, `ṣ`, `ḍ`, `ṭ`, `ẓ`, `ʿ`, `ʾ`), bijvoorbeeld `ḥiṣānun` in plaats van het informele `hisaanun`.
+
+### 3. Eén duidelijke "Ga verder"-knop op het startscherm (Punt 4)
+- **Slim hervatten:** Zowel op desktop als op mobiel staat nu één prominente "Ga verder"-knop die in `localStorage` onthoudt waar de student voor het laatst gebleven was (grammatica of woordenschat).
+- **Logisch beginpunt:** Voor nieuwe gebruikers verwijst de knop direct naar `Les 0` (Inleiding · Klinkertekens & symbolen), zodat de grammaticale inleiding nooit wordt overgeslagen.
+
+### 4. Eenvoudige taal en één uniforme naamgeving (Punt 5)
+- **Overal "Les":** Alle wisselingen tussen "Hoofdstuk", "Les", "Inleiding" en "Fase" zijn gelijkgetrokken naar het uniforme `Les N`.
+- **Geen verwarrend jargon meer:** Termen zoals "MVP", "Spiekkaart", "Iʿrāb Studio", "Fase 01/02/03/04" en "Ontleden: uit" zijn verwijderd. In dialoogvensters staat nu gewoon "Toon ontleding" / "Ontleding verbergen".
+
+### 5. Arabische typografie en leesbaarheid (Punt 6)
+- **Arabisch in lopende tekst:** Alle Arabische woorden tussen «...» in de Nederlandse theorie, regels, voetnoten en tabellen worden in `grammar_v2.js` automatisch gewrapped in `<span class="ar-inline" lang="ar" dir="rtl">...</span>`.
+- **Ruime regelafstand & geen beknelling:** In `styles.css` is `.ar-inline` gedefinieerd met `font-size: max(24px, 1.32em)`, `line-height: 2.05`, `font-weight: 700`, `overflow: visible` en een opvallende accentkleur (`var(--forest)`).
+- **Voorbeelden en tabellen:** `.gram-ar` vergroot naar 28px (25px mobiel) met `line-height: 2.05`; `.gram-cell-ar` vergroot naar 26px met `line-height: 2.05`, zodat fatḥah, kasrah, ḍammah, sukūn, shaddah en dagger-alifs overal haarscherp en ongeknepen ademen.
+
+### 6. Basisgemak & Gebruikerservaring (Punt 7)
+- **Pinch-zoom:** Volledig ontgrendeld met `touch-action: pan-y pinch-zoom;` op `html, body, #app`.
+- **Telefoon-terugknop (History API):** Geïntegreerd via `history.pushState` en een `popstate`-listener. Het indrukken van de hardware- of swipe-terugknop op de telefoon navigeert nu soepel terug binnen de app in plaats van de browserpagina af te sluiten.
+- **Voortgang Back-up & Herstel:** In het Profiel / Instellingenscherm is een volledige export- en importfunctie toegevoegd. Gebruikers kunnen hun voortgang als `.json`-bestand downloaden en later herstellen.
+
+---
+
 ## [Herbouw Grammatica & Verwijdering Geluid] – 2026-11-09
 
 ### 1. Opdracht D: Volledige verwijdering van geluid en spraak (Stilte & Rust)

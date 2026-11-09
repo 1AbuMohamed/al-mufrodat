@@ -40,6 +40,12 @@ function formatArabicLine(text){
   return E(text);
 }
 
+function formatDutchText(text){
+  if(text === null || text === undefined) return '';
+  const escaped = E(text);
+  return escaped.replace(/«([^»]+)»/g, '<span class="ar-inline" lang="ar" dir="rtl">«$1»</span>');
+}
+
 /* ---------- 1. Lessenoverzicht (Grammatica-startpagina) ---------- */
 function renderOverview(){
   const G = window.GRAMMATICA || {};
@@ -98,14 +104,14 @@ function renderLesson(n){
   inhoud.forEach(item => {
     if(item.type === 'tekst'){
       const isBold = !!item.vet;
-      contentHtml += `<p class="gram-p ${isBold ? 'is-bold' : ''}">${E(item.tekst)}</p>`;
+      contentHtml += `<p class="gram-p ${isBold ? 'is-bold' : ''}">${formatDutchText(item.tekst)}</p>`;
     }
     else if(item.type === 'regel'){
-      contentHtml += `<p class="gram-p gram-rule">${E(item.tekst)}</p>`;
+      contentHtml += `<p class="gram-p gram-rule">${formatDutchText(item.tekst)}</p>`;
     }
     else if(item.type === 'voorbeeld'){
       const arPart = item.ar ? `<span class="gram-ar" lang="ar" dir="rtl">${E(item.ar)}</span>` : '';
-      const nlPart = item.nl ? `<span class="gram-nl">${E(item.nl)}</span>` : '';
+      const nlPart = item.nl ? `<span class="gram-nl">${formatDutchText(item.nl)}</span>` : '';
       contentHtml += `<div class="gram-ex-row">
         ${nlPart}
         ${arPart}
@@ -114,19 +120,19 @@ function renderLesson(n){
     else if(item.type === 'tabel'){
       let thead = '';
       if(item.kop && item.kop.length){
-        thead = `<thead><tr>${item.kop.map(k => `<th>${E(k)}</th>`).join('')}</tr></thead>`;
+        thead = `<thead><tr>${item.kop.map(k => `<th>${formatDutchText(k)}</th>`).join('')}</tr></thead>`;
       }
       let tbody = '';
       (item.rijen || []).forEach(row => {
         tbody += `<tr>${row.map(cell => {
           const isCellAr = /[\u0600-\u06FF]/.test(cell);
-          return `<td ${isCellAr ? 'class="gram-cell-ar" lang="ar" dir="rtl"' : ''}>${E(cell)}</td>`;
+          return `<td ${isCellAr ? 'class="gram-cell-ar" lang="ar" dir="rtl"' : ''}>${formatDutchText(cell)}</td>`;
         }).join('')}</tr>`;
       });
       contentHtml += `<div class="gram-tbl-wrap"><table class="gram-tbl">${thead}<tbody>${tbody}</tbody></table></div>`;
     }
     else if(item.type === 'voetnoot'){
-      contentHtml += `<p class="gram-footnote">${E(item.tekst)}</p>`;
+      contentHtml += `<p class="gram-footnote">${formatDutchText(item.tekst)}</p>`;
     }
   });
 
@@ -134,20 +140,20 @@ function renderLesson(n){
   if(les.is_aanvulling && les.reader8_data && les.reader8_data.steps){
     les.reader8_data.steps.forEach(st => {
       contentHtml += `<div class="gram-reader8-sec">
-        <p class="gram-p is-bold">${E(st.title)}</p>`;
+        <p class="gram-p is-bold">${formatDutchText(st.title)}</p>`;
       (st.text || []).forEach(t => {
-        contentHtml += `<p class="gram-p">${E(t)}</p>`;
+        contentHtml += `<p class="gram-p">${formatDutchText(t)}</p>`;
       });
       if(st.table){
-        let thead = `<thead><tr>${(st.table.headers||[]).map(h => `<th>${E(h)}</th>`).join('')}</tr></thead>`;
-        let tbody = (st.table.rows||[]).map(r => `<tr>${r.map(c => `<td>${E(c)}</td>`).join('')}</tr>`).join('');
+        let thead = `<thead><tr>${(st.table.headers||[]).map(h => `<th>${formatDutchText(h)}</th>`).join('')}</tr></thead>`;
+        let tbody = (st.table.rows||[]).map(r => `<tr>${r.map(c => `<td>${formatDutchText(c)}</td>`).join('')}</tr>`).join('');
         contentHtml += `<div class="gram-tbl-wrap"><table class="gram-tbl">${thead}<tbody>${tbody}</tbody></table></div>`;
       }
       (st.examples || []).forEach(ex => {
         contentHtml += `<div class="gram-ex-row">
           <span class="gram-ar" lang="ar" dir="rtl">${E(ex.ar)}</span>
           <span class="gram-sep">—</span>
-          <span class="gram-nl">${E(ex.nl)}</span>
+          <span class="gram-nl">${formatDutchText(ex.nl)}</span>
         </div>`;
       });
       contentHtml += `</div>`;
