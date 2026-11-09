@@ -6,9 +6,9 @@
 <title>Al-Mufrodat — Medina Arabisch · Woordenschat, Grammatica & Dialogen</title>
 <meta name="theme-color" content="#F5F0E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="styles.css?v=20261109h">
-<script src="lessons_v2.js?v=20261109h"></script>
-<script src="grammar_v2.js?v=20261109h"></script>
+<link rel="stylesheet" href="styles.css?v=20261109i">
+<script src="lessons_v2.js?v=20261109i"></script>
+<script src="grammar_v2.js?v=20261109i"></script>
 <style>
 /* Simpele woordenschat-kaarten */
 .vocab-simple-list{display:flex;flex-direction:column;gap:8px;max-width:640px}
@@ -36,7 +36,6 @@
 .vocab-simple-head p{font-size:13.5px;color:var(--muted);margin:0}
 .vocab-simple-tools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center}
 .vocab-simple-tools .grow{flex:1}
-/* Sidebar submenu chevron draait open/dicht */
 .sbn-course .sb-chevron{display:inline-block;transition:transform .15s ease}
 .sbn-course[aria-expanded="true"] .sb-chevron{transform:rotate(180deg)}
 </style>
@@ -50,6 +49,25 @@
 <script>
 (async function(){
   const GOOD = 'https://raw.githubusercontent.com/1AbuMohamed/al-mufrodat/c45e6b965b40a478bb93b686867d8ae4550c9f50/index.html';
+
+  function scrollPageTop(){
+    try {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      const app = document.getElementById('app');
+      if (app) app.scrollTop = 0;
+      // na render nogmaals (layout kan even later klaar zijn)
+      requestAnimationFrame(function(){
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        if (app) app.scrollTop = 0;
+      });
+    } catch (e) {}
+  }
+  window.__scrollPageTop = scrollPageTop;
+
   try {
     const res = await fetch(GOOD);
     if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -85,7 +103,7 @@
         'html=(typeof window.renderBookLesson==="function"?window.renderBookLesson():renderBookLessonFallback());'
       );
 
-    // 2) Fix: grammatica-menu togglen (was altijd true → kon niet dicht)
+    // 2) Grammatica-menu togglen
     inline = inline.replace(
       /if\(m==='gram'\)\{\s*sbMenuState\.gram = true;\s*state\.path='grammar';\s*if\(state\.view==='book-lesson'\)\{\s*state\.view='book';\s*state\.bookLesson=null;\s*try\{history\.pushState\(null,'','#\/grammatica'\)\}\s*catch\(e\)\{\}\s*\} else if\(state\.view!=='book'\)\{\s*state\.view='book';\s*state\.bookLesson=null;\s*try\{history\.pushState\(null,'','#\/grammatica'\)\}\s*catch\(e\)\{\}\s*\}\s*render\(\);\s*\(document\.getElementById\("app"\)\|\|window\)\.scrollTop=0;\s*return;\s*\}/,
       "if(m==='gram'){\n" +
@@ -99,12 +117,12 @@
       "        }\n" +
       "      }\n" +
       "      render();\n" +
-      "      if(willOpen) (document.getElementById('app')||window).scrollTop=0;\n" +
+      "      if(willOpen && window.__scrollPageTop) window.__scrollPageTop();\n" +
       "      return;\n" +
       "    }"
     );
 
-    // 3) gramOpen / convOpen: alleen op basis van toggle-state (niet forceren door path)
+    // 3) gramOpen / convOpen alleen via toggle
     inline = inline
       .replace(
         /const gramOpen = \(path === 'grammar'\) \|\| \(state\.view === 'book'\) \|\| \(state\.view === 'book-lesson'\) \|\| !!sbMenuState\.gram;/,
@@ -115,17 +133,37 @@
         "const convOpen = !!sbMenuState.conv;"
       );
 
-    // 4) Bij openen van een les: submenu open houden
+    // 4) open-book: submenu open + scroll naar boven (window, niet alleen #app)
     inline = inline.replace(
       /else if\(act==='open-book'\)\{\s*state\.path='grammar';/,
       "else if(act==='open-book'){\n    sbMenuState.gram=true;\n    state.path='grammar';"
+    );
+    inline = inline.replace(
+      /state\.view='book-lesson';\s*try\{history\.pushState\(null,'','#'\/grammatica\/'\+state\.bookLesson\)\}\s*catch\(e\)\{\}\s*render\(\);\s*\(document\.getElementById\("app"\)\|\|window\)\.scrollTop=0;/,
+      "state.view='book-lesson';\n" +
+      "    try{history.pushState(null,'','#/grammatica/'+state.bookLesson)}catch(e){}\n" +
+      "    render();\n" +
+      "    if(window.__scrollPageTop) window.__scrollPageTop();"
+    );
+
+    // 5) Alle overige app.scrollTop=0 → echte page top
+    inline = inline.replace(
+      /\(document\.getElementById\("app"\)\|\|window\)\.scrollTop=0/g,
+      "(window.__scrollPageTop?window.__scrollPageTop():window.scrollTo(0,0))"
     );
 
     const s = document.createElement('script');
     s.textContent = inline;
     document.body.appendChild(s);
 
-    // ——— Vereenvoudigde woordenschat-UI ———
+    // Extra: bij hash-wisseling naar andere les altijd naar boven
+    window.addEventListener('hashchange', function(){
+      if ((location.hash || '').indexOf('#/grammatica') === 0) {
+        scrollPageTop();
+      }
+    });
+
+    // Vereenvoudigde woordenschat
     window.renderVocabHub = function renderVocabHub(){
       const total = ALL.length, m = mastered(ALL), pct = total ? Math.round(100 * m / total) : 0;
       let rows = '';
@@ -160,7 +198,6 @@
     };
     try { renderVocabHub = window.renderVocabHub; } catch (e) {}
 
-    // Minder rommel in oefenschermen
     const style = document.createElement('style');
     style.textContent = [
       '.vl-phases{display:none!important}',
