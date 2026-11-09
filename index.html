@@ -6,10 +6,11 @@
 <title>Al-Mufrodat — Medina Arabisch · Woordenschat, Grammatica & Dialogen</title>
 <meta name="theme-color" content="#F5F0E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="styles.css?v=20261109k">
-<script src="lessons_v2.js?v=20261109k"></script>
-<script src="grammar_v2.js?v=20261109k"></script>
-<script src="exercises_v2.js?v=20261109k"></script>
+<link rel="stylesheet" href="styles.css?v=20261109m">
+<script src="lessons_v2.js?v=20261109m"></script>
+<script src="grammar_v2.js?v=20261109m"></script>
+<script src="parse_data.js?v=20261109m"></script>
+<script src="exercises_v2.js?v=20261109m"></script>
 <style>
 /* Simpele woordenschat-kaarten */
 .vocab-simple-list{display:flex;flex-direction:column;gap:8px;max-width:640px}
@@ -88,7 +89,6 @@
     }
     if (!inline) throw new Error('Inline app script niet gevonden in history');
 
-    // 1) Fix recursive renderBook
     inline = inline
       .replace(
         /function renderBook\(\)\{\s*if\(window\.renderBook\) return window\.renderBook\(\);\s*return '';\s*\}/,
@@ -107,7 +107,6 @@
         'html=(typeof window.renderBookLesson==="function"?window.renderBookLesson():renderBookLessonFallback());'
       );
 
-    // 2) Grammatica-menu togglen + Oefeningen-menu
     inline = inline.replace(
       /if\(m==='gram'\)\{\s*sbMenuState\.gram = true;\s*state\.path='grammar';\s*if\(state\.view==='book-lesson'\)\{\s*state\.view='book';\s*state\.bookLesson=null;\s*try\{history\.pushState\(null,'','#\/grammatica'\)\}\s*catch\(e\)\{\}\s*\} else if\(state\.view!=='book'\)\{\s*state\.view='book';\s*state\.bookLesson=null;\s*try\{history\.pushState\(null,'','#\/grammatica'\)\}\s*catch\(e\)\{\}\s*\}\s*render\(\);\s*\(document\.getElementById\("app"\)\|\|window\)\.scrollTop=0;\s*return;\s*\}/,
       "if(m==='gram'){\n" +
@@ -140,7 +139,6 @@
       "    }"
     );
 
-    // 3) gramOpen / convOpen alleen via toggle + exOpen
     inline = inline
       .replace(
         /const gramOpen = \(path === 'grammar'\) \|\| \(state\.view === 'book'\) \|\| \(state\.view === 'book-lesson'\) \|\| !!sbMenuState\.gram;/,
@@ -151,13 +149,11 @@
         "const convOpen = !!sbMenuState.conv;"
       );
 
-    // 3b) Init sbMenuState.ex
     inline = inline.replace(
       /let sbMenuState = \{ gram: false, conv: false \};/,
       "let sbMenuState = { gram: false, conv: false, ex: false };\nwindow.sbMenuState = sbMenuState;"
     );
 
-    // 4) open-book: submenu open + scroll naar boven
     inline = inline.replace(
       /else if\(act==='open-book'\)\{\s*state\.path='grammar';/,
       "else if(act==='open-book'){\n    sbMenuState.gram=true;\n    state.path='grammar';"
@@ -170,19 +166,16 @@
       "    if(window.__scrollPageTop) window.__scrollPageTop();"
     );
 
-    // 5) Alle overige app.scrollTop=0 → echte page top
     inline = inline.replace(
       /\(document\.getElementById\("app"\)\|\|window\)\.scrollTop=0/g,
       "(window.__scrollPageTop?window.__scrollPageTop():window.scrollTo(0,0))"
     );
 
-    // 6) currentPath() uitbreiden voor exercises
     inline = inline.replace(
       /if\(\['book','book-lesson'\]\.includes\(state\.view\)\)return 'grammar';/,
       "if(['book','book-lesson'].includes(state.view))return 'grammar';\n  if(['ex','ex-lesson'].includes(state.view))return 'exercises';"
     );
 
-    // 7) In render(): oefeningen-views toevoegen
     inline = inline.replace(
       /else if\(state\.view==='book-lesson'\)html=\(typeof window\.renderBookLesson===\"function\"\?window\.renderBookLesson\(\):renderBookLessonFallback\(\)\);/,
       "else if(state.view==='book-lesson')html=(typeof window.renderBookLesson===\"function\"?window.renderBookLesson():renderBookLessonFallback());\n" +
@@ -190,13 +183,11 @@
       "  else if(state.view==='ex-lesson')html=(typeof window.renderExerciseLesson===\"function\"?window.renderExerciseLesson():'<p class=\"empty\">Oefening laden…</p>');"
     );
 
-    // 8) viewLabels voor topbar
     inline = inline.replace(
       /book: 'Grammatica · Medina-boek',/,
       "book: 'Grammatica · Medina-boek',\n    ex: 'Oefeningen',\n    'ex-lesson': 'Oefeningen',"
     );
 
-    // 9) In renderSidebar: Oefeningen-menu toevoegen na Grammatica-submenu
     inline = inline.replace(
       /(<button type="button" class="sbn sbn-course \$\{path==='conv'\?'active':''\}" data-act="sb-menu" data-menu="conv"[\s\S]*?<\/div>\s*)\n\n\n\s*<button type="button" class="sbn \$\{state\.view==='words'/,
       "$1\n\n      <button type=\"button\" class=\"sbn sbn-course ${path==='exercises'?'active':''}\" data-act=\"sb-menu\" data-menu=\"ex\" aria-expanded=\"${exOpen}\">\n" +
@@ -209,7 +200,6 @@
       "      </div>\n\n      <button type=\"button\" class=\"sbn ${state.view==='words'"
     );
 
-    // 10) Bouw exLinks in renderSidebar (vóór return)
     inline = inline.replace(
       /const convLinks = Object\.entries\(CONVERSATIONS\)\.map\(\(\[u, c\]\) => \{[\s\S]*?\}\)\.join\(''\);/,
       "const convLinks = Object.entries(CONVERSATIONS).map(([u, c]) => {\n" +
@@ -227,7 +217,6 @@
       "  }).join('');"
     );
 
-    // 11) open-ex handler in de click-listener
     inline = inline.replace(
       /else if\(act==='open-book'\)\{/,
       "else if(act==='open-ex'){\n" +
@@ -245,7 +234,6 @@
       "  else if(act==='open-book'){"
     );
 
-    // 12) nav naar book/ex ook via data-v
     inline = inline.replace(
       /else if\(v==='book'\)\{state\.path='grammar';state\.view='book';state\.bookLesson=null;state\.bookTab='uitleg';if\(state\.g2\)state\.g2\.view='map';sbMenuState\.gram=true;try\{history\.pushState\(null,'','#\/grammatica'\)\}catch\(e\)\{\}\}/,
       "else if(v==='book'){state.path='grammar';state.view='book';state.bookLesson=null;state.bookTab='uitleg';if(state.g2)state.g2.view='map';sbMenuState.gram=true;try{history.pushState(null,'','#/grammatica')}catch(e){}}\n" +
@@ -256,7 +244,6 @@
     s.textContent = inline;
     document.body.appendChild(s);
 
-    // Extra: bij hash-wisseling naar andere les altijd naar boven
     window.addEventListener('hashchange', function(){
       const h = location.hash || '';
       if (h.indexOf('#/grammatica') === 0 || h.indexOf('#/oefeningen') === 0) {
@@ -264,7 +251,6 @@
       }
     });
 
-    // Vereenvoudigde woordenschat
     window.renderVocabHub = function renderVocabHub(){
       const total = ALL.length, m = mastered(ALL), pct = total ? Math.round(100 * m / total) : 0;
       let rows = '';
@@ -311,7 +297,6 @@
     ].join('');
     document.head.appendChild(style);
 
-    // Zorg dat oefeningen-hash ook bij eerste load werkt
     if ((location.hash || '').indexOf('#/oefeningen') === 0 && typeof window.render === 'function') {
       setTimeout(function(){
         if (window.state) {
