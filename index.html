@@ -6,44 +6,139 @@
 <title>Al-Mufrodat — Medina Arabisch · Woordenschat, Grammatica & Dialogen</title>
 <meta name="theme-color" content="#F5F0E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="styles.css?v=20261109n">
-<script src="lessons_v2.js?v=20261109n"></script>
-<script src="grammar_v2.js?v=20261109n"></script>
-<script src="parse_data.js?v=20261109n"></script>
-<script src="exercises_v2.js?v=20261109n"></script>
+<link rel="stylesheet" href="styles.css?v=20261110a">
+<script src="lessons_v2.js?v=20261110a"></script>
+<script src="grammar_v2.js?v=20261110a"></script>
+<script src="parse_data.js?v=20261110a"></script>
+<script src="exercises_v2.js?v=20261110a"></script>
 <style>
-/* Simpele woordenschat-kaarten */
-.vocab-simple-list{display:flex;flex-direction:column;gap:8px;max-width:640px}
-.vocab-simple-item{
-  display:flex;align-items:center;gap:14px;
-  padding:14px 16px;border-radius:12px;
-  border:1px solid var(--line);background:var(--surface);
-  text-decoration:none;color:inherit;cursor:pointer;
-  transition:border-color .15s,box-shadow .15s;
+/* ===== Duo-style vocab + fun layout ===== */
+.duo-head{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin-bottom:18px}
+.duo-stat{
+  flex:1;min-width:100px;background:var(--surface);border:1.5px solid var(--line);
+  border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;
 }
-.vocab-simple-item:hover{border-color:var(--gold);box-shadow:var(--shadow)}
-.vocab-simple-num{
-  width:36px;height:36px;border-radius:10px;flex-shrink:0;
-  display:grid;place-items:center;font-weight:800;font-size:14px;
-  background:var(--paper-deep);color:var(--muted);border:1.5px solid var(--line);
+.duo-stat .k{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.duo-stat .v{font-size:22px;font-weight:800;color:var(--forest);line-height:1.15}
+.duo-stat.gold .v{color:var(--gold)}
+.duo-stat.fire .v{color:#e85d04}
+.duo-tools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center}
+.duo-tools .grow{flex:1}
+
+/* Path nodes */
+.duo-path{display:flex;flex-direction:column;align-items:center;gap:0;max-width:420px;margin:0 auto;padding:8px 0 24px}
+.duo-node-wrap{display:flex;flex-direction:column;align-items:center;width:100%;position:relative}
+.duo-connector{width:4px;height:22px;background:var(--line);border-radius:4px}
+.duo-node-wrap.done .duo-connector,.duo-node-wrap.busy + .duo-node-wrap .duo-connector{background:var(--gold)}
+.duo-node{
+  width:100%;display:flex;align-items:center;gap:14px;padding:12px 14px;
+  background:var(--surface);border:2px solid var(--line);border-radius:18px;
+  cursor:pointer;text-align:start;font:inherit;color:inherit;
+  transition:transform .15s ease,border-color .15s,box-shadow .15s;
+  box-shadow:0 2px 0 var(--line);
 }
-.vocab-simple-item.busy .vocab-simple-num{background:var(--gold-pale);color:var(--forest);border-color:var(--gold)}
-.vocab-simple-item.done .vocab-simple-num{background:var(--forest);color:var(--on-forest);border-color:var(--forest)}
-.vocab-simple-body{flex:1;min-width:0}
-.vocab-simple-body strong{display:block;font-size:15px;font-weight:700;line-height:1.3}
-.vocab-simple-meta{font-size:12.5px;color:var(--muted);margin-top:2px}
-.vocab-simple-go{color:var(--muted);font-size:18px;flex-shrink:0}
-.vocab-simple-head{margin-bottom:18px}
-.vocab-simple-head h1{font-size:22px;font-weight:700;margin:0 0 4px;letter-spacing:-.02em}
-.vocab-simple-head p{font-size:13.5px;color:var(--muted);margin:0}
-.vocab-simple-tools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center}
-.vocab-simple-tools .grow{flex:1}
+.duo-node:hover{transform:translateY(-2px);border-color:var(--gold);box-shadow:0 4px 0 var(--gold)}
+.duo-node:active{transform:translateY(1px);box-shadow:0 1px 0 var(--line)}
+.duo-node.done{border-color:var(--ok);box-shadow:0 2px 0 var(--ok)}
+.duo-node.done:hover{border-color:var(--ok);box-shadow:0 4px 0 var(--ok)}
+.duo-node.busy{border-color:var(--gold);box-shadow:0 2px 0 var(--gold)}
+.duo-node.current{outline:3px solid var(--gold-pale)}
+.duo-bubble{
+  width:52px;height:52px;border-radius:50%;flex-shrink:0;
+  display:grid;place-items:center;font-weight:800;font-size:16px;
+  background:var(--paper-deep);color:var(--muted);border:3px solid var(--line);
+}
+.duo-node.busy .duo-bubble{background:var(--gold);color:#173B3F;border-color:var(--gold-soft)}
+.duo-node.done .duo-bubble{background:var(--ok);color:#fff;border-color:#34a853}
+.duo-node-body{flex:1;min-width:0}
+.duo-node-body strong{display:block;font-size:15px;font-weight:700;line-height:1.25}
+.duo-node-body span{font-size:12.5px;color:var(--muted)}
+.duo-node-cta{font-size:12px;font-weight:700;color:var(--forest);flex-shrink:0}
+.duo-node.done .duo-node-cta{color:var(--ok)}
+.duo-node.busy .duo-node-cta{color:var(--gold)}
+
+/* Learn session fun */
+.qcard{border-radius:18px!important;padding:20px 18px!important;border-width:2px!important}
+.options{gap:12px!important}
+.opt{
+  border-radius:16px!important;border-width:2px!important;min-height:56px!important;
+  font-weight:700!important;box-shadow:0 3px 0 var(--line)!important;
+  transition:transform .12s ease,box-shadow .12s,border-color .12s,background .12s!important;
+}
+.opt:hover{transform:translateY(-2px);box-shadow:0 5px 0 var(--line)!important}
+.opt:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)!important}
+.opt.correct{
+  background:var(--ok-soft)!important;border-color:var(--ok)!important;color:var(--ok)!important;
+  box-shadow:0 3px 0 var(--ok)!important;animation:duoPop .35s ease;
+}
+.opt.wrong{
+  background:var(--clay-soft)!important;border-color:var(--clay)!important;
+  box-shadow:0 3px 0 var(--clay)!important;animation:duoShake .4s ease;
+}
+@keyframes duoPop{0%{transform:scale(.94)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
+@keyframes duoShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+@keyframes duoFloat{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-18px);opacity:0}}
+.duo-float-xp{
+  position:fixed;z-index:500;pointer-events:none;font-weight:800;font-size:18px;
+  color:var(--gold);animation:duoFloat .9s ease forwards;text-shadow:0 1px 0 rgba(0,0,0,.15);
+}
+
+.feedback{
+  border-radius:18px 18px 0 0!important;border-width:2px 0 0!important;
+  padding:16px 18px!important;
+}
+.feedback.show{animation:duoSlideUp .25s ease}
+@keyframes duoSlideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.feedback.ok{background:#d7f5e3!important;border-color:var(--ok)!important}
+.feedback.no{background:#fde4e0!important;border-color:var(--clay)!important}
+[data-theme="dark"] .feedback.ok{background:rgba(72,187,120,.2)!important}
+[data-theme="dark"] .feedback.no{background:rgba(226,109,92,.2)!important}
+.feedback .txt{font-size:16px!important}
+.feedback.ok .txt::before{content:"✓ ";font-weight:900}
+.feedback.no .txt::before{content:"✗ ";font-weight:900}
+
+.progress{height:10px!important;border-radius:99px!important;background:var(--paper-deep)!important}
+.progress>i{background:linear-gradient(90deg,var(--gold),#e8c46a)!important;box-shadow:0 0 8px var(--gold-pale)}
+
+.learn-hud{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:12px;flex-wrap:wrap;
+}
+.learn-hud .combo{
+  display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;
+  background:var(--gold-pale);border:1.5px solid var(--gold);font-weight:800;font-size:13px;color:#8a6a1f;
+}
+.learn-hud .xp-pill{
+  display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;
+  background:var(--forest-soft);border:1.5px solid var(--forest);font-weight:800;font-size:13px;color:var(--forest);
+}
+
+/* Summary celebration */
+.sum-celebrate{font-size:42px;line-height:1;margin-bottom:6px}
+.sum-xp{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;
+  background:var(--gold-pale);border:1.5px solid var(--gold);font-weight:800;color:#8a6a1f;margin:8px 0 4px}
+
+/* Cards & general polish */
+.card,.gram-wrap .card,section.card{border-radius:16px}
+.btn-primary{border-radius:14px!important;box-shadow:0 3px 0 rgba(0,0,0,.12);font-weight:700}
+.btn-primary:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.12)}
+.btn-secondary{border-radius:14px!important}
+.gram-list-item{border-radius:14px!important;transition:transform .12s,border-color .12s}
+.gram-list-item:hover{transform:translateY(-1px);border-color:var(--gold)}
+
+/* Hide old clutter still */
+.vl-phases{display:none!important}
+.vl-kicker{display:none!important}
+.learn-mini .mini-btn{display:none!important}
+.session-top .tag,.flash-card .tag{display:none!important}
+.sh-eyebrow{display:none!important}
+.path-alts{display:none!important}
+.lesson .status{display:none!important}
+
+/* Oefeningen leftovers */
+.ex-block{border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .sbn-course .sb-chevron{display:inline-block;transition:transform .15s ease}
 .sbn-course[aria-expanded="true"] .sb-chevron{transform:rotate(180deg)}
-/* Oefeningen-blokjes in lespagina */
-.ex-block{border:1px solid var(--line);border-radius:12px;background:var(--surface)}
-.ex-block h3{color:var(--ink)}
-.ex-answers summary{color:var(--forest)}
 </style>
 </head>
 <body>
@@ -240,6 +335,62 @@
       "    else if(v==='ex'||v==='oefeningen'){state.path='exercises';state.view='ex';state.exLesson=null;sbMenuState.ex=true;try{history.pushState(null,'','#/oefeningen')}catch(e){}}"
     );
 
+
+    // --- Duolingo-style feedback / XP / combo ---
+    inline = inline.replace(
+      /function showFb\(ok,text\)\{[\s\S]*?const delay = ok \? 2000 : 3000;/,
+      "function showFb(ok,text){\n" +
+      "  clearVocabFbTimer();\n" +
+      "  const bar=document.getElementById('fb');const txt=document.getElementById('fb-txt');const btn=document.getElementById('fb-btn');\n" +
+      "  if(!bar)return;\n" +
+      "  if(ok){\n" +
+      "    window.__duoCombo=(window.__duoCombo||0)+1;\n" +
+      "    const combo=window.__duoCombo;\n" +
+      "    const gain = combo>=5?15:combo>=3?12:10;\n" +
+      "    if(typeof window.__duoXP==='number'){ window.__duoXP+=gain; try{localStorage.setItem('alm_xp',String(window.__duoXP))}catch(e){} }\n" +
+      "    const float=document.createElement('div'); float.className='duo-float-xp'; float.textContent='+'+gain+' XP';\n" +
+      "    float.style.left=(window.innerWidth/2-28)+'px'; float.style.top=(window.innerHeight*0.4)+'px';\n" +
+      "    document.body.appendChild(float); setTimeout(function(){float.remove()},900);\n" +
+      "    const cheers=['Goed zo!','Top!','Mooi!','Yes!','Sterk!','Super!'];\n" +
+      "    const cheer=cheers[Math.floor(Math.random()*cheers.length)];\n" +
+      "    const comboTxt=combo>=2?(' · 🔥 combo ×'+combo):'';\n" +
+      "    txt.innerHTML=cheer+comboTxt+(text&&text!=='Goed'&&text!=='Beheerst'?('<div style=\"font-size:13px;font-weight:600;opacity:.85;margin-top:3px\">'+text+'</div>'):'');\n" +
+      "  } else {\n" +
+      "    window.__duoCombo=0;\n" +
+      "    txt.innerHTML='Bijna! <div style=\"font-size:13px;font-weight:600;opacity:.9;margin-top:3px\">'+text+'</div>';\n" +
+      "  }\n" +
+      "  bar.className='feedback show '+(ok?'ok':'no');\n" +
+      "  if(btn){ btn.style.display='inline-flex'; btn.textContent=ok?'Door! →':'Oké, verder →'; }\n" +
+      "  bar.onclick=(e)=>{\n" +
+      "    if(e.target&&e.target.id!=='fb-btn'&&_vocabFbTimer){\n" +
+      "      clearVocabFbTimer();\n" +
+      "      txt.innerHTML=txt.innerHTML+' <small style=\"display:block;opacity:0.8;font-size:12px;margin-top:4px\">⏸️ Timer gepauzeerd</small>';\n" +
+      "    }\n" +
+      "  };\n" +
+      "  const delay = ok ? 1600 : 2800;"
+    );
+
+    inline = inline.replace(
+      /const msg = ok\s*\n\s*\? \(p\.box>=MASTERY\?'Beheerst':'Goed'\)\s*\n\s*: w\.ar\+'  ·  '\+w\.nl;/,
+      "const msg = ok\n    ? (p.box>=MASTERY?'Beheerst — nieuw woord geleerd!':'Juist')\n    : (w.ar+'  ·  '+w.nl);"
+    );
+
+    inline = inline.replace(
+      /return`<div class="desktop-narrow">\s*<div class="learn-mini" style="justify-content:space-between;margin-bottom:10px">\s*<button class="back" data-act="nav" data-v="vocab" style="margin:0"><span>←<\/span> Overzicht<\/button>\s*<span class="learn-count">Vraag \$\{state\.stepIdx\+1\} van \$\{state\.queue\.length\}<\/span>/,
+      "const __combo=window.__duoCombo||0; const __xp=window.__duoXP||0;\n  return`<div class=\"desktop-narrow\">\n    <div class=\"learn-hud\">\n      <button class=\"back\" data-act=\"nav\" data-v=\"vocab\" style=\"margin:0\"><span>←</span></button>\n      <span class=\"combo\" title=\"Combo\">🔥 ${__combo}</span>\n      <span class=\"xp-pill\">⭐ ${__xp} XP</span>\n      <span class=\"learn-count\">${state.stepIdx+1}/${Math.max(state.queue.length,1)}</span>"
+    );
+
+    inline = inline.replace(
+      /<div class="gl-kicker">Sessie afgerond · Resultaten<\/div>\s*<div class="sum-score">\$\{state\.correct\}<span>\/\$\{state\.sessionLen\}<\/span><\/div>\s*<h2 style="font-size:22px;margin-top:4px">\$\{acc>=80\?'Uitstekend gewerkt!':'Ronde voltooid'\}<\/h2>\s*<p style="color:var\(--muted\);font-size:14px">\$\{acc\}% van de vragen in één keer goed\$\{state\.review\?' · herhalingsronde':''\}<\/p>/,
+      "<div class=\"sum-celebrate\">${acc>=90?'🎉':acc>=70?'🌟':'💪'}</div>\n        <div class=\"sum-score\">${state.correct}<span>/${state.sessionLen}</span></div>\n        <h2 style=\"font-size:22px;margin-top:4px\">${acc>=90?'Perfect!':acc>=70?'Goed gedaan!':'Blijf oefenen!'}</h2>\n        <div class=\"sum-xp\">+${Math.max(5, state.correct*10)} XP deze ronde</div>\n        <p style=\"color:var(--muted);font-size:14px\">${acc}% in één keer goed${state.review?' · herhalingsronde':''}</p>"
+    );
+
+    // Reset combo when starting a learn session
+    inline = inline.replace(
+      /state\.asked=0; state\.correct=0; state\.answered=false;/,
+      "state.asked=0; state.correct=0; state.answered=false; window.__duoCombo=0;"
+    );
+
     const s = document.createElement('script');
     s.textContent = inline;
     document.body.appendChild(s);
@@ -251,28 +402,62 @@
       }
     });
 
+    // XP helpers
+    window.__duoXP = (function(){
+      try { return parseInt(localStorage.getItem('alm_xp')||'0',10)||0; } catch(e){ return 0; }
+    })();
+    window.__duoCombo = 0;
+    function __saveXP(){ try{ localStorage.setItem('alm_xp', String(window.__duoXP||0)); }catch(e){} }
+    function __addXP(n){
+      window.__duoXP = (window.__duoXP||0) + n;
+      __saveXP();
+      const el = document.createElement('div');
+      el.className = 'duo-float-xp';
+      el.textContent = '+' + n + ' XP';
+      el.style.left = (window.innerWidth/2 - 30) + 'px';
+      el.style.top = (window.innerHeight*0.42) + 'px';
+      document.body.appendChild(el);
+      setTimeout(function(){ el.remove(); }, 900);
+    }
+
     window.renderVocabHub = function renderVocabHub(){
       const total = ALL.length, m = mastered(ALL), pct = total ? Math.round(100 * m / total) : 0;
-      let rows = '';
-      for (const n of lessonNums()) {
+      const st = (typeof streak!=='undefined' && streak.last) ? (function(){
+        const t = new Date().toISOString().slice(0,10);
+        const y = new Date(Date.now()-864e5).toISOString().slice(0,10);
+        return (streak.last===t||streak.last===y) ? (streak.count||0) : 0;
+      })() : 0;
+      const xp = window.__duoXP||0;
+      let path = '';
+      const nums = lessonNums();
+      nums.forEach(function(n, i){
         const ws = wordsFor(n);
         const mm = mastered(ws);
         const p = ws.length ? Math.round(100 * mm / ws.length) : 0;
         const stt = p >= 100 ? 'done' : p > 0 ? 'busy' : '';
         const title = VOCAB_TITLES[n] || (LESSON_META[n] || ['', ''])[0];
-        const meta = p >= 100 ? (mm + '/' + ws.length + ' beheerst') : (mm + '/' + ws.length + ' woorden');
-        rows += '<button type="button" class="vocab-simple-item ' + stt + '" data-act="start-learn" data-l="' + n + '">' +
-          '<span class="vocab-simple-num">' + n + '</span>' +
-          '<span class="vocab-simple-body"><strong>Les ' + n + (title ? ' · ' + esc(title) : '') + '</strong>' +
-          '<span class="vocab-simple-meta">' + meta + '</span></span>' +
-          '<span class="vocab-simple-go">›</span></button>';
-      }
+        const meta = p >= 100 ? ('★ ' + mm + '/' + ws.length + ' beheerst') : (mm + '/' + ws.length + ' · ' + p + '%');
+        const cta = p >= 100 ? 'Herhaal' : (p > 0 ? 'Ga verder' : 'Start');
+        const bubble = p >= 100 ? '✓' : String(n);
+        if (i > 0) path += '<div class="duo-connector"></div>';
+        path += '<div class="duo-node-wrap ' + stt + '">' +
+          '<button type="button" class="duo-node ' + stt + '" data-act="start-learn" data-l="' + n + '">' +
+            '<span class="duo-bubble">' + bubble + '</span>' +
+            '<span class="duo-node-body"><strong>Les ' + n + (title ? ' · ' + esc(title) : '') + '</strong>' +
+            '<span>' + meta + '</span></span>' +
+            '<span class="duo-node-cta">' + cta + ' ›</span>' +
+          '</button></div>';
+      });
       return '<div class="desktop-page">' +
-        '<div class="vocab-simple-head">' +
-          '<h1>Woordenschat</h1>' +
-          '<p>' + m + ' van ' + total + ' woorden · ' + pct + '%</p>' +
+        '<div style="margin-bottom:8px"><h1 style="font-size:24px;font-weight:800;letter-spacing:-.02em;margin:0 0 4px">Woordenschat</h1>' +
+        '<p style="margin:0;color:var(--muted);font-size:14px">Oefen zoals een spel — verdien XP en houd je reeks vast</p></div>' +
+        '<div class="duo-head">' +
+          '<div class="duo-stat"><span class="k">Beheerst</span><span class="v">' + m + '/' + total + '</span></div>' +
+          '<div class="duo-stat gold"><span class="k">Voortgang</span><span class="v">' + pct + '%</span></div>' +
+          '<div class="duo-stat fire"><span class="k">Reeks</span><span class="v">🔥 ' + st + '</span></div>' +
+          '<div class="duo-stat"><span class="k">XP</span><span class="v">' + xp + '</span></div>' +
         '</div>' +
-        '<div class="vocab-simple-tools">' +
+        '<div class="duo-tools">' +
           '<button class="btn btn-sm ' + (quizDir==='ar2nl'?'btn-primary':'btn-secondary') + '" data-act="set-quiz-dir" data-d="ar2nl">AR → NL</button>' +
           '<button class="btn btn-sm ' + (quizDir==='nl2ar'?'btn-primary':'btn-secondary') + '" data-act="set-quiz-dir" data-d="nl2ar">NL → AR</button>' +
           '<button class="btn btn-sm ' + (quizDir==='mix'?'btn-primary':'btn-secondary') + '" data-act="set-quiz-dir" data-d="mix">Gemengd</button>' +
@@ -280,7 +465,7 @@
           '<button class="btn btn-secondary btn-sm" data-act="start-learn" data-l="all">Alles oefenen</button>' +
           '<button class="btn btn-secondary btn-sm" data-act="nav" data-v="words">Lijst</button>' +
         '</div>' +
-        '<div class="vocab-simple-list">' + rows + '</div>' +
+        '<div class="duo-path">' + path + '</div>' +
       '</div>';
     };
     try { renderVocabHub = window.renderVocabHub; } catch (e) {}
