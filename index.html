@@ -6,9 +6,9 @@
 <title>Al-Mufrodat — Medina Arabisch · Woordenschat, Grammatica & Dialogen</title>
 <meta name="theme-color" content="#F5F0E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="styles.css?v=20261109c">
-<script src="lessons_v2.js?v=20261109c"></script>
-<script src="grammar_v2.js?v=20261109c"></script>
+<link rel="stylesheet" href="styles.css?v=20261109d">
+<script src="lessons_v2.js?v=20261109d"></script>
+<script src="grammar_v2.js?v=20261109d"></script>
 </head>
 <body>
 <div id="sidebar-host"></div>
@@ -549,8 +549,8 @@ function renderSidebar(){
   const overallPct = totalItems ? Math.round(100 * doneItems / totalItems) : 0;
   const mkCount = mistakeStats().length;
 
-  const gramOpen = !!sbMenuState.gram;
-  const convOpen = !!sbMenuState.conv;
+  const gramOpen = (path === 'grammar') || (state.view === 'book') || (state.view === 'book-lesson') || !!sbMenuState.gram;
+  const convOpen = (path === 'conv') || (state.view === 'conv') || (state.view === 'conv-unit') || !!sbMenuState.conv;
 
   const gramListNums = g2Keys || lessonNums();
   const gramLinks = gramListNums.map(n => {
@@ -667,7 +667,7 @@ function renderTopbar(){
       <svg class="icon-open" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
       <svg class="icon-closed" viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h16"/></svg>
     </button>
-    <div class="tb-crumb"><span>Al-Mufrodat</span><span>›</span><strong>${esc(curLabel)}</strong></div>
+    <div class="tb-crumb">${state.view === 'book-lesson' ? `<span>Al-Mufrodat</span><span>›</span><a href="#/grammatica" class="tb-crumb-link" data-act="book-list">Grammatica</a><span>›</span><strong>${esc(hoofdstuk(state.bookLesson))}</strong>` : `<span>Al-Mufrodat</span><span>›</span><strong>${esc(curLabel)}</strong>`}</div>
     <div style="flex:1"></div>
     <div class="tb-ar-size" title="Grootte Arabisch schrift">
       <button type="button" class="${arSize==='s'?'on':''}" data-act="set-ar" data-s="s">A-</button>
@@ -2559,12 +2559,26 @@ document.addEventListener('click',e=>{
   }
   else if(act==='sb-menu'){
     const m=btn.dataset.menu;
+    if(m==='gram'){
+      sbMenuState.gram = true;
+      state.path='grammar';
+      if(state.view==='book-lesson'){
+        state.view='book';
+        state.bookLesson=null;
+        try{history.pushState(null,'','#/grammatica')}catch(e){}
+      } else if(state.view!=='book'){
+        state.view='book';
+        state.bookLesson=null;
+        try{history.pushState(null,'','#/grammatica')}catch(e){}
+      }
+      render();
+      (document.getElementById("app")||window).scrollTop=0;
+      return;
+    }
     const willOpen = !sbMenuState[m];
     sbMenuState[m] = willOpen;
     if(willOpen){
-      if(m==='gram' && state.view!=='book' && state.view!=='book-lesson'){
-        state.path='grammar';state.view='book';state.bookLesson=null;
-      } else if(m==='conv' && state.view!=='conv' && state.view!=='conv-unit'){
+      if(m==='conv' && state.view!=='conv' && state.view!=='conv-unit'){
         state.path='conv';state.view='conv';state.convUnit=null;
       }
     }
@@ -2576,7 +2590,7 @@ document.addEventListener('click',e=>{
     clearVocabFbTimer();
     const v=btn.dataset.v;
     if(v==='vocab'){state.path='vocab';state.view='vocab';state.bookLesson=null}
-    else if(v==='book'){state.path='grammar';state.view='book';state.bookLesson=null;state.bookTab='uitleg';if(state.g2)state.g2.view='map';sbMenuState.gram=true;}
+    else if(v==='book'){state.path='grammar';state.view='book';state.bookLesson=null;state.bookTab='uitleg';if(state.g2)state.g2.view='map';sbMenuState.gram=true;try{history.pushState(null,'','#/grammatica')}catch(e){}}
     else if(v==='home'){state.path='home';state.view='home';state.bookLesson=null}
     else if(v==='conv'){state.path='conv';state.view='conv';state.convUnit=null;sbMenuState.conv=true;}
     else if(v==='exam'){state.path='exam';state.view='exam';if(!state.examMode)state.examMode='hub';}
@@ -2802,6 +2816,7 @@ document.addEventListener('click',e=>{
   }
   else if(act==='open-book'){
     state.path='grammar';
+    sbMenuState.gram=true;
     const n=parseInt(btn.dataset.l,10);
     state.bookLesson=isNaN(n)?1:n;
     lastGrammar=state.bookLesson;saveG();

@@ -70,6 +70,7 @@ function renderOverview(){
   return `<div class="gram-wrap gram-overview-wrap">
     <div class="gram-overview-header">
       <h1 class="gram-lesson-title">Grammatica</h1>
+      <p class="gram-overview-subtitle">Kies een les (Les 0 t/m 23 + Reader 8) om direct te beginnen met theorie en oefeningen:</p>
     </div>
     <div class="gram-list">
       ${rows}
@@ -89,6 +90,7 @@ function renderLesson(n){
   }
 
   const isDone = !!doneLessons[n];
+  const allKeys = Object.keys(G).map(Number).sort((a,b) => a - b);
   const keys = Object.keys(G).filter(k => k !== '24').map(Number).sort((a,b) => a - b);
   const curIdx = keys.indexOf(Number(n));
   const prevLesson = curIdx > 0 ? keys[curIdx - 1] : null;
@@ -96,6 +98,43 @@ function renderLesson(n){
 
   // 1. Titel: precies één titel, heel simpel: alleen "Les N" (of "Reader 8 (Aanvulling)" voor Les 24)
   const pageTitle = les.is_aanvulling ? 'Reader 8 (Aanvulling)' : ('Les ' + n);
+
+  // Openklapbare leskiezer bovenaan de les (voor mobiel & desktop)
+  let pickerRows = '';
+  allKeys.forEach(k => {
+    const kLabel = (k === 0) ? 'Les 0' : (k === 24 ? 'Reader 8 (Aanvulling)' : ('Les ' + k));
+    const isCur = Number(k) === Number(n);
+    const isDoneK = !!doneLessons[k];
+    pickerRows += `<a href="#/grammatica/${k}" class="gram-picker-item ${isCur ? 'active' : ''}" data-act="open-book" data-l="${k}">
+      <span class="gram-picker-label">${kLabel}</span>
+      ${isDoneK ? '<span class="gram-check">✓</span>' : ''}
+    </a>`;
+  });
+
+  const topNavHtml = `<div class="gram-lesson-nav-top">
+    <a href="#/grammatica" class="gram-back-link" data-act="book-list" title="Alle lessen">
+      <span class="gram-nav-arrow">‹</span>
+      <span class="gram-nav-txt">Alle lessen</span>
+    </a>
+
+    <details class="gram-lesson-picker" id="gram-picker-details">
+      <summary class="gram-picker-summary" aria-label="Kies les">
+        <span class="gram-picker-cur">${pageTitle}</span>
+        <span class="gram-picker-chevron">▾</span>
+      </summary>
+      <div class="gram-picker-menu">
+        <div class="gram-picker-title">Kies een les:</div>
+        <div class="gram-picker-list">
+          ${pickerRows}
+        </div>
+      </div>
+    </details>
+
+    <div class="gram-quick-nav">
+      ${prevLesson !== null ? `<a href="#/grammatica/${prevLesson}" class="gram-step-btn" data-act="open-book" data-l="${prevLesson}" title="Vorige: Les ${prevLesson}">‹</a>` : `<span class="gram-step-btn disabled">‹</span>`}
+      ${nextLesson !== null ? `<a href="#/grammatica/${nextLesson}" class="gram-step-btn" data-act="open-book" data-l="${nextLesson}" title="Volgende: Les ${nextLesson}">›</a>` : `<span class="gram-step-btn disabled">›</span>`}
+    </div>
+  </div>`;
   
   // 2. Boektekst in boekvolgorde
   let contentHtml = '';
@@ -212,6 +251,7 @@ function renderLesson(n){
   </div>`;
 
   return `<div class="gram-wrap gram-lesson-wrap">
+    ${topNavHtml}
     <h1 class="gram-lesson-title">${pageTitle}</h1>
     
     <section class="gram-section gram-sec-theory">
@@ -253,6 +293,15 @@ function openLightbox(src, alt){
 
 /* ---------- 4. Event Listeners ---------- */
 document.addEventListener('click', e => {
+  // Leskiezer open/dicht beheer
+  if(e.target && e.target.closest('.gram-picker-item')){
+    const pk = document.getElementById('gram-picker-details');
+    if(pk) pk.removeAttribute('open');
+  } else if(!e.target.closest('.gram-lesson-picker')){
+    const pk = document.getElementById('gram-picker-details');
+    if(pk && pk.hasAttribute('open')) pk.removeAttribute('open');
+  }
+
   // Zoom op oefeningafbeelding
   const zoomImg = e.target && e.target.closest && e.target.closest('[data-act="gram-zoom"]');
   if(zoomImg){
@@ -291,6 +340,9 @@ function handleHashRoute(){
   const parts = hash.slice(1).split('/').filter(Boolean); // ['grammatica'] of ['grammatica', '1']
   if(typeof window.state === 'object'){
     window.state.path = 'grammar';
+    if(typeof window.sbMenuState === 'object'){
+      window.sbMenuState.gram = true;
+    }
     if(parts.length >= 2){
       const lesNr = parseInt(parts[1], 10);
       window.state.view = 'book-lesson';
