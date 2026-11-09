@@ -16,11 +16,10 @@ const LS_KEY = 'alm_g2_v1';
 /* ---------- opslag ---------- */
 let P;
 try{ P = JSON.parse(localStorage.getItem(LS_KEY)||'null'); }catch(e){ P=null; }
-if(!P||typeof P!=='object') P = {lessons:{}, mistakes:[], unlockAll:false, autoAdvance:true, sfx:true, inlineIrab:false};
+if(!P||typeof P!=='object') P = {lessons:{}, mistakes:[], unlockAll:false, autoAdvance:true, inlineIrab:false};
 if(!P.lessons) P.lessons={};
 if(!Array.isArray(P.mistakes)) P.mistakes=[];
 if(P.autoAdvance===undefined) P.autoAdvance=true;
-if(P.sfx===undefined) P.sfx=true;
 if(P.inlineIrab===undefined) P.inlineIrab=false;
 function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(P)); }catch(e){} }
 function lp(n){ if(!P.lessons[n]) P.lessons[n]={steps:{},vocab:false,book:null,test:null,review:false}; return P.lessons[n]; }
@@ -29,62 +28,11 @@ function lp(n){ if(!P.lessons[n]) P.lessons[n]={steps:{},vocab:false,book:null,t
 const E = s => (typeof esc==='function'?esc(s):String(s??''));
 const AR_RE = /[\u0600-\u06FF]/;
 function isAr(s){ s=String(s||''); return AR_RE.test(s) && !/[a-zA-Z]{2,}/.test(s); }
-function isSpeakable(s){
-  if(!s) return false;
-  const str=String(s).trim();
-  const arabicLetters=str.match(/[\u0621-\u063A\u0641-\u064A\u0671-\u06D3]/g);
-  return !!arabicLetters && arabicLetters.length>=1;
-}
 function arHtml(s){ return (typeof markAr==='function') ? markAr(String(s),'plain') : E(s); }
 function mix(s){ return (typeof glMix==='function') ? glMix(String(s||'')) : E(s); }
 function shuf(a){ return (typeof shuffle==='function') ? shuffle(a) : a.slice().sort(()=>Math.random()-.5); }
-function spk(text, label){
-  if(!isSpeakable(text)) return '';
-  return `<button type="button" class="g2-spk" data-act="speak-text" data-text="${E(text)}" title="Beluister" aria-label="Beluister">${label||ICO.spk}</button>`;
-}
 
-/* ---------- Geluidseffecten (Web Audio API) ---------- */
-let _g2AudioCtx = null;
-function playSfx(ok) {
-  if (!ok || P.sfx === false) return;
-  try {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtx) return;
-    if (!_g2AudioCtx) _g2AudioCtx = new AudioCtx();
-    if (_g2AudioCtx.state === 'suspended') _g2AudioCtx.resume();
-    const ctx = _g2AudioCtx;
-    const now = ctx.currentTime;
-
-    // Aangenaam belletje bij juist antwoord: D5 (587Hz) -> D6 (1174Hz)
-    const o1 = ctx.createOscillator();
-    const g1 = ctx.createGain();
-    o1.type = 'sine';
-    o1.frequency.setValueAtTime(587.33, now);
-    o1.frequency.exponentialRampToValueAtTime(880, now + 0.1);
-    g1.gain.setValueAtTime(0.14, now);
-    g1.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
-    o1.connect(g1);
-    g1.connect(ctx.destination);
-    o1.start(now);
-    o1.stop(now + 0.28);
-
-    const o2 = ctx.createOscillator();
-    const g2 = ctx.createGain();
-    o2.type = 'sine';
-    o2.frequency.setValueAtTime(880, now + 0.08);
-    o2.frequency.exponentialRampToValueAtTime(1174.66, now + 0.2);
-    g2.gain.setValueAtTime(0.001, now);
-    g2.gain.setValueAtTime(0.18, now + 0.08);
-    g2.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
-    o2.connect(g2);
-    g2.connect(ctx.destination);
-    o2.start(now + 0.08);
-    o2.stop(now + 0.45);
-  } catch (e) {}
-}
-window.sfx = playSfx;
 const ICO = {
-  spk:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>',
   lock:'<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
   check:'<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>',
   book:'<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14z"/><path d="M6.5 17A2.5 2.5 0 0 0 4 19.5 2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>'
@@ -1550,7 +1498,6 @@ function renderDndParseBlock(ps, sentObj, words, isStudio, s, sents){
     return `<div class="g2-dnd-col">
       <div class="g2-dnd-word-box">
         <span class="ar g2-dnd-word-ar" lang="ar">${arHtml(w.ar)}</span>
-        ${spk(w.ar)}
       </div>
       <div class="g2-dnd-arrow">↓</div>
       <div class="${slotCls}"
@@ -1626,7 +1573,6 @@ function renderDndParseBlock(ps, sentObj, words, isStudio, s, sents){
         <div class="g2-dnd-nl">"${E(sentObj.nl || '')}"</div>
         <div class="g2-dnd-Instruction">Sleep een grammaticale rol naar het juiste woord, of <b>tik op een rol</b> om het gemarkeerde vakje direct in te vullen:</div>
       </div>
-      ${spk(sentObj.sentence)}
     </div>
 
     <div class="g2-dnd-words-row" dir="rtl">
@@ -1712,7 +1658,6 @@ function renderInteractiveParse(s, kicker, x){
           <span class="focus-label">Ontleed woord <b>${ps.wi + 1}</b> van <b>${words.length}</b></span>
           <div class="ar focus-word" lang="ar">«${arHtml(curWord.ar)}»</div>
         </div>
-        ${spk(curWord.ar)}
       </div>
 
       <div class="g2-parse-section">
@@ -1823,7 +1768,7 @@ function renderInteractiveParse(s, kicker, x){
     ${prog}
     ${modeBar}
     <div class="g2-parse-sentence-card">
-      <div class="g2-parse-sentence ar" lang="ar" dir="rtl">${sentenceDisplay} ${spk(d.sentence)}</div>
+      <div class="g2-parse-sentence ar" lang="ar" dir="rtl">${sentenceDisplay}</div>
       <div class="g2-parse-sub">${mix(d.nl || '')}</div>
     </div>
     <div class="g2-parse-tabs">${wordTabsHtml}</div>
@@ -1882,7 +1827,6 @@ function renderIrabStudio(){
           <span class="focus-label">Ontleed woord <b>${ps.wi + 1}</b> van <b>${words.length}</b></span>
           <div class="ar focus-word" lang="ar">«${arHtml(curWord.ar)}»</div>
         </div>
-        ${spk(curWord.ar)}
       </div>
 
       <div class="g2-parse-section">
@@ -2043,7 +1987,7 @@ function renderIrabStudio(){
         ${liveTable}
       ` : `
         <div class="g2-parse-sentence-card">
-          <div class="g2-parse-sentence ar" lang="ar" dir="rtl">${sentenceDisplay} ${spk(curSent.sentence)}</div>
+          <div class="g2-parse-sentence ar" lang="ar" dir="rtl">${sentenceDisplay}</div>
           <div class="g2-parse-sub">${mix(curSent.nl || '')}</div>
         </div>
         <div class="g2-parse-tabs">${wordTabsHtml}</div>
@@ -2179,7 +2123,6 @@ function head(n, sub){
   const isNode = (s.n === Number(n) && s.view === 'node');
   const isDrillMode = isNode && (s.kind === 'book' || s.kind === 'test' || s.kind === 'review' || (s.kind === 'step' && s.phase === 'do'));
   const autoOn = P.autoAdvance !== false;
-  const sfxOn = P.sfx !== false;
   const irabOn = !!P.inlineIrab;
   const i0 = KEYS.indexOf(Number(n));
   const prevL = i0 > 0 ? KEYS[i0 - 1] : undefined;
@@ -2201,9 +2144,6 @@ function head(n, sub){
     </button>
     <button type="button" class="g2-pill-btn ${autoOn?'active':''}" data-act="g2-toggle-auto" title="${autoOn?'Auto-doorgaan is actief — klik om handmatig te maken':'Auto-doorgaan staat uit — klik om aan te zetten'}">
       ${autoOn?'Auto: aan':'Auto: uit'}
-    </button>
-    <button type="button" class="g2-pill-btn ${sfxOn?'active':''}" data-act="g2-toggle-sfx" title="${sfxOn?'Geluidseffect staat aan — klik om te dempen':'Geluidseffect is gedempt — klik om aan te zetten'}">
-      ${sfxOn?'Geluid: aan':'Geluid: uit'}
     </button>
   </div>
   <div class="g2-head ${isDrillMode?'g2-head-compact':''}">
@@ -2454,9 +2394,8 @@ function renderTable(t){
   const th=(t.headers||[]).map(h=>`<th>${mix(h)}</th>`).join('');
   const tr=t.rows.map(r=>'<tr>'+r.map(c=>{
     const s=String(c??'');
-    const speakBtn = isSpeakable(s) ? spk(s) : '';
     return isAr(s)
-      ? `<td class="ar-cell"><div class="g2-cell-wrap"><span class="ar" lang="ar" dir="rtl">${arHtml(s)}</span>${speakBtn}</div></td>`
+      ? `<td class="ar-cell"><div class="g2-cell-wrap"><span class="ar" lang="ar" dir="rtl">${arHtml(s)}</span></div></td>`
       : `<td>${mix(s)}</td>`;
   }).join('')+'</tr>').join('');
   return `<div class="g2-table-wrap"><table class="g2-table">${th?`<thead><tr>${th}</tr></thead>`:''}<tbody>${tr}</tbody></table></div>`;
@@ -2471,7 +2410,6 @@ function renderExamples(list, hideNl, prefixKey){
     return `<div class="g2-exitem ${isOpen?'irab-open':''}">
       <div class="g2-exrow">
         <div class="g2-ex-main">
-          ${spk(e.ar)}
           <span class="g2-exar ar" lang="ar" dir="rtl">${arHtml(e.ar)}</span>
         </div>
         <div class="g2-ex-sub">
@@ -2534,7 +2472,7 @@ function renderStructuredRuleText(st, n, si){
 
     if(isAr(p)){
       flushSteps(); flushBullets();
-      blocks.push(`<div class="g2-arp ar" lang="ar" dir="rtl">${arHtml(p)} ${spk(p)}</div>`);
+      blocks.push(`<div class="g2-arp ar" lang="ar" dir="rtl">${arHtml(p)}</div>`);
       continue;
     }
 
@@ -2617,7 +2555,7 @@ function renderStep(n){
     body=`<div class="g2-card">
       <div class="g2-kicker">Voorbeelden &amp; Leesoefening · blz. ${E(st.page||'')}</div>
       <h2>${E(shortTitle(st.title))}</h2>
-      <p class="g2-hint">Lees hardop, luister en ontleed de zinnen zoals in de les (Moebtada, Gabr/Khabar, Moedaf, Voorzetsel).</p>
+      <p class="g2-hint">Lees aandachtig en ontleed de zinnen zoals in de les (Moebtada, Gabr/Khabar, Moedaf, Voorzetsel).</p>
       <div class="g2-tools">
         <button type="button" class="btn ${s.hideNl?'btn-primary':'btn-secondary'} btn-sm" data-act="g2-hide">${s.hideNl?'Toon vertalingen':'Verberg vertalingen'}</button>
         ${hasParseableEx ? `
@@ -2854,7 +2792,6 @@ function renderDrill(s, kicker){
     let prompt='';
     const allHarakahOpts = Array.isArray(d.options) && d.options.length > 0 && d.options.every(isHarakahOnly);
     if(d.type==='fill'){
-      const solvedForAudio = getSolvedSentenceFromDrill(d);
       if(allHarakahOpts){
         const mainTask = instrTitle || 'Kies hoe je het onderstreepte woord in het boek leest (met het juiste klinkerteken):';
         const bookSent = answered
@@ -2865,7 +2802,7 @@ function renderDrill(s, kicker){
             <div class="g2-opdracht-title">${mix(mainTask)}</div>
           </div>
           <div class="g2-book-paper">
-            <div class="g2-fill ar" lang="ar" dir="rtl">${bookSent} ${answered && isSpeakable(solvedForAudio) ? spk(solvedForAudio) : ''}</div>
+            <div class="g2-fill ar" lang="ar" dir="rtl">${bookSent}</div>
             ${d.nl?`<div class="g2-sub">${mix(d.nl)}</div>`:''}
           </div>`;
       } else {
@@ -2887,7 +2824,7 @@ function renderDrill(s, kicker){
             <div class="g2-opdracht-title">${mix(mainTask)}</div>
           </div>
           <div class="g2-book-paper">
-            <div class="g2-fill ar" lang="ar" dir="rtl">${fillHtml} ${answered && isSpeakable(solvedForAudio) ? spk(solvedForAudio) : ''}</div>
+            <div class="g2-fill ar" lang="ar" dir="rtl">${fillHtml}</div>
             ${d.nl?`<div class="g2-sub">${mix(d.nl)}</div>`:''}
           </div>`;
       }
@@ -2902,7 +2839,7 @@ function renderDrill(s, kicker){
           <div class="g2-opdracht-title">${mix(mainTask)}</div>
         </div>
         <div class="g2-book-paper">
-          <div class="g2-from ar" lang="ar" dir="rtl">${arHtml(d.from||'')} <span class="g2-book-arrow">⟵</span> <span class="g2-gap">......</span> ${spk(d.from||'')}</div>
+          <div class="g2-from ar" lang="ar" dir="rtl">${arHtml(d.from||'')} <span class="g2-book-arrow">⟵</span> <span class="g2-gap">......</span></div>
         </div>`;
     }else if(d.type==='parse'){
       const target=d.target||'';
@@ -2919,7 +2856,7 @@ function renderDrill(s, kicker){
           <div class="g2-opdracht-title">Wat is de grammaticale rol van <b class="ar" lang="ar">«${arHtml(target)}»</b> in deze zin?</div>
         </div>
         <div class="g2-book-paper">
-          <div class="g2-parse-sent ar" lang="ar" dir="rtl">${sentHtml} ${spk(sent)}</div>
+          <div class="g2-parse-sent ar" lang="ar" dir="rtl">${sentHtml}</div>
         </div>`;
     }else{
       const rawQ = String(d.q || '').trim();
@@ -2934,7 +2871,7 @@ function renderDrill(s, kicker){
             <div class="g2-opdracht-sub">Aanwijzing: <b>${mix(nlHint)}</b></div>
           </div>
           <div class="g2-book-paper">
-            <div class="g2-fill ar" lang="ar" dir="rtl">${arHtml(arPart)} ${spk(arPart)}</div>
+            <div class="g2-fill ar" lang="ar" dir="rtl">${arHtml(arPart)}</div>
           </div>`;
       } else {
         prompt=`<div class="g2-opdracht-box">
@@ -2965,7 +2902,7 @@ function renderDrill(s, kicker){
       : (d.type==='fill' && allHarakahOpts ? buildBookHarakahPlain(d.ar, d.options[d.answer]) : d.options[d.answer]);
     const correctDisplay = isHarakahOnly(correct)
       ? formatHarakahInline(correct)
-      : `<span class="ar" lang="ar">${isAr(correct)?arHtml(correct):mix(correct)}</span>${isAr(correct)?spk(correct):''}`;
+      : `<span class="ar" lang="ar">${isAr(correct)?arHtml(correct):mix(correct)}</span>`;
     fb=`<div class="g2-fb ${ok?'ok':'bad'}">
       <b>${ok?'Goed!':'Nog niet goed'}</b>
       ${ok?'':`<div class="g2-correct">Juist: ${correctDisplay}</div>`}
@@ -3031,7 +2968,6 @@ function renderVocab(n){
   const grid = `<div class="g2-vocab-grid">${v.map((item, i) => `
     <div class="g2-vocab-card">
       <div class="g2-vc-top">
-        ${spk(item.ar)}
         <span class="g2-vc-ar ar" lang="ar" dir="rtl">${arHtml(item.ar)}</span>
       </div>
       <div class="g2-vc-nl ${s.hideNl?'hid':''}" ${s.hideNl?`data-act="g2-reveal" data-i="${i}"`:''}>${s.hideNl?'Tik om vertaling te tonen':mix(item.nl||'')}</div>
@@ -3042,7 +2978,7 @@ function renderVocab(n){
       <div>
         <div class="g2-kicker">Woordenlijst uit de les (${v.length} woorden)</div>
         <h2>Nieuwe woorden · ${n===0?'Inleiding':'Les '+n}</h2>
-        <p class="g2-hint" style="margin:0">Luister naar elk woord en zeg het hardop na. Gebruik de overhoormodus om jezelf te testen.</p>
+        <p class="g2-hint" style="margin:0">Bestudeer elk woord en gebruik de overhoormodus om jezelf te testen.</p>
       </div>
       <div class="g2-tools" style="margin:0">
         <button type="button" class="btn ${s.hideNl?'btn-primary':'btn-secondary'} btn-sm" data-act="g2-hide">${s.hideNl?'Toon alle vertalingen':'Overhoormodus (verberg NL)'}</button>
@@ -3116,11 +3052,6 @@ function toggleAutoAdvance(){
   }
   render();
 }
-function toggleSfx(){
-  P.sfx = (P.sfx === false) ? true : false;
-  save();
-  render();
-}
 function toggleDrillTimer(){
   const s = S();
   if(_g2AutoTimer && !s.timerPaused){
@@ -3141,7 +3072,6 @@ function answer(ok){
   if(s.kind==='review') resolveMistake(ref, ok, s.n);
   else if(!ok) addMistake(ref);
   if(ok && !(s.retry&&s.retry[ref])) s.score++;
-  if(typeof sfx==='function'){ try{ sfx(ok); }catch(e){} }
   scheduleG2AutoNext(ok);
 }
 function next(){
@@ -3307,7 +3237,6 @@ document.addEventListener('click', e=>{
       if(!w) return;
       if(matchClassroomRole(role, w)){
         st.done[st.wi] = true;
-        try{ playSfx(true); }catch(err){}
         st.fb = { ok: true, msg: `Juist! ${w.explain}` };
         let nextWi = -1;
         for(let k = 0; k < parsed.words.length; k++){
@@ -3320,7 +3249,6 @@ document.addEventListener('click', e=>{
           st.complete = true;
         }
       } else {
-        try{ playSfx(false); }catch(err){}
         st.fb = { ok: false, msg: `Let op: ${w.explain}` };
       }
       render(); return;
@@ -3398,7 +3326,6 @@ document.addEventListener('click', e=>{
     const allFilled = words.every((_, idx) => !!ps.slots[idx]);
     if(!allFilled){
       ps.dndMsg = { type: 'warn', text: 'Vul eerst alle vakjes in voordat je controleert!' };
-      try{ playSfx(false); }catch(err){}
       render(); return;
     }
     let allCorrect = true;
@@ -3417,7 +3344,6 @@ document.addEventListener('click', e=>{
       ps.complete = true;
       ps.dndMsg = null;
       ps.tapRole = null;
-      try{ playSfx(true); }catch(err){}
       if(ctx.isStudio){
         P.irabDone = P.irabDone || {};
         P.irabDone[sentObj.id] = true;
@@ -3428,7 +3354,6 @@ document.addEventListener('click', e=>{
       }
     } else {
       ps.dndMsg = { type: 'err', text: 'Nog niet helemaal goed. De rode vakjes kloppen nog niet — tik op een rood vakje om het te verbeteren!' };
-      try{ playSfx(false); }catch(err){}
     }
     render(); return;
   }
@@ -3481,7 +3406,6 @@ document.addEventListener('click', e=>{
       ps.wordsDone[ps.wi] = { role: ps.selRole, status: ps.selStatus, mark: ps.selMark, ok: true };
       ps.slots[ps.wi] = w.role;
       ps.slotStatus[ps.wi] = 'correct';
-      try{ playSfx(true); }catch(e){}
       ps.selRole = null; ps.selStatus = null; ps.selMark = null; ps.feedback = null;
       if(ps.wi + 1 < words.length){
         ps.wi++;
@@ -3497,7 +3421,6 @@ document.addEventListener('click', e=>{
       else if(!sOk) hint = 'Kijk goed naar de naamvalsstatus (nominatief of genitief).';
       else if(!mOk) hint = 'Kijk goed naar het juiste klinkerteken (harakah/tashkīl).';
       ps.feedback = { ok: false, msg: w.explain || hint };
-      try{ playSfx(false); }catch(e){}
     }
     render(); return;
   }
@@ -3543,7 +3466,6 @@ document.addEventListener('click', e=>{
 
     if(rOk && sOk && mOk){
       ps.wordsDone[ps.wi] = { role: ps.selRole, status: ps.selStatus, mark: ps.selMark, ok: true };
-      try{ playSfx(true); }catch(e){}
       ps.selRole = null; ps.selStatus = null; ps.selMark = null; ps.feedback = null;
       if(ps.wi + 1 < words.length){
         ps.wi++;
@@ -3558,7 +3480,6 @@ document.addEventListener('click', e=>{
       else if(!sOk) hint = 'Kijk goed naar de naamvalsstatus (nominatief of genitief).';
       else if(!mOk) hint = 'Kijk goed naar het juiste klinkerteken (harakah/tashkīl).';
       ps.feedback = { ok: false, msg: w.explain || hint };
-      try{ playSfx(false); }catch(e){}
     }
     render(); return;
   }
@@ -3608,7 +3529,6 @@ document.addEventListener('click', e=>{
     render(); return;
   }
   if(act==='g2-toggle-auto'){ toggleAutoAdvance(); return; }
-  if(act==='g2-toggle-sfx'){ toggleSfx(); return; }
   if(act==='g2-toggle-timer'){ toggleDrillTimer(); return; }
   if(act==='g2-toggle-cheat'){
     clearG2AutoTimer();

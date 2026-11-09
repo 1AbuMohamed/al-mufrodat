@@ -1861,7 +1861,7 @@ button.gl-chip:hover{border-color:var(--gold);background:var(--surface)}
 .path-alts{gap:6px;justify-content:space-between}
 .path-alts button{padding:3px 4px;font-size:12px;white-space:nowrap}
 .path-alts{flex-wrap:wrap}.path-alts button{min-width:0}
-.path-alts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px}.path-alts button{justify-content:center;font-size:11.5px;gap:4px}
+.path-alts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px}.path-alts button{justify-content:center;font-size:11.5px;gap:4px}
 
 /* Examen: een vraag per scherm */
 .exam-run{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:20px;align-items:start}
