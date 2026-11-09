@@ -6,9 +6,37 @@
 <title>Al-Mufrodat — Medina Arabisch · Woordenschat, Grammatica & Dialogen</title>
 <meta name="theme-color" content="#F5F0E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="styles.css?v=20261109f">
-<script src="lessons_v2.js?v=20261109f"></script>
-<script src="grammar_v2.js?v=20261109f"></script>
+<link rel="stylesheet" href="styles.css?v=20261109g">
+<script src="lessons_v2.js?v=20261109g"></script>
+<script src="grammar_v2.js?v=20261109g"></script>
+<style>
+/* Simpele woordenschat-kaarten */
+.vocab-simple-list{display:flex;flex-direction:column;gap:8px;max-width:640px}
+.vocab-simple-item{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;border-radius:12px;
+  border:1px solid var(--line);background:var(--surface);
+  text-decoration:none;color:inherit;cursor:pointer;
+  transition:border-color .15s,box-shadow .15s;
+}
+.vocab-simple-item:hover{border-color:var(--gold);box-shadow:var(--shadow)}
+.vocab-simple-num{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  display:grid;place-items:center;font-weight:800;font-size:14px;
+  background:var(--paper-deep);color:var(--muted);border:1.5px solid var(--line);
+}
+.vocab-simple-item.busy .vocab-simple-num{background:var(--gold-pale);color:var(--forest);border-color:var(--gold)}
+.vocab-simple-item.done .vocab-simple-num{background:var(--forest);color:var(--on-forest);border-color:var(--forest)}
+.vocab-simple-body{flex:1;min-width:0}
+.vocab-simple-body strong{display:block;font-size:15px;font-weight:700;line-height:1.3}
+.vocab-simple-meta{font-size:12.5px;color:var(--muted);margin-top:2px}
+.vocab-simple-go{color:var(--muted);font-size:18px;flex-shrink:0}
+.vocab-simple-head{margin-bottom:18px}
+.vocab-simple-head h1{font-size:22px;font-weight:700;margin:0 0 4px;letter-spacing:-.02em}
+.vocab-simple-head p{font-size:13.5px;color:var(--muted);margin:0}
+.vocab-simple-tools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center}
+.vocab-simple-tools .grow{flex:1}
+</style>
 </head>
 <body>
 <div id="sidebar-host"></div>
@@ -24,7 +52,6 @@
     if (!res.ok) throw new Error('HTTP ' + res.status);
     let html = await res.text();
 
-    // Extract the large inline <script> (without src=)
     const re = /<script>([\s\S]*?)<\/script>/g;
     let match, inline = null;
     while ((match = re.exec(html)) !== null) {
@@ -36,7 +63,7 @@
     }
     if (!inline) throw new Error('Inline app script niet gevonden in history');
 
-    // Fix the recursive renderBook / renderBookLesson wrappers
+    // Fix recursive renderBook
     inline = inline
       .replace(
         /function renderBook\(\)\{\s*if\(window\.renderBook\) return window\.renderBook\(\);\s*return '';\s*\}/,
@@ -58,13 +85,66 @@
     const s = document.createElement('script');
     s.textContent = inline;
     document.body.appendChild(s);
+
+    // ——— Vereenvoudigde woordenschat-UI ———
+    window.renderVocabHub = function renderVocabHub(){
+      const total = ALL.length, m = mastered(ALL), pct = total ? Math.round(100 * m / total) : 0;
+      let rows = '';
+      for (const n of lessonNums()) {
+        const ws = wordsFor(n);
+        const mm = mastered(ws);
+        const p = ws.length ? Math.round(100 * mm / ws.length) : 0;
+        const stt = p >= 100 ? 'done' : p > 0 ? 'busy' : '';
+        const title = VOCAB_TITLES[n] || (LESSON_META[n] || ['', ''])[0];
+        const meta = p >= 100 ? (mm + '/' + ws.length + ' beheerst') : (mm + '/' + ws.length + ' woorden');
+        rows += '<button type="button" class="vocab-simple-item ' + stt + '" data-act="start-learn" data-l="' + n + '">' +
+          '<span class="vocab-simple-num">' + n + '</span>' +
+          '<span class="vocab-simple-body"><strong>Les ' + n + (title ? ' · ' + esc(title) : '') + '</strong>' +
+          '<span class="vocab-simple-meta">' + meta + '</span></span>' +
+          '<span class="vocab-simple-go">›</span></button>';
+      }
+      return '<div class="desktop-page">' +
+        '<div class="vocab-simple-head">' +
+          '<h1>Woordenschat</h1>' +
+          '<p>' + m + ' van ' + total + ' woorden · ' + pct + '%</p>' +
+        '</div>' +
+        '<div class="vocab-simple-tools">' +
+          '<button class="btn btn-sm ' + (quizDir==='ar2nl'?'btn-primary':'btn-secondary') + '" data-act="set-quiz-dir" data-d="ar2nl">AR → NL</button>' +
+          '<button class="btn btn-sm ' + (quizDir==='nl2ar'?'btn-primary':'btn-secondary') + '" data-act="set-quiz-dir" data-d="nl2ar">NL → AR</button>' +
+          '<button class="btn btn-sm ' + (quizDir==='mix'?'btn-primary':'btn-secondary') + '" data-act="set-quiz-dir" data-d="mix">Gemengd</button>' +
+          '<span class="grow"></span>' +
+          '<button class="btn btn-secondary btn-sm" data-act="start-learn" data-l="all">Alles oefenen</button>' +
+          '<button class="btn btn-secondary btn-sm" data-act="nav" data-v="words">Lijst</button>' +
+        '</div>' +
+        '<div class="vocab-simple-list">' + rows + '</div>' +
+      '</div>';
+    };
+
+    // Overschrijf ook de lokale binding als die bestaat
+    try { renderVocabHub = window.renderVocabHub; } catch (e) {}
+
+    // Vereenvoudig oefenscherm: minder labels in de learn-view via CSS
+    const style = document.createElement('style');
+    style.textContent = [
+      '.vl-phases{display:none!important}',
+      '.vl-kicker{display:none!important}',
+      '.learn-mini .mini-btn{display:none!important}',
+      '.session-top .tag,.flash-card .tag{display:none!important}',
+      '.sh-eyebrow{display:none!important}',
+      '.path-alts{display:none!important}',
+      '.lesson .status{display:none!important}'
+    ].join('');
+    document.head.appendChild(style);
+
+    // Als we al op vocab zitten, opnieuw tekenen
+    if (typeof render === 'function' && window.state && (state.view === 'vocab' || state.view === 'home')) {
+      render();
+    }
   } catch (err) {
     console.error(err);
     document.getElementById('app').innerHTML =
       '<div style="padding:2rem;font-family:system-ui">' +
-      '<h1>Herstel mislukt</h1><p>' + String(err.message || err) + '</p>' +
-      '<p>Upload handmatig <code>artifacts/index.html.fixed</code> als index.html, of herstel vanaf commit <code>c45e6b9</code>.</p>' +
-      '</div>';
+      '<h1>Herstel mislukt</h1><p>' + String(err.message || err) + '</p></div>';
   }
 })();
 </script>
