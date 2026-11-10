@@ -1,0 +1,13 @@
+/* Fout-feedback: eerst Fout, dan juiste antwoord */
+.gd-feedback-correct-label{
+  display:block;
+  margin:10px 0 4px;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:.02em;
+  color:inherit;
+  opacity:.9;
+}
+.gd-feedback-sheet.review .gd-feedback-inner>strong{
+  font-size:28px;
+}
