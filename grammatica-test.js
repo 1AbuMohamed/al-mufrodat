@@ -1,8 +1,8 @@
-/* grammatica-test.js v6 — 12-part b64 loader */
+/* grammatica-test.js v6 — 24-part b64 loader */
 (function(){
-  var n = 12;
+  var n = 24;
   var urls = [];
-  for (var i=0;i<n;i++) urls.push('grammatica-test.p'+String(i).padStart(2,'0')+'.txt?v=6');
+  for (var i=0;i<n;i++) urls.push('grammatica-test.q'+String(i).padStart(2,'0')+'.txt?v=6');
   function b64ToU8(s){
     var bin = atob(s), len = bin.length, u = new Uint8Array(len);
     for (var i=0;i<len;i++) u[i] = bin.charCodeAt(i);
