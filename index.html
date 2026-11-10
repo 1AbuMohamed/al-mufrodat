@@ -6,49 +6,32 @@
 <title>Al-Mufrodat — Medina Arabisch · Woordenschat, Grammatica & Dialogen</title>
 <meta name="theme-color" content="#F5F0E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="styles.css?v=20261110d">
-<script src="lessons_v2.js?v=20261110d"></script>
-<script src="grammar_v2.js?v=20261110d"></script>
-<script src="parse_data.js?v=20261110d"></script>
-<script src="exercises_v2.js?v=20261110d"></script>
-<script src="conv_duo.js?v=20261110d"></script>
+<link rel="stylesheet" href="styles.css?v=20261110e">
+<script src="lessons_v2.js?v=20261110e"></script>
+<script src="grammar_v2.js?v=20261110e"></script>
+<script src="parse_data.js?v=20261110e"></script>
+<script src="exercises_v2.js?v=20261110e"></script>
+<script src="conv_duo.js?v=20261110e"></script>
+<script src="vocab_duo.js?v=20261110e"></script>
 <style>
-/* ===== Duo-style vocab + fun layout ===== */
 .duo-head{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin-bottom:18px}
-.duo-stat{
-  flex:1;min-width:100px;background:var(--surface);border:1.5px solid var(--line);
-  border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;
-}
+.duo-stat{flex:1;min-width:100px;background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
 .duo-stat .k{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .duo-stat .v{font-size:22px;font-weight:800;color:var(--forest);line-height:1.15}
 .duo-stat.gold .v{color:var(--gold)}
 .duo-stat.fire .v{color:#e85d04}
 .duo-tools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center}
 .duo-tools .grow{flex:1}
-
-/* Path nodes */
 .duo-path{display:flex;flex-direction:column;align-items:center;gap:0;max-width:420px;margin:0 auto;padding:8px 0 24px}
 .duo-node-wrap{display:flex;flex-direction:column;align-items:center;width:100%;position:relative}
 .duo-connector{width:4px;height:22px;background:var(--line);border-radius:4px}
 .duo-node-wrap.done .duo-connector,.duo-node-wrap.busy + .duo-node-wrap .duo-connector{background:var(--gold)}
-.duo-node{
-  width:100%;display:flex;align-items:center;gap:14px;padding:12px 14px;
-  background:var(--surface);border:2px solid var(--line);border-radius:18px;
-  cursor:pointer;text-align:start;font:inherit;color:inherit;
-  transition:transform .15s ease,border-color .15s,box-shadow .15s;
-  box-shadow:0 2px 0 var(--line);
-}
+.duo-node{width:100%;display:flex;align-items:center;gap:14px;padding:12px 14px;background:var(--surface);border:2px solid var(--line);border-radius:18px;cursor:pointer;text-align:start;font:inherit;color:inherit;transition:transform .15s ease,border-color .15s,box-shadow .15s;box-shadow:0 2px 0 var(--line)}
 .duo-node:hover{transform:translateY(-2px);border-color:var(--gold);box-shadow:0 4px 0 var(--gold)}
 .duo-node:active{transform:translateY(1px);box-shadow:0 1px 0 var(--line)}
 .duo-node.done{border-color:var(--ok);box-shadow:0 2px 0 var(--ok)}
-.duo-node.done:hover{border-color:var(--ok);box-shadow:0 4px 0 var(--ok)}
 .duo-node.busy{border-color:var(--gold);box-shadow:0 2px 0 var(--gold)}
-.duo-node.current{outline:3px solid var(--gold-pale)}
-.duo-bubble{
-  width:52px;height:52px;border-radius:50%;flex-shrink:0;
-  display:grid;place-items:center;font-weight:800;font-size:16px;
-  background:var(--paper-deep);color:var(--muted);border:3px solid var(--line);
-}
+.duo-bubble{width:52px;height:52px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;font-weight:800;font-size:16px;background:var(--paper-deep);color:var(--muted);border:3px solid var(--line)}
 .duo-node.busy .duo-bubble{background:var(--gold);color:#173B3F;border-color:var(--gold-soft)}
 .duo-node.done .duo-bubble{background:var(--ok);color:#fff;border-color:#34a853}
 .duo-node-body{flex:1;min-width:0}
@@ -57,37 +40,17 @@
 .duo-node-cta{font-size:12px;font-weight:700;color:var(--forest);flex-shrink:0}
 .duo-node.done .duo-node-cta{color:var(--ok)}
 .duo-node.busy .duo-node-cta{color:var(--gold)}
-
-/* Learn session fun */
 .qcard{border-radius:18px!important;padding:20px 18px!important;border-width:2px!important}
 .options{gap:12px!important}
-.opt{
-  border-radius:16px!important;border-width:2px!important;min-height:56px!important;
-  font-weight:700!important;box-shadow:0 3px 0 var(--line)!important;
-  transition:transform .12s ease,box-shadow .12s,border-color .12s,background .12s!important;
-}
+.opt{border-radius:16px!important;border-width:2px!important;min-height:56px!important;font-weight:700!important;box-shadow:0 3px 0 var(--line)!important;transition:transform .12s ease,box-shadow .12s,border-color .12s,background .12s!important}
 .opt:hover{transform:translateY(-2px);box-shadow:0 5px 0 var(--line)!important}
-.opt:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)!important}
-.opt.correct{
-  background:var(--ok-soft)!important;border-color:var(--ok)!important;color:var(--ok)!important;
-  box-shadow:0 3px 0 var(--ok)!important;animation:duoPop .35s ease;
-}
-.opt.wrong{
-  background:var(--clay-soft)!important;border-color:var(--clay)!important;
-  box-shadow:0 3px 0 var(--clay)!important;animation:duoShake .4s ease;
-}
+.opt.correct{background:var(--ok-soft)!important;border-color:var(--ok)!important;color:var(--ok)!important;box-shadow:0 3px 0 var(--ok)!important;animation:duoPop .35s ease}
+.opt.wrong{background:var(--clay-soft)!important;border-color:var(--clay)!important;box-shadow:0 3px 0 var(--clay)!important;animation:duoShake .4s ease}
 @keyframes duoPop{0%{transform:scale(.94)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
 @keyframes duoShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
 @keyframes duoFloat{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-18px);opacity:0}}
-.duo-float-xp{
-  position:fixed;z-index:500;pointer-events:none;font-weight:800;font-size:18px;
-  color:var(--gold);animation:duoFloat .9s ease forwards;text-shadow:0 1px 0 rgba(0,0,0,.15);
-}
-
-.feedback{
-  border-radius:18px 18px 0 0!important;border-width:2px 0 0!important;
-  padding:16px 18px!important;
-}
+.duo-float-xp{position:fixed;z-index:500;pointer-events:none;font-weight:800;font-size:18px;color:var(--gold);animation:duoFloat .9s ease forwards;text-shadow:0 1px 0 rgba(0,0,0,.15)}
+.feedback{border-radius:18px 18px 0 0!important;border-width:2px 0 0!important;padding:16px 18px!important}
 .feedback.show{animation:duoSlideUp .25s ease}
 @keyframes duoSlideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .feedback.ok{background:#d7f5e3!important;border-color:var(--ok)!important}
@@ -97,40 +60,20 @@
 .feedback .txt{font-size:16px!important}
 .feedback.ok .txt::before{content:"✓ ";font-weight:900}
 .feedback.no .txt::before{content:"✗ ";font-weight:900}
-
 .progress{height:10px!important;border-radius:99px!important;background:var(--paper-deep)!important}
 .progress>i{background:linear-gradient(90deg,var(--gold),#e8c46a)!important;box-shadow:0 0 8px var(--gold-pale)}
-
-.learn-hud{
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-  margin-bottom:12px;flex-wrap:wrap;
-}
-.learn-hud .combo{
-  display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;
-  background:var(--gold-pale);border:1.5px solid var(--gold);font-weight:800;font-size:13px;color:#8a6a1f;
-}
-.learn-hud .xp-pill{
-  display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;
-  background:var(--forest-soft);border:1.5px solid var(--forest);font-weight:800;font-size:13px;color:var(--forest);
-}
-
-/* Summary celebration */
+.learn-hud{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.learn-hud .combo{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--gold-pale);border:1.5px solid var(--gold);font-weight:800;font-size:13px;color:#8a6a1f}
+.learn-hud .xp-pill{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;background:var(--forest-soft);border:1.5px solid var(--forest);font-weight:800;font-size:13px;color:var(--forest)}
 .sum-celebrate{font-size:42px;line-height:1;margin-bottom:6px}
-.sum-xp{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;
-  background:var(--gold-pale);border:1.5px solid var(--gold);font-weight:800;color:#8a6a1f;margin:8px 0 4px}
-
-/* Cards & general polish */
+.sum-xp{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;background:var(--gold-pale);border:1.5px solid var(--gold);font-weight:800;color:#8a6a1f;margin:8px 0 4px}
 .card,.gram-wrap .card,section.card{border-radius:16px}
 .btn-primary{border-radius:14px!important;box-shadow:0 3px 0 rgba(0,0,0,.12);font-weight:700}
 .btn-primary:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.12)}
 .btn-secondary{border-radius:14px!important}
 .gram-list-item{border-radius:14px!important;transition:transform .12s,border-color .12s}
 .gram-list-item:hover{transform:translateY(-1px);border-color:var(--gold)}
-
-/* Hide vocab exercise instructional hints */
 .flash-card .hint{display:none!important}
-
-/* Hide old clutter still */
 .vl-phases{display:none!important}
 .vl-kicker{display:none!important}
 .learn-mini .mini-btn{display:none!important}
@@ -138,8 +81,6 @@
 .sh-eyebrow{display:none!important}
 .path-alts{display:none!important}
 .lesson .status{display:none!important}
-
-/* Oefeningen leftovers */
 .ex-block{border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .sbn-course .sb-chevron{display:inline-block;transition:transform .15s ease}
 .sbn-course[aria-expanded="true"] .sb-chevron{transform:rotate(180deg)}
@@ -154,7 +95,6 @@
 <script>
 (async function(){
   const GOOD = 'https://raw.githubusercontent.com/1AbuMohamed/al-mufrodat/c45e6b965b40a478bb93b686867d8ae4550c9f50/index.html';
-
   function scrollPageTop(){
     try {
       window.scrollTo(0, 0);
@@ -171,253 +111,74 @@
     } catch (e) {}
   }
   window.__scrollPageTop = scrollPageTop;
-
   try {
     const res = await fetch(GOOD);
     if (!res.ok) throw new Error('HTTP ' + res.status);
     let html = await res.text();
-
     const re = /<script>([\s\S]*?)<\/script>/g;
     let match, inline = null;
     while ((match = re.exec(html)) !== null) {
       const body = match[1];
-      if (body.includes('const BASE_WORDS') || body.includes('function render(')) {
-        inline = body;
-        break;
-      }
+      if (body.includes('const BASE_WORDS') || body.includes('function render(')) { inline = body; break; }
     }
     if (!inline) throw new Error('Inline app script niet gevonden in history');
 
     inline = inline
-      .replace(
-        /function renderBook\(\)\{\s*if\(window\.renderBook\) return window\.renderBook\(\);\s*return '';\s*\}/,
-        'function renderBookFallback(){ return ""; }'
-      )
-      .replace(
-        /function renderBookLesson\(\)\{\s*if\(window\.renderBookLesson\) return window\.renderBookLesson\(\);\s*return '';\s*\}/,
-        'function renderBookLessonFallback(){ return ""; }'
-      )
-      .replace(
-        /html=\(window\.renderBook\?window\.renderBook\(\):renderBook\(\)\);/g,
-        'html=(typeof window.renderBook==="function"?window.renderBook():renderBookFallback());'
-      )
-      .replace(
-        /html=\(window\.renderBookLesson\?window\.renderBookLesson\(\):renderBookLesson\(\)\);/g,
-        'html=(typeof window.renderBookLesson==="function"?window.renderBookLesson():renderBookLessonFallback());'
-      );
+      .replace(/function renderBook\(\)\{\s*if\(window\.renderBook\) return window\.renderBook\(\);\s*return '';\s*\}/, 'function renderBookFallback(){ return ""; }')
+      .replace(/function renderBookLesson\(\)\{\s*if\(window\.renderBookLesson\) return window\.renderBookLesson\(\);\s*return '';\s*\}/, 'function renderBookLessonFallback(){ return ""; }')
+      .replace(/html=\(window\.renderBook\?window\.renderBook\(\):renderBook\(\)\);/g, 'html=(typeof window.renderBook==="function"?window.renderBook():renderBookFallback());')
+      .replace(/html=\(window\.renderBookLesson\?window\.renderBookLesson\(\):renderBookLesson\(\)\);/g, 'html=(typeof window.renderBookLesson==="function"?window.renderBookLesson():renderBookLessonFallback());');
 
     inline = inline.replace(
       /if\(m==='gram'\)\{\s*sbMenuState\.gram = true;\s*state\.path='grammar';\s*if\(state\.view==='book-lesson'\)\{\s*state\.view='book';\s*state\.bookLesson=null;\s*try\{history\.pushState\(null,'','#\/grammatica'\)\}\s*catch\(e\)\{\}\s*\} else if\(state\.view!=='book'\)\{\s*state\.view='book';\s*state\.bookLesson=null;\s*try\{history\.pushState\(null,'','#\/grammatica'\)\}\s*catch\(e\)\{\}\s*\}\s*render\(\);\s*\(document\.getElementById\("app"\)\|\|window\)\.scrollTop=0;\s*return;\s*\}/,
-      "if(m==='gram'){\n" +
-      "      const willOpen = !sbMenuState.gram;\n" +
-      "      sbMenuState.gram = willOpen;\n" +
-      "      if(willOpen){\n" +
-      "        state.path='grammar';\n" +
-      "        if(state.view!=='book' && state.view!=='book-lesson'){\n" +
-      "          state.view='book'; state.bookLesson=null;\n" +
-      "          try{history.pushState(null,'','#/grammatica')}catch(e){}\n" +
-      "        }\n" +
-      "      }\n" +
-      "      render();\n" +
-      "      if(willOpen && window.__scrollPageTop) window.__scrollPageTop();\n" +
-      "      return;\n" +
-      "    }\n" +
-      "    if(m==='ex'){\n" +
-      "      const willOpenEx = !sbMenuState.ex;\n" +
-      "      sbMenuState.ex = willOpenEx;\n" +
-      "      if(willOpenEx){\n" +
-      "        state.path='exercises';\n" +
-      "        if(state.view!=='ex' && state.view!=='ex-lesson'){\n" +
-      "          state.view='ex'; state.exLesson=null;\n" +
-      "          try{history.pushState(null,'','#/oefeningen')}catch(e){}\n" +
-      "        }\n" +
-      "      }\n" +
-      "      render();\n" +
-      "      if(willOpenEx && window.__scrollPageTop) window.__scrollPageTop();\n" +
-      "      return;\n" +
-      "    }"
+      "if(m==='gram'){\n      const willOpen = !sbMenuState.gram;\n      sbMenuState.gram = willOpen;\n      if(willOpen){\n        state.path='grammar';\n        if(state.view!=='book' && state.view!=='book-lesson'){\n          state.view='book'; state.bookLesson=null;\n          try{history.pushState(null,'','#/grammatica')}catch(e){}\n        }\n      }\n      render();\n      if(willOpen && window.__scrollPageTop) window.__scrollPageTop();\n      return;\n    }\n    if(m==='ex'){\n      const willOpenEx = !sbMenuState.ex;\n      sbMenuState.ex = willOpenEx;\n      if(willOpenEx){\n        state.path='exercises';\n        if(state.view!=='ex' && state.view!=='ex-lesson'){\n          state.view='ex'; state.exLesson=null;\n          try{history.pushState(null,'','#/oefeningen')}catch(e){}\n        }\n      }\n      render();\n      if(willOpenEx && window.__scrollPageTop) window.__scrollPageTop();\n      return;\n    }"
     );
 
     inline = inline
-      .replace(
-        /const gramOpen = \(path === 'grammar'\) \|\| \(state\.view === 'book'\) \|\| \(state\.view === 'book-lesson'\) \|\| !!sbMenuState\.gram;/,
-        "const gramOpen = !!sbMenuState.gram;\n  const exOpen = !!sbMenuState.ex;"
-      )
-      .replace(
-        /const convOpen = \(path === 'conv'\) \|\| \(state\.view === 'conv'\) \|\| \(state\.view === 'conv-unit'\) \|\| !!sbMenuState\.conv;/,
-        "const convOpen = !!sbMenuState.conv;"
-      );
+      .replace(/const gramOpen = \(path === 'grammar'\) \|\| \(state\.view === 'book'\) \|\| \(state\.view === 'book-lesson'\) \|\| !!sbMenuState\.gram;/, "const gramOpen = !!sbMenuState.gram;\n  const exOpen = !!sbMenuState.ex;")
+      .replace(/const convOpen = \(path === 'conv'\) \|\| \(state\.view === 'conv'\) \|\| \(state\.view === 'conv-unit'\) \|\| !!sbMenuState\.conv;/, "const convOpen = !!sbMenuState.conv;");
 
-    inline = inline.replace(
-      /let sbMenuState = \{ gram: false, conv: false \};/,
-      "let sbMenuState = { gram: false, conv: false, ex: false };\nwindow.sbMenuState = sbMenuState;"
-    );
-
-    inline = inline.replace(
-      /else if\(act==='open-book'\)\{\s*state\.path='grammar';/,
-      "else if(act==='open-book'){\n    sbMenuState.gram=true;\n    state.path='grammar';"
-    );
-    inline = inline.replace(
-      /state\.view='book-lesson';\s*try\{history\.pushState\(null,'','#'\/grammatica\/'\+state\.bookLesson\)\}\s*catch\(e\)\{\}\s*render\(\);\s*\(document\.getElementById\("app"\)\|\|window\)\.scrollTop=0;/,
-      "state.view='book-lesson';\n" +
-      "    try{history.pushState(null,'','#/grammatica/'+state.bookLesson)}catch(e){}\n" +
-      "    render();\n" +
-      "    if(window.__scrollPageTop) window.__scrollPageTop();"
-    );
-
-    inline = inline.replace(
-      /\(document\.getElementById\("app"\)\|\|window\)\.scrollTop=0/g,
-      "(window.__scrollPageTop?window.__scrollPageTop():window.scrollTo(0,0))"
-    );
-
-    inline = inline.replace(
-      /if\(\['book','book-lesson'\]\.includes\(state\.view\)\)return 'grammar';/,
-      "if(['book','book-lesson'].includes(state.view))return 'grammar';\n  if(['ex','ex-lesson'].includes(state.view))return 'exercises';"
-    );
-
-    inline = inline.replace(
-      /else if\(state\.view==='book-lesson'\)html=\(typeof window\.renderBookLesson===\"function\"\?window\.renderBookLesson\(\):renderBookLessonFallback\(\)\);/,
-      "else if(state.view==='book-lesson')html=(typeof window.renderBookLesson===\"function\"?window.renderBookLesson():renderBookLessonFallback());\n" +
-      "  else if(state.view==='ex')html=(typeof window.renderExercises===\"function\"?window.renderExercises():'<p class=\"empty\">Oefeningen laden…</p>');\n" +
-      "  else if(state.view==='ex-lesson')html=(typeof window.renderExerciseLesson===\"function\"?window.renderExerciseLesson():'<p class=\"empty\">Oefening laden…</p>');"
-    );
-
-    inline = inline.replace(
-      /book: 'Grammatica · Medina-boek',/,
-      "book: 'Grammatica · Medina-boek',\n    ex: 'Oefeningen',\n    'ex-lesson': 'Oefeningen',"
-    );
+    inline = inline.replace(/let sbMenuState = \{ gram: false, conv: false \};/, "let sbMenuState = { gram: false, conv: false, ex: false };\nwindow.sbMenuState = sbMenuState;");
+    inline = inline.replace(/else if\(act==='open-book'\)\{\s*state\.path='grammar';/, "else if(act==='open-book'){\n    sbMenuState.gram=true;\n    state.path='grammar';");
+    inline = inline.replace(/state\.view='book-lesson';\s*try\{history\.pushState\(null,'','#'\/grammatica\/'\+state\.bookLesson\)\}\s*catch\(e\)\{\}\s*render\(\);\s*\(document\.getElementById\("app"\)\|\|window\)\.scrollTop=0;/, "state.view='book-lesson';\n    try{history.pushState(null,'','#/grammatica/'+state.bookLesson)}catch(e){}\n    render();\n    if(window.__scrollPageTop) window.__scrollPageTop();");
+    inline = inline.replace(/\(document\.getElementById\("app"\)\|\|window\)\.scrollTop=0/g, "(window.__scrollPageTop?window.__scrollPageTop():window.scrollTo(0,0))");
+    inline = inline.replace(/if\(\['book','book-lesson'\]\.includes\(state\.view\)\)return 'grammar';/, "if(['book','book-lesson'].includes(state.view))return 'grammar';\n  if(['ex','ex-lesson'].includes(state.view))return 'exercises';");
+    inline = inline.replace(/else if\(state\.view==='book-lesson'\)html=\(typeof window\.renderBookLesson===\"function\"\?window\.renderBookLesson\(\):renderBookLessonFallback\(\)\);/, "else if(state.view==='book-lesson')html=(typeof window.renderBookLesson===\"function\"?window.renderBookLesson():renderBookLessonFallback());\n  else if(state.view==='ex')html=(typeof window.renderExercises===\"function\"?window.renderExercises():'<p class=\"empty\">Oefeningen laden…</p>');\n  else if(state.view==='ex-lesson')html=(typeof window.renderExerciseLesson===\"function\"?window.renderExerciseLesson():'<p class=\"empty\">Oefening laden…</p>');");
+    inline = inline.replace(/book: 'Grammatica · Medina-boek',/, "book: 'Grammatica · Medina-boek',\n    ex: 'Oefeningen',\n    'ex-lesson': 'Oefeningen',");
 
     inline = inline.replace(
       /(<button type="button" class="sbn sbn-course \$\{path==='conv'\?'active':''\}" data-act="sb-menu" data-menu="conv"[\s\S]*?<\/div>\s*)\n\n\n\s*<button type="button" class="sbn \$\{state\.view==='words'/,
-      "$1\n\n      <button type=\"button\" class=\"sbn sbn-course ${path==='exercises'?'active':''}\" data-act=\"sb-menu\" data-menu=\"ex\" aria-expanded=\"${exOpen}\">\n" +
-      "        <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\"><path d=\"M9 11l3 3L22 4\"/><path d=\"M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11\"/></svg>\n" +
-      "        <span>Oefeningen</span>\n" +
-      "        <span class=\"sb-chevron\">⌄</span>\n" +
-      "      </button>\n" +
-      "      <div class=\"sb-course-menu ${exOpen?'open':''}\">\n" +
-      "        ${exLinks}\n" +
-      "      </div>\n\n      <button type=\"button\" class=\"sbn ${state.view==='words'"
+      "$1\n\n      <button type=\"button\" class=\"sbn sbn-course ${path==='exercises'?'active':''}\" data-act=\"sb-menu\" data-menu=\"ex\" aria-expanded=\"${exOpen}\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\"><path d=\"M9 11l3 3L22 4\"/><path d=\"M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11\"/></svg>\n        <span>Oefeningen</span>\n        <span class=\"sb-chevron\">⌄</span>\n      </button>\n      <div class=\"sb-course-menu ${exOpen?'open':''}\">\n        ${exLinks}\n      </div>\n\n      <button type=\"button\" class=\"sbn ${state.view==='words'"
     );
 
     inline = inline.replace(
       /const convLinks = Object\.entries\(CONVERSATIONS\)\.map\(\(\[u, c\]\) => \{[\s\S]*?\}\)\.join\(''\);/,
-      "const convLinks = Object.entries(CONVERSATIONS).map(([u, c]) => {\n" +
-      "    const active = state.view==='conv-unit' && String(state.convUnit)===String(u);\n" +
-      "    const num = String(u).padStart(2,'0');\n" +
-      "    return `<button type=\"button\" class=\"${active?'active':''}\" data-act=\"open-conv\" data-u=\"${u}\"><span>${num}</span>${esc(c.titleNl)}</button>`;\n" +
-      "  }).join('');\n\n" +
-      "  const exListNums = [];\n" +
-      "  for (let i = 1; i <= 23; i++) exListNums.push(i);\n" +
-      "  const exLinks = exListNums.map(n => {\n" +
-      "    const active = state.view==='ex-lesson' && Number(state.exLesson)===Number(n);\n" +
-      "    const num = String(n).padStart(2,'0');\n" +
-      "    const isDone = (window.EX2 && window.EX2.lessonDone) ? window.EX2.lessonDone(n) : false;\n" +
-      "    return `<button type=\"button\" class=\"${active?'active':''}\" data-act=\"open-ex\" data-l=\"${n}\"><span>${num}</span>Les ${n}${isDone?' ✓':''}</button>`;\n" +
-      "  }).join('');"
+      "const convLinks = Object.entries(CONVERSATIONS).map(([u, c]) => {\n    const active = state.view==='conv-unit' && String(state.convUnit)===String(u);\n    const num = String(u).padStart(2,'0');\n    return `<button type=\"button\" class=\"${active?'active':''}\" data-act=\"open-conv\" data-u=\"${u}\"><span>${num}</span>${esc(c.titleNl)}</button>`;\n  }).join('');\n\n  const exListNums = [];\n  for (let i = 1; i <= 23; i++) exListNums.push(i);\n  const exLinks = exListNums.map(n => {\n    const active = state.view==='ex-lesson' && Number(state.exLesson)===Number(n);\n    const num = String(n).padStart(2,'0');\n    const isDone = (window.EX2 && window.EX2.lessonDone) ? window.EX2.lessonDone(n) : false;\n    return `<button type=\"button\" class=\"${active?'active':''}\" data-act=\"open-ex\" data-l=\"${n}\"><span>${num}</span>Les ${n}${isDone?' ✓':''}</button>`;\n  }).join('');"
     );
 
     inline = inline.replace(
       /else if\(act==='open-book'\)\{/,
-      "else if(act==='open-ex'){\n" +
-      "    const n = parseInt(btn.dataset.l, 10);\n" +
-      "    if(isNaN(n)) return;\n" +
-      "    sbMenuState.ex = true;\n" +
-      "    state.path = 'exercises';\n" +
-      "    state.view = 'ex-lesson';\n" +
-      "    state.exLesson = n;\n" +
-      "    try{history.pushState(null,'','#/oefeningen/'+n)}catch(e){}\n" +
-      "    render();\n" +
-      "    if(window.__scrollPageTop) window.__scrollPageTop();\n" +
-      "    return;\n" +
-      "  }\n" +
-      "  else if(act==='open-book'){"
+      "else if(act==='open-ex'){\n    const n = parseInt(btn.dataset.l, 10);\n    if(isNaN(n)) return;\n    sbMenuState.ex = true;\n    state.path = 'exercises';\n    state.view = 'ex-lesson';\n    state.exLesson = n;\n    try{history.pushState(null,'','#/oefeningen/'+n)}catch(e){}\n    render();\n    if(window.__scrollPageTop) window.__scrollPageTop();\n    return;\n  }\n  else if(act==='open-book'){"
     );
 
     inline = inline.replace(
       /else if\(v==='book'\)\{state\.path='grammar';state\.view='book';state\.bookLesson=null;state\.bookTab='uitleg';if\(state\.g2\)state\.g2\.view='map';sbMenuState\.gram=true;try\{history\.pushState\(null,'','#\/grammatica'\)\}catch\(e\)\{\}\}/,
-      "else if(v==='book'){state.path='grammar';state.view='book';state.bookLesson=null;state.bookTab='uitleg';if(state.g2)state.g2.view='map';sbMenuState.gram=true;try{history.pushState(null,'','#/grammatica')}catch(e){}}\n" +
-      "    else if(v==='ex'||v==='oefeningen'){state.path='exercises';state.view='ex';state.exLesson=null;sbMenuState.ex=true;try{history.pushState(null,'','#/oefeningen')}catch(e){}}"
+      "else if(v==='book'){state.path='grammar';state.view='book';state.bookLesson=null;state.bookTab='uitleg';if(state.g2)state.g2.view='map';sbMenuState.gram=true;try{history.pushState(null,'','#/grammatica')}catch(e){}}\n    else if(v==='ex'||v==='oefeningen'){state.path='exercises';state.view='ex';state.exLesson=null;sbMenuState.ex=true;try{history.pushState(null,'','#/oefeningen')}catch(e){}}"
     );
 
+    inline = inline.replace(/else if\(state\.view==='conv'\)html=renderConv\(\);/, "else if(state.view==='conv')html=(typeof window.renderConv===\"function\"?window.renderConv():renderConv());");
+    inline = inline.replace(/else if\(state\.view==='conv-unit'\)html=renderConvUnit\(\);/, "else if(state.view==='conv-unit')html=(typeof window.renderConvUnit===\"function\"?window.renderConvUnit():renderConvUnit());");
+    inline = inline.replace(/else if\(state\.view==='flash'\)html=renderFlash\(\);/, "else if(state.view==='flash')html=(typeof window.renderFlash===\"function\"?window.renderFlash():renderFlash());");
+    inline = inline.replace(/state\.convUnit=String\(btn\.dataset\.u\|\|''\);state\.view='conv-unit';state\.convOpen=\{\};state\.convShowAll=true;state\.convDi=0;state\.path='conv';/, "state.convUnit=String(btn.dataset.u||'');state.view='conv-unit';state.convOpen={};state.convShowAll=false;state.convDi=0;state.path='conv';");
 
-    inline = inline.replace(
-      /else if\(state\.view==='conv'\)html=renderConv\(\);/,
-      "else if(state.view==='conv')html=(typeof window.renderConv===\"function\"?window.renderConv():renderConv());"
-    );
-    inline = inline.replace(
-      /else if\(state\.view==='conv-unit'\)html=renderConvUnit\(\);/,
-      "else if(state.view==='conv-unit')html=(typeof window.renderConvUnit===\"function\"?window.renderConvUnit():renderConvUnit());"
-    );
+    inline = inline.replace(/<div class="hint">\$\{f\?'Tik of druk Spatie om terug te draaien':'Tik of druk Spatie voor antwoord'\}<\/div>/g, '');
+    inline = inline.replace(/<div class="vl-translit" style="margin-bottom:12px">Transcriptie-hint: <strong>\$\{esc\(w\.translit\|\|''\)\}<\/strong><\/div>/g, '');
 
-    // Remove flashcard instructional hint
-    inline = inline.replace(
-      /<div class="hint">\$\{f\?'Tik of druk Spatie om terug te draaien':'Tik of druk Spatie voor antwoord'\}<\/div>/g,
-      ''
-    );
-    // Remove "Transcriptie-hint:" label in word-build phase (keep blocks)
-    inline = inline.replace(
-      /<div class="vl-translit" style="margin-bottom:12px">Transcriptie-hint: <strong>\$\{esc\(w\.translit\|\|''\)\}<\/strong><\/div>/g,
-      ''
-    );
-    // Soften build placeholder (less instructional noise)
-    inline = inline.replace(
-      /Tik op de Arabische blokken hieronder \(van rechts naar links\)…/g,
-      '…'
-    );
-
-    // --- Duolingo-style feedback / XP / combo ---
     inline = inline.replace(
       /function showFb\(ok,text\)\{[\s\S]*?const delay = ok \? 2000 : 3000;/,
-      "function showFb(ok,text){\n" +
-      "  clearVocabFbTimer();\n" +
-      "  const bar=document.getElementById('fb');const txt=document.getElementById('fb-txt');const btn=document.getElementById('fb-btn');\n" +
-      "  if(!bar)return;\n" +
-      "  if(ok){\n" +
-      "    window.__duoCombo=(window.__duoCombo||0)+1;\n" +
-      "    const combo=window.__duoCombo;\n" +
-      "    const gain = combo>=5?15:combo>=3?12:10;\n" +
-      "    if(typeof window.__duoXP==='number'){ window.__duoXP+=gain; try{localStorage.setItem('alm_xp',String(window.__duoXP))}catch(e){} }\n" +
-      "    const float=document.createElement('div'); float.className='duo-float-xp'; float.textContent='+'+gain+' XP';\n" +
-      "    float.style.left=(window.innerWidth/2-28)+'px'; float.style.top=(window.innerHeight*0.4)+'px';\n" +
-      "    document.body.appendChild(float); setTimeout(function(){float.remove()},900);\n" +
-      "    const cheers=['Goed zo!','Top!','Mooi!','Yes!','Sterk!','Super!'];\n" +
-      "    const cheer=cheers[Math.floor(Math.random()*cheers.length)];\n" +
-      "    const comboTxt=combo>=2?(' · 🔥 combo ×'+combo):'';\n" +
-      "    txt.innerHTML=cheer+comboTxt+(text&&text!=='Goed'&&text!=='Beheerst'?('<div style=\"font-size:13px;font-weight:600;opacity:.85;margin-top:3px\">'+text+'</div>'):'');\n" +
-      "  } else {\n" +
-      "    window.__duoCombo=0;\n" +
-      "    txt.innerHTML='Bijna! <div style=\"font-size:13px;font-weight:600;opacity:.9;margin-top:3px\">'+text+'</div>';\n" +
-      "  }\n" +
-      "  bar.className='feedback show '+(ok?'ok':'no');\n" +
-      "  if(btn){ btn.style.display='inline-flex'; btn.textContent=ok?'Door! →':'Oké, verder →'; }\n" +
-      "  bar.onclick=(e)=>{\n" +
-      "    if(e.target&&e.target.id!=='fb-btn'&&_vocabFbTimer){\n" +
-      "      clearVocabFbTimer();\n" +
-      "      txt.innerHTML=txt.innerHTML+' <small style=\"display:block;opacity:0.8;font-size:12px;margin-top:4px\">⏸️ Timer gepauzeerd</small>';\n" +
-      "    }\n" +
-      "  };\n" +
-      "  const delay = ok ? 1600 : 2800;"
+      "function showFb(ok,text){\n  clearVocabFbTimer();\n  const bar=document.getElementById('fb');const txt=document.getElementById('fb-txt');const btn=document.getElementById('fb-btn');\n  if(!bar)return;\n  if(ok){\n    window.__duoCombo=(window.__duoCombo||0)+1;\n    const combo=window.__duoCombo;\n    const gain = combo>=5?15:combo>=3?12:10;\n    if(typeof window.__duoXP==='number'){ window.__duoXP+=gain; try{localStorage.setItem('alm_xp',String(window.__duoXP))}catch(e){} }\n    const float=document.createElement('div'); float.className='duo-float-xp'; float.textContent='+'+gain+' XP';\n    float.style.left=(window.innerWidth/2-28)+'px'; float.style.top=(window.innerHeight*0.4)+'px';\n    document.body.appendChild(float); setTimeout(function(){float.remove()},900);\n    const cheers=['Goed zo!','Top!','Mooi!','Yes!','Sterk!','Super!'];\n    const cheer=cheers[Math.floor(Math.random()*cheers.length)];\n    const comboTxt=combo>=2?(' · 🔥 combo ×'+combo):'';\n    txt.innerHTML=cheer+comboTxt+(text&&text!=='Goed'&&text!=='Beheerst'?('<div style=\"font-size:13px;font-weight:600;opacity:.85;margin-top:3px\">'+text+'</div>'):'');\n  } else {\n    window.__duoCombo=0;\n    txt.innerHTML='Bijna! <div style=\"font-size:13px;font-weight:600;opacity:.9;margin-top:3px\">'+text+'</div>';\n  }\n  bar.className='feedback show '+(ok?'ok':'no');\n  if(btn){ btn.style.display='inline-flex'; btn.textContent=ok?'Door! →':'Oké, verder →'; }\n  bar.onclick=(e)=>{ if(e.target&&e.target.id!=='fb-btn'&&_vocabFbTimer){ clearVocabFbTimer(); txt.innerHTML=txt.innerHTML+' <small style=\"display:block;opacity:0.8;font-size:12px;margin-top:4px\">⏸️ Timer gepauzeerd</small>'; } };\n  const delay = ok ? 1600 : 2800;"
     );
-
-    inline = inline.replace(
-      /const msg = ok\s*\n\s*\? \(p\.box>=MASTERY\?'Beheerst':'Goed'\)\s*\n\s*: w\.ar\+'  ·  '\+w\.nl;/,
-      "const msg = ok\n    ? (p.box>=MASTERY?'Beheerst — nieuw woord geleerd!':'Juist')\n    : (w.ar+'  ·  '+w.nl);"
-    );
-
-    inline = inline.replace(
-      /return`<div class="desktop-narrow">\s*<div class="learn-mini" style="justify-content:space-between;margin-bottom:10px">\s*<button class="back" data-act="nav" data-v="vocab" style="margin:0"><span>←<\/span> Overzicht<\/button>\s*<span class="learn-count">Vraag \$\{state\.stepIdx\+1\} van \$\{state\.queue\.length\}<\/span>/,
-      "const __combo=window.__duoCombo||0; const __xp=window.__duoXP||0;\n  return`<div class=\"desktop-narrow\">\n    <div class=\"learn-hud\">\n      <button class=\"back\" data-act=\"nav\" data-v=\"vocab\" style=\"margin:0\"><span>←</span></button>\n      <span class=\"combo\" title=\"Combo\">🔥 ${__combo}</span>\n      <span class=\"xp-pill\">⭐ ${__xp} XP</span>\n      <span class=\"learn-count\">${state.stepIdx+1}/${Math.max(state.queue.length,1)}</span>"
-    );
-
-    inline = inline.replace(
-      /<div class="gl-kicker">Sessie afgerond · Resultaten<\/div>\s*<div class="sum-score">\$\{state\.correct\}<span>\/\$\{state\.sessionLen\}<\/span><\/div>\s*<h2 style="font-size:22px;margin-top:4px">\$\{acc>=80\?'Uitstekend gewerkt!':'Ronde voltooid'\}<\/h2>\s*<p style="color:var\(--muted\);font-size:14px">\$\{acc\}% van de vragen in één keer goed\$\{state\.review\?' · herhalingsronde':''\}<\/p>/,
-      "<div class=\"sum-celebrate\">${acc>=90?'🎉':acc>=70?'🌟':'💪'}</div>\n        <div class=\"sum-score\">${state.correct}<span>/${state.sessionLen}</span></div>\n        <h2 style=\"font-size:22px;margin-top:4px\">${acc>=90?'Perfect!':acc>=70?'Goed gedaan!':'Blijf oefenen!'}</h2>\n        <div class=\"sum-xp\">+${Math.max(5, state.correct*10)} XP deze ronde</div>\n        <p style=\"color:var(--muted);font-size:14px\">${acc}% in één keer goed${state.review?' · herhalingsronde':''}</p>"
-    );
-
-    inline = inline.replace(
-      /state\.asked=0; state\.correct=0; state\.answered=false;/,
-      "state.asked=0; state.correct=0; state.answered=false; window.__duoCombo=0;"
-    );
+    inline = inline.replace(/state\.asked=0; state\.correct=0; state\.answered=false;/, "state.asked=0; state.correct=0; state.answered=false; window.__duoCombo=0;");
 
     const s = document.createElement('script');
     s.textContent = inline;
@@ -425,14 +186,10 @@
 
     window.addEventListener('hashchange', function(){
       const h = location.hash || '';
-      if (h.indexOf('#/grammatica') === 0 || h.indexOf('#/oefeningen') === 0) {
-        scrollPageTop();
-      }
+      if (h.indexOf('#/grammatica') === 0 || h.indexOf('#/oefeningen') === 0) scrollPageTop();
     });
 
-    window.__duoXP = (function(){
-      try { return parseInt(localStorage.getItem('alm_xp')||'0',10)||0; } catch(e){ return 0; }
-    })();
+    window.__duoXP = (function(){ try { return parseInt(localStorage.getItem('alm_xp')||'0',10)||0; } catch(e){ return 0; } })();
     window.__duoCombo = 0;
 
     window.renderVocabHub = function renderVocabHub(){
@@ -456,7 +213,7 @@
         const bubble = p >= 100 ? '✓' : String(n);
         if (i > 0) path += '<div class="duo-connector"></div>';
         path += '<div class="duo-node-wrap ' + stt + '">' +
-          '<button type="button" class="duo-node ' + stt + '" data-act="start-learn" data-l="' + n + '">' +
+          '<button type="button" class="duo-node ' + stt + '" data-act="start-flash" data-l="' + n + '">' +
             '<span class="duo-bubble">' + bubble + '</span>' +
             '<span class="duo-node-body"><strong>Les ' + n + (title ? ' · ' + esc(title) : '') + '</strong>' +
             '<span>' + meta + '</span></span>' +
@@ -465,7 +222,7 @@
       });
       return '<div class="desktop-page">' +
         '<div style="margin-bottom:8px"><h1 style="font-size:24px;font-weight:800;letter-spacing:-.02em;margin:0 0 4px">Woordenschat</h1>' +
-        '<p style="margin:0;color:var(--muted);font-size:14px">Oefen zoals een spel — verdien XP en houd je reeks vast</p></div>' +
+        '<p style="margin:0;color:var(--muted);font-size:14px">Tik voor vertaling · swipe voor volgende</p></div>' +
         '<div class="duo-head">' +
           '<div class="duo-stat"><span class="k">Beheerst</span><span class="v">' + m + '/' + total + '</span></div>' +
           '<div class="duo-stat gold"><span class="k">Voortgang</span><span class="v">' + pct + '%</span></div>' +
@@ -473,11 +230,8 @@
           '<div class="duo-stat"><span class="k">XP</span><span class="v">' + xp + '</span></div>' +
         '</div>' +
         '<div class="duo-tools">' +
-          '<button class="btn btn-sm ' + (quizDir==='ar2nl'?'btn-primary':'btn-secondary') + '" data-act="set-quiz-dir" data-d="ar2nl">AR → NL</button>' +
-          '<button class="btn btn-sm ' + (quizDir==='nl2ar'?'btn-primary':'btn-secondary') + '" data-act="set-quiz-dir" data-d="nl2ar">NL → AR</button>' +
-          '<button class="btn btn-sm ' + (quizDir==='mix'?'btn-primary':'btn-secondary') + '" data-act="set-quiz-dir" data-d="mix">Gemengd</button>' +
+          '<button class="btn btn-sm btn-secondary" data-act="start-learn" data-l="all">Quiz</button>' +
           '<span class="grow"></span>' +
-          '<button class="btn btn-secondary btn-sm" data-act="start-learn" data-l="all">Alles oefenen</button>' +
           '<button class="btn btn-secondary btn-sm" data-act="nav" data-v="words">Lijst</button>' +
         '</div>' +
         '<div class="duo-path">' + path + '</div>' +
@@ -485,46 +239,22 @@
     };
     try { renderVocabHub = window.renderVocabHub; } catch (e) {}
 
-    const style = document.createElement('style');
-    style.textContent = [
-      '.vl-phases{display:none!important}',
-      '.vl-kicker{display:none!important}',
-      '.learn-mini .mini-btn{display:none!important}',
-      '.session-top .tag,.flash-card .tag{display:none!important}',
-      '.sh-eyebrow{display:none!important}',
-      '.path-alts{display:none!important}',
-      '.lesson .status{display:none!important}',
-      '.flash-card .hint{display:none!important}'
-    ].join('');
-    document.head.appendChild(style);
-
     if ((location.hash || '').indexOf('#/oefeningen') === 0 && typeof window.render === 'function') {
       setTimeout(function(){
         if (window.state) {
           window.state.path = 'exercises';
           const parts = (location.hash || '').slice(1).split('/').filter(Boolean);
-          if (parts.length >= 2) {
-            window.state.view = 'ex-lesson';
-            window.state.exLesson = parseInt(parts[1], 10) || 1;
-          } else {
-            window.state.view = 'ex';
-            window.state.exLesson = null;
-          }
+          if (parts.length >= 2) { window.state.view = 'ex-lesson'; window.state.exLesson = parseInt(parts[1], 10) || 1; }
+          else { window.state.view = 'ex'; window.state.exLesson = null; }
           if (window.sbMenuState) window.sbMenuState.ex = true;
-          window.render();
-          scrollPageTop();
+          window.render(); scrollPageTop();
         }
       }, 80);
     }
-
-    if (typeof render === 'function' && window.state) {
-      render();
-    }
+    if (typeof render === 'function' && window.state) render();
   } catch (err) {
     console.error(err);
-    document.getElementById('app').innerHTML =
-      '<div style="padding:2rem;font-family:system-ui">' +
-      '<h1>Laden mislukt</h1><p>' + String(err.message || err) + '</p></div>';
+    document.getElementById('app').innerHTML = '<div style="padding:2rem;font-family:system-ui"><h1>Laden mislukt</h1><p>' + String(err.message || err) + '</p></div>';
   }
 })();
 </script>
