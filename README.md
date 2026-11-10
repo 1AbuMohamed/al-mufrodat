@@ -12,7 +12,6 @@ Interactieve Nederlandstalige leeromgeving bij *Durūs al-Lughah al-ʿArabiyyah 
    - Arabische teksten met alle originele harakāt (klinkertekens en dagger-alifs).
    - Rustige, afleidingsvrije weergave: per lespagina **precies één titel** (`Les N`), geen geforceerde stappen, geen toetsdrempels of lesvergrendelingen.
    - Eenvoudig voortgangsvinkje per les (*Les afgerond*), lokaal opgeslagen.
-   - *Les 24 (Madinah Arabic Reader 8)* staat niet in Boek 1 en is netjes bewaard als afzonderlijke referentie (*Reader 8 Aanvulling*).
 
 2. **Oefeningen (Letterlijk met illustraties)**
    - **Bron:** *Madina Book 1 Arabic Text* (`Madina_Book1_Arabic_Text.pdf`).

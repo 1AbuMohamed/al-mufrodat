@@ -16,10 +16,10 @@ function saveParse(){ try { localStorage.setItem(LS_PARSE, parseOn ? '1' : '0');
 const E = s => {
   if (s == null) return '';
   return String(s)
-    .replace(/&/g, '&')
-    .replace(/</g, '<')
-    .replace(/>/g, '>')
-    .replace(/"/g, '"')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 };
 
@@ -39,7 +39,7 @@ const IMGS = {
   13:['les13-oef13a-1.webp','les13-oef13a-2.webp','les13-oef13a-3.webp','les13-oef13a-4.webp','les13-oef13a-5.webp','les13-oef13a-6.webp','les13-oef13b-1.webp','les13-oef13b-2.webp','les13-oef13b-3.webp','les13-oef13b-4.webp','les13-oef13b-5.webp','les13-oef13b-6.webp','les13-oef13c-1.webp','les13-oef13c-2.webp','les13-oef13c-3.webp','les13-oef13c-4.webp'],
   14:['les14-oef1.webp','les14-oef2.webp','les14-oef3.webp','les14-oef4.webp','les14-oef5.webp','les14-oef6.webp'],
   15:['les15-oef1.webp','les15-oef2.webp','les15-oef3.webp','les15-oef4.webp','les15-oef5.webp','les15-oef6.webp'],
-  16:['les16-oef1.webp','les16-oef2.webp','les16-oef3.webp','les16-oef4.webp','les16-oef5.webp'],
+  16:['les16-oef1.webp','les16-oef2.webp','les16-oef3.webp','les16-oef4.webp'],
   17:['les17-oef1.webp','les17-oef2.webp','les17-oef3.webp','les17-oef4.webp'],
   18:['les18-oef1.webp','les18-oef2.webp','les18-oef3.webp','les18-oef4.webp','les18-oef5.webp'],
   19:['les19-oef1.webp','les19-oef2.webp','les19-oef3.webp','les19-oef4.webp'],
@@ -359,21 +359,36 @@ function renderExLesson(){
   return renderLesson(n);
 }
 
+let hashInitAttempts = 0;
 function handleHash(){
-  const m = (location.hash || '').match(/^#\/oefeningen(?:\/(\d+))?$/);
-  if (!m) return;
+  const m = (location.hash || '').match(/^#\\/oefeningen(?:\\/(\\d+))?$/);
+  if (!m) { hashInitAttempts = 0; return; }
+  // The app shell is loaded asynchronously; DOMContentLoaded can fire before state exists.
+  if (!window.state) {
+    if (hashInitAttempts < 30) {
+      hashInitAttempts += 1;
+      setTimeout(handleHash, 100);
+    }
+    return;
+  }
+  hashInitAttempts = 0;
   if (m[1]) {
     const n = parseInt(m[1], 10);
-    if (window.state) {
+    if (n >= 1 && n <= 23) {
       window.state.path = 'exercises';
       window.state.view = 'ex-lesson';
       window.state.exLesson = n;
+    } else {
+      window.state.path = 'exercises';
+      window.state.view = 'ex';
+      window.state.exLesson = null;
     }
-  } else if (window.state) {
+  } else {
     window.state.path = 'exercises';
     window.state.view = 'ex';
     window.state.exLesson = null;
   }
+  if (typeof window.render === 'function') window.render();
 }
 
 window.renderExercises = renderExHub;
