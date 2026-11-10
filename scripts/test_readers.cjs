@@ -31,7 +31,7 @@ const document = {
   addEventListener(type, fn) { listeners[type] = listeners[type] || []; listeners[type].push(fn); }
 };
 const location = { hash: '#/grammatica/1' };
-const window = { GRAMMATICA: G, location, state: { bookLesson: 1, view: 'book-lesson', path: 'grammar' } };
+const window = { GRAMMATICA: G, location, state: { bookLesson: 1, view: 'book-lesson', path: 'grammar' }, addEventListener() {} };
 const context = vm.createContext({
   window, document, location, localStorage,
   history: { replaceState() {} }, setTimeout() {}, console,
