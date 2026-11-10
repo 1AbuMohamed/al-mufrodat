@@ -193,7 +193,11 @@
     };
     try { renderVocabHub = window.renderVocabHub; } catch (e) {}
 
-    if (typeof render === 'function' && window.state) render();
+    if (typeof render === 'function' && window.state) {
+      // Bij asynchroon laden kan DOMContentLoaded al voorbij zijn.
+      // Pas een gedeelde grammaticalink daarom nogmaals expliciet toe.
+      if (!(typeof window.__applyGrammarDeepLink === 'function' && window.__applyGrammarDeepLink())) render();
+    }
   } catch (err) {
     console.error(err);
     document.getElementById('app').innerHTML = '<div style="padding:2rem;font-family:system-ui"><h1>Laden mislukt</h1><p>' + String(err.message || err) + '</p></div>';
