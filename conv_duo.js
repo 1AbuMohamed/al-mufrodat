@@ -22,7 +22,7 @@ window.renderConvUnit=function(){
  let di=Math.max(0,Math.min(total-1,state.convDi|0));state.convDi=di;const d=ds[di],speakers=[];
  (d.lines||[]).forEach(l=>{if(l.who&&!speakers.includes(l.who))speakers.push(l.who)});
  const chat=(d.lines||[]).map((line,i)=>{
-  const id=di+'-'+i,open=!!state.convShowAll||!!state.convOpen[id],role=(Math.max(0,speakers.indexOf(line.who))%2===0)?'a':'b';
+  const id=di+'-'+i,open=(state.convOpen[id]===undefined ? !!state.convShowAll : !!state.convOpen[id]),role=(Math.max(0,speakers.indexOf(line.who))%2===0)?'a':'b';
   const key='conv_'+n+'_'+di+'_'+i,can=!!(window.analyzeArabicSentence&&window.analyzeArabicSentence(line.ar)),sess=can&&window.getInlineIrabSession?window.getInlineIrabSession(key,'view'):null,irab=!!(sess&&sess.open);
   const ar=(typeof markAr==='function')?markAr(line.ar,'plain'):ce(line.ar);
   const label=ce(line.who||'');
