@@ -1,4 +1,4 @@
-/* Woordenschat flash · tik = vertaling, swipe / Volgende · geen fonetiek */
+/* Woordenschat flash · tik = vertaling, swipe / Volgende · foto boven, Arabisch kleiner */
 (function(){
 'use strict';
 
@@ -6,6 +6,14 @@ function escLocal(s){
   if (typeof esc === 'function') return esc(s);
   if (s == null) return '';
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function picHtml(w){
+  try {
+    if (typeof showPics !== 'undefined' && !showPics) return '';
+    if (typeof wordPic === 'function') return wordPic(w) || '';
+  } catch(e){}
+  return '';
 }
 
 window.renderFlash = function renderFlash(){
@@ -22,22 +30,27 @@ window.renderFlash = function renderFlash(){
   var arFirst = dir !== 'nl2ar';
   var pct = pool.length ? Math.round(100 * (state.idx + 1) / pool.length) : 0;
   var arHtml = (typeof wrapTash === 'function') ? wrapTash(w.ar, 'plain') : escLocal(w.ar);
+  var pic = picHtml(w);
 
   var main, sub;
   if (!f) {
     if (arFirst) {
-      main = '<div class="vf-ar ar ar-mark" lang="ar">' + arHtml + '</div>';
+      main = (pic ? '<div class="vf-pic">' + pic + '</div>' : '') +
+             '<div class="vf-ar ar ar-mark" lang="ar">' + arHtml + '</div>';
       sub = '';
     } else {
-      main = '<div class="vf-nl">' + escLocal(w.nl) + '</div>';
+      main = (pic ? '<div class="vf-pic">' + pic + '</div>' : '') +
+             '<div class="vf-nl">' + escLocal(w.nl) + '</div>';
       sub = '';
     }
   } else {
     if (arFirst) {
       main = '<div class="vf-nl">' + escLocal(w.nl) + '</div>';
-      sub = '<div class="vf-ar-sm ar ar-mark" lang="ar">' + arHtml + '</div>';
+      sub = (pic ? '<div class="vf-pic vf-pic-sm">' + pic + '</div>' : '') +
+            '<div class="vf-ar-sm ar ar-mark" lang="ar">' + arHtml + '</div>';
     } else {
-      main = '<div class="vf-ar ar ar-mark" lang="ar">' + arHtml + '</div>';
+      main = (pic ? '<div class="vf-pic">' + pic + '</div>' : '') +
+             '<div class="vf-ar ar ar-mark" lang="ar">' + arHtml + '</div>';
       sub = '<div class="vf-nl-sm">' + escLocal(w.nl) + '</div>';
     }
   }
@@ -107,22 +120,32 @@ style.textContent = `
 .vf-chip.on{border-color:var(--forest);background:var(--forest);color:var(--on-forest)}
 .vf-card{
   background:var(--surface);border:2px solid var(--line);border-radius:22px;
-  min-height:220px;padding:28px 22px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:220px;padding:20px 18px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;cursor:pointer;box-shadow:0 3px 0 var(--line);
   transition:border-color .15s,transform .12s;user-select:none;-webkit-user-select:none;
-  touch-action:pan-y;
+  touch-action:pan-y;gap:6px;
 }
 .vf-card:active{transform:scale(.99)}
 .vf-card.is-flipped{border-color:var(--gold);box-shadow:0 3px 0 var(--gold)}
-.vf-ar{font-family:var(--ar);font-size:clamp(40px,11vw,56px);font-weight:700;line-height:1.35;direction:rtl}
-.vf-ar-sm{font-family:var(--ar);font-size:28px;font-weight:700;direction:rtl;margin-top:10px;color:var(--forest)}
+.vf-pic{display:flex;justify-content:center;margin:0 0 4px}
+.vf-pic .pic-frame,.vf-pic img{max-height:110px;width:auto;border-radius:12px}
+.vf-pic-sm .pic-frame,.vf-pic-sm img{max-height:72px}
+.vf-ar{font-family:var(--ar);font-size:clamp(28px,7.5vw,40px);font-weight:700;line-height:1.45;direction:rtl;margin-top:6px}
+.vf-ar-sm{font-family:var(--ar);font-size:clamp(22px,6vw,30px);font-weight:700;direction:rtl;margin-top:8px;color:var(--forest)}
 .vf-nl{font-size:26px;font-weight:800;line-height:1.3;letter-spacing:-.02em}
 .vf-nl-sm{font-size:16px;font-weight:600;color:var(--muted);margin-top:8px}
-.vf-tap{margin-top:18px;font-size:12px;font-weight:700;color:var(--muted);opacity:.65}
+.vf-tap{margin-top:14px;font-size:12px;font-weight:700;color:var(--muted);opacity:.65}
 .vf-nav{display:flex;gap:10px;margin-top:16px}
 .vf-nav .btn{flex:1}
 .vf-next{flex:2!important}
-.session-top .tag,.flash-card .hint,.flash-card .tag,.learn-mini,.flash-card .translit,.card .translit,.vf-ph{display:none!important}
+.qcard .q-pic{margin:0 0 10px;display:flex;justify-content:center}
+.qcard .q-pic .pic-frame,.qcard .q-pic img{max-height:120px;width:auto;border-radius:12px}
+.qcard .qar,.qcard .big-ar,.qcard .flash-mushaf{
+  font-size:clamp(26px,7vw,38px)!important;
+  line-height:1.45!important;
+  margin-top:4px!important;
+}
+.flash-card .hint,.flash-card .tag,.flash-card .translit,.card .translit,.vf-ph{display:none!important}
 `;
 document.head.appendChild(style);
 })();
