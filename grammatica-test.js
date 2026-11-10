@@ -6,13 +6,14 @@
   'use strict';
 
   var DATA = window.GRAMMATICA || {};
-  var SAVE_KEY = 'alm_grammar_test_scores_v1';
-  var MAX_TASKS = 6;
+  var SAVE_KEY = 'alm_grammar_test_v2';
+  var OLD_KEY = 'alm_grammar_test_scores_v1';
+  var MAX_TASKS = 10;
   var app = null;
   var session = {
     lesson: null, stage: 'overview', tasks: [], index: 0,
     chosen: -1, ordered: [], feedback: null,
-    correct: 0, missed: [], review: false
+    correct: 0, missed: [], review: false, hearts: 5, combo: 0, xp: 0, wrong: 0, attempts: 0, lastMissed: []
   };
 
   function plain(value) { return String(value == null ? '' : value).trim(); }
@@ -87,32 +88,33 @@
       bank: seededShuffle(words.map(function (_word, i) { return i; }), seed + 13)
     };
   }
-  function buildTasks(n) {
+  function buildTasks(n, seed) {
     var examples = getExamples(n);
     if (!examples.length) return [];
-    var attempts = ['choice', 'order', 'gap', 'choice', 'order', 'gap'];
-    var tasks = [], chosenExamples = new Set();
-    attempts.forEach(function (kind, step) {
-      var candidates = examples.slice();
-      var rotated = candidates.slice(step % candidates.length).concat(candidates.slice(0, step % candidates.length));
-      var possibilities = rotated.map(function (example, i) {
-        var seed = n * 89 + step * 31 + i;
-        if (kind === 'choice') {
-          var options = choicesFor(example, examples, seed);
-          return options ? { type: kind, example: example, options: options } : null;
+    var types = ['choice','order','gap','reverse','pairs','choice','order','gap','reverse','pairs'];
+    var tasks = [], base = seed === undefined ? n*89+7 : seed;
+    for (var i=0;i<MAX_TASKS;i++) {
+      var type=types[i], pool=seededShuffle(examples,base+i*103), candidate=null;
+      for(var j=0;j<pool.length;j++){
+        var ex=pool[j], k=base+i*31+j;
+        if(type==='choice'){
+          var options=choicesFor(ex,examples,k);
+          if(options)candidate={type:type,example:ex,options:options};
+        }else if(type==='gap')candidate=makeGap(ex,examples,k);
+        else if(type==='order')candidate=makeOrder(ex,k);
+        else if(type==='reverse'){
+          var others=[...new Set(examples.map(function(x){return plain(x.ar);}))].filter(function(x){return x!==plain(ex.ar);});
+          if(others.length)candidate={type:type,example:ex,options:seededShuffle([plain(ex.ar)].concat(seededShuffle(others,k).slice(0,3)),k+9)};
+        }else if(type==='pairs'){
+          var pairs=[ex].concat(seededShuffle(examples.filter(function(x){return x.ar!==ex.ar&&x.nl!==ex.nl;}),k).slice(0,3));
+          if(pairs.length>1)candidate={type:type,example:ex,pairs:pairs,options:seededShuffle(pairs.map(function(x){return plain(x.nl);}),k+17)};
         }
-        if (kind === 'order') return makeOrder(example, seed);
-        return makeGap(example, examples, seed);
-      }).filter(Boolean);
-      if (!possibilities.length) return;
-      var picked = possibilities.find(function (task) {
-        return !chosenExamples.has(task.example.ar + '\u0000' + task.example.nl);
-      }) || possibilities[0];
-      tasks.push(picked);
-      chosenExamples.add(picked.example.ar + '\u0000' + picked.example.nl);
-    });
-    if (!tasks.length) tasks.push({ type: 'reflect', example: examples[0] });
-    return tasks.slice(0, MAX_TASKS);
+        if(candidate)break;
+      }
+      if(!candidate)candidate={type:'reflect',example:pool[0]};
+      tasks.push(candidate);
+    }
+    return tasks;
   }
 
   // Beschikbaar voor tests, zonder de daadwerkelijke app-data te wijzigen.
