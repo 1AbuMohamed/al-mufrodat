@@ -57,7 +57,7 @@
 <div class="toast" id="toast"></div>
 <script>
 (async function(){
-  const GOOD = 'https://raw.githubusercontent.com/1AbuMohamed/al-mufrodat/c45e6b965b40a478bb93b686867d8ae4550c9f50/index.html';
+  const GOOD = 'app_core.js';
   function scrollPageTop(){
     try {
       window.scrollTo(0, 0);
@@ -71,14 +71,10 @@
   try {
     const res = await fetch(GOOD);
     if (!res.ok) throw new Error('HTTP ' + res.status);
-    let html = await res.text();
-    const re = /<script>([\s\S]*?)<\/script>/g;
-    let match, inline = null;
-    while ((match = re.exec(html)) !== null) {
-      const body = match[1];
-      if (body.includes('const BASE_WORDS') || body.includes('function render(')) { inline = body; break; }
+    let inline = await res.text();
+    if (!inline.includes('const BASE_WORDS') || !inline.includes('function render(')) {
+      throw new Error('Lokaal applicatiescript ontbreekt of is ongeldig');
     }
-    if (!inline) throw new Error('Inline app script niet gevonden');
 
     inline = inline
       .replace(/function renderBook\(\)\{\s*if\(window\.renderBook\) return window\.renderBook\(\);\s*return '';\s*\}/, 'function renderBookFallback(){ return ""; }')
