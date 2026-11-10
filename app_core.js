@@ -2734,17 +2734,14 @@ document.addEventListener('click',e=>{
     else if(dir==='set')i=Math.max(0,Math.min(n-1,+(btn.dataset.i||0)));
     state.convDi=i;
     state.convOpen={};
-    state.convShowAll=true;
+    // Behoud de keuze om vertalingen te tonen/verbergen bij wisselen van dialoog.
     lastConv={u:String(state.convUnit),di:i};try{saveConv()}catch(e){}
     render();(document.getElementById("app")||window).scrollTop=0;
   }
   else if(act==='toggle-all-trans'){
     state.convShowAll=!state.convShowAll;
-    if(state.convShowAll){
-      const c=CONVERSATIONS[state.convUnit];
-      if(!state.convOpen)state.convOpen={};
-      (c&&c.dialogues||[]).forEach((d,di)=>{(d.lines||[]).forEach((_,li)=>{state.convOpen[di+'-'+li]=true})});
-    }else{state.convOpen={}}
+    // Per-zin-keuzes terugzetten zodat ook 'toon alles' omkeerbaar is.
+    state.convOpen={};
     render();
   }
   else if(act==='toggle-conv-irab'){
@@ -2769,7 +2766,8 @@ document.addEventListener('click',e=>{
   else if(act==='toggle-line'){
     const id=btn.dataset.id;
     if(!state.convOpen)state.convOpen={};
-    state.convOpen[id]=!state.convOpen[id];
+    const wasVisible = state.convOpen[id] === undefined ? !!state.convShowAll : !!state.convOpen[id];
+    state.convOpen[id]=!wasVisible;
     render();
   }
   else if(act==='set-flash-dir'){
