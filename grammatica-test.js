@@ -93,7 +93,7 @@
     if (!examples.length) return [];
     var types = ['choice','order','gap','reverse','pairs','choice','order','gap','reverse','pairs'];
     var tasks = [], base = seed === undefined ? n*89+7 : seed;
-    for (var i=0;i<MAX_TASKS;i++) {
+    for (var i=0;i<(seed === undefined ? 6 : MAX_TASKS);i++) {
       var type=types[i], pool=seededShuffle(examples,base+i*103), candidate=null;
       for(var j=0;j<pool.length;j++){
         var ex=pool[j], k=base+i*31+j;
