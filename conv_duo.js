@@ -1,4 +1,4 @@
-/* Dialogen · clean chat, vertaling alleen op klik */
+/* Dialogen · clean chat, vertaling op klik, korte scène-titels, iʿrāb */
 (function(){
 'use strict';
 
@@ -32,7 +32,7 @@ window.renderConv = function renderConv(){
     path += '<div class="duo-node-wrap ' + stt + '">' +
       '<button type="button" class="duo-node ' + stt + '" data-act="open-conv" data-u="' + n + '">' +
         '<span class="duo-bubble">' + bubble + '</span>' +
-        '<span class="duo-node-body"><strong>' + escLocal(c.titleNl || ('Eenheid ' + n)) + '</strong>' +
+        '<span class="duo-node-body"><strong>Eenheid ' + escLocal(n) + '</strong>' +
         '<span>' + nDlg + (nDlg === 1 ? ' scène' : ' scènes') + (isDone ? ' · gelezen' : '') + '</span></span>' +
         '<span class="duo-node-cta">' + cta + ' ›</span>' +
       '</button></div>';
@@ -59,11 +59,6 @@ window.renderConvUnit = function renderConvUnit(){
   const c = (CONVERSATIONS && (CONVERSATIONS[n] || CONVERSATIONS[Number(n)])) || null;
   if (!c) return '<div class="empty">Dialoog niet gevonden.</div>';
 
-  const dark = typeof darkMode !== 'undefined' && darkMode;
-  const palette = dark
-    ? ['#68D391','#63B3ED','#F6AD55','#B794F4','#F687B3','#F6E05E']
-    : ['#1F4F45','#2B6CB0','#C45C26','#6B3FA0','#8B2942','#B8860B'];
-
   const dialogs = c.dialogues || [];
   const total = dialogs.length;
   if (!total) return '<div class="empty">Geen scènes.</div>';
@@ -74,7 +69,6 @@ window.renderConvUnit = function renderConvUnit(){
   state.convDi = di;
   const d = dialogs[di];
 
-  const colorMap = {};
   const spkList = [];
   (d.lines || []).forEach(function(l){
     if (l.who && spkList.indexOf(l.who) < 0) spkList.push(l.who);
@@ -84,22 +78,30 @@ window.renderConvUnit = function renderConvUnit(){
   (d.lines || []).forEach(function(line, li){
     const id = di + '-' + li;
     const open = !!(state.convOpen && state.convOpen[id]);
-    const spk = line.who || ('s' + li);
-    if (!colorMap[spk]) colorMap[spk] = palette[Object.keys(colorMap).length % palette.length];
-    const col = colorMap[spk];
     const spkIdx = spkList.indexOf(line.who);
     const role = (spkIdx >= 0 ? spkIdx : li) % 2 === 0 ? 'a' : 'b';
-    const initial = (line.who || '').replace(/[\u064B-\u065F\u0670\u0640\s]/g,'').charAt(0) || String(li + 1);
     const arHtml = (typeof markAr === 'function') ? markAr(line.ar, 'plain') : escLocal(line.ar);
 
+    const irabKey = 'conv_' + n + '_' + di + '_' + li;
+    const canIrab = !!(window.analyzeArabicSentence && window.analyzeArabicSentence(line.ar));
+    const irabSess = canIrab && window.getInlineIrabSession ? window.getInlineIrabSession(irabKey, 'view') : null;
+    const irabOpen = !!(irabSess && irabSess.open);
+
     chat += '<div class="chat-row spk-' + role + '">' +
-      '<div class="chat-av" style="background:' + col + '">' + escLocal(initial) + '</div>' +
-      '<div class="chat-bubble' + (open ? ' is-open' : '') + '" data-act="toggle-line" data-id="' + id + '">' +
-        '<div class="who"><span class="ar" lang="ar">' + escLocal(line.who || '') + '</span></div>' +
-        '<div class="ar-line ar ar-mark" lang="ar">' + arHtml + '</div>' +
+      '<div class="chat-bubble' + (open ? ' is-open' : '') + (irabOpen ? ' has-irab' : '') + '">' +
+        '<div class="chat-top">' +
+          '<span class="who ar" lang="ar">' + escLocal(line.who || '') + '</span>' +
+          (canIrab
+            ? '<button type="button" class="irab-btn' + (irabOpen ? ' on' : '') + '" data-act="iirab-toggle" data-key="' + escLocal(irabKey) + '" data-sent="' + escLocal(line.ar) + '" title="Zinsontleding">إعراب</button>'
+            : '') +
+        '</div>' +
+        '<div class="ar-line ar ar-mark" lang="ar" data-act="toggle-line" data-id="' + id + '">' + arHtml + '</div>' +
         (open
-          ? '<div class="nl-line">' + escLocal(line.nl || '') + '</div>'
-          : '<div class="tap-hint">tik voor vertaling</div>') +
+          ? '<div class="nl-line" data-act="toggle-line" data-id="' + id + '">' + escLocal(line.nl || '') + '</div>'
+          : '<div class="tap-hint" data-act="toggle-line" data-id="' + id + '">tik voor vertaling</div>') +
+        (irabOpen && window.renderInlineIrab
+          ? '<div class="irab-panel">' + window.renderInlineIrab(line.ar, irabKey, irabSess.mode) + '</div>'
+          : '') +
       '</div></div>';
   });
 
@@ -107,16 +109,12 @@ window.renderConvUnit = function renderConvUnit(){
   if (total > 1) {
     pills = '<div class="scene-pills">';
     for (let i = 0; i < total; i++) {
-      pills += '<button type="button" class="scene-pill' + (i === di ? ' on' : '') + '" data-act="conv-di" data-dir="set" data-i="' + i + '">' + (i + 1) + '</button>';
+      pills += '<button type="button" class="scene-pill' + (i === di ? ' on' : '') + '" data-act="conv-di" data-dir="set" data-i="' + i + '">Scène ' + (i + 1) + '</button>';
     }
     pills += '</div>';
   }
 
   const isDone = !!(window.__convDone && window.__convDone[n]);
-  const sceneTitle = (d.titleNl || '')
-    .replace(/^(?:Hoofdstuk|Les)\s*\d+\s*[—\-–]\s*/i, '')
-    .replace(/^Dialoog\s*\d+\s*[—\-–]\s*/i, '')
-    .trim();
 
   return '<div class="desktop-narrow conv-clean">' +
     '<div class="conv-bar">' +
@@ -124,8 +122,7 @@ window.renderConvUnit = function renderConvUnit(){
       '<span class="conv-bar-meta">Eenheid ' + escLocal(n) + (total > 1 ? ' · ' + (di + 1) + '/' + total : '') + '</span>' +
       '<label class="conv-done-mini"><input type="checkbox" id="conv-done-cb" data-u="' + escLocal(n) + '"' + (isDone ? ' checked' : '') + '> Gelezen</label>' +
     '</div>' +
-    '<h1 class="conv-unit-title">' + escLocal(sceneTitle || c.titleNl || ('Eenheid ' + n)) + '</h1>' +
-    (c.titleAr ? '<div class="conv-unit-ar ar" lang="ar">' + escLocal(c.titleAr) + '</div>' : '') +
+    '<h1 class="conv-unit-title">Scène ' + (di + 1) + '</h1>' +
     pills +
     '<div class="chat-stack">' + chat + '</div>' +
     '<div class="conv-nav-simple">' +
@@ -155,26 +152,27 @@ style.textContent = `
 .conv-clean .conv-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
 .conv-clean .conv-bar-meta{flex:1;font-size:13px;font-weight:700;color:var(--muted)}
 .conv-done-mini{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;user-select:none}
-.conv-unit-title{font-size:20px;font-weight:800;margin:0 0 4px;letter-spacing:-.02em}
-.conv-unit-ar{font-family:var(--ar);font-size:24px;font-weight:700;direction:rtl;text-align:right;margin:0 0 12px;color:var(--forest)}
+.conv-unit-title{font-size:20px;font-weight:800;margin:0 0 12px;letter-spacing:-.02em}
 .scene-pills{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
-.scene-pill{width:36px;height:36px;border:2px solid var(--line);background:var(--surface);border-radius:50%;font-weight:800;font-size:13px;cursor:pointer;color:inherit;font:inherit;box-shadow:0 2px 0 var(--line);display:grid;place-items:center;padding:0}
+.scene-pill{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-weight:800;font-size:13px;cursor:pointer;color:inherit;font:inherit;box-shadow:0 2px 0 var(--line)}
 .scene-pill:hover{border-color:var(--gold)}
 .scene-pill.on{border-color:var(--forest);background:var(--forest);color:var(--on-forest);box-shadow:0 2px 0 var(--forest-dark,#0a2527)}
 .chat-stack{display:flex;flex-direction:column;gap:12px;margin:4px 0 18px}
 .chat-row{display:flex;gap:10px;align-items:flex-end;max-width:100%}
 .chat-row.spk-b{flex-direction:row-reverse}
-.chat-av{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;font-weight:800;font-size:13px;color:#fff;border:2px solid var(--surface)}
-.chat-bubble{max-width:min(100%,340px);padding:12px 14px;border-radius:18px 18px 18px 6px;background:var(--surface);border:2px solid var(--line);box-shadow:0 2px 0 var(--line);cursor:pointer;transition:border-color .12s,transform .12s}
+.chat-bubble{max-width:min(100%,380px);padding:12px 14px;border-radius:18px 18px 18px 6px;background:var(--surface);border:2px solid var(--line);box-shadow:0 2px 0 var(--line);transition:border-color .12s}
 .chat-row.spk-b .chat-bubble{border-radius:18px 18px 6px 18px}
-.chat-bubble:hover{border-color:var(--gold)}
-.chat-bubble.is-open{border-color:var(--gold)}
-.chat-bubble .who{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:4px}
-.chat-bubble .who .ar{font-size:13px;color:var(--forest)}
-.chat-bubble .ar-line{font-family:var(--ar);font-size:22px;line-height:1.5;direction:rtl;text-align:right;font-weight:700}
-.chat-bubble .nl-line{font-size:14px;color:var(--ink-soft);margin-top:8px;line-height:1.4;padding-top:8px;border-top:1px solid var(--line)}
-.chat-bubble .tap-hint{font-size:11px;color:var(--muted);margin-top:6px;font-weight:600;opacity:.7}
+.chat-bubble.is-open,.chat-bubble.has-irab{border-color:var(--gold)}
+.chat-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.chat-bubble .who{font-size:13px;font-weight:700;color:var(--forest);font-family:var(--ar)}
+.irab-btn{border:1.5px solid var(--line);background:var(--paper-deep);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;cursor:pointer;color:var(--muted);font-family:var(--ar);line-height:1.2}
+.irab-btn:hover,.irab-btn.on{border-color:var(--forest);color:var(--forest);background:var(--forest-soft,#e8f2ef)}
+.chat-bubble .ar-line{font-family:var(--ar);font-size:22px;line-height:1.5;direction:rtl;text-align:right;font-weight:700;cursor:pointer}
+.chat-bubble .nl-line{font-size:14px;color:var(--ink-soft);margin-top:8px;line-height:1.4;padding-top:8px;border-top:1px solid var(--line);cursor:pointer}
+.chat-bubble .tap-hint{font-size:11px;color:var(--muted);margin-top:6px;font-weight:600;opacity:.7;cursor:pointer}
+.irab-panel{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
 .conv-nav-simple{display:flex;justify-content:space-between;gap:10px;margin-top:4px}
+.conv-spk-avatar,.chat-av,.conv-spk-phon{display:none!important}
 `;
 document.head.appendChild(style);
 })();
