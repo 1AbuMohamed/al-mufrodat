@@ -1,4 +1,4 @@
-/* Woordenschat flash · tik = vertaling, swipe / Volgende · foto boven, Arabisch kleiner · geen fonetiek */
+/* Woordenschat flash · foto omhoog, Arabisch lager · na kaarten → quiz */
 (function(){
 'use strict';
 
@@ -16,6 +16,13 @@ function picHtml(w){
   return '';
 }
 
+function lessonKey(){
+  try {
+    if (typeof state !== 'undefined' && state.lesson != null) return state.lesson;
+  } catch(e){}
+  return 'all';
+}
+
 window.renderFlash = function renderFlash(){
   if (typeof state === 'undefined') return '<div class="empty">Laden…</div>';
   var pool = state.pool || [];
@@ -31,6 +38,8 @@ window.renderFlash = function renderFlash(){
   var pct = pool.length ? Math.round(100 * (state.idx + 1) / pool.length) : 0;
   var arHtml = (typeof wrapTash === 'function') ? wrapTash(w.ar, 'plain') : escLocal(w.ar);
   var pic = picHtml(w);
+  var last = state.idx >= pool.length - 1;
+  var les = lessonKey();
 
   var main, sub;
   if (!f) {
@@ -55,6 +64,13 @@ window.renderFlash = function renderFlash(){
     }
   }
 
+  var nextBtn;
+  if (last) {
+    nextBtn = '<button type="button" class="btn btn-primary vf-next" data-act="start-learn" data-l="' + escLocal(String(les)) + '">Test je kennis ›</button>';
+  } else {
+    nextBtn = '<button type="button" class="btn btn-primary vf-next" data-act="flash-next">Volgende ›</button>';
+  }
+
   return '<div class="desktop-narrow vf-wrap">' +
     '<div class="vf-top">' +
       '<button class="back" data-act="nav" data-v="vocab" style="margin:0"><span>←</span></button>' +
@@ -65,13 +81,13 @@ window.renderFlash = function renderFlash(){
       '<button type="button" class="vf-chip' + (arFirst ? ' on' : '') + '" data-act="set-flash-dir" data-d="ar2nl">AR</button>' +
       '<button type="button" class="vf-chip' + (!arFirst ? ' on' : '') + '" data-act="set-flash-dir" data-d="nl2ar">NL</button>' +
     '</div>' +
-    '<div class="vf-card' + (f ? ' is-flipped' : '') + '" id="vf-card" data-act="flip" role="button" tabindex="0">' +
+    '<div class="vf-card' + (f ? ' is-flipped' : '') + (arFirst ? ' vf-ar-side' : '') + '" id="vf-card" data-act="flip" role="button" tabindex="0">' +
       main + sub +
       (!f ? '<div class="vf-tap">tik voor vertaling</div>' : '') +
     '</div>' +
     '<div class="vf-nav">' +
       '<button type="button" class="btn btn-secondary" data-act="flash-prev"' + (state.idx === 0 ? ' disabled' : '') + '>‹</button>' +
-      '<button type="button" class="btn btn-primary vf-next" data-act="flash-next"' + (state.idx >= pool.length - 1 ? ' disabled' : '') + '>Volgende ›</button>' +
+      nextBtn +
     '</div>' +
   '</div>';
 };
@@ -99,6 +115,10 @@ document.addEventListener('touchend', function(e){
     if (state.idx < state.pool.length - 1) {
       state.idx++; state.flipped = false;
       if (typeof render === 'function') render();
+    } else {
+      var btn = document.querySelector('[data-act="start-learn"]');
+      if (btn) btn.click();
+      else if (typeof startLearn === 'function') startLearn(String(lessonKey()));
     }
   } else {
     if (state.idx > 0) {
@@ -120,21 +140,26 @@ style.textContent = `
 .vf-chip.on{border-color:var(--forest);background:var(--forest);color:var(--on-forest)}
 .vf-card{
   background:var(--surface);border:2px solid var(--line);border-radius:22px;
-  min-height:220px;padding:20px 18px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:240px;padding:16px 18px 28px;display:flex;flex-direction:column;align-items:center;
   text-align:center;cursor:pointer;box-shadow:0 3px 0 var(--line);
   transition:border-color .15s,transform .12s;user-select:none;-webkit-user-select:none;
-  touch-action:pan-y;gap:6px;
+  touch-action:pan-y;gap:0;justify-content:flex-start;padding-top:14px;
 }
+.vf-card.vf-ar-side{justify-content:flex-start}
 .vf-card:active{transform:scale(.99)}
 .vf-card.is-flipped{border-color:var(--gold);box-shadow:0 3px 0 var(--gold)}
-.vf-pic{display:flex;justify-content:center;margin:0 0 4px}
-.vf-pic .pic-frame,.vf-pic img{max-height:110px;width:auto;border-radius:12px}
-.vf-pic-sm .pic-frame,.vf-pic-sm img{max-height:72px}
-.vf-ar{font-family:var(--ar);font-size:clamp(28px,7.5vw,40px);font-weight:700;line-height:1.45;direction:rtl;margin-top:6px}
-.vf-ar-sm{font-family:var(--ar);font-size:clamp(22px,6vw,30px);font-weight:700;direction:rtl;margin-top:8px;color:var(--forest)}
-.vf-nl{font-size:26px;font-weight:800;line-height:1.3;letter-spacing:-.02em}
-.vf-nl-sm{font-size:16px;font-weight:600;color:var(--muted);margin-top:8px}
-.vf-tap{margin-top:14px;font-size:12px;font-weight:700;color:var(--muted);opacity:.65}
+.vf-pic{display:flex;justify-content:center;margin:0 0 2px;order:-1;flex-shrink:0}
+.vf-pic .pic-frame,.vf-pic img{max-height:100px;width:auto;border-radius:12px}
+.vf-pic-sm{margin-top:10px}
+.vf-pic-sm .pic-frame,.vf-pic-sm img{max-height:64px}
+.vf-ar{
+  font-family:var(--ar);font-size:clamp(28px,7.5vw,40px);font-weight:700;
+  line-height:1.5;direction:rtl;margin-top:22px;padding-top:4px;
+}
+.vf-ar-sm{font-family:var(--ar);font-size:clamp(22px,6vw,30px);font-weight:700;direction:rtl;margin-top:12px;color:var(--forest)}
+.vf-nl{font-size:26px;font-weight:800;line-height:1.3;letter-spacing:-.02em;margin-top:12px}
+.vf-nl-sm{font-size:16px;font-weight:600;color:var(--muted);margin-top:10px}
+.vf-tap{margin-top:auto;padding-top:16px;font-size:12px;font-weight:700;color:var(--muted);opacity:.65}
 .vf-nav{display:flex;gap:10px;margin-top:16px}
 .vf-nav .btn{flex:1}
 .vf-next{flex:2!important}
@@ -143,7 +168,7 @@ style.textContent = `
 .qcard .qar,.qcard .big-ar,.qcard .flash-mushaf{
   font-size:clamp(26px,7vw,38px)!important;
   line-height:1.45!important;
-  margin-top:4px!important;
+  margin-top:8px!important;
 }
 .flash-card .hint,.flash-card .tag,.flash-card .translit,.card .translit,.vf-ph,.translit{display:none!important}
 `;
