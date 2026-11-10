@@ -3,6 +3,10 @@
 'use strict';
 
 const LS_DONE_KEY = 'alm_gram_done_v2';
+const LS_TRANS_KEY = 'alm_gram_show_translations_v1';
+// Vertalingen worden standaard getoond en de keuze geldt voor alle lessen.
+let showGrammarTranslations = true;
+try { showGrammarTranslations = localStorage.getItem(LS_TRANS_KEY) !== '0'; } catch(e) {}
 let doneLessons = {};
 try { doneLessons = JSON.parse(localStorage.getItem(LS_DONE_KEY) || '{}'); } catch(e){}
 function saveDone(){ try { localStorage.setItem(LS_DONE_KEY, JSON.stringify(doneLessons)); } catch(e){} }
@@ -95,6 +99,19 @@ function renderLesson(n){
   const isDone = !!doneLessons[n];
   const pageTitle = 'Les ' + n;
   const contentHtml = renderInhoud(les.inhoud);
+  const translationControl = `<div class="gram-reading-tools">
+    <div class="gram-reading-desc">
+      <strong>Vertalingen bij voorbeelden</strong>
+      <small>De grammaticale uitleg blijft altijd zichtbaar.</small>
+    </div>
+    <label class="gram-trans-control">
+      <input type="checkbox" id="gram-trans-toggle" role="switch"
+        aria-label="Nederlandse vertalingen bij Arabische voorbeelden tonen"
+        ${showGrammarTranslations?'checked':''}>
+      <span class="gram-trans-track" aria-hidden="true"></span>
+      <span>Toon vertalingen</span>
+    </label>
+  </div>`;
 
   const keys = Object.keys(G).map(Number).sort((a,b)=>a-b);
   const idx = keys.indexOf(n);
@@ -110,9 +127,10 @@ function renderLesson(n){
     <div class="gram-nav-next">${nextLesson!==null?`<a href="#/grammatica/${nextLesson}" class="btn btn-primary btn-sm" data-act="open-book" data-l="${nextLesson}">Les ${nextLesson} ›</a>`:''}</div>
   </div>`;
 
-  return `<div class="gram-wrap gram-lesson-wrap">
+  return `<div class="gram-wrap gram-lesson-wrap ${showGrammarTranslations?'':'gram-trans-off'}">
     ${nav}
     <h1 class="gram-lesson-title">${pageTitle}</h1>
+    ${translationControl}
     <section class="gram-section gram-sec-theory">
       <div class="gram-content">${contentHtml}</div>
     </section>
@@ -122,6 +140,13 @@ function renderLesson(n){
 
 document.addEventListener('change', function(e){
   const t = e.target;
+  if(t && t.id === 'gram-trans-toggle'){
+    showGrammarTranslations = !!t.checked;
+    try { localStorage.setItem(LS_TRANS_KEY, showGrammarTranslations ? '1' : '0'); } catch(e) {}
+    const lesson = t.closest('.gram-lesson-wrap');
+    if(lesson) lesson.classList.toggle('gram-trans-off', !showGrammarTranslations);
+    return;
+  }
   if(t && t.id === 'gram-done-cb'){
     const n = t.getAttribute('data-l');
     if(n == null) return;
