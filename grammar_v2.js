@@ -24,8 +24,7 @@ function renderOverview(){
     const item = G[n];
     if(!item) return;
     const isDone = !!doneLessons[n];
-    const isReader8 = !!item.is_aanvulling || n === 24;
-    const label = isReader8 ? 'Reader 8 (Aanvulling)' : ('Les ' + n);
+    const label = 'Les ' + n;
     rows += `<a href="#/grammatica/${n}" class="gram-list-item ${isDone?'is-done':''}" data-act="open-book" data-l="${n}">
       <span class="gram-list-label">${label}</span>
       <span class="gram-list-status">${isDone?'<span class="gram-check">✓</span>':'<span class="gram-chevron">›</span>'}</span>
@@ -82,8 +81,7 @@ function renderLesson(n){
       <a href="#/grammatica" class="btn btn-secondary" data-act="nav" data-v="book">← Overzicht</a></div>`;
   }
   const isDone = !!doneLessons[n];
-  const isReader8 = !!les.is_aanvulling || n === 24;
-  const pageTitle = isReader8 ? 'Reader 8 (Aanvulling)' : ('Les ' + n);
+  const pageTitle = 'Les ' + n;
   const contentHtml = renderInhoud(les.inhoud);
 
   const keys = Object.keys(G).map(Number).sort((a,b)=>a-b);
@@ -128,8 +126,13 @@ function handleHashRoute(){
     window.state.path = 'grammar';
     if(parts.length >= 2){
       const lesNr = parseInt(parts[1], 10);
-      window.state.view = 'book-lesson';
-      window.state.bookLesson = isNaN(lesNr) ? 1 : lesNr;
+      if (!Number.isInteger(lesNr) || lesNr < 0 || lesNr > 23) {
+        window.state.view = 'book';
+        window.state.bookLesson = null;
+      } else {
+        window.state.view = 'book-lesson';
+        window.state.bookLesson = lesNr;
+      }
     } else {
       window.state.view = 'book';
       window.state.bookLesson = null;
@@ -149,7 +152,8 @@ function g2RenderBook(){
   return renderOverview();
 }
 function g2RenderBookLesson(){
-  const n = (window.state && window.state.bookLesson != null) ? Number(window.state.bookLesson) : 1;
+  let n = (window.state && window.state.bookLesson != null) ? Number(window.state.bookLesson) : 1;
+  if (!Number.isInteger(n) || n < 0 || n > 23) n = 1;
   const targetHash = '#/grammatica/' + n;
   if(window.location.hash !== targetHash){
     try { history.replaceState(null, '', targetHash); } catch(e){}
@@ -161,7 +165,6 @@ window.renderBookLesson = g2RenderBookLesson;
 
 const shortTitles = {};
 for(let i=0;i<=23;i++) shortTitles[i] = 'Les '+i;
-shortTitles[24] = 'Reader 8 (Aanvulling)';
 window.G2 = {
   L: window.GRAMMATICA || {},
   SHORT_TITLES: shortTitles,
