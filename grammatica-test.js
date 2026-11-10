@@ -13,7 +13,7 @@
   var session = {
     lesson: null, stage: 'overview', tasks: [], index: 0,
     chosen: -1, ordered: [], feedback: null,
-    correct: 0, missed: [], review: false, hearts: 5, combo: 0, xp: 0, wrong: 0, attempts: 0, lastMissed: []
+    correct: 0, missed: [], review: false, hearts: 5, combo: 0, xp: 0, wrong: 0, attempts: 0, lastMissed: [], queued: false
   };
 
   function plain(value) { return String(value == null ? '' : value).trim(); }
@@ -365,7 +365,7 @@
     session.index=0;session.correct=0;session.missed=[];session.lastMissed=[];
     session.chosen=-1;session.ordered=[];session.feedback=null;session.review=false;
     session.hearts=5;session.combo=0;session.xp=0;session.wrong=0;session.attempts=0;
-    session.stage='intro';render();
+    session.queued=false;session.stage='intro';render();
   }
   function setWeak(){
     var tasks=[];
@@ -383,7 +383,7 @@
     session.index=0;session.correct=0;session.missed=[];session.lastMissed=[];
     session.chosen=-1;session.ordered=[];session.feedback=null;session.review=true;
     session.hearts=5;session.combo=0;session.xp=0;session.wrong=0;session.attempts=0;
-    session.stage='play';render();
+    session.queued=false;session.stage='play';render();
   }
   function check(){
     if(!answered()||session.feedback)return;
@@ -397,6 +397,9 @@
   }
   function next(){
     session.index++;session.chosen=-1;session.ordered=[];session.feedback=null;
+    if(session.hearts>0&&session.index>=session.tasks.length&&!session.queued&&session.missed.length){
+      session.tasks=session.tasks.concat(session.missed.slice());session.queued=true;
+    }
     if(session.hearts===0||session.index>=session.tasks.length)finishRound();
     render();
   }
@@ -432,7 +435,7 @@
       session.tasks=session.lastMissed.slice();session.missed=[];session.lastMissed=[];
       session.correct=0;session.wrong=0;session.attempts=0;session.xp=0;
       session.hearts=5;session.combo=0;session.index=0;session.chosen=-1;session.ordered=[];
-      session.feedback=null;session.review=true;session.stage='play';return render();
+      session.feedback=null;session.review=true;session.queued=true;session.stage='play';return render();
     }
     if(action==='continue'){session.stage='overview';history.replaceState(null,'','grammatica-test.html');return render();}
   }
