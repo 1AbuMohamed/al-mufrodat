@@ -33,7 +33,9 @@ jobs:
           PY
           node --check /tmp/al-mufrodat-inline.js
       - name: Grammatica en dialogen met echte data testen
-        run: node scripts/test_readers.cjs
+        run: |
+          node scripts/test_readers.cjs
+          node scripts/test_bootstrap.cjs
       - name: Complete site- en assetscontrole
         run: python scripts/site_audit.py
       - name: Controleren of alle PDF's aanwezig zijn
