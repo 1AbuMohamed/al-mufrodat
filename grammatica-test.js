@@ -1,1 +1,1 @@
-PLACEHOLDER_REPLACE_WITH_FULL_FILE
+@/home/workdir/artifacts/grammatica-test.js
