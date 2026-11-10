@@ -223,6 +223,8 @@ function handleHashRoute(){
   }
   return false;
 }
+// Laat de vertraagd geladen applicatie een directe leslink altijd opnieuw toepassen.
+window.__applyGrammarDeepLink = handleHashRoute;
 window.addEventListener('hashchange', handleHashRoute);
 window.addEventListener('DOMContentLoaded', handleHashRoute);
 
