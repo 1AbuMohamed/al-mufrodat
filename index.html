@@ -49,7 +49,7 @@
 <div class="toast" id="toast"></div>
 <script>
 (async function(){
-  const GOOD = 'https://raw.githubusercontent.com/1AbuMohamed/al-mufrodat/main/index.html';
+  const GOOD = 'https://raw.githubusercontent.com/1AbuMohamed/al-mufrodat/c45e6b965b40a478bb93b686867d8ae4550c9f50/index.html';
   function scrollPageTop(){
     try {
       window.scrollTo(0, 0);
@@ -92,6 +92,10 @@
     inline = inline.replace(/\(document\.getElementById\("app"\)\|\|window\)\.scrollTop=0/g, "(window.__scrollPageTop?window.__scrollPageTop():window.scrollTo(0,0))");
     inline = inline.replace(/if\(\['book','book-lesson'\]\.includes\(state\.view\)\)return 'grammar';/, "if(['book','book-lesson'].includes(state.view))return 'grammar';\n  if(['ex','ex-lesson'].includes(state.view))return 'exercises';");
     inline = inline.replace(/else if\(state\.view==='book-lesson'\)html=\(typeof window\.renderBookLesson===\"function\"\?window\.renderBookLesson\(\):renderBookLessonFallback\(\)\);/, "else if(state.view==='book-lesson')html=(typeof window.renderBookLesson===\"function\"?window.renderBookLesson():renderBookLessonFallback());\n  else if(state.view==='ex')html=(typeof window.renderExercises===\"function\"?window.renderExercises():'<p class=\"empty\">Oefeningen laden…</p>');\n  else if(state.view==='ex-lesson')html=(typeof window.renderExerciseLesson===\"function\"?window.renderExerciseLesson():'<p class=\"empty\">Oefening laden…</p>');");
+    // Compacte labels voor de mobiele hoofdtabbalk.
+    inline = inline.replace("{v:'vocab',l:'Woorden',", "{v:'vocab',l:'Woord',")
+      .replace("{v:'book',l:'Grammatica',", "{v:'book',l:'Gram.',")
+      .replace("{v:'conv',l:'Dialogen',", "{v:'conv',l:'Praat',");
     inline = inline.replace(/book: 'Grammatica · Medina-boek',/, "book: 'Grammatica · Medina-boek',\n    ex: 'Oefeningen',\n    'ex-lesson': 'Oefeningen',");
 
     inline = inline.replace(
