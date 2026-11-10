@@ -38,6 +38,11 @@ jobs:
           node scripts/test_bootstrap.cjs
       - name: Complete site- en assetscontrole
         run: python scripts/site_audit.py
+      - name: Mobiele lesbalk in browser controleren (320–768 px)
+        run: |
+          python -m pip install --quiet playwright
+          python -m playwright install chromium
+          python scripts/test_mobile_layout.py
       - name: Controleren of alle PDF's aanwezig zijn
         run: |
           python - <<'PY'

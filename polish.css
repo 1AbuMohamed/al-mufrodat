@@ -1,32 +1,141 @@
-/* Al-Mufrodat · gerichte leesbaarheids- en toegankelijkheidsverbeteringen
-   Houd het oude styles.css intact; de onderstaande regels gelden voor de
-   vernieuwde grammatica- en dialogenschermen. */
-
-/* Grammatica: vertalingen uitzetten zonder de Nederlandse uitleg te verbergen */
-.gram-reading-tools {
+/* Grammaticapagina: compacte leesbalk en duidelijke vorige/volgende navigatie */
+.gram-lesson-wrap {
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 820px;
+}
+.gram-lesson-header {
+  margin: 0 0 14px;
+}
+.gram-lesson-utility {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px 18px;
-  margin: 0 0 20px;
-  padding: 14px 16px;
+  gap: 12px;
+  min-height: 44px;
+  margin-bottom: 4px;
+}
+.gram-lesson-utility .gram-overview-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  color: var(--forest);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.gram-lesson-utility .gram-overview-link:hover { text-decoration: underline; }
+.gram-lesson-utility .gram-done-toggle {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 4px;
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.gram-lesson-utility .gram-done-toggle input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
+.gram-lesson-header .gram-lesson-title {
+  font-size: clamp(25px, 5.3vw, 34px);
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 1px 0 16px;
+  letter-spacing: -.035em;
+}
+.gram-lesson-pager {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 10px;
+  width: 100%;
+}
+.gram-pager-slot {
+  display: flex;
+  min-width: 0;
+}
+.gram-pager-next { justify-content: flex-end; }
+.gram-pager-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 43px;
+  max-width: 100%;
+  padding: 8px 15px;
+  gap: 7px;
+  border: 1px solid var(--line-strong);
+  border-radius: 11px;
+  background: var(--surface);
+  color: var(--forest);
+  font-size: 13px;
+  line-height: 1.25;
+  font-weight: 750;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color .15s, background-color .15s;
+}
+.gram-pager-btn:hover {
+  border-color: var(--gold);
+  background: var(--forest-soft);
+}
+.gram-pager-btn.gram-pager-primary {
+  background: var(--forest);
+  color: var(--on-forest);
+  border-color: var(--forest);
+}
+.gram-pager-btn.gram-pager-primary:hover {
+  background: var(--forest-dark);
+  border-color: var(--forest-dark);
+}
+.gram-pager-count {
+  justify-self: center;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: .04em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.gram-reading-tools {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 54px;
+  margin: 0 0 22px;
+  padding: 7px 13px;
   border: 1px solid var(--line);
-  border-radius: 13px;
+  border-radius: 12px;
   background: var(--surface);
 }
-.gram-reading-desc { display: flex; flex-direction: column; gap: 3px; }
-.gram-reading-desc strong { font-size: 13px; color: var(--ink); line-height: 1.4; }
-.gram-reading-desc small { font-size: 11.5px; color: var(--muted); line-height: 1.45; }
+.gram-reading-label {
+  color: var(--ink-soft);
+  font-size: 12.5px;
+  line-height: 1.45;
+  font-weight: 650;
+}
 .gram-trans-control {
   display: inline-flex;
   position: relative;
   align-items: center;
-  gap: 10px;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+  gap: 9px;
   min-height: 44px;
-  font-size: 12.5px;
+  color: var(--muted);
+  font-size: 12px;
   font-weight: 700;
-  color: var(--ink-soft);
   cursor: pointer;
   user-select: none;
 }
@@ -39,30 +148,85 @@
 }
 .gram-trans-track {
   position: relative;
-  flex: 0 0 44px;
-  width: 44px;
-  height: 25px;
-  border-radius: 999px;
+  width: 40px;
+  height: 23px;
+  border-radius: 99px;
   background: var(--line-strong);
   transition: background-color .18s ease;
+  flex: 0 0 40px;
 }
 .gram-trans-track::after {
   content: "";
   position: absolute;
   top: 3px;
   left: 3px;
-  width: 19px;
-  height: 19px;
+  width: 17px;
+  height: 17px;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 1px 3px rgba(0,0,0,.14);
+  box-shadow: 0 1px 3px rgba(0,0,0,.13);
   transition: transform .18s ease;
 }
 .gram-trans-control input:checked + .gram-trans-track { background: var(--forest); }
-.gram-trans-control input:checked + .gram-trans-track::after { transform: translateX(19px); }
-.gram-trans-control input:focus-visible + .gram-trans-track { outline: 3px solid var(--gold); outline-offset: 3px; }
+.gram-trans-control input:checked + .gram-trans-track::after { transform: translateX(17px); }
+.gram-trans-control input:focus-visible + .gram-trans-track {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+.gram-trans-caption {
+  min-width: 22px;
+  color: var(--ink-soft);
+  font-size: 12px;
+  text-align: start;
+}
 .gram-trans-off .gram-ex-row .gram-nl { display: none !important; }
 .gram-trans-off .gram-ex-row { gap: 0; }
+.gram-lesson-footer {
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+  margin-top: 36px;
+}
+.gram-footer-overview {
+  display: block;
+  margin: 16px auto 0;
+  padding: 10px 12px;
+  width: fit-content;
+  min-height: 44px;
+  box-sizing: border-box;
+  color: var(--forest);
+  font-size: 12.5px;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+@media (max-width: 600px) {
+  .gram-lesson-wrap {
+    padding: 12px 16px 96px;
+  }
+  .gram-lesson-header { margin-bottom: 12px; }
+  .gram-lesson-header .gram-lesson-title { margin-bottom: 14px; }
+  .gram-reading-tools {
+    flex-flow: row nowrap;
+    gap: 8px;
+    min-height: 52px;
+    padding: 6px 11px;
+  }
+  .gram-reading-label { font-size: 12px; }
+  .gram-trans-control { width: auto; gap: 6px; justify-content: flex-end; }
+  .gram-pager-btn { font-size: 12.5px; padding: 8px 12px; }
+  .gram-lesson-pager { column-gap: 7px; }
+  .gram-pager-count { font-size: 10.5px; }
+}
+@media (max-width: 355px) {
+  .gram-lesson-wrap { padding-inline: 12px; }
+  .gram-pager-btn { padding: 8px 9px; gap: 4px; font-size: 12px; }
+  .gram-pager-count { font-size: 10px; }
+  .gram-reading-label { font-size: 11.5px; }
+  .gram-trans-caption { font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gram-pager-btn,.gram-trans-track,.gram-trans-track::after { transition: none; }
+}
 
 /* Dialogen: tekstgerichte leesweergave zonder foto's of avatar-icoontjes */
 .conv-overview { max-width: 1040px; }
@@ -257,8 +421,6 @@
 
 /* Ook op kleine schermen voldoende ruimte voor Arabisch en de knoppen */
 @media (max-width: 600px) {
-  .gram-reading-tools { padding: 12px; gap: 8px; }
-  .gram-trans-control { width: 100%; justify-content: space-between; }
   .conv-page-head { align-items: flex-start; }
   .conv-reader-hero { padding: 14px 15px; }
   .conv-chat-bubble,.conv-chat-row.spk-b .conv-chat-bubble { width: 100%; padding: 12px 13px; }

@@ -99,42 +99,52 @@ function renderLesson(n){
   const isDone = !!doneLessons[n];
   const pageTitle = 'Les ' + n;
   const contentHtml = renderInhoud(les.inhoud);
-  const translationControl = `<div class="gram-reading-tools">
-    <div class="gram-reading-desc">
-      <strong>Vertalingen bij voorbeelden</strong>
-      <small>De grammaticale uitleg blijft altijd zichtbaar.</small>
-    </div>
-    <label class="gram-trans-control">
-      <input type="checkbox" id="gram-trans-toggle" role="switch"
-        aria-label="Nederlandse vertalingen bij Arabische voorbeelden tonen"
-        ${showGrammarTranslations?'checked':''}>
-      <span class="gram-trans-track" aria-hidden="true"></span>
-      <span>Toon vertalingen</span>
-    </label>
-  </div>`;
-
+  // Compacte lesbalk: geen knoppen meer die ongeordend om elkaar heen vouwen.
   const keys = Object.keys(G).map(Number).sort((a,b)=>a-b);
   const idx = keys.indexOf(n);
   const prevLesson = idx > 0 ? keys[idx-1] : null;
   const nextLesson = idx < keys.length-1 ? keys[idx+1] : null;
 
-  const nav = `<div class="gram-top-nav">
-    <div class="gram-nav-prev">${prevLesson!==null?`<a href="#/grammatica/${prevLesson}" class="btn btn-secondary btn-sm" data-act="open-book" data-l="${prevLesson}">‹ Les ${prevLesson}</a>`:''}</div>
-    <div class="gram-nav-center">
-      <a href="#/grammatica" class="gram-overview-link" data-act="nav" data-v="book">Overzicht</a>
-      <label class="gram-done-toggle"><input type="checkbox" id="gram-done-cb" data-l="${n}" ${isDone?'checked':''}><span>Les afgerond</span></label>
+  const pager = `<nav class="gram-lesson-pager" aria-label="Bladeren tussen grammaticalessen">
+    <div class="gram-pager-slot gram-pager-prev">
+      ${prevLesson!==null ? `<a href="#/grammatica/${prevLesson}" class="gram-pager-btn gram-pager-outline" data-act="open-book" data-l="${prevLesson}" aria-label="Vorige les: les ${prevLesson}"><span aria-hidden="true">←</span> Les ${prevLesson}</a>` : ''}
     </div>
-    <div class="gram-nav-next">${nextLesson!==null?`<a href="#/grammatica/${nextLesson}" class="btn btn-primary btn-sm" data-act="open-book" data-l="${nextLesson}">Les ${nextLesson} ›</a>`:''}</div>
+    <span class="gram-pager-count" aria-label="Les ${n} van 23">${String(n).padStart(2,'0')} / 23</span>
+    <div class="gram-pager-slot gram-pager-next">
+      ${nextLesson!==null ? `<a href="#/grammatica/${nextLesson}" class="gram-pager-btn gram-pager-primary" data-act="open-book" data-l="${nextLesson}" aria-label="Volgende les: les ${nextLesson}">Les ${nextLesson} <span aria-hidden="true">→</span></a>` : ''}
+    </div>
+  </nav>`;
+
+  const header = `<header class="gram-lesson-header">
+    <div class="gram-lesson-utility">
+      <a href="#/grammatica" class="gram-overview-link" data-act="nav" data-v="book"><span aria-hidden="true">←</span> Alle lessen</a>
+      <label class="gram-done-toggle"><input type="checkbox" id="gram-done-cb" data-l="${n}" ${isDone?'checked':''}><span>Afgerond</span></label>
+    </div>
+    <h1 class="gram-lesson-title">${pageTitle}</h1>
+    ${pager}
+  </header>`;
+
+  const translationControl = `<div class="gram-reading-tools">
+    <span class="gram-reading-label">Vertalingen bij voorbeelden</span>
+    <label class="gram-trans-control">
+      <input type="checkbox" id="gram-trans-toggle" role="switch"
+        aria-label="Nederlandse vertalingen bij Arabische voorbeelden tonen"
+        ${showGrammarTranslations?'checked':''}>
+      <span class="gram-trans-track" aria-hidden="true"></span>
+      <span class="gram-trans-caption">${showGrammarTranslations?'Aan':'Uit'}</span>
+    </label>
   </div>`;
 
   return `<div class="gram-wrap gram-lesson-wrap ${showGrammarTranslations?'':'gram-trans-off'}">
-    ${nav}
-    <h1 class="gram-lesson-title">${pageTitle}</h1>
+    ${header}
     ${translationControl}
     <section class="gram-section gram-sec-theory">
       <div class="gram-content">${contentHtml}</div>
     </section>
-    ${nav}
+    <footer class="gram-lesson-footer">
+      ${pager}
+      <a href="#/grammatica" class="gram-footer-overview" data-act="nav" data-v="book">Terug naar alle lessen</a>
+    </footer>
   </div>`;
 }
 
@@ -145,6 +155,8 @@ document.addEventListener('change', function(e){
     try { localStorage.setItem(LS_TRANS_KEY, showGrammarTranslations ? '1' : '0'); } catch(e) {}
     const lesson = t.closest('.gram-lesson-wrap');
     if(lesson) lesson.classList.toggle('gram-trans-off', !showGrammarTranslations);
+    const caption = t.closest('.gram-trans-control')?.querySelector('.gram-trans-caption');
+    if(caption) caption.textContent = showGrammarTranslations ? 'Aan' : 'Uit';
     return;
   }
   if(t && t.id === 'gram-done-cb'){
