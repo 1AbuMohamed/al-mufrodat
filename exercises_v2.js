@@ -16,10 +16,10 @@ function saveParse(){ try { localStorage.setItem(LS_PARSE, parseOn ? '1' : '0');
 const E = s => {
   if (s == null) return '';
   return String(s)
-    .replace(/&/g, '&')
-    .replace(/</g, '<')
-    .replace(/>/g, '>')
-    .replace(/"/g, '"')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 };
 
@@ -359,21 +359,36 @@ function renderExLesson(){
   return renderLesson(n);
 }
 
+let hashInitAttempts = 0;
 function handleHash(){
-  const m = (location.hash || '').match(/^#\/oefeningen(?:\/(\d+))?$/);
-  if (!m) return;
+  const m = (location.hash || '').match(/^#\\/oefeningen(?:\\/(\\d+))?$/);
+  if (!m) { hashInitAttempts = 0; return; }
+  // The app shell is loaded asynchronously; DOMContentLoaded can fire before state exists.
+  if (!window.state) {
+    if (hashInitAttempts < 30) {
+      hashInitAttempts += 1;
+      setTimeout(handleHash, 100);
+    }
+    return;
+  }
+  hashInitAttempts = 0;
   if (m[1]) {
     const n = parseInt(m[1], 10);
-    if (window.state) {
+    if (n >= 1 && n <= 23) {
       window.state.path = 'exercises';
       window.state.view = 'ex-lesson';
       window.state.exLesson = n;
+    } else {
+      window.state.path = 'exercises';
+      window.state.view = 'ex';
+      window.state.exLesson = null;
     }
-  } else if (window.state) {
+  } else {
     window.state.path = 'exercises';
     window.state.view = 'ex';
     window.state.exLesson = null;
   }
+  if (typeof window.render === 'function') window.render();
 }
 
 window.renderExercises = renderExHub;

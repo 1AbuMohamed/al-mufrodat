@@ -76,14 +76,6 @@ window.PARSE_DATA = {
     ]
   }
 };
-(function () {
-  var P = window.PARSE_DATA.SENTENCES;
-  for (var n = 11; n <= 23; n++) {
-    if (!P[n]) {
-      P[n] = [
-        { tokens: [{ t: 'الْكِتَابُ', r: 'mubtada' }, { t: 'جَدِيدٌ', r: 'khabar' }] },
-        { tokens: [{ t: 'الطَّالِبُ', r: 'mubtada' }, { t: 'فِي', r: 'jar' }, { t: 'الْفَصْلِ', r: 'majrur' }] }
-      ];
-    }
-  }
-})();
+// Alleen zinnen met een gecontroleerde leskoppeling opnemen.
+// Voor lessen 11–23 is nog geen betrouwbare, lesgebonden ontleding beschikbaar;
+// de UI verbergt het onderdeel daar automatisch in plaats van herhaalde voorbeeldzinnen te tonen.
