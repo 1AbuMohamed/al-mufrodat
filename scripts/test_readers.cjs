@@ -59,6 +59,13 @@ assert.equal((lesson5.match(/id="gram-trans-toggle"/g)||[]).length, 1, 'Vertaalo
 assert.equal((lesson5.match(/class="gram-lesson-title"/g)||[]).length, 1, 'Eén lestitel');
 assert.match(lesson5, /class="gram-reading-label">Vertalingen bij voorbeelden/);
 assert.match(lesson5, /class="gram-trans-caption">Aan/);
+assert.match(lesson5, /class="gram-next-steps"/, 'Lesroute moet beschikbaar zijn');
+assert.match(lesson5, /data-act="start-flash" data-l="5"/, 'Woordenschat van huidige les');
+assert.match(lesson5, /data-act="open-ex" data-l="5"/, 'Oefeningen van huidige les');
+assert.match(lesson5, /class="gram-reveal-btn" aria-expanded="false">Vertaling tonen/, 'Zelftest op voorbeelden');
+assert.match(lesson5, /class="gram-ex-row"><span class="gram-ar"/, 'Arabisch verschijnt vóór de Nederlandse vertaling');
+const sourceExample = G[5].inhoud.find(row => row.type === 'voorbeeld' && row.ar && row.nl);
+assert(sourceExample && lesson5.includes(sourceExample.ar), 'De originele Arabische tekst moet behouden blijven');
 assert.doesNotMatch(lesson5, /gram-top-nav|gram-nav-center/, 'Geen oude verbrokkelde navigatie');
 window.state.bookLesson = 0;
 const lesson0 = grammarHtml();
@@ -76,14 +83,14 @@ let toggleClass = '';
 transChange({target: {
   id: 'gram-trans-toggle',
   checked: false,
-  closest: () => ({classList: {toggle(name, bool) {toggleClass = name + ':' + bool;}}, querySelector: () => ({textContent:'Aan'})})
+  closest: () => ({classList: {toggle(name, bool) {toggleClass = name + ':' + bool;}}, querySelector: () => ({textContent:'Aan'}), querySelectorAll: () => []})
 }});
 assert.equal(store.get('alm_gram_show_translations_v1'), '0');
 assert.equal(toggleClass, 'gram-trans-off:true');
 assert.match(grammarHtml(), /gram-lesson-wrap gram-trans-off/);
 transChange({target: {
   id:'gram-trans-toggle', checked:true,
-  closest: () => ({classList:{toggle(){}}, querySelector: () => ({textContent:'Uit'})})
+  closest: () => ({classList:{toggle(){}}, querySelector: () => ({textContent:'Uit'}), querySelectorAll: () => []})
 }});
 assert.doesNotMatch(grammarHtml(), /gram-lesson-wrap gram-trans-off/);
 

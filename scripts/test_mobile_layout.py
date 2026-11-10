@@ -87,6 +87,46 @@ def main():
             page.locator(".gram-lesson-header .gram-pager-next a").click()
             page.wait_for_function("document.querySelector('.gram-lesson-title')?.textContent.trim() === 'Les 6'")
             assert page.locator("#gram-done-cb").count() == 1, "Dubbele afgerond-checkbox"
+            # Actief ophalen van de vertaling; oorspronkelijke lesinhoud blijft behouden.
+            assert page.locator(".gram-ex-row").count() > 1, "Voorbeelden ontbreken"
+            assert page.locator(".gram-next-actions button").count() == 2, "Leerroute ontbreekt"
+            first = page.locator(".gram-ex-row").filter(has=page.locator(".gram-reveal-btn")).first
+            example_ar = first.locator(".gram-ar").inner_text()
+            example_nl = first.locator(".gram-nl").inner_text()
+            assert example_ar.strip() and example_nl.strip()
+            page.locator("#gram-trans-toggle").uncheck()
+            button = first.locator(".gram-reveal-btn")
+            assert button.is_visible(), "Zelftest-knop ontbreekt wanneer vertalingen uit staan"
+            assert not first.locator(".gram-nl").is_visible(), "Vertaling moet verborgen zijn"
+            button.click()
+            assert first.locator(".gram-nl").is_visible(), "Enkele vertaling werd niet onthuld"
+            assert button.inner_text() == "Vertaling verbergen"
+            button.click()
+            assert not first.locator(".gram-nl").is_visible()
+            page.locator("#gram-trans-toggle").check()
+            assert first.locator(".gram-nl").is_visible(), "Globale vertaalinstelling werkt niet"
+            assert first.locator(".gram-ar").inner_text() == example_ar, "Arabische inhoud veranderde"
+            assert first.locator(".gram-nl").inner_text() == example_nl, "Nederlandse inhoud veranderde"
+            print("OK: zelftest per voorbeeld werkt zonder Arabisch of Nederlands te wijzigen")
+            page.set_viewport_size({"width": 390, "height": 844})
+            page.locator(".gram-next-vocab").click()
+            page.wait_for_function("window.state?.view === 'flash'")
+            page.locator('.tabbar [data-act="nav"][data-v="vocab"]').click()
+            page.wait_for_selector(".duo-lesson-actions .duo-practice-btn")
+            assert page.locator(".duo-lesson-actions .duo-practice-btn").count() >= 23
+            assert page.locator(".duo-lesson-actions .vocab-pdf-link").count() == 22
+            action = page.locator('.duo-practice-btn[data-l="6"]')
+            assert action.is_visible()
+            action.click()
+            page.wait_for_function("window.state?.view === 'learn'")
+            print("OK: leerroute grammatica → woordenschat → lesquiz werkt")
+            # Controleer ook de afzonderlijke grammaticaoefeningen vanuit de les.
+            page.goto(f"http://127.0.0.1:{server.server_port}/#/grammatica/6", wait_until="domcontentloaded")
+            page.wait_for_selector(".gram-next-exercise", timeout=20000)
+            page.locator(".gram-next-exercise").click()
+            page.wait_for_function("window.state?.view === 'ex-lesson'")
+            assert page.locator("#app").inner_text().strip(), "Oefenpagina is leeg"
+            print("OK: grammatica → oefeningen van dezelfde les werkt")
             print("OK: schakelaar werkt en volgende-lesknop navigeert naar Les 6")
             browser.close()
     finally:
