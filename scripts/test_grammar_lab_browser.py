@@ -76,7 +76,7 @@ def main():
     errors = []
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True, args=["--no-sandbox"])
+            browser = p.chromium.launch(headless=True, args=["--no-sandbox"], channel=os.environ.get("PW_CHANNEL") or None)
             page = browser.new_page(
                 viewport={"width": 390, "height": 844},
                 device_scale_factor=1,
@@ -100,8 +100,10 @@ def main():
             assert "geen afzonderlijke" in page.locator(".gd-intro").inner_text()
             assert page.locator('a[href="index.html#/grammatica/0"]').count() > 0
             page.goto(f"http://127.0.0.1:{server.server_port}/grammatica-test.html")
-            page.wait_for_selector(".gd-lesson-card", timeout=10000)
-            assert page.locator(".gd-lesson-card").count() == 24
+            page.wait_for_selector('[data-h="tab"][data-v="lessons"]', timeout=10000)
+            page.locator('[data-h="tab"][data-v="lessons"]').click()
+            page.wait_for_selector(".lh-tile", timeout=10000)
+            assert page.locator(".lh-tile").count() == 24
             assert not errors, "Browserfouten: " + ", ".join(errors)
             browser.close()
             print("OK: 24 leskaarten, geen verzonnen opgaven voor les 0, geen JavaScript-fouten.")

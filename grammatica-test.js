@@ -167,6 +167,15 @@
       localStorage.setItem(SAVE_KEY, JSON.stringify(scores));
 
       // Mirror naar v2 structuur
+      // Dagvoortgang, streak en beheersing (startpagina)
+      if (window.GrammarLabHome) {
+        window.GrammarLabHome.record({
+          lesson: session.lesson, correct: session.correct, total: session.tasks.length,
+          xp: session.xp, review: session.review
+        });
+        session.xp = 0;
+        return;
+      }
       var v2 = JSON.parse(localStorage.getItem(SAVE_KEY_V2) || '{"items":{},"daily":{},"xp":0,"streak":1}');
       v2.xp = (v2.xp || 0) + session.xp;
       localStorage.setItem(SAVE_KEY_V2, JSON.stringify(v2));
@@ -192,13 +201,15 @@
     }).join('');
   }
 
+  var HOUSE = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 10.5 12 3l9 7.5V21H3z"/><path d="M9 21v-7h6v7"/></svg>';
+
   function topBar() {
     var finished = session.stage === 'done', intro = session.stage === 'intro';
     var total = Math.max(1, session.tasks.length);
     var completed = finished ? total : intro ? 0 : session.index;
     var percent = Math.round(100 * completed / total);
     return '<div class="gd-lesson-bar">' +
-      '<button type="button" class="gd-home" data-action="overview" aria-label="Terug naar overzicht" title="Overzicht">✕</button>' +
+      '<button type="button" class="gd-home" data-action="overview" aria-label="Naar het startscherm" title="Startscherm">' + HOUSE + '</button>' +
       '<div class="gd-progress-wrap"><div class="gd-progress-title">' +
       '<strong>Les ' + session.lesson + '</strong><span>' + (finished ? 'Afgerond' : intro ? 'Voorbereiding' : (completed + 1) + ' / ' + total) +
       '</span></div><div class="gd-progress" role="progressbar" aria-label="Voortgang oefenronde" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + percent + '">' +
@@ -208,6 +219,10 @@
   }
 
   function overview() {
+    return window.GrammarLabHome ? window.GrammarLabHome.view() : legacyOverview();
+  }
+
+  function legacyOverview() {
     var scores = storedScores();
     var keys = Object.keys(DATA).map(Number).sort(function (a, b) { return a - b; });
     var totalXP = 0;
@@ -383,10 +398,29 @@
 
   function render() {
     if (!app) return;
+    var home = session.stage === 'overview' && !!window.GrammarLabHome;
+    if (document.body && document.body.classList) document.body.classList.toggle('lh-on', home);
     app.innerHTML = session.stage === 'overview' ? overview() :
       session.stage === 'intro' ? intro() :
       session.stage === 'done' ? finished() : taskScreen();
+    if (home) window.GrammarLabHome.afterRender();
+    else if (window.scrollTo && session.stage !== 'play') { try { window.scrollTo(0, 0); } catch (_e) {} }
   }
+
+  // Koppeling met de startpagina (grammatica-test-home.js)
+  window.GrammarLabEngine = {
+    refresh: render,
+    isHome: function () { return session.stage === 'overview'; },
+    open: function (n, mode) {
+      setLesson(n);
+      if (!session.tasks.length) {
+        if (window.GrammarLabHome) window.GrammarLabHome.markRead(n);
+      } else if (mode === 'start') {
+        session.stage = 'play';
+        render();
+      }
+    }
+  };
 
   function setLesson(n) {
     if (!Object.prototype.hasOwnProperty.call(DATA, n)) { session.stage = 'overview'; render(); return; }
@@ -400,6 +434,7 @@
     session.ordered = [];
     session.feedback = null;
     session.review = false;
+    session.xp = 0;
     session.stage = 'intro';
     render();
   }
@@ -443,6 +478,8 @@
     if (!node) return;
     var action = node.getAttribute('data-action');
     if (action === 'overview') {
+      if (session.stage === 'play' && !window.confirm('Weet je het zeker? Je voortgang van deze ronde gaat verloren.')) return;
+      if (window.GrammarLabHome) window.GrammarLabHome.enter();
       session.stage = 'overview';
       if (history.replaceState) history.replaceState(null, '', 'grammatica-test.html');
       return render();
@@ -495,6 +532,7 @@
     app = document.getElementById('gd-app');
     if (!app) return;
     app.addEventListener('click', onClick);
+    if (window.GrammarLabHome) window.GrammarLabHome.mount(app, window.GrammarLabEngine);
     var requested = new URLSearchParams(location.search).get('les');
     if (requested !== null && /^\d+$/.test(requested) && Object.prototype.hasOwnProperty.call(DATA, requested)) {
       setLesson(Number(requested));

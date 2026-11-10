@@ -22,7 +22,11 @@
     }catch(e){ audioCtx=null; }
     return audioCtx;
   }
+  function muted(){
+    try{ return JSON.parse(localStorage.getItem('alm_grammar_test_settings_v1')||'{}').sound === false; }catch(e){ return false; }
+  }
   function tone(freq, start, dur, type, gain){
+    if(muted()) return;
     var ctx=ensureAudio(); if(!ctx) return;
     var o=ctx.createOscillator(), g=ctx.createGain();
     o.type=type||'sine';
