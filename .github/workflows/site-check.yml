@@ -1,0 +1,43 @@
+name: Basiscontroles website
+
+on:
+  push:
+    paths-ignore:
+      - "pdf/**"
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: JavaScript syntax controleren
+        run: |
+          node --check app_core.js
+          node --check grammar_v2.js
+          node --check vocab_duo.js
+          node --check exercises_v2.js
+          node --check conv_duo.js
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          html = Path("index.html").read_text(encoding="utf-8")
+          inline = re.findall(r"<script(?:\s[^>]*)?>([\s\S]*?)</script>", html)
+          assert inline and any("const GOOD" in x for x in inline), "Inline bootloader ontbreekt"
+          Path("/tmp/al-mufrodat-inline.js").write_text("\n".join(inline), encoding="utf-8")
+          PY
+          node --check /tmp/al-mufrodat-inline.js
+      - name: Controleren of alle PDF's aanwezig zijn
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          expected = set(range(1, 24)) - {11}
+          actual = {int(p.stem.rsplit("-", 1)[-1]) for p in Path("pdf").glob("woordenlijst-les-*.pdf")}
+          assert actual == expected, f"PDF's mismatch: {actual ^ expected}"
+          for p in Path("pdf").glob("woordenlijst-les-*.pdf"):
+              assert p.read_bytes().startswith(b"%PDF-"), f"Geen PDF: {p}"
+          print(f"{len(actual)} geldige PDF-bestanden gevonden")
+          PY
