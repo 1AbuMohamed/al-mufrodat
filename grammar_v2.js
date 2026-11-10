@@ -63,7 +63,10 @@ function renderInhoud(inhoud){
     } else if(item.type === 'voorbeeld'){
       const ar = item.ar ? `<span class="gram-ar" lang="ar" dir="rtl">${E(item.ar)}</span>` : '';
       const nl = item.nl ? `<span class="gram-nl">${formatDutchText(item.nl)}</span>` : '';
-      html += `<div class="gram-ex-row">${nl}${ar}</div>`;
+      // De lesdata blijft letterlijk gelijk. Alleen de presentatie verschuift
+      // naar Arabisch eerst, daarna de vertaling; optioneel zelf op te vragen.
+      const reveal = item.nl ? '<button type="button" class="gram-reveal-btn" aria-expanded="false">Vertaling tonen</button>' : '';
+      html += `<div class="gram-ex-row">${ar}${nl}${reveal}</div>`;
     } else if(item.type === 'tabel'){
       let thead = '';
       if(item.kop && item.kop.length){
@@ -124,6 +127,14 @@ function renderLesson(n){
     ${pager}
   </header>`;
 
+  const nextSteps = n >= 1 ? `<aside class="gram-next-steps" aria-label="Deze les verder oefenen">
+    <strong>Verder oefenen met les ${n}</strong>
+    <div class="gram-next-actions">
+      <button type="button" class="gram-next-link gram-next-vocab" data-act="start-flash" data-l="${n}">Woorden oefenen <span aria-hidden="true">→</span></button>
+      <button type="button" class="gram-next-link gram-next-exercise" data-act="open-ex" data-l="${n}">Grammatica oefenen <span aria-hidden="true">→</span></button>
+    </div>
+  </aside>` : '';
+
   const translationControl = `<div class="gram-reading-tools">
     <span class="gram-reading-label">Vertalingen bij voorbeelden</span>
     <label class="gram-trans-control">
@@ -141,6 +152,7 @@ function renderLesson(n){
     <section class="gram-section gram-sec-theory">
       <div class="gram-content">${contentHtml}</div>
     </section>
+    ${nextSteps}
     <footer class="gram-lesson-footer">
       ${pager}
       <a href="#/grammatica" class="gram-footer-overview" data-act="nav" data-v="book">Terug naar alle lessen</a>
@@ -148,13 +160,33 @@ function renderLesson(n){
   </div>`;
 }
 
+// Zelftest: met globale vertalingen UIT kan een student één voorbeeld
+// onthullen en weer verbergen. De Arabische zin en vertaling zijn ongewijzigd.
+document.addEventListener('click', function(e){
+  const button = e.target && e.target.closest && e.target.closest('.gram-reveal-btn');
+  if(!button) return;
+  const example = button.closest('.gram-ex-row');
+  const lesson = button.closest('.gram-lesson-wrap');
+  if(!example || !lesson || !lesson.classList.contains('gram-trans-off')) return;
+  const isRevealed = example.classList.toggle('is-revealed');
+  button.setAttribute('aria-expanded', String(isRevealed));
+  button.textContent = isRevealed ? 'Vertaling verbergen' : 'Vertaling tonen';
+});
+
 document.addEventListener('change', function(e){
   const t = e.target;
   if(t && t.id === 'gram-trans-toggle'){
     showGrammarTranslations = !!t.checked;
     try { localStorage.setItem(LS_TRANS_KEY, showGrammarTranslations ? '1' : '0'); } catch(e) {}
     const lesson = t.closest('.gram-lesson-wrap');
-    if(lesson) lesson.classList.toggle('gram-trans-off', !showGrammarTranslations);
+    if(lesson){
+      lesson.classList.toggle('gram-trans-off', !showGrammarTranslations);
+      lesson.querySelectorAll('.gram-ex-row.is-revealed').forEach(row => {
+        row.classList.remove('is-revealed');
+        const button = row.querySelector('.gram-reveal-btn');
+        if(button){ button.textContent = 'Vertaling tonen'; button.setAttribute('aria-expanded', 'false'); }
+      });
+    }
     const caption = t.closest('.gram-trans-control')?.querySelector('.gram-trans-caption');
     if(caption) caption.textContent = showGrammarTranslations ? 'Aan' : 'Uit';
     return;
