@@ -6,13 +6,13 @@
 <title>Al-Mufrodat — Medina Arabisch · Woordenschat, Grammatica & Dialogen</title>
 <meta name="theme-color" content="#F5F0E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="styles.css?v=20261110h">
-<script src="lessons_v2.js?v=20261110h"></script>
-<script src="grammar_v2.js?v=20261110h"></script>
-<script src="parse_data.js?v=20261110h"></script>
-<script src="exercises_v2.js?v=20261110h"></script>
-<script src="conv_duo.js?v=20261110h"></script>
-<script src="vocab_duo.js?v=20261110h"></script>
+<link rel="stylesheet" href="styles.css?v=20261110i">
+<script src="lessons_v2.js?v=20261110i"></script>
+<script src="grammar_v2.js?v=20261110i"></script>
+<script src="parse_data.js?v=20261110i"></script>
+<script src="exercises_v2.js?v=20261110i"></script>
+<script src="conv_duo.js?v=20261110i"></script>
+<script src="vocab_duo.js?v=20261110i"></script>
 <style>
 .duo-head{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin-bottom:18px}
 .duo-stat{flex:1;min-width:100px;background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
@@ -25,26 +25,21 @@
 .duo-path{display:flex;flex-direction:column;align-items:center;gap:0;max-width:420px;margin:0 auto;padding:8px 0 24px}
 .duo-node-wrap{display:flex;flex-direction:column;align-items:center;width:100%;position:relative}
 .duo-connector{width:4px;height:22px;background:var(--line);border-radius:4px}
-.duo-node-wrap.done .duo-connector,.duo-node-wrap.busy + .duo-node-wrap .duo-connector{background:var(--gold)}
-.duo-node{width:100%;display:flex;align-items:center;gap:14px;padding:12px 14px;background:var(--surface);border:2px solid var(--line);border-radius:18px;cursor:pointer;text-align:start;font:inherit;color:inherit;transition:transform .15s ease,border-color .15s,box-shadow .15s;box-shadow:0 2px 0 var(--line)}
-.duo-node:hover{transform:translateY(-2px);border-color:var(--gold);box-shadow:0 4px 0 var(--gold)}
-.duo-node:active{transform:translateY(1px);box-shadow:0 1px 0 var(--line)}
-.duo-node.done{border-color:var(--ok);box-shadow:0 2px 0 var(--ok)}
-.duo-node.busy{border-color:var(--gold);box-shadow:0 2px 0 var(--gold)}
+.duo-node{width:100%;display:flex;align-items:center;gap:14px;padding:12px 14px;background:var(--surface);border:2px solid var(--line);border-radius:18px;cursor:pointer;text-align:start;font:inherit;color:inherit;box-shadow:0 2px 0 var(--line)}
+.duo-node.done{border-color:var(--ok)}
+.duo-node.busy{border-color:var(--gold)}
 .duo-bubble{width:52px;height:52px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;font-weight:800;font-size:16px;background:var(--paper-deep);color:var(--muted);border:3px solid var(--line)}
-.duo-node.busy .duo-bubble{background:var(--gold);color:#173B3F;border-color:var(--gold-soft)}
-.duo-node.done .duo-bubble{background:var(--ok);color:#fff;border-color:#34a853}
+.duo-node.busy .duo-bubble{background:var(--gold);color:#173B3F}
+.duo-node.done .duo-bubble{background:var(--ok);color:#fff}
 .duo-node-body{flex:1;min-width:0}
-.duo-node-body strong{display:block;font-size:15px;font-weight:700;line-height:1.25}
+.duo-node-body strong{display:block;font-size:15px;font-weight:700}
 .duo-node-body span{font-size:12.5px;color:var(--muted)}
-.duo-node-cta{font-size:12px;font-weight:700;color:var(--forest);flex-shrink:0}
-.duo-node.done .duo-node-cta{color:var(--ok)}
-.duo-node.busy .duo-node-cta{color:var(--gold)}
+.duo-node-cta{font-size:12px;font-weight:700;color:var(--forest)}
 .flash-card .hint,.flash-card .translit,.card .translit{display:none!important}
-.vl-phases,.vl-kicker,.path-alts,.sh-eyebrow,.lesson .status{display:none!important}
-.learn-mini .mini-btn,.session-top .tag,.flash-card .tag{display:none!important}
-.sbn-course .sb-chevron{display:inline-block;transition:transform .15s ease}
-.sbn-course[aria-expanded="true"] .sb-chevron{transform:rotate(180deg)}
+.qcard .q-pic{margin:0 0 10px!important}
+.qcard .q-pic .pic-frame,.qcard .q-pic img{max-height:120px!important;width:auto}
+.qcard .qar,.qcard .big-ar{font-size:clamp(26px,7vw,38px)!important;line-height:1.45!important;margin-top:6px!important}
+.gram-sec-title{display:none!important}
 </style>
 </head>
 <body>
@@ -63,10 +58,6 @@
       document.body.scrollTop = 0;
       const app = document.getElementById('app');
       if (app) app.scrollTop = 0;
-      requestAnimationFrame(function(){
-        window.scrollTo(0, 0);
-        if (app) app.scrollTop = 0;
-      });
     } catch (e) {}
   }
   window.__scrollPageTop = scrollPageTop;
@@ -114,10 +105,7 @@
       "const convLinks = Object.entries(CONVERSATIONS).map(([u, c]) => {\n    const active = state.view==='conv-unit' && String(state.convUnit)===String(u);\n    const num = String(u).padStart(2,'0');\n    return `<button type=\"button\" class=\"${active?'active':''}\" data-act=\"open-conv\" data-u=\"${u}\"><span>${num}</span>${esc(c.titleNl)}</button>`;\n  }).join('');\n\n  const exListNums = [];\n  for (let i = 1; i <= 23; i++) exListNums.push(i);\n  const exLinks = exListNums.map(n => {\n    const active = state.view==='ex-lesson' && Number(state.exLesson)===Number(n);\n    const num = String(n).padStart(2,'0');\n    const isDone = (window.EX2 && window.EX2.lessonDone) ? window.EX2.lessonDone(n) : false;\n    return `<button type=\"button\" class=\"${active?'active':''}\" data-act=\"open-ex\" data-l=\"${n}\"><span>${num}</span>Les ${n}${isDone?' ✓':''}</button>`;\n  }).join('');"
     );
 
-    inline = inline.replace(
-      /else if\(act==='open-book'\)\{/,
-      "else if(act==='open-ex'){\n    const n = parseInt(btn.dataset.l, 10);\n    if(isNaN(n)) return;\n    sbMenuState.ex = true;\n    state.path = 'exercises';\n    state.view = 'ex-lesson';\n    state.exLesson = n;\n    try{history.pushState(null,'','#/oefeningen/'+n)}catch(e){}\n    render();\n    if(window.__scrollPageTop) window.__scrollPageTop();\n    return;\n  }\n  else if(act==='open-book'){"
-    );
+    inline = inline.replace(/else if\(act==='open-book'\)\{/, "else if(act==='open-ex'){\n    const n = parseInt(btn.dataset.l, 10);\n    if(isNaN(n)) return;\n    sbMenuState.ex = true;\n    state.path = 'exercises';\n    state.view = 'ex-lesson';\n    state.exLesson = n;\n    try{history.pushState(null,'','#/oefeningen/'+n)}catch(e){}\n    render();\n    if(window.__scrollPageTop) window.__scrollPageTop();\n    return;\n  }\n  else if(act==='open-book'){");
 
     inline = inline.replace(
       /else if\(v==='book'\)\{state\.path='grammar';state\.view='book';state\.bookLesson=null;state\.bookTab='uitleg';if\(state\.g2\)state\.g2\.view='map';sbMenuState\.gram=true;try\{history\.pushState\(null,'','#\/grammatica'\)\}catch\(e\)\{\}\}/,
@@ -135,10 +123,6 @@
     inline = inline.replace(
       /(<button type="button" class="sbn \$\{path==='vocab'&&state\.view!=='words'&&state\.view!=='home'\?'active':''\}" data-act="nav" data-v="vocab">[\s\S]*?<\/button>\s*)\n\s*(<button type="button" class="sbn sbn-course \$\{path==='grammar'\?'active':''\}" data-act="sb-menu" data-menu="gram"[\s\S]*?<\/div>\s*)/,
       "$2\n\n      $1"
-    );
-    inline = inline.replace(
-      /\{v:'vocab',l:'Woorden',svg:'[^']*',active:path==='vocab'&&state\.view!=='home'\},\s*\{v:'book',l:'Grammatica',svg:'[^']*',active:path==='grammar'\}/,
-      "{v:'book',l:'Grammatica',svg:'<path d=\"M12 2L2 7l10 5 10-5-10-5z\"/><path d=\"M2 17l10 5 10-5\"/><path d=\"M2 12l10 5 10-5\"/>',active:path==='grammar'},\n    {v:'vocab',l:'Woorden',svg:'<path d=\"M4 19.5A2.5 2.5 0 0 1 6.5 17H20\"/><path d=\"M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z\"/>',active:path==='vocab'&&state.view!=='home'}"
     );
 
     const s = document.createElement('script');
@@ -166,9 +150,9 @@
         const meta = p >= 100 ? ('★ ' + mm + '/' + ws.length) : (mm + '/' + ws.length + ' · ' + p + '%');
         const cta = p >= 100 ? 'Herhaal' : (p > 0 ? 'Ga verder' : 'Start');
         if (i > 0) path += '<div class="duo-connector"></div>';
-        path += '<div class="duo-node-wrap ' + stt + '"><button type="button" class="duo-node ' + stt + '" data-act="start-flash" data-l="' + n + '"><span class="duo-bubble">' + (p>=100?'✓':String(n)) + '</span><span class="duo-node-body"><strong>Les ' + n + (title?' · '+esc(title):'') + '</strong><span>' + meta + '</span></span><span class="duo-node-cta">' + cta + ' ›</span></button></div>';
+        path += '<div class="duo-node-wrap ' + stt + '"><button type="button" class="duo-node ' + stt + '" data-act="start-learn" data-l="' + n + '"><span class="duo-bubble">' + (p>=100?'✓':String(n)) + '</span><span class="duo-node-body"><strong>Les ' + n + (title?' · '+esc(title):'') + '</strong><span>' + meta + '</span></span><span class="duo-node-cta">' + cta + ' ›</span></button></div>';
       });
-      return '<div class="desktop-page"><div style="margin-bottom:8px"><h1 style="font-size:24px;font-weight:800;margin:0 0 4px">Woordenschat</h1><p style="margin:0;color:var(--muted);font-size:14px">Tik voor vertaling · swipe voor volgende</p></div><div class="duo-head"><div class="duo-stat"><span class="k">Beheerst</span><span class="v">' + m + '/' + total + '</span></div><div class="duo-stat gold"><span class="k">Voortgang</span><span class="v">' + pct + '%</span></div><div class="duo-stat fire"><span class="k">Reeks</span><span class="v">🔥 ' + st + '</span></div><div class="duo-stat"><span class="k">XP</span><span class="v">' + xp + '</span></div></div><div class="duo-tools"><button class="btn btn-sm btn-secondary" data-act="start-learn" data-l="all">Quiz</button><span class="grow"></span><button class="btn btn-secondary btn-sm" data-act="nav" data-v="words">Lijst</button></div><div class="duo-path">' + path + '</div></div>';
+      return '<div class="desktop-page"><div style="margin-bottom:8px"><h1 style="font-size:24px;font-weight:800;margin:0 0 4px">Woordenschat</h1><p style="margin:0;color:var(--muted);font-size:14px">Quiz per les · kaarten via knop hieronder</p></div><div class="duo-head"><div class="duo-stat"><span class="k">Beheerst</span><span class="v">' + m + '/' + total + '</span></div><div class="duo-stat gold"><span class="k">Voortgang</span><span class="v">' + pct + '%</span></div><div class="duo-stat fire"><span class="k">Reeks</span><span class="v">🔥 ' + st + '</span></div><div class="duo-stat"><span class="k">XP</span><span class="v">' + xp + '</span></div></div><div class="duo-tools"><button class="btn btn-sm btn-primary" data-act="start-learn" data-l="all">Quiz</button><button class="btn btn-sm btn-secondary" data-act="start-flash" data-l="all">Kaarten</button><span class="grow"></span><button class="btn btn-secondary btn-sm" data-act="nav" data-v="words">Lijst</button></div><div class="duo-path">' + path + '</div></div>';
     };
     try { renderVocabHub = window.renderVocabHub; } catch (e) {}
 
