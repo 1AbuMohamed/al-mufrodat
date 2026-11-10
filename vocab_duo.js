@@ -1,12 +1,6 @@
-/* Woordenschat flash · simpel: tik = vertaling, swipe / Volgende */
+/* Woordenschat flash · tik = vertaling, swipe / Volgende · geen fonetiek */
 (function(){
 'use strict';
-
-var LS_PH = 'alm_show_phonetic_v1';
-var showPhonetic = true;
-try { showPhonetic = localStorage.getItem(LS_PH) !== '0'; } catch(e){}
-
-function savePh(){ try { localStorage.setItem(LS_PH, showPhonetic ? '1' : '0'); } catch(e){} }
 
 function escLocal(s){
   if (typeof esc === 'function') return esc(s);
@@ -33,7 +27,7 @@ window.renderFlash = function renderFlash(){
   if (!f) {
     if (arFirst) {
       main = '<div class="vf-ar ar ar-mark" lang="ar">' + arHtml + '</div>';
-      sub = showPhonetic && w.translit ? '<div class="vf-ph">' + escLocal(w.translit) + '</div>' : '';
+      sub = '';
     } else {
       main = '<div class="vf-nl">' + escLocal(w.nl) + '</div>';
       sub = '';
@@ -41,12 +35,10 @@ window.renderFlash = function renderFlash(){
   } else {
     if (arFirst) {
       main = '<div class="vf-nl">' + escLocal(w.nl) + '</div>';
-      sub = '<div class="vf-ar-sm ar ar-mark" lang="ar">' + arHtml + '</div>' +
-        (showPhonetic && w.translit ? '<div class="vf-ph">' + escLocal(w.translit) + '</div>' : '');
+      sub = '<div class="vf-ar-sm ar ar-mark" lang="ar">' + arHtml + '</div>';
     } else {
       main = '<div class="vf-ar ar ar-mark" lang="ar">' + arHtml + '</div>';
-      sub = (showPhonetic && w.translit ? '<div class="vf-ph">' + escLocal(w.translit) + '</div>' : '') +
-        '<div class="vf-nl-sm">' + escLocal(w.nl) + '</div>';
+      sub = '<div class="vf-nl-sm">' + escLocal(w.nl) + '</div>';
     }
   }
 
@@ -59,7 +51,6 @@ window.renderFlash = function renderFlash(){
     '<div class="vf-tools">' +
       '<button type="button" class="vf-chip' + (arFirst ? ' on' : '') + '" data-act="set-flash-dir" data-d="ar2nl">AR</button>' +
       '<button type="button" class="vf-chip' + (!arFirst ? ' on' : '') + '" data-act="set-flash-dir" data-d="nl2ar">NL</button>' +
-      '<button type="button" class="vf-chip' + (showPhonetic ? ' on' : '') + '" id="vf-ph-toggle" title="Fonetisch">Aa</button>' +
     '</div>' +
     '<div class="vf-card' + (f ? ' is-flipped' : '') + '" id="vf-card" data-act="flip" role="button" tabindex="0">' +
       main + sub +
@@ -71,17 +62,6 @@ window.renderFlash = function renderFlash(){
     '</div>' +
   '</div>';
 };
-
-document.addEventListener('click', function(e){
-  var t = e.target;
-  if (t && (t.id === 'vf-ph-toggle' || (t.closest && t.closest('#vf-ph-toggle')))) {
-    e.preventDefault();
-    e.stopPropagation();
-    showPhonetic = !showPhonetic;
-    savePh();
-    if (typeof render === 'function') render();
-  }
-}, true);
 
 var sx = 0, sy = 0, tracking = false;
 document.addEventListener('touchstart', function(e){
@@ -138,12 +118,11 @@ style.textContent = `
 .vf-ar-sm{font-family:var(--ar);font-size:28px;font-weight:700;direction:rtl;margin-top:10px;color:var(--forest)}
 .vf-nl{font-size:26px;font-weight:800;line-height:1.3;letter-spacing:-.02em}
 .vf-nl-sm{font-size:16px;font-weight:600;color:var(--muted);margin-top:8px}
-.vf-ph{font-size:14px;color:var(--muted);margin-top:8px;font-weight:600}
 .vf-tap{margin-top:18px;font-size:12px;font-weight:700;color:var(--muted);opacity:.65}
 .vf-nav{display:flex;gap:10px;margin-top:16px}
 .vf-nav .btn{flex:1}
 .vf-next{flex:2!important}
-.session-top .tag,.flash-card .hint,.flash-card .tag,.learn-mini{display:none!important}
+.session-top .tag,.flash-card .hint,.flash-card .tag,.learn-mini,.flash-card .translit,.card .translit,.vf-ph{display:none!important}
 `;
 document.head.appendChild(style);
 })();
