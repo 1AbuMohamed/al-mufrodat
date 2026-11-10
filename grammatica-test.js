@@ -131,7 +131,7 @@
     try{
       var raw=JSON.parse(localStorage.getItem(SAVE_KEY)||'null');
       if(raw&&typeof raw==='object')Object.assign(d,raw);
-      else d.legacy=JSON.parse(localStorage.getItem(OLD_KEY)||'{}');
+      else { d.legacy=JSON.parse(localStorage.getItem(OLD_KEY)||'{}'); try{localStorage.setItem(SAVE_KEY,JSON.stringify(d));}catch(_e){} }
     }catch(_e){}
     d.items=d.items||{};d.daily=d.daily||{};return d;
   }
@@ -139,8 +139,8 @@
   function key(n,ar){return n+'|'+plain(ar);}
   function mastery(n,ar){return readSave().items[key(n,ar)]||{level:0,due:'',misses:0,last:''};}
   function crowns(n){var a=getExamples(n);return a.length?Math.max(0,Math.min(5,Math.round(a.reduce(function(t,e){return t+(mastery(n,e.ar).level||0);},0)/a.length))):0;}
-  function weakened(n){return getExamples(n).some(function(e){var m=mastery(n,e.ar);return m.due&&m.due<today();});}
-  function firstNext(){var keys=Object.keys(DATA).map(Number).sort(function(a,b){return a-b;});return keys.find(function(n){return crowns(n)<1;})??keys[0];}
+  function weakened(n){return getExamples(n).some(function(e){var m=mastery(n,e.ar);return m.due&&m.due<=today();});}
+  function firstNext(){var keys=Object.keys(DATA).map(Number).sort(function(a,b){return a-b;});return keys.find(function(n){return getExamples(n).length&&crowns(n)<1;})??keys[0];}
   function refreshStreak(d){
     var days=Object.keys(d.daily).filter(function(x){return d.daily[x]>=d.goal;}).sort();
     var last=days[days.length-1];if(!last){d.streak=0;return;}
@@ -314,7 +314,7 @@
   function taskFeedback(task){
     if(!session.feedback)return '';
     var good=session.feedback.correct;
-    return '<section class="gd-feedback-sheet '+(good?'good':'review')+'" role="status" aria-live="assertive">'+
+    return '<section class="gd-feedback gd-feedback-sheet '+(good?'good':'review')+'" role="status" aria-live="assertive">'+
       '<div class="gd-feedback-inner"><strong>'+(good?['Goed!','Prima!','Uitstekend!'][session.index%3]:'Juiste antwoord:')+'</strong>'+
       (session.combo>=3?'<span class="gd-combo">'+session.combo+'× combo</span>':'')+
       '<p class="gd-arabic" lang="ar" dir="rtl">'+esc(task.example.ar)+'</p>'+
