@@ -44,6 +44,32 @@ const grammarHtml = () => window.renderBookLesson();
 assert.match(grammarHtml(), /id="gram-trans-toggle"/);
 assert.match(grammarHtml(), /class="gram-nl"/);
 assert.doesNotMatch(grammarHtml(), /gram-trans-off/);
+
+// Mobiele lesbalk: overzicht, status, vorige en volgende bij elkaar,
+// en géén dubbele checkbox bij de onderste lesnavigatie.
+window.state.bookLesson = 5;
+let lesson5 = grammarHtml();
+assert.match(lesson5, /class="gram-lesson-header"/);
+assert.match(lesson5, /class="gram-lesson-pager"/);
+assert.match(lesson5, /aria-label="Vorige les: les 4"/);
+assert.match(lesson5, /aria-label="Volgende les: les 6"/);
+assert.match(lesson5, /05 \/ 23/);
+assert.equal((lesson5.match(/id="gram-done-cb"/g)||[]).length, 1, 'Afgerond niet herhalen');
+assert.equal((lesson5.match(/id="gram-trans-toggle"/g)||[]).length, 1, 'Vertaaloptie niet herhalen');
+assert.equal((lesson5.match(/class="gram-lesson-title"/g)||[]).length, 1, 'Eén lestitel');
+assert.match(lesson5, /class="gram-reading-label">Vertalingen bij voorbeelden/);
+assert.match(lesson5, /class="gram-trans-caption">Aan/);
+assert.doesNotMatch(lesson5, /gram-top-nav|gram-nav-center/, 'Geen oude verbrokkelde navigatie');
+window.state.bookLesson = 0;
+const lesson0 = grammarHtml();
+assert.doesNotMatch(lesson0, /aria-label="Vorige les:/);
+assert.match(lesson0, /aria-label="Volgende les: les 1"/);
+window.state.bookLesson = 23;
+const lesson23 = grammarHtml();
+assert.match(lesson23, /aria-label="Vorige les: les 22"/);
+assert.doesNotMatch(lesson23, /aria-label="Volgende les:/);
+window.state.bookLesson = 5;
+
 const transChange = listeners.change.find(fn => fn.toString().includes('gram-trans-toggle'));
 assert(transChange, 'De aan/uit-schakelaar is niet bedraad');
 let toggleClass = '';
