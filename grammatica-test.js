@@ -123,19 +123,64 @@
     splitArabic: splitArabic, choicesFor: choicesFor
   };
 
-  function storedScores() {
-    try { return JSON.parse(localStorage.getItem(SAVE_KEY) || '{}') || {}; }
-    catch (_err) { return {}; }
+  function today(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+  function addDays(day,n){var p=day.split('-').map(Number),d=new Date(p[0],p[1]-1,p[2]+n);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+  function weekOf(day){var p=day.split('-').map(Number),d=new Date(p[0],p[1]-1,p[2]);d.setDate(d.getDate()-(d.getDay()+6)%7);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+  function readSave(){
+    var d={items:{},daily:{},goal:20,xp:0,streak:0,freezeWeek:'',lastGoalDay:''};
+    try{
+      var raw=JSON.parse(localStorage.getItem(SAVE_KEY)||'null');
+      if(raw&&typeof raw==='object')Object.assign(d,raw);
+      else d.legacy=JSON.parse(localStorage.getItem(OLD_KEY)||'{}');
+    }catch(_e){}
+    d.items=d.items||{};d.daily=d.daily||{};return d;
   }
-  function storeScore() {
-    try {
-      var scores = storedScores();
-      scores[session.lesson] = {
-        correct: session.correct, total: session.tasks.length,
-        reviewed: session.review, date: new Date().toISOString().slice(0, 10)
-      };
-      localStorage.setItem(SAVE_KEY, JSON.stringify(scores));
-    } catch (_err) {}
+  function writeSave(d){try{localStorage.setItem(SAVE_KEY,JSON.stringify(d));}catch(_e){}}
+  function key(n,ar){return n+'|'+plain(ar);}
+  function mastery(n,ar){return readSave().items[key(n,ar)]||{level:0,due:'',misses:0,last:''};}
+  function crowns(n){var a=getExamples(n);return a.length?Math.max(0,Math.min(5,Math.round(a.reduce(function(t,e){return t+(mastery(n,e.ar).level||0);},0)/a.length))):0;}
+  function weakened(n){return getExamples(n).some(function(e){var m=mastery(n,e.ar);return m.due&&m.due<today();});}
+  function firstNext(){var keys=Object.keys(DATA).map(Number).sort(function(a,b){return a-b;});return keys.find(function(n){return crowns(n)<1;})??keys[0];}
+  function refreshStreak(d){
+    var days=Object.keys(d.daily).filter(function(x){return d.daily[x]>=d.goal;}).sort();
+    var last=days[days.length-1];if(!last){d.streak=0;return;}
+    var count=1,used=false,cur=last;
+    for(var i=days.length-2;i>=0;i--){
+      if(days[i]===addDays(cur,-1)){count++;cur=days[i];continue;}
+      var skipped=addDays(cur,-1);
+      if(!used&&days[i]===addDays(cur,-2)&&d.freezeWeek!==weekOf(skipped)){
+        used=true;d.freezeWeek=weekOf(skipped);count+=2;cur=days[i];continue;
+      }
+      break;
+    }
+    d.lastGoalDay=last;d.streak=(last===today()||last===addDays(today(),-1))?count:0;
+  }
+  function credit(task,good){
+    var d=readSave(),n=task.lesson===undefined?session.lesson:task.lesson;
+    var k=key(n,task.example.ar),old=d.items[k]||{level:0,misses:0};
+    var level=Math.max(0,Math.min(5,(old.level||0)+(good?1:-1)));
+    d.items[k]={level:level,due:addDays(today(),good?[0,1,3,7,14,30][level]:0),misses:(old.misses||0)+(good?0:1),last:today()};
+    session.attempts++;
+    if(good){session.correct++;session.combo++;session.xp+=10;d.xp+=10;d.daily[today()]=(d.daily[today()]||0)+10;}
+    else{session.wrong++;session.combo=0;session.hearts=Math.max(0,session.hearts-1);session.missed.push(task);}
+    refreshStreak(d);writeSave(d);
+  }
+  function finishRound(){
+    session.lastMissed=session.missed.slice();session.stage='done';
+    if(session.attempts&&session.wrong===0){
+      var d=readSave();d.xp+=5;d.daily[today()]=(d.daily[today()]||0)+5;session.xp+=5;refreshStreak(d);writeSave(d);
+    }
+  }
+  function icon(name){
+    var paths={
+      flame:'<path d="M12 22c5 0 8-4 8-8 0-3-2-5-4-7 0 3-2 4-3 5C13 7 11 4 8 2c0 5-4 8-4 12 0 5 3 8 8 8Z"/>',
+      star:'<path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z"/>',
+      crown:'<path d="m2 7 5 4 5-8 5 8 5-4-2 12H4Z"/>',
+      heart:'<path d="M20 5a5 5 0 0 0-7 0l-1 1-1-1a5 5 0 0 0-7 7l8 9 8-9a5 5 0 0 0 0-7Z"/>',
+      check:'<path d="m4 12 5 5L20 6"/>',
+      book:'<path d="M12 6C9 4 6 4 2 5v15c4-1 7-1 10 1 3-2 6-2 10-1V5c-4-1-7-1-10 1Z"/><path d="M12 6v15"/>'
+    };
+    return '<svg class="gd-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+paths[name]+'</svg>';
   }
   function lessonUrl(n) { return 'index.html#/grammatica/' + n; }
   function introSample(n) {
