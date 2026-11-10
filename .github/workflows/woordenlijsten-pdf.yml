@@ -39,5 +39,7 @@ jobs:
             echo "Geen PDF-wijzigingen"
           else
             git commit -m "Genereer PDF-woordenlijsten per les"
-            git push
+            git fetch origin "$GITHUB_REF_NAME"
+            git rebase "origin/$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
           fi
