@@ -1,0 +1,40 @@
+name: Grammatica Lab proefversie controleren
+
+on:
+  push:
+    paths:
+      - 'grammatica-test.html'
+      - 'grammatica-test.js'
+      - 'grammatica-test.css'
+      - 'lessons_v2.js'
+      - 'scripts/test_grammar_lab.cjs'
+      - 'scripts/test_grammar_lab_browser.py'
+      - '.github/workflows/grammar-lab-check.yml'
+  pull_request:
+    paths:
+      - 'grammatica-test.html'
+      - 'grammatica-test.js'
+      - 'grammatica-test.css'
+      - 'lessons_v2.js'
+      - 'scripts/test_grammar_lab.cjs'
+      - 'scripts/test_grammar_lab_browser.py'
+      - '.github/workflows/grammar-lab-check.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  lab:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code ophalen
+        uses: actions/checkout@v4
+      - name: Syntax en originele Medina-data toetsen
+        run: |
+          node --check grammatica-test.js
+          node scripts/test_grammar_lab.cjs
+      - name: Mobiele browsercontrole
+        run: |
+          python -m pip install --quiet playwright
+          python -m playwright install chromium
+          python scripts/test_grammar_lab_browser.py
