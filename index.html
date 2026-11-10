@@ -6,13 +6,13 @@
 <title>Al-Mufrodat — Medina Arabisch · Woordenschat, Grammatica & Dialogen</title>
 <meta name="theme-color" content="#F5F0E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="styles.css?v=20261110g">
-<script src="lessons_v2.js?v=20261110g"></script>
-<script src="grammar_v2.js?v=20261110g"></script>
-<script src="parse_data.js?v=20261110g"></script>
-<script src="exercises_v2.js?v=20261110g"></script>
-<script src="conv_duo.js?v=20261110g"></script>
-<script src="vocab_duo.js?v=20261110g"></script>
+<link rel="stylesheet" href="styles.css?v=20261110h">
+<script src="lessons_v2.js?v=20261110h"></script>
+<script src="grammar_v2.js?v=20261110h"></script>
+<script src="parse_data.js?v=20261110h"></script>
+<script src="exercises_v2.js?v=20261110h"></script>
+<script src="conv_duo.js?v=20261110h"></script>
+<script src="vocab_duo.js?v=20261110h"></script>
 <style>
 .duo-head{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin-bottom:18px}
 .duo-stat{flex:1;min-width:100px;background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
@@ -40,48 +40,9 @@
 .duo-node-cta{font-size:12px;font-weight:700;color:var(--forest);flex-shrink:0}
 .duo-node.done .duo-node-cta{color:var(--ok)}
 .duo-node.busy .duo-node-cta{color:var(--gold)}
-.qcard{border-radius:18px!important;padding:20px 18px!important;border-width:2px!important}
-.options{gap:12px!important}
-.opt{border-radius:16px!important;border-width:2px!important;min-height:56px!important;font-weight:700!important;box-shadow:0 3px 0 var(--line)!important;transition:transform .12s ease,box-shadow .12s,border-color .12s,background .12s!important}
-.opt:hover{transform:translateY(-2px);box-shadow:0 5px 0 var(--line)!important}
-.opt.correct{background:var(--ok-soft)!important;border-color:var(--ok)!important;color:var(--ok)!important;box-shadow:0 3px 0 var(--ok)!important;animation:duoPop .35s ease}
-.opt.wrong{background:var(--clay-soft)!important;border-color:var(--clay)!important;box-shadow:0 3px 0 var(--clay)!important;animation:duoShake .4s ease}
-@keyframes duoPop{0%{transform:scale(.94)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
-@keyframes duoShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
-@keyframes duoFloat{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-18px);opacity:0}}
-.duo-float-xp{position:fixed;z-index:500;pointer-events:none;font-weight:800;font-size:18px;color:var(--gold);animation:duoFloat .9s ease forwards;text-shadow:0 1px 0 rgba(0,0,0,.15)}
-.feedback{border-radius:18px 18px 0 0!important;border-width:2px 0 0!important;padding:16px 18px!important}
-.feedback.show{animation:duoSlideUp .25s ease}
-@keyframes duoSlideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.feedback.ok{background:#d7f5e3!important;border-color:var(--ok)!important}
-.feedback.no{background:#fde4e0!important;border-color:var(--clay)!important}
-[data-theme="dark"] .feedback.ok{background:rgba(72,187,120,.2)!important}
-[data-theme="dark"] .feedback.no{background:rgba(226,109,92,.2)!important}
-.feedback .txt{font-size:16px!important}
-.feedback.ok .txt::before{content:"✓ ";font-weight:900}
-.feedback.no .txt::before{content:"✗ ";font-weight:900}
-.progress{height:10px!important;border-radius:99px!important;background:var(--paper-deep)!important}
-.progress>i{background:linear-gradient(90deg,var(--gold),#e8c46a)!important;box-shadow:0 0 8px var(--gold-pale)}
-.learn-hud{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
-.learn-hud .combo{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--gold-pale);border:1.5px solid var(--gold);font-weight:800;font-size:13px;color:#8a6a1f}
-.learn-hud .xp-pill{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;background:var(--forest-soft);border:1.5px solid var(--forest);font-weight:800;font-size:13px;color:var(--forest)}
-.sum-celebrate{font-size:42px;line-height:1;margin-bottom:6px}
-.sum-xp{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;background:var(--gold-pale);border:1.5px solid var(--gold);font-weight:800;color:#8a6a1f;margin:8px 0 4px}
-.card,.gram-wrap .card,section.card{border-radius:16px}
-.btn-primary{border-radius:14px!important;box-shadow:0 3px 0 rgba(0,0,0,.12);font-weight:700}
-.btn-primary:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.12)}
-.btn-secondary{border-radius:14px!important}
-.gram-list-item{border-radius:14px!important;transition:transform .12s,border-color .12s}
-.gram-list-item:hover{transform:translateY(-1px);border-color:var(--gold)}
 .flash-card .hint,.flash-card .translit,.card .translit{display:none!important}
-.vl-phases{display:none!important}
-.vl-kicker{display:none!important}
-.learn-mini .mini-btn{display:none!important}
-.session-top .tag,.flash-card .tag{display:none!important}
-.sh-eyebrow{display:none!important}
-.path-alts{display:none!important}
-.lesson .status{display:none!important}
-.ex-block{border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.vl-phases,.vl-kicker,.path-alts,.sh-eyebrow,.lesson .status{display:none!important}
+.learn-mini .mini-btn,.session-top .tag,.flash-card .tag{display:none!important}
 .sbn-course .sb-chevron{display:inline-block;transition:transform .15s ease}
 .sbn-course[aria-expanded="true"] .sb-chevron{transform:rotate(180deg)}
 </style>
@@ -104,8 +65,6 @@
       if (app) app.scrollTop = 0;
       requestAnimationFrame(function(){
         window.scrollTo(0, 0);
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
         if (app) app.scrollTop = 0;
       });
     } catch (e) {}
@@ -121,7 +80,7 @@
       const body = match[1];
       if (body.includes('const BASE_WORDS') || body.includes('function render(')) { inline = body; break; }
     }
-    if (!inline) throw new Error('Inline app script niet gevonden in history');
+    if (!inline) throw new Error('Inline app script niet gevonden');
 
     inline = inline
       .replace(/function renderBook\(\)\{\s*if\(window\.renderBook\) return window\.renderBook\(\);\s*return '';\s*\}/, 'function renderBookFallback(){ return ""; }')
@@ -131,7 +90,7 @@
 
     inline = inline.replace(
       /if\(m==='gram'\)\{\s*sbMenuState\.gram = true;\s*state\.path='grammar';\s*if\(state\.view==='book-lesson'\)\{\s*state\.view='book';\s*state\.bookLesson=null;\s*try\{history\.pushState\(null,'','#\/grammatica'\)\}\s*catch\(e\)\{\}\s*\} else if\(state\.view!=='book'\)\{\s*state\.view='book';\s*state\.bookLesson=null;\s*try\{history\.pushState\(null,'','#\/grammatica'\)\}\s*catch\(e\)\{\}\s*\}\s*render\(\);\s*\(document\.getElementById\("app"\)\|\|window\)\.scrollTop=0;\s*return;\s*\}/,
-      "if(m==='gram'){\n      const willOpen = !sbMenuState.gram;\n      sbMenuState.gram = willOpen;\n      if(willOpen){\n        state.path='grammar';\n        if(state.view!=='book' && state.view!=='book-lesson'){\n          state.view='book'; state.bookLesson=null;\n          try{history.pushState(null,'','#/grammatica')}catch(e){}\n        }\n      }\n      render();\n      if(willOpen && window.__scrollPageTop) window.__scrollPageTop();\n      return;\n    }\n    if(m==='ex'){\n      const willOpenEx = !sbMenuState.ex;\n      sbMenuState.ex = willOpenEx;\n      if(willOpenEx){\n        state.path='exercises';\n        if(state.view!=='ex' && state.view!=='ex-lesson'){\n          state.view='ex'; state.exLesson=null;\n          try{history.pushState(null,'','#/oefeningen')}catch(e){}\n        }\n      }\n      render();\n      if(willOpenEx && window.__scrollPageTop) window.__scrollPageTop();\n      return;\n    }"
+      "if(m==='gram'){const willOpen=!sbMenuState.gram;sbMenuState.gram=willOpen;if(willOpen){state.path='grammar';if(state.view!=='book'&&state.view!=='book-lesson'){state.view='book';state.bookLesson=null;try{history.pushState(null,'','#/grammatica')}catch(e){}}}render();if(willOpen&&window.__scrollPageTop)window.__scrollPageTop();return;}if(m==='ex'){const willOpenEx=!sbMenuState.ex;sbMenuState.ex=willOpenEx;if(willOpenEx){state.path='exercises';if(state.view!=='ex'&&state.view!=='ex-lesson'){state.view='ex';state.exLesson=null;try{history.pushState(null,'','#/oefeningen')}catch(e){}}}render();if(willOpenEx&&window.__scrollPageTop)window.__scrollPageTop();return;}"
     );
 
     inline = inline
@@ -140,7 +99,6 @@
 
     inline = inline.replace(/let sbMenuState = \{ gram: false, conv: false \};/, "let sbMenuState = { gram: false, conv: false, ex: false };\nwindow.sbMenuState = sbMenuState;");
     inline = inline.replace(/else if\(act==='open-book'\)\{\s*state\.path='grammar';/, "else if(act==='open-book'){\n    sbMenuState.gram=true;\n    state.path='grammar';");
-    inline = inline.replace(/state\.view='book-lesson';\s*try\{history\.pushState\(null,'','#'\/grammatica\/'\+state\.bookLesson\)\}\s*catch\(e\)\{\}\s*render\(\);\s*\(document\.getElementById\("app"\)\|\|window\)\.scrollTop=0;/, "state.view='book-lesson';\n    try{history.pushState(null,'','#/grammatica/'+state.bookLesson)}catch(e){}\n    render();\n    if(window.__scrollPageTop) window.__scrollPageTop();");
     inline = inline.replace(/\(document\.getElementById\("app"\)\|\|window\)\.scrollTop=0/g, "(window.__scrollPageTop?window.__scrollPageTop():window.scrollTo(0,0))");
     inline = inline.replace(/if\(\['book','book-lesson'\]\.includes\(state\.view\)\)return 'grammar';/, "if(['book','book-lesson'].includes(state.view))return 'grammar';\n  if(['ex','ex-lesson'].includes(state.view))return 'exercises';");
     inline = inline.replace(/else if\(state\.view==='book-lesson'\)html=\(typeof window\.renderBookLesson===\"function\"\?window\.renderBookLesson\(\):renderBookLessonFallback\(\)\);/, "else if(state.view==='book-lesson')html=(typeof window.renderBookLesson===\"function\"?window.renderBookLesson():renderBookLessonFallback());\n  else if(state.view==='ex')html=(typeof window.renderExercises===\"function\"?window.renderExercises():'<p class=\"empty\">Oefeningen laden…</p>');\n  else if(state.view==='ex-lesson')html=(typeof window.renderExerciseLesson===\"function\"?window.renderExerciseLesson():'<p class=\"empty\">Oefening laden…</p>');");
@@ -170,24 +128,22 @@
     inline = inline.replace(/else if\(state\.view==='conv-unit'\)html=renderConvUnit\(\);/, "else if(state.view==='conv-unit')html=(typeof window.renderConvUnit===\"function\"?window.renderConvUnit():renderConvUnit());");
     inline = inline.replace(/else if\(state\.view==='flash'\)html=renderFlash\(\);/, "else if(state.view==='flash')html=(typeof window.renderFlash===\"function\"?window.renderFlash():renderFlash());");
     inline = inline.replace(/state\.convUnit=String\(btn\.dataset\.u\|\|''\);state\.view='conv-unit';state\.convOpen=\{\};state\.convShowAll=true;state\.convDi=0;state\.path='conv';/, "state.convUnit=String(btn.dataset.u||'');state.view='conv-unit';state.convOpen={};state.convShowAll=false;state.convDi=0;state.path='conv';");
-
     inline = inline.replace(/<div class="hint">\$\{f\?'Tik of druk Spatie om terug te draaien':'Tik of druk Spatie voor antwoord'\}<\/div>/g, '');
     inline = inline.replace(/<div class="vl-translit" style="margin-bottom:12px">Transcriptie-hint: <strong>\$\{esc\(w\.translit\|\|''\)\}<\/strong><\/div>/g, '');
 
+    // Grammatica boven Woordenschat
     inline = inline.replace(
-      /function showFb\(ok,text\)\{[\s\S]*?const delay = ok \? 2000 : 3000;/,
-      "function showFb(ok,text){\n  clearVocabFbTimer();\n  const bar=document.getElementById('fb');const txt=document.getElementById('fb-txt');const btn=document.getElementById('fb-btn');\n  if(!bar)return;\n  if(ok){\n    window.__duoCombo=(window.__duoCombo||0)+1;\n    const combo=window.__duoCombo;\n    const gain = combo>=5?15:combo>=3?12:10;\n    if(typeof window.__duoXP==='number'){ window.__duoXP+=gain; try{localStorage.setItem('alm_xp',String(window.__duoXP))}catch(e){} }\n    const float=document.createElement('div'); float.className='duo-float-xp'; float.textContent='+'+gain+' XP';\n    float.style.left=(window.innerWidth/2-28)+'px'; float.style.top=(window.innerHeight*0.4)+'px';\n    document.body.appendChild(float); setTimeout(function(){float.remove()},900);\n    const cheers=['Goed zo!','Top!','Mooi!','Yes!','Sterk!','Super!'];\n    const cheer=cheers[Math.floor(Math.random()*cheers.length)];\n    const comboTxt=combo>=2?(' · 🔥 combo ×'+combo):'';\n    txt.innerHTML=cheer+comboTxt+(text&&text!=='Goed'&&text!=='Beheerst'?('<div style=\"font-size:13px;font-weight:600;opacity:.85;margin-top:3px\">'+text+'</div>'):'');\n  } else {\n    window.__duoCombo=0;\n    txt.innerHTML='Bijna! <div style=\"font-size:13px;font-weight:600;opacity:.9;margin-top:3px\">'+text+'</div>';\n  }\n  bar.className='feedback show '+(ok?'ok':'no');\n  if(btn){ btn.style.display='inline-flex'; btn.textContent=ok?'Door! →':'Oké, verder →'; }\n  bar.onclick=(e)=>{ if(e.target&&e.target.id!=='fb-btn'&&_vocabFbTimer){ clearVocabFbTimer(); txt.innerHTML=txt.innerHTML+' <small style=\"display:block;opacity:0.8;font-size:12px;margin-top:4px\">⏸️ Timer gepauzeerd</small>'; } };\n  const delay = ok ? 1600 : 2800;"
+      /(<button type="button" class="sbn \$\{path==='vocab'&&state\.view!=='words'&&state\.view!=='home'\?'active':''\}" data-act="nav" data-v="vocab">[\s\S]*?<\/button>\s*)\n\s*(<button type="button" class="sbn sbn-course \$\{path==='grammar'\?'active':''\}" data-act="sb-menu" data-menu="gram"[\s\S]*?<\/div>\s*)/,
+      "$2\n\n      $1"
     );
-    inline = inline.replace(/state\.asked=0; state\.correct=0; state\.answered=false;/, "state.asked=0; state.correct=0; state.answered=false; window.__duoCombo=0;");
+    inline = inline.replace(
+      /\{v:'vocab',l:'Woorden',svg:'[^']*',active:path==='vocab'&&state\.view!=='home'\},\s*\{v:'book',l:'Grammatica',svg:'[^']*',active:path==='grammar'\}/,
+      "{v:'book',l:'Grammatica',svg:'<path d=\"M12 2L2 7l10 5 10-5-10-5z\"/><path d=\"M2 17l10 5 10-5\"/><path d=\"M2 12l10 5 10-5\"/>',active:path==='grammar'},\n    {v:'vocab',l:'Woorden',svg:'<path d=\"M4 19.5A2.5 2.5 0 0 1 6.5 17H20\"/><path d=\"M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z\"/>',active:path==='vocab'&&state.view!=='home'}"
+    );
 
     const s = document.createElement('script');
     s.textContent = inline;
     document.body.appendChild(s);
-
-    window.addEventListener('hashchange', function(){
-      const h = location.hash || '';
-      if (h.indexOf('#/grammatica') === 0 || h.indexOf('#/oefeningen') === 0) scrollPageTop();
-    });
 
     window.__duoXP = (function(){ try { return parseInt(localStorage.getItem('alm_xp')||'0',10)||0; } catch(e){ return 0; } })();
     window.__duoCombo = 0;
@@ -201,66 +157,21 @@
       })() : 0;
       const xp = window.__duoXP||0;
       let path = '';
-      const nums = lessonNums();
-      nums.forEach(function(n, i){
+      lessonNums().forEach(function(n, i){
         const ws = wordsFor(n);
         const mm = mastered(ws);
         const p = ws.length ? Math.round(100 * mm / ws.length) : 0;
         const stt = p >= 100 ? 'done' : p > 0 ? 'busy' : '';
         const title = VOCAB_TITLES[n] || (LESSON_META[n] || ['', ''])[0];
-        const meta = p >= 100 ? ('★ ' + mm + '/' + ws.length + ' beheerst') : (mm + '/' + ws.length + ' · ' + p + '%');
+        const meta = p >= 100 ? ('★ ' + mm + '/' + ws.length) : (mm + '/' + ws.length + ' · ' + p + '%');
         const cta = p >= 100 ? 'Herhaal' : (p > 0 ? 'Ga verder' : 'Start');
-        const bubble = p >= 100 ? '✓' : String(n);
         if (i > 0) path += '<div class="duo-connector"></div>';
-        path += '<div class="duo-node-wrap ' + stt + '">' +
-          '<button type="button" class="duo-node ' + stt + '" data-act="start-flash" data-l="' + n + '">' +
-            '<span class="duo-bubble">' + bubble + '</span>' +
-            '<span class="duo-node-body"><strong>Les ' + n + (title ? ' · ' + esc(title) : '') + '</strong>' +
-            '<span>' + meta + '</span></span>' +
-            '<span class="duo-node-cta">' + cta + ' ›</span>' +
-          '</button></div>';
+        path += '<div class="duo-node-wrap ' + stt + '"><button type="button" class="duo-node ' + stt + '" data-act="start-flash" data-l="' + n + '"><span class="duo-bubble">' + (p>=100?'✓':String(n)) + '</span><span class="duo-node-body"><strong>Les ' + n + (title?' · '+esc(title):'') + '</strong><span>' + meta + '</span></span><span class="duo-node-cta">' + cta + ' ›</span></button></div>';
       });
-      return '<div class="desktop-page">' +
-        '<div style="margin-bottom:8px"><h1 style="font-size:24px;font-weight:800;letter-spacing:-.02em;margin:0 0 4px">Woordenschat</h1>' +
-        '<p style="margin:0;color:var(--muted);font-size:14px">Tik voor vertaling · swipe voor volgende</p></div>' +
-        '<div class="duo-head">' +
-          '<div class="duo-stat"><span class="k">Beheerst</span><span class="v">' + m + '/' + total + '</span></div>' +
-          '<div class="duo-stat gold"><span class="k">Voortgang</span><span class="v">' + pct + '%</span></div>' +
-          '<div class="duo-stat fire"><span class="k">Reeks</span><span class="v">🔥 ' + st + '</span></div>' +
-          '<div class="duo-stat"><span class="k">XP</span><span class="v">' + xp + '</span></div>' +
-        '</div>' +
-        '<div class="duo-tools">' +
-          '<button class="btn btn-sm btn-secondary" data-act="start-learn" data-l="all">Quiz</button>' +
-          '<span class="grow"></span>' +
-          '<button class="btn btn-secondary btn-sm" data-act="nav" data-v="words">Lijst</button>' +
-        '</div>' +
-        '<div class="duo-path">' + path + '</div>' +
-      '</div>';
+      return '<div class="desktop-page"><div style="margin-bottom:8px"><h1 style="font-size:24px;font-weight:800;margin:0 0 4px">Woordenschat</h1><p style="margin:0;color:var(--muted);font-size:14px">Tik voor vertaling · swipe voor volgende</p></div><div class="duo-head"><div class="duo-stat"><span class="k">Beheerst</span><span class="v">' + m + '/' + total + '</span></div><div class="duo-stat gold"><span class="k">Voortgang</span><span class="v">' + pct + '%</span></div><div class="duo-stat fire"><span class="k">Reeks</span><span class="v">🔥 ' + st + '</span></div><div class="duo-stat"><span class="k">XP</span><span class="v">' + xp + '</span></div></div><div class="duo-tools"><button class="btn btn-sm btn-secondary" data-act="start-learn" data-l="all">Quiz</button><span class="grow"></span><button class="btn btn-secondary btn-sm" data-act="nav" data-v="words">Lijst</button></div><div class="duo-path">' + path + '</div></div>';
     };
     try { renderVocabHub = window.renderVocabHub; } catch (e) {}
 
-    // Grammatica boven Woordenschat in sidebar
-    inline = inline.replace(
-      /(<button type="button" class="sbn \$\{path==='vocab'&&state\.view!=='words'&&state\.view!=='home'\?'active':''\}" data-act="nav" data-v="vocab">[\s\S]*?<\/button>\s*)\n\s*(<button type="button" class="sbn sbn-course \$\{path==='grammar'\?'active':''\}" data-act="sb-menu" data-menu="gram"[\s\S]*?<\/div>\s*)/,
-      "$2\n\n      $1"
-    );
-    inline = inline.replace(
-      /\{v:'vocab',l:'Woorden',svg:'[^']*',active:path==='vocab'&&state\.view!=='home'\},\s*\{v:'book',l:'Grammatica',svg:'[^']*',active:path==='grammar'\}/,
-      "{v:'book',l:'Grammatica',svg:'<path d=\"M12 2L2 7l10 5 10-5-10-5z\"/><path d=\"M2 17l10 5 10-5\"/><path d=\"M2 12l10 5 10-5\"/>',active:path==='grammar'},\n    {v:'vocab',l:'Woorden',svg:'<path d=\"M4 19.5A2.5 2.5 0 0 1 6.5 17H20\"/><path d=\"M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z\"/>',active:path==='vocab'&&state.view!=='home'}"
-    );
-
-    if ((location.hash || '').indexOf('#/oefeningen') === 0 && typeof window.render === 'function') {
-      setTimeout(function(){
-        if (window.state) {
-          window.state.path = 'exercises';
-          const parts = (location.hash || '').slice(1).split('/').filter(Boolean);
-          if (parts.length >= 2) { window.state.view = 'ex-lesson'; window.state.exLesson = parseInt(parts[1], 10) || 1; }
-          else { window.state.view = 'ex'; window.state.exLesson = null; }
-          if (window.sbMenuState) window.sbMenuState.ex = true;
-          window.render(); scrollPageTop();
-        }
-      }, 80);
-    }
     if (typeof render === 'function' && window.state) render();
   } catch (err) {
     console.error(err);
