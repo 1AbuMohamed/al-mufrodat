@@ -76,14 +76,14 @@ let toggleClass = '';
 transChange({target: {
   id: 'gram-trans-toggle',
   checked: false,
-  closest: () => ({classList: {toggle(name, bool) {toggleClass = name + ':' + bool;}}})
+  closest: () => ({classList: {toggle(name, bool) {toggleClass = name + ':' + bool;}}, querySelector: () => ({textContent:'Aan'})})
 }});
 assert.equal(store.get('alm_gram_show_translations_v1'), '0');
 assert.equal(toggleClass, 'gram-trans-off:true');
 assert.match(grammarHtml(), /gram-lesson-wrap gram-trans-off/);
 transChange({target: {
   id:'gram-trans-toggle', checked:true,
-  closest: () => ({classList:{toggle(){}}})
+  closest: () => ({classList:{toggle(){}}, querySelector: () => ({textContent:'Uit'})})
 }});
 assert.doesNotMatch(grammarHtml(), /gram-lesson-wrap gram-trans-off/);
 
