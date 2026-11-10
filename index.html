@@ -6,12 +6,12 @@
 <title>Al-Mufrodat — Medina Arabisch · Woordenschat, Grammatica & Dialogen</title>
 <meta name="theme-color" content="#F5F0E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="styles.css?v=20261110c">
-<script src="lessons_v2.js?v=20261110c"></script>
-<script src="grammar_v2.js?v=20261110c"></script>
-<script src="parse_data.js?v=20261110c"></script>
-<script src="exercises_v2.js?v=20261110c"></script>
-<script src="conv_duo.js?v=20261110c"></script>
+<link rel="stylesheet" href="styles.css?v=20261110d">
+<script src="lessons_v2.js?v=20261110d"></script>
+<script src="grammar_v2.js?v=20261110d"></script>
+<script src="parse_data.js?v=20261110d"></script>
+<script src="exercises_v2.js?v=20261110d"></script>
+<script src="conv_duo.js?v=20261110d"></script>
 <style>
 /* ===== Duo-style vocab + fun layout ===== */
 .duo-head{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin-bottom:18px}
@@ -126,6 +126,9 @@
 .btn-secondary{border-radius:14px!important}
 .gram-list-item{border-radius:14px!important;transition:transform .12s,border-color .12s}
 .gram-list-item:hover{transform:translateY(-1px);border-color:var(--gold)}
+
+/* Hide vocab exercise instructional hints */
+.flash-card .hint{display:none!important}
 
 /* Hide old clutter still */
 .vl-phases{display:none!important}
@@ -346,6 +349,22 @@
       "else if(state.view==='conv-unit')html=(typeof window.renderConvUnit===\"function\"?window.renderConvUnit():renderConvUnit());"
     );
 
+    // Remove flashcard instructional hint
+    inline = inline.replace(
+      /<div class="hint">\$\{f\?'Tik of druk Spatie om terug te draaien':'Tik of druk Spatie voor antwoord'\}<\/div>/g,
+      ''
+    );
+    // Remove "Transcriptie-hint:" label in word-build phase (keep blocks)
+    inline = inline.replace(
+      /<div class="vl-translit" style="margin-bottom:12px">Transcriptie-hint: <strong>\$\{esc\(w\.translit\|\|''\)\}<\/strong><\/div>/g,
+      ''
+    );
+    // Soften build placeholder (less instructional noise)
+    inline = inline.replace(
+      /Tik op de Arabische blokken hieronder \(van rechts naar links\)…/g,
+      '…'
+    );
+
     // --- Duolingo-style feedback / XP / combo ---
     inline = inline.replace(
       /function showFb\(ok,text\)\{[\s\S]*?const delay = ok \? 2000 : 3000;/,
@@ -474,7 +493,8 @@
       '.session-top .tag,.flash-card .tag{display:none!important}',
       '.sh-eyebrow{display:none!important}',
       '.path-alts{display:none!important}',
-      '.lesson .status{display:none!important}'
+      '.lesson .status{display:none!important}',
+      '.flash-card .hint{display:none!important}'
     ].join('');
     document.head.appendChild(style);
 
