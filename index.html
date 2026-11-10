@@ -6,13 +6,13 @@
 <title>Al-Mufrodat — Medina Arabisch · Woordenschat, Grammatica & Dialogen</title>
 <meta name="theme-color" content="#F5F0E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="styles.css?v=20261110j">
-<script src="lessons_v2.js?v=20261110j"></script>
-<script src="grammar_v2.js?v=20261110j"></script>
-<script src="parse_data.js?v=20261110j"></script>
-<script src="exercises_v2.js?v=20261110j"></script>
-<script src="conv_duo.js?v=20261110j"></script>
-<script src="vocab_duo.js?v=20261110j"></script>
+<link rel="stylesheet" href="styles.css?v=20261110k">
+<script src="lessons_v2.js?v=20261110k"></script>
+<script src="grammar_v2.js?v=20261110k"></script>
+<script src="parse_data.js?v=20261110k"></script>
+<script src="exercises_v2.js?v=20261110k"></script>
+<script src="conv_duo.js?v=20261110k"></script>
+<script src="vocab_duo.js?v=20261110k"></script>
 <style>
 .duo-head{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin-bottom:18px}
 .duo-stat{flex:1;min-width:100px;background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
@@ -37,8 +37,7 @@
 .duo-node-cta{font-size:12px;font-weight:700;color:var(--forest)}
 .flash-card .hint,.flash-card .translit,.card .translit,.translit{display:none!important}
 .qcard .q-pic{margin:0 0 10px!important}
-.qcard .q-pic .pic-frame,.qcard .q-pic img{max-height:120px!important;width:auto}
-.qcard .qar,.qcard .big-ar{font-size:clamp(26px,7vw,38px)!important;line-height:1.45!important;margin-top:6px!important}
+.qcard .qar,.qcard .big-ar{font-size:clamp(26px,7vw,38px)!important;margin-top:8px!important}
 .gram-sec-title{display:none!important}
 </style>
 </head>
@@ -118,10 +117,15 @@
     inline = inline.replace(/state\.convUnit=String\(btn\.dataset\.u\|\|''\);state\.view='conv-unit';state\.convOpen=\{\};state\.convShowAll=true;state\.convDi=0;state\.path='conv';/, "state.convUnit=String(btn.dataset.u||'');state.view='conv-unit';state.convOpen={};state.convShowAll=false;state.convDi=0;state.path='conv';");
     inline = inline.replace(/<div class="hint">\$\{f\?'Tik of druk Spatie om terug te draaien':'Tik of druk Spatie voor antwoord'\}<\/div>/g, '');
     inline = inline.replace(/<div class="vl-translit" style="margin-bottom:12px">Transcriptie-hint: <strong>\$\{esc\(w\.translit\|\|''\)\}<\/strong><\/div>/g, '');
-    // Never show translit under Arabic in legacy flash
     inline = inline.replace(/<div class="translit">\$\{esc\(w\.translit\|\|''\)\}<\/div>/g, '');
     inline = inline.replace(/ · \$\{esc\(w\.translit\|\|''\)\}/g, '');
     inline = inline.replace(/\$\{esc\(w\.translit\|\|''\)\} · /g, '');
+
+    // flash-next op laatste kaart → quiz
+    inline = inline.replace(
+      /else if\(act==='flash-next'\)\{\s*state\.idx=Math\.min\(state\.pool\.length-1,state\.idx\+1\);state\.flipped=false;render\(\);\s*\}/,
+      "else if(act==='flash-next'){if(state.idx>=state.pool.length-1){startLearn(String(state.lesson));}else{state.idx=Math.min(state.pool.length-1,state.idx+1);state.flipped=false;render();}}"
+    );
 
     // Grammatica boven Woordenschat
     inline = inline.replace(
@@ -156,7 +160,7 @@
         if (i > 0) path += '<div class="duo-connector"></div>';
         path += '<div class="duo-node-wrap ' + stt + '"><button type="button" class="duo-node ' + stt + '" data-act="start-flash" data-l="' + n + '"><span class="duo-bubble">' + (p>=100?'✓':String(n)) + '</span><span class="duo-node-body"><strong>Les ' + n + (title?' · '+esc(title):'') + '</strong><span>' + meta + '</span></span><span class="duo-node-cta">' + cta + ' ›</span></button></div>';
       });
-      return '<div class="desktop-page"><div style="margin-bottom:8px"><h1 style="font-size:24px;font-weight:800;margin:0 0 4px">Woordenschat</h1><p style="margin:0;color:var(--muted);font-size:14px">Tik voor vertaling · swipe voor volgende</p></div><div class="duo-head"><div class="duo-stat"><span class="k">Beheerst</span><span class="v">' + m + '/' + total + '</span></div><div class="duo-stat gold"><span class="k">Voortgang</span><span class="v">' + pct + '%</span></div><div class="duo-stat fire"><span class="k">Reeks</span><span class="v">🔥 ' + st + '</span></div><div class="duo-stat"><span class="k">XP</span><span class="v">' + xp + '</span></div></div><div class="duo-tools"><button class="btn btn-sm btn-primary" data-act="start-flash" data-l="all">Kaarten</button><button class="btn btn-sm btn-secondary" data-act="start-learn" data-l="all">Quiz</button><span class="grow"></span><button class="btn btn-secondary btn-sm" data-act="nav" data-v="words">Lijst</button></div><div class="duo-path">' + path + '</div></div>';
+      return '<div class="desktop-page"><div style="margin-bottom:8px"><h1 style="font-size:24px;font-weight:800;margin:0 0 4px">Woordenschat</h1><p style="margin:0;color:var(--muted);font-size:14px">Kaarten eerst · daarna test</p></div><div class="duo-head"><div class="duo-stat"><span class="k">Beheerst</span><span class="v">' + m + '/' + total + '</span></div><div class="duo-stat gold"><span class="k">Voortgang</span><span class="v">' + pct + '%</span></div><div class="duo-stat fire"><span class="k">Reeks</span><span class="v">🔥 ' + st + '</span></div><div class="duo-stat"><span class="k">XP</span><span class="v">' + xp + '</span></div></div><div class="duo-tools"><button class="btn btn-sm btn-primary" data-act="start-flash" data-l="all">Kaarten</button><button class="btn btn-sm btn-secondary" data-act="start-learn" data-l="all">Quiz</button><span class="grow"></span><button class="btn btn-secondary btn-sm" data-act="nav" data-v="words">Lijst</button></div><div class="duo-path">' + path + '</div></div>';
     };
     try { renderVocabHub = window.renderVocabHub; } catch (e) {}
 
