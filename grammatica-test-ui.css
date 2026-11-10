@@ -1,0 +1,24 @@
+/* Theorie-kaarten + zinsontleding + finish */
+.gd-theory .gd-dots{display:flex;gap:8px;justify-content:center;margin:10px 0 16px}
+.gd-dot{width:8px;height:8px;border-radius:50%;background:#cfd8d2;display:inline-block}
+.gd-dot.on{background:var(--forest,#1f6b4a);transform:scale(1.25)}
+.gd-dot.done{background:#8fbfa3}
+.gd-theory-card{min-height:180px}
+.gd-theory-text{font-size:15px;line-height:1.65;margin:0 0 14px}
+.gd-theory-example{background:#eef6f0;border-radius:14px;padding:14px 16px;margin:10px 0}
+.gd-theory-example .gd-arabic{margin:0 0 6px;font-size:28px}
+.gd-theory-example .gd-dutch{margin:0;color:var(--muted,#5c6b63);font-size:14px}
+.gd-mark{background:#ffe08a;color:inherit;border-radius:6px;padding:0 3px}
+.gd-theory-actions{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.gd-theory-quiz{margin-top:12px}
+.gd-theory-quiz-fb{margin-top:8px;font-weight:800;font-size:13px}
+.gd-theory-quiz-fb.ok{color:#155532}
+.gd-theory-quiz-fb.bad{color:#8e312b}
+.gd-feedback-correct-label{display:block;margin:10px 0 4px;font-size:13px;font-weight:800}
+.gd-parse-words{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0;direction:rtl}
+.gd-parse-word{border:2px solid var(--line,#d5ddd7);background:#fff;border-radius:12px;padding:10px 12px;font-size:20px;font-family:var(--ar,serif);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:56px}
+.gd-parse-word.selected{border-color:var(--forest,#1f6b4a);box-shadow:0 0 0 3px #1f6b4a22}
+.gd-parse-word.filled{background:#eef6f0}
+.gd-parse-word small{font-size:11px;font-weight:800;font-family:system-ui,sans-serif;color:var(--forest,#1f6b4a);direction:ltr}
+.gd-parse-labels{margin-top:10px}
+.gd-finish-actions{display:flex;flex-direction:column;gap:8px;margin-top:12px}
