@@ -6,13 +6,13 @@
 <title>Al-Mufrodat — Medina Arabisch · Woordenschat, Grammatica & Dialogen</title>
 <meta name="theme-color" content="#F5F0E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="styles.css?v=20261110e">
-<script src="lessons_v2.js?v=20261110e"></script>
-<script src="grammar_v2.js?v=20261110e"></script>
-<script src="parse_data.js?v=20261110e"></script>
-<script src="exercises_v2.js?v=20261110e"></script>
-<script src="conv_duo.js?v=20261110e"></script>
-<script src="vocab_duo.js?v=20261110e"></script>
+<link rel="stylesheet" href="styles.css?v=20261110g">
+<script src="lessons_v2.js?v=20261110g"></script>
+<script src="grammar_v2.js?v=20261110g"></script>
+<script src="parse_data.js?v=20261110g"></script>
+<script src="exercises_v2.js?v=20261110g"></script>
+<script src="conv_duo.js?v=20261110g"></script>
+<script src="vocab_duo.js?v=20261110g"></script>
 <style>
 .duo-head{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin-bottom:18px}
 .duo-stat{flex:1;min-width:100px;background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
@@ -73,7 +73,7 @@
 .btn-secondary{border-radius:14px!important}
 .gram-list-item{border-radius:14px!important;transition:transform .12s,border-color .12s}
 .gram-list-item:hover{transform:translateY(-1px);border-color:var(--gold)}
-.flash-card .hint{display:none!important}
+.flash-card .hint,.flash-card .translit,.card .translit{display:none!important}
 .vl-phases{display:none!important}
 .vl-kicker{display:none!important}
 .learn-mini .mini-btn{display:none!important}
@@ -238,6 +238,16 @@
       '</div>';
     };
     try { renderVocabHub = window.renderVocabHub; } catch (e) {}
+
+    // Grammatica boven Woordenschat in sidebar
+    inline = inline.replace(
+      /(<button type="button" class="sbn \$\{path==='vocab'&&state\.view!=='words'&&state\.view!=='home'\?'active':''\}" data-act="nav" data-v="vocab">[\s\S]*?<\/button>\s*)\n\s*(<button type="button" class="sbn sbn-course \$\{path==='grammar'\?'active':''\}" data-act="sb-menu" data-menu="gram"[\s\S]*?<\/div>\s*)/,
+      "$2\n\n      $1"
+    );
+    inline = inline.replace(
+      /\{v:'vocab',l:'Woorden',svg:'[^']*',active:path==='vocab'&&state\.view!=='home'\},\s*\{v:'book',l:'Grammatica',svg:'[^']*',active:path==='grammar'\}/,
+      "{v:'book',l:'Grammatica',svg:'<path d=\"M12 2L2 7l10 5 10-5-10-5z\"/><path d=\"M2 17l10 5 10-5\"/><path d=\"M2 12l10 5 10-5\"/>',active:path==='grammar'},\n    {v:'vocab',l:'Woorden',svg:'<path d=\"M4 19.5A2.5 2.5 0 0 1 6.5 17H20\"/><path d=\"M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z\"/>',active:path==='vocab'&&state.view!=='home'}"
+    );
 
     if ((location.hash || '').indexOf('#/oefeningen') === 0 && typeof window.render === 'function') {
       setTimeout(function(){
