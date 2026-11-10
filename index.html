@@ -6,13 +6,15 @@
 <title>Al-Mufrodat — Medina Arabisch · Woordenschat, Grammatica & Dialogen</title>
 <meta name="theme-color" content="#F5F0E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="styles.css?v=20261110l">
-<script src="lessons_v2.js?v=20261110l"></script>
-<script src="grammar_v2.js?v=20261110l"></script>
-<script src="parse_data.js?v=20261110l"></script>
-<script src="exercises_v2.js?v=20261110l"></script>
-<script src="conv_duo.js?v=20261110l"></script>
-<script src="vocab_duo.js?v=20261110l"></script>
+<link rel="icon" type="image/svg+xml" href="assets/al-mufrodat-logo.svg">
+<meta name="description" content="Leer Arabische woordenschat, grammatica en dialogen met de Medina-methode. Download de woordenlijsten per les als PDF.">
+<link rel="stylesheet" href="styles.css?v=20261110logo">
+<script src="lessons_v2.js?v=20261110logo"></script>
+<script src="grammar_v2.js?v=20261110logo"></script>
+<script src="parse_data.js?v=20261110logo"></script>
+<script src="exercises_v2.js?v=20261110logo"></script>
+<script src="conv_duo.js?v=20261110logo"></script>
+<script src="vocab_duo.js?v=20261110logo"></script>
 <style>
 .duo-head{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin-bottom:18px}
 .duo-stat{flex:1;min-width:100px;background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
@@ -39,6 +41,12 @@
 .qcard .q-pic{margin:0 0 10px!important}
 .qcard .qar,.qcard .big-ar{font-size:clamp(26px,7vw,38px)!important;margin-top:8px!important}
 .gram-sec-title{display:none!important}
+
+/* Woordenlijsten zijn lesmateriaal, geen aparte grammatica-sectie. */
+.vocab-pdf-link{display:inline-flex;align-items:center;justify-content:center;min-height:40px;align-self:flex-end;margin:8px 6px 4px;padding:7px 14px;border:1px solid var(--line);border-radius:12px;color:var(--forest);background:var(--surface);font-size:13px;font-weight:750;text-decoration:none}
+.vocab-pdf-link:hover,.vocab-pdf-link:focus-visible{border-color:var(--gold);background:var(--forest-soft);outline-offset:2px}
+.sb-brand-mark[src]{display:block;width:40px;height:40px;object-fit:contain;border:0;background:transparent;border-radius:0}
+@media(max-width:480px){.vocab-pdf-link{margin:8px 4px 8px}}
 </style>
 </head>
 <body>
@@ -49,7 +57,7 @@
 <div class="toast" id="toast"></div>
 <script>
 (async function(){
-  const GOOD = 'https://raw.githubusercontent.com/1AbuMohamed/al-mufrodat/c45e6b965b40a478bb93b686867d8ae4550c9f50/index.html';
+  const GOOD = 'app_core.js';
   function scrollPageTop(){
     try {
       window.scrollTo(0, 0);
@@ -63,14 +71,10 @@
   try {
     const res = await fetch(GOOD);
     if (!res.ok) throw new Error('HTTP ' + res.status);
-    let html = await res.text();
-    const re = /<script>([\s\S]*?)<\/script>/g;
-    let match, inline = null;
-    while ((match = re.exec(html)) !== null) {
-      const body = match[1];
-      if (body.includes('const BASE_WORDS') || body.includes('function render(')) { inline = body; break; }
+    let inline = await res.text();
+    if (!inline.includes('const BASE_WORDS') || !inline.includes('function render(')) {
+      throw new Error('Lokaal applicatiescript ontbreekt of is ongeldig');
     }
-    if (!inline) throw new Error('Inline app script niet gevonden');
 
     inline = inline
       .replace(/function renderBook\(\)\{\s*if\(window\.renderBook\) return window\.renderBook\(\);\s*return '';\s*\}/, 'function renderBookFallback(){ return ""; }')
@@ -137,6 +141,12 @@
       "$2\n\n      $1"
     );
 
+    // Het nieuwe logo vervangt het kleine tekstsymbool in de zijbalk.
+    inline = inline.replace(
+      '<div class="sb-brand-mark" lang="ar">م</div>',
+      '<img class="sb-brand-mark" src="assets/al-mufrodat-logo.svg" alt="" width="40" height="40" loading="eager">'
+    );
+
     const s = document.createElement('script');
     s.textContent = inline;
     document.body.appendChild(s);
@@ -162,7 +172,13 @@
         const meta = p >= 100 ? ('★ ' + mm + '/' + ws.length) : (mm + '/' + ws.length + ' · ' + p + '%');
         const cta = p >= 100 ? 'Herhaal' : (p > 0 ? 'Ga verder' : 'Start');
         if (i > 0) path += '<div class="duo-connector"></div>';
-        path += '<div class="duo-node-wrap ' + stt + '"><button type="button" class="duo-node ' + stt + '" data-act="start-flash" data-l="' + n + '"><span class="duo-bubble">' + (p>=100?'✓':String(n)) + '</span><span class="duo-node-body"><strong>Les ' + n + (title?' · '+esc(title):'') + '</strong><span>' + meta + '</span></span><span class="duo-node-cta">' + cta + ' ›</span></button></div>';
+        path += '<div class="duo-node-wrap ' + stt + '"><button type="button" class="duo-node ' + stt + '" data-act="start-flash" data-l="' + n + '"><span class="duo-bubble">' + (p>=100?'✓':String(n)) + '</span><span class="duo-node-body"><strong>Les ' + n + (title?' · '+esc(title):'') + '</strong><span>' + meta + '</span></span><span class="duo-node-cta">' + cta + ' ›</span></button>';
+        // 11 en 24 bevatten in de originele grammaticadata geen losse woordenlijst.
+        if (n >= 1 && n <= 23 && n !== 11) {
+          const fileNumber = String(n).padStart(2, '0');
+          path += '<a class="vocab-pdf-link" href="pdf/woordenlijst-les-' + fileNumber + '.pdf" download="Al-Mufrodat-woordenlijst-les-' + fileNumber + '.pdf" aria-label="Download woordenlijst van les ' + n + ' als PDF">↓ Woordenlijst PDF</a>';
+        }
+        path += '</div>';
       });
       return '<div class="desktop-page"><div style="margin-bottom:8px"><h1 style="font-size:24px;font-weight:800;margin:0 0 4px">Woordenschat</h1><p style="margin:0;color:var(--muted);font-size:14px">Kaarten eerst · daarna test</p></div><div class="duo-head"><div class="duo-stat"><span class="k">Beheerst</span><span class="v">' + m + '/' + total + '</span></div><div class="duo-stat gold"><span class="k">Voortgang</span><span class="v">' + pct + '%</span></div><div class="duo-stat fire"><span class="k">Reeks</span><span class="v">🔥 ' + st + '</span></div><div class="duo-stat"><span class="k">XP</span><span class="v">' + xp + '</span></div></div><div class="duo-tools"><button class="btn btn-sm btn-primary" data-act="start-flash" data-l="all">Kaarten</button><button class="btn btn-sm btn-secondary" data-act="start-learn" data-l="all">Quiz</button><span class="grow"></span><button class="btn btn-secondary btn-sm" data-act="nav" data-v="words">Lijst</button></div><div class="duo-path">' + path + '</div></div>';
     };

@@ -39,7 +39,19 @@ function renderOverview(){
 
 function renderInhoud(inhoud){
   let html = '';
-  (inhoud || []).forEach(item => {
+  // Toon de grammaticale uitleg, maar laat de zelfstandige woordenlijsten
+  // (kop, woordentabel en bijbehorende *-voetnoot) weg uit deze sectie.
+  // De oorspronkelijke data blijft behouden voor de PDF's bij Woordenschat.
+  const rows = (inhoud || []).filter((item, i, all) => {
+    const isGlossaryTitle = entry => entry && entry.type === 'tekst' &&
+      /^Woordenlijst van les\b/i.test(String(entry.tekst || '').trim());
+    if (isGlossaryTitle(item)) return false;
+    if (item.type === 'tabel' && isGlossaryTitle(all[i - 1])) return false;
+    if (item.type === 'regel' && /^\s*\*/.test(String(item.tekst || '')) &&
+        all[i - 1] && all[i - 1].type === 'tabel' && isGlossaryTitle(all[i - 2])) return false;
+    return true;
+  });
+  rows.forEach(item => {
     if(item.type === 'tekst'){
       html += `<p class="gram-p ${item.vet?'is-bold':''}">${formatDutchText(item.tekst)}</p>`;
     } else if(item.type === 'regel'){

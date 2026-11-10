@@ -1,0 +1,45 @@
+name: PDF-woordenlijsten bijwerken
+
+on:
+  push:
+    paths:
+      - "lessons_v2.js"
+      - "scripts/generate_wordlists.py"
+      - ".github/workflows/woordenlijsten-pdf.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository ophalen
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Python instellen
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Arabisch lettertype en PDF-engine installeren
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-core
+          python -m pip install "weasyprint>=62,<68"
+      - name: Woordenlijsten genereren
+        run: python scripts/generate_wordlists.py
+      - name: PDF's naar dezelfde branch publiceren
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add pdf/
+          if git diff --cached --quiet; then
+            echo "Geen PDF-wijzigingen"
+          else
+            git commit -m "Genereer PDF-woordenlijsten per les"
+            git fetch origin "$GITHUB_REF_NAME"
+            git rebase "origin/$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi

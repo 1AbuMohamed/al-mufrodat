@@ -361,7 +361,7 @@ function renderExLesson(){
 
 let hashInitAttempts = 0;
 function handleHash(){
-  const m = (location.hash || '').match(/^#\\/oefeningen(?:\\/(\\d+))?$/);
+  const m = (location.hash || '').match(/^#\/oefeningen(?:\/(\d+))?$/);
   if (!m) { hashInitAttempts = 0; return; }
   // The app shell is loaded asynchronously; DOMContentLoaded can fire before state exists.
   if (!window.state) {

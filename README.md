@@ -26,6 +26,25 @@ Interactieve Nederlandstalige leeromgeving bij *Durūs al-Lughah al-ʿArabiyyah 
 
 ---
 
+## Woordenlijsten als PDF (nieuw)
+
+- De afzonderlijke woordenlijsten worden **niet meer onder Grammatica getoond**.
+  Alle eigenlijke grammaticaregels, voorbeelden en inhoudelijke tabellen blijven wel zichtbaar.
+- Bij de lessen onder **Woordenschat** staat een directe knop **Woordenlijst PDF**;
+  ook vanuit de flashcards van de betreffende les is deze beschikbaar.
+- Er zijn **22 downloadbare les-PDF's**, op basis van **25 oorspronkelijke lijsten**.
+  Les 4a/4b, 9a/9b en 13a/13b zijn per les samengevoegd.
+- De bron in `lessons_v2.js` blijft volledig behouden, inclusief Arabische tekens,
+  Nederlandse vertalingen en voetnoten. Les 11 en de Reader-8-aanvulling hebben
+  in de grammatica-bron geen zelfstandige woordenlijst en dus geen aparte PDF.
+- PDF-bestanden staan in `pdf/woordenlijst-les-NN.pdf` en worden reproduceerbaar
+  gegenereerd via `python scripts/generate_wordlists.py` (vereist `weasyprint`).
+  GitHub Actions bouwt en commit ze bij wijzigingen in de inhoud of generator.
+- Het nieuwe logo staat in `assets/al-mufrodat-logo.svg`; de basisapp wordt lokaal
+  geladen uit `app_core.js` in plaats van via een externe GitHub Raw-URL.
+
+---
+
 ## Geluid en Audio (Verwijderd voor overzicht)
 
 Op verzoek van de gebruiker zijn **alle geluids- en spraakfuncties volledig verwijderd** (de audiomap, Text-to-Speech via externe bronnen en spraakherkenning) om de applicatie stil, snel en overzichtelijk te maken. Ook worden lettertypen (zoals het Arabische *Amiri*) nu lokaal geserveerd vanuit de map `fonts/` zonder afhankelijkheden van externe Google Fonts servers.

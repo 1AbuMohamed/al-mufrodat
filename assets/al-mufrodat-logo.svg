@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-labelledby="logo-title">
+  <title id="logo-title">Al-Mufrodat - een boek onder een Arabische boog</title>
+  <defs>
+    <linearGradient id="emerald" x1="0" y1="0" x2="0.9" y2="1">
+      <stop stop-color="#124d4c"/>
+      <stop offset="1" stop-color="#0a3035"/>
+    </linearGradient>
+  </defs>
+  <path d="M96 8C82 28 64 39 43 50C29 58 22 73 22 91V145C22 157 30 166 42 166H150C162 166 170 157 170 145V91C170 73 163 58 149 50C128 39 110 28 96 8Z" fill="url(#emerald)" stroke="#C49A45" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M96 21C78 45 49 54 37 73" stroke="#D8B467" stroke-width="2.2" fill="none" opacity=".65"/>
+  <path d="M96 21C114 45 143 54 155 73" stroke="#D8B467" stroke-width="2.2" fill="none" opacity=".65"/>
+  <path d="M36 113Q65 99 96 120Q127 99 156 113V151Q123 141 96 159Q69 141 36 151Z" fill="#FAF4E7"/>
+  <path d="M96 120V159M42 121Q67 113 88 128M150 121Q125 113 104 128" fill="none" stroke="#C49A45" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M36 150Q68 140 96 159Q124 140 156 150" stroke="#C49A45" stroke-width="3" fill="none"/>
+  <text x="96" y="99" text-anchor="middle" font-family="serif" font-size="64" font-weight="bold" fill="#FAF4E7">م</text>
+  <path d="M72 40L80 48L72 56L64 48Z M95 29L103 37L95 45L87 37Z" fill="#D8B467"/>
+</svg>

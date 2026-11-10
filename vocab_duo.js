@@ -40,6 +40,12 @@ window.renderFlash = function renderFlash(){
   var pic = picHtml(w);
   var last = state.idx >= pool.length - 1;
   var les = lessonKey();
+  var n = Number(les);
+  var listLink = Number.isInteger(n) && n >= 1 && n <= 23 && n !== 11
+    ? '<a class="vf-pdf-link" href="pdf/woordenlijst-les-' + String(n).padStart(2, '0') +
+      '.pdf" download="Al-Mufrodat-woordenlijst-les-' + String(n).padStart(2, '0') +
+      '.pdf" aria-label="Woordenlijst van les ' + n + ' als PDF downloaden">↓ Woordenlijst PDF</a>'
+    : '';
 
   var main, sub;
   if (!f) {
@@ -80,7 +86,7 @@ window.renderFlash = function renderFlash(){
     '<div class="vf-tools">' +
       '<button type="button" class="vf-chip' + (arFirst ? ' on' : '') + '" data-act="set-flash-dir" data-d="ar2nl">AR</button>' +
       '<button type="button" class="vf-chip' + (!arFirst ? ' on' : '') + '" data-act="set-flash-dir" data-d="nl2ar">NL</button>' +
-    '</div>' +
+    '</div>' + listLink +
     '<div class="vf-card' + (f ? ' is-flipped' : '') + (arFirst ? ' vf-ar-side' : '') + '" id="vf-card" data-act="flip" role="button" tabindex="0">' +
       main + sub +
       (!f ? '<div class="vf-tap">tik voor vertaling</div>' : '') +
@@ -160,6 +166,8 @@ style.textContent = `
 .vf-nl{font-size:26px;font-weight:800;line-height:1.3;letter-spacing:-.02em;margin-top:12px}
 .vf-nl-sm{font-size:16px;font-weight:600;color:var(--muted);margin-top:10px}
 .vf-tap{margin-top:auto;padding-top:16px;font-size:12px;font-weight:700;color:var(--muted);opacity:.65}
+.vf-pdf-link{display:inline-flex;align-items:center;min-height:40px;padding:7px 12px;margin:-3px 0 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--forest);font-size:13px;font-weight:750;text-decoration:none}
+.vf-pdf-link:hover,.vf-pdf-link:focus-visible{border-color:var(--gold);background:var(--forest-soft);outline-offset:2px}
 .vf-nav{display:flex;gap:10px;margin-top:16px}
 .vf-nav .btn{flex:1}
 .vf-next{flex:2!important}
