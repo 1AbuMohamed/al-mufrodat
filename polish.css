@@ -445,3 +445,254 @@ input:focus-visible {
   outline: 3px solid var(--gold);
   outline-offset: 3px;
 }
+
+
+/* ===========================================================
+   Medina-leerpad: kleur als aanwijzing, niet als versiering.
+   Groen = lesuitleg, goud = voorbeeld, blauw = schema;
+   alle oorspronkelijke zinnen en tabellen blijven onaangetast.
+   =========================================================== */
+.gram-lesson-wrap .gram-p.is-bold,
+.gram-lesson-wrap .gram-h {
+  color: var(--forest);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 5px;
+}
+.gram-lesson-wrap .gram-rule {
+  border-left: 3px solid var(--forest);
+  background: var(--forest-soft);
+  border-top-color: var(--line);
+  border-right-color: var(--line);
+  border-bottom-color: var(--line);
+}
+.gram-lesson-wrap .gram-ex-row {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 0;
+  padding: 15px 17px;
+  margin: 12px 0;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--gold);
+  border-radius: 11px;
+  background: var(--surface);
+}
+.gram-lesson-wrap .gram-ex-row:hover {
+  background: var(--surface);
+  border-color: var(--line);
+  border-left-color: var(--gold);
+}
+.gram-lesson-wrap .gram-ex-row .gram-ar {
+  display: block;
+  align-self: stretch;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  color: var(--forest);
+  text-align: right;
+  direction: rtl;
+  flex: 0 1 auto;
+  font-size: clamp(26px, 5.7vw, 33px);
+  line-height: 1.9;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.gram-lesson-wrap .gram-ex-row .gram-nl {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 0 0;
+  margin: 8px 0 0;
+  border-top: 1px solid var(--line);
+  text-align: start;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+.gram-lesson-wrap .gram-tbl-wrap {
+  border-left: 3px solid #477fa1;
+  background: var(--surface);
+}
+.gram-lesson-wrap .gram-tbl thead th {
+  color: var(--ink);
+  background: var(--forest-soft);
+  border-bottom: 2px solid #477fa1;
+}
+.gram-lesson-wrap .gram-tbl td {
+  vertical-align: middle;
+}
+.gram-lesson-wrap .gram-footnote {
+  color: var(--muted);
+}
+
+/* Kennis ophalen: verberg alle vertalingen en onthul zelf per kaart */
+.gram-lesson-wrap .gram-reveal-btn {
+  display: none;
+  align-self: flex-start;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  margin: 12px 0 0;
+  padding: 8px 12px;
+  border: 1px solid var(--gold);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--forest);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 750;
+  cursor: pointer;
+}
+.gram-lesson-wrap.gram-trans-off .gram-ex-row:not(.is-revealed) .gram-nl {
+  display: none !important;
+}
+.gram-lesson-wrap.gram-trans-off .gram-ex-row.is-revealed .gram-nl {
+  display: block !important;
+}
+.gram-lesson-wrap.gram-trans-off .gram-reveal-btn {
+  display: inline-flex;
+}
+.gram-lesson-wrap .gram-reveal-btn:hover,
+.gram-lesson-wrap .gram-reveal-btn:focus-visible {
+  background: var(--forest-soft);
+}
+.gram-next-steps {
+  margin: 12px 0 26px;
+  padding: 15px 16px;
+  border-radius: 13px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.gram-next-steps > strong {
+  display: block;
+  font-size: 14px;
+  color: var(--ink);
+  font-weight: 750;
+  margin-bottom: 10px;
+}
+.gram-next-actions {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 9px;
+}
+.gram-next-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  gap: 8px;
+  min-height: 46px;
+  padding: 10px 13px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--forest-soft);
+  color: var(--forest);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 750;
+  text-align: start;
+  cursor: pointer;
+}
+.gram-next-exercise {
+  border-color: var(--gold);
+  background: var(--gold-pale);
+  color: var(--ink);
+}
+.gram-next-link:hover,
+.gram-next-link:focus-visible {
+  border-color: var(--forest);
+  outline-offset: 2px;
+}
+
+/* Woordenschat: duidelijke volgende actie per les, zonder extra pagina */
+.vocab-study-hint {
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.duo-node-wrap .duo-node {
+  box-shadow: none;
+  border-width: 1px;
+  border-radius: 15px;
+  padding: 13px 14px;
+}
+.duo-node-wrap .duo-node:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+.duo-node-wrap .duo-mini-progress {
+  display: block;
+  width: 100%;
+  height: 5px;
+  background: var(--paper-deep);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-top: 7px;
+}
+.duo-node-wrap .duo-mini-progress > i {
+  display: block;
+  height: 100%;
+  background: var(--gold);
+  border-radius: inherit;
+}
+.duo-node-wrap.done .duo-mini-progress > i {
+  background: var(--ok);
+}
+.duo-node-wrap .duo-lesson-actions {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  gap: 8px;
+  margin: 5px 0 0;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+}
+.duo-node-wrap .duo-practice-btn,
+.duo-node-wrap .duo-lesson-actions .vocab-pdf-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 8px 13px;
+  margin: 0;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 750;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.duo-node-wrap .duo-practice-btn {
+  color: var(--forest);
+  border: 1px solid var(--gold);
+  background: var(--gold-pale);
+}
+.duo-node-wrap .duo-lesson-actions .vocab-pdf-link {
+  color: var(--ink-soft);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+.duo-node-wrap .duo-practice-btn:hover,
+.duo-node-wrap .duo-lesson-actions .vocab-pdf-link:hover {
+  border-color: var(--forest);
+}
+@media(max-width:430px) {
+  .gram-lesson-wrap .gram-ex-row { padding: 12px 14px; }
+  .gram-lesson-wrap .gram-ex-row .gram-ar { font-size: 27px; line-height: 1.95; }
+  .gram-next-steps { padding: 12px; }
+  .gram-next-actions { grid-template-columns: 1fr; }
+  .gram-next-link { min-height: 44px; }
+  .duo-node-wrap .duo-lesson-actions { justify-content: stretch; }
+  .duo-node-wrap .duo-practice-btn,
+  .duo-node-wrap .duo-lesson-actions .vocab-pdf-link { flex: 1 1 130px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .duo-node-wrap .duo-node,.gram-lesson-wrap .gram-ex-row { transition:none; }
+}
