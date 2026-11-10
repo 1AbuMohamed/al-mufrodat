@@ -1,4 +1,4 @@
-/* grammatica-test.js — restore t00-t33 hybrid loader */
+/* grammatica-test.js — t00-t33 hybrid loader */
 (function(){
   var urls=[];
   for(var i=0;i<=33;i++) urls.push('grammatica-test.t'+String(i).padStart(2,'0')+'.js?v=5');
