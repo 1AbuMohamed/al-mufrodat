@@ -1,25 +1,9 @@
-/* grammatica-test.js v6 — 24-part b64 loader */
+/* grammatica-test.js — restore t00-t33 hybrid loader */
 (function(){
-  var n = 24;
-  var urls = [];
-  for (var i=0;i<n;i++) urls.push('grammatica-test.q'+String(i).padStart(2,'0')+'.txt?v=6');
-  function b64ToU8(s){
-    var bin = atob(s), len = bin.length, u = new Uint8Array(len);
-    for (var i=0;i<len;i++) u[i] = bin.charCodeAt(i);
-    return u;
-  }
-  function fail(e){
-    console.error(e);
-    var el = document.getElementById('gd-app');
-    if (el) el.innerHTML = '<p class="loading">Laden mislukt</p>';
-  }
-  Promise.all(urls.map(function(u){ return fetch(u).then(function(r){ if(!r.ok) throw new Error(u); return r.text(); }); }))
-    .then(function(parts){
-      var B64 = parts.join('');
-      var ds = new DecompressionStream('gzip');
-      var stream = new Blob([b64ToU8(B64)]).stream().pipeThrough(ds);
-      return new Response(stream).text();
-    })
-    .then(function(text){ (0, eval)(text); })
-    .catch(fail);
+  var urls=[];
+  for(var i=0;i<=33;i++) urls.push('grammatica-test.t'+String(i).padStart(2,'0')+'.js?v=5');
+  function run(code){var s=document.createElement('script');s.textContent=code;document.head.appendChild(s);}
+  function fail(e){console.error(e);var el=document.getElementById('gd-app');if(el)el.innerHTML='<p class="loading">Laden mislukt</p>';}
+  Promise.all(urls.map(function(u){return fetch(u).then(function(r){if(!r.ok)throw new Error(u);return r.text();});}))
+    .then(function(parts){run(parts.join(''));}).catch(fail);
 })();
