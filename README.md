@@ -45,6 +45,26 @@ Interactieve Nederlandstalige leeromgeving bij *Durūs al-Lughah al-ʿArabiyyah 
 
 ---
 
+## Leesinstellingen en dialogen
+
+- **Grammatica:** in iedere les staat de schakelaar **Toon vertalingen**.
+  Daarmee worden de Nederlandse vertalingen bij Arabische voorbeelden getoond of verborgen.
+  De Nederlandstalige grammaticale uitleg, regels en grammaticatabellen blijven altijd zichtbaar.
+  De keuze wordt lokaal onthouden, ook bij volgende bezoeken.
+- **Dialogen:** schone leesweergave zonder foto's of avatars, met kleinere sprekerlabels,
+  overzichtelijke afzonderlijke zinnen en Nederlandse vertalingen per zin of allemaal tegelijk.
+  De 8 oorspronkelijke eenheden, 13 dialogen, 81 Arabische zinnen en Nederlandse vertalingen
+  zijn ongewijzigd. De lijst met belangrijke zinnen en iʿrāb zijn behouden.
+- **Technische correctie:** oudere functies voor dialogen en flashcards overschrijven niet
+  langer de nieuwe renderers. Het omschakelen van dialogen bewaart nu de vertaalweergave.
+- **Kleine verbeteringen:** toetsenbordfocus, mobiele leesbreedtes, knoppen en leescontrast.
+  De gerichte stijlverbeteringen staan in `polish.css`.
+- **Automatische sitecontrole:** `node scripts/test_readers.cjs`,
+  `node scripts/test_bootstrap.cjs` en `python scripts/site_audit.py`
+  controleren de bestaande data, renderer-voorkeuren, pagina-assets en PDF's.
+
+---
+
 ## Geluid en Audio (Verwijderd voor overzicht)
 
 Op verzoek van de gebruiker zijn **alle geluids- en spraakfuncties volledig verwijderd** (de audiomap, Text-to-Speech via externe bronnen en spraakherkenning) om de applicatie stil, snel en overzichtelijk te maken. Ook worden lettertypen (zoals het Arabische *Amiri*) nu lokaal geserveerd vanuit de map `fonts/` zonder afhankelijkheden van externe Google Fonts servers.

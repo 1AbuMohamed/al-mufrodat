@@ -9,6 +9,7 @@
 <link rel="icon" type="image/svg+xml" href="assets/al-mufrodat-logo.svg">
 <meta name="description" content="Leer Arabische woordenschat, grammatica en dialogen met de Medina-methode. Download de woordenlijsten per les als PDF.">
 <link rel="stylesheet" href="styles.css?v=20261110logo">
+<link rel="stylesheet" href="polish.css?v=20261110b">
 <script src="lessons_v2.js?v=20261110logo"></script>
 <script src="grammar_v2.js?v=20261110logo"></script>
 <script src="parse_data.js?v=20261110logo"></script>
@@ -119,9 +120,15 @@
       "else if(v==='book'){state.path='grammar';state.view='book';state.bookLesson=null;state.bookTab='uitleg';if(state.g2)state.g2.view='map';sbMenuState.gram=true;try{history.pushState(null,'','#/grammatica')}catch(e){}}\n    else if(v==='ex'||v==='oefeningen'){state.path='exercises';state.view='ex';state.exLesson=null;sbMenuState.ex=true;try{history.pushState(null,'','#/oefeningen')}catch(e){}}"
     );
 
-    inline = inline.replace(/else if\(state\.view==='conv'\)html=renderConv\(\);/, "else if(state.view==='conv')html=(typeof window.renderConv===\"function\"?window.renderConv():renderConv());");
-    inline = inline.replace(/else if\(state\.view==='conv-unit'\)html=renderConvUnit\(\);/, "else if(state.view==='conv-unit')html=(typeof window.renderConvUnit===\"function\"?window.renderConvUnit():renderConvUnit());");
-    inline = inline.replace(/else if\(state\.view==='flash'\)html=renderFlash\(\);/, "else if(state.view==='flash')html=(typeof window.renderFlash===\"function\"?window.renderFlash():renderFlash());");
+    // De oude globale declaraties overschreven eerder de modernere renderers
+    // uit conv_duo.js en vocab_duo.js. Bewaar ze uitsluitend als fallback.
+    inline = inline.replace(/function renderConv\(\)\{/, 'function renderConvLegacy(){');
+    inline = inline.replace(/function renderConvUnit\(\)\{/, 'function renderConvUnitLegacy(){');
+    inline = inline.replace(/function renderFlash\(\)\{/, 'function renderFlashLegacy(){');
+
+    inline = inline.replace(/else if\(state\.view==='conv'\)html=renderConv\(\);/, "else if(state.view==='conv')html=(typeof window.renderConv===\"function\"?window.renderConv():renderConvLegacy());");
+    inline = inline.replace(/else if\(state\.view==='conv-unit'\)html=renderConvUnit\(\);/, "else if(state.view==='conv-unit')html=(typeof window.renderConvUnit===\"function\"?window.renderConvUnit():renderConvUnitLegacy());");
+    inline = inline.replace(/else if\(state\.view==='flash'\)html=renderFlash\(\);/, "else if(state.view==='flash')html=(typeof window.renderFlash===\"function\"?window.renderFlash():renderFlashLegacy());");
     inline = inline.replace(/state\.convUnit=String\(btn\.dataset\.u\|\|''\);state\.view='conv-unit';state\.convOpen=\{\};state\.convShowAll=true;state\.convDi=0;state\.path='conv';/, "state.convUnit=String(btn.dataset.u||'');state.view='conv-unit';state.convOpen={};state.convShowAll=false;state.convDi=0;state.path='conv';");
     inline = inline.replace(/<div class="hint">\$\{f\?'Tik of druk Spatie om terug te draaien':'Tik of druk Spatie voor antwoord'\}<\/div>/g, '');
     inline = inline.replace(/<div class="vl-translit" style="margin-bottom:12px">Transcriptie-hint: <strong>\$\{esc\(w\.translit\|\|''\)\}<\/strong><\/div>/g, '');
