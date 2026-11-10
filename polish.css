@@ -1,0 +1,285 @@
+/* Al-Mufrodat · gerichte leesbaarheids- en toegankelijkheidsverbeteringen
+   Houd het oude styles.css intact; de onderstaande regels gelden voor de
+   vernieuwde grammatica- en dialogenschermen. */
+
+/* Grammatica: vertalingen uitzetten zonder de Nederlandse uitleg te verbergen */
+.gram-reading-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  margin: 0 0 20px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: var(--surface);
+}
+.gram-reading-desc { display: flex; flex-direction: column; gap: 3px; }
+.gram-reading-desc strong { font-size: 13px; color: var(--ink); line-height: 1.4; }
+.gram-reading-desc small { font-size: 11.5px; color: var(--muted); line-height: 1.45; }
+.gram-trans-control {
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  cursor: pointer;
+  user-select: none;
+}
+.gram-trans-control input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+}
+.gram-trans-track {
+  position: relative;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 25px;
+  border-radius: 999px;
+  background: var(--line-strong);
+  transition: background-color .18s ease;
+}
+.gram-trans-track::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,.14);
+  transition: transform .18s ease;
+}
+.gram-trans-control input:checked + .gram-trans-track { background: var(--forest); }
+.gram-trans-control input:checked + .gram-trans-track::after { transform: translateX(19px); }
+.gram-trans-control input:focus-visible + .gram-trans-track { outline: 3px solid var(--gold); outline-offset: 3px; }
+.gram-trans-off .gram-ex-row .gram-nl { display: none !important; }
+.gram-trans-off .gram-ex-row { gap: 0; }
+
+/* Dialogen: tekstgerichte leesweergave zonder foto's of avatar-icoontjes */
+.conv-overview { max-width: 1040px; }
+.conv-page-head { align-items: center; }
+.conv-overview-grid { gap: 14px; }
+.conv-overview-card {
+  min-height: 165px;
+  text-align: start;
+  gap: 7px;
+  padding: 17px 18px;
+  border-radius: 14px;
+  box-shadow: none;
+  transition: border-color .15s, background-color .15s;
+  cursor: pointer;
+}
+.conv-overview-card:hover { border-color: var(--gold); background: var(--paper); }
+.conv-overview-card > strong { font-size: 15px; line-height: 1.45; }
+.conv-overview-card .conv-card-ar { font-size: 20px; line-height: 1.5; text-align: right; }
+.conv-overview-card .conv-card-preview { line-height: 1.5; min-height: 0; }
+.conv-overview-card .conv-card-bottom { margin-top: auto; }
+.conv-reader { max-width: 760px; }
+.conv-reader-top {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.conv-done-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  cursor: pointer;
+}
+.conv-done-label input { width: 16px; height: 16px; accent-color: var(--forest); }
+.conv-reader-hero {
+  display: block;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: var(--surface);
+  box-shadow: none;
+  margin: 0 0 16px;
+}
+.conv-unit-kicker {
+  display: block;
+  color: var(--muted);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .075em;
+  font-size: 10.5px;
+}
+.conv-reader-hero h1 {
+  margin: 6px 0 0;
+  color: var(--ink);
+  font-size: clamp(19px, 3vw, 24px);
+  line-height: 1.3;
+  font-weight: 800;
+}
+.conv-reader-ar {
+  margin: 5px 0 7px;
+  font-size: clamp(21px, 3.2vw, 25px);
+  line-height: 1.65;
+  text-align: right;
+}
+.conv-reader-hero h2 {
+  font-size: 12.5px;
+  line-height: 1.45;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 4px 0 0;
+}
+.conv-scene-tabs {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  padding: 3px 1px 10px;
+  scroll-snap-type: x proximity;
+}
+.conv-scene-tab {
+  min-height: 43px;
+  max-width: 230px;
+  flex: 0 0 auto;
+  padding: 9px 12px;
+  gap: 8px;
+  scroll-snap-align: start;
+  cursor: pointer;
+}
+.conv-scene-tab b { font-size: 12px; line-height: 1.4; }
+.conv-scene-tab.active { background: var(--forest); border-color: var(--forest); }
+.conv-tools {
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin: 2px 0 12px;
+  padding: 8px 0 12px;
+  border-bottom: 1px solid var(--line);
+}
+.conv-tools > span { flex: 1; min-width: 180px; font-size: 12px; line-height: 1.5; font-weight: 500; }
+.conv-tools .btn { min-height: 38px; white-space: nowrap; }
+.conv-chat-stack { gap: 10px; margin: 0 0 18px; }
+.conv-chat-row,
+.conv-chat-row.spk-b { display: block; width: 100%; }
+.conv-chat-bubble,
+.conv-chat-row.spk-b .conv-chat-bubble {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  padding: 14px 17px 13px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--forest);
+  border-radius: 12px;
+  box-shadow: none;
+}
+.conv-chat-row.spk-b .conv-chat-bubble {
+  border-left-color: var(--gold);
+  background: var(--surface);
+}
+.conv-chat-bubble.open,
+.conv-chat-bubble.irab-open { border-color: var(--line); border-left-color: var(--forest); }
+.conv-chat-row.spk-b .conv-chat-bubble.open,
+.conv-chat-row.spk-b .conv-chat-bubble.irab-open { border-left-color: var(--gold); }
+.conv-chat-meta { display: flex; align-items: center; min-height: 24px; gap: 8px; margin: 0 0 7px; }
+.conv-speaker {
+  font-family: var(--ar, serif);
+  font-size: 13px !important;
+  line-height: 1.45;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0;
+  text-align: right;
+}
+.conv-irab-btn {
+  margin-inline-start: auto;
+  min-height: 30px;
+  padding: 4px 10px;
+  background: var(--surface);
+  font-size: 11.5px;
+  cursor: pointer;
+}
+.conv-ar-line {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: 2px 0 4px;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: clamp(23px, 3.5vw, 28px);
+  font-family: var(--ar, serif);
+  line-height: 1.65;
+  cursor: pointer;
+  text-align: right;
+  direction: rtl;
+}
+.conv-nl-line {
+  display: block;
+  width: 100%;
+  margin-top: 9px;
+  padding: 12px 0 2px;
+  border: 0;
+  border-top: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-soft);
+  text-align: start;
+  font-size: 13px;
+  line-height: 1.65;
+  cursor: pointer;
+}
+.conv-hint {
+  display: inline-flex;
+  width: auto;
+  min-height: 34px;
+  margin: 3px 0 0;
+  padding: 5px 0;
+  align-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--forest);
+  font-size: 11.5px;
+  font-weight: 750;
+  cursor: pointer;
+}
+.conv-phrases { margin: 20px 0; }
+.conv-phrases summary { min-height: 42px; }
+.conv-phrases-grid { gap: 9px; }
+.conv-phrase { padding: 11px 12px; gap: 4px; }
+.conv-phrase span { font-size: 12px; line-height: 1.5; }
+.conv-reader-nav { gap: 12px; padding-top: 8px; border-top: 1px solid var(--line); }
+.conv-reader-nav .btn { min-height: 42px; }
+
+/* Ook op kleine schermen voldoende ruimte voor Arabisch en de knoppen */
+@media (max-width: 600px) {
+  .gram-reading-tools { padding: 12px; gap: 8px; }
+  .gram-trans-control { width: 100%; justify-content: space-between; }
+  .conv-page-head { align-items: flex-start; }
+  .conv-reader-hero { padding: 14px 15px; }
+  .conv-chat-bubble,.conv-chat-row.spk-b .conv-chat-bubble { width: 100%; padding: 12px 13px; }
+  .conv-ar-line { font-size: 24px; }
+  .conv-tools > span { min-width: 0; }
+  .conv-scene-tab { max-width: 200px; }
+}
+@media (max-width: 380px) {
+  .conv-reader-top > small { margin-left: 0; }
+  .conv-reader-top .conv-done-label { margin-left: auto; }
+  .conv-tools .btn { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gram-trans-track,.gram-trans-track::after,.conv-overview-card { transition: none; }
+}
+
+/* Toetsenbord en tabnavigatie duidelijker voor alle hoofdschermen */
+button:focus-visible,
+a:focus-visible,
+summary:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
