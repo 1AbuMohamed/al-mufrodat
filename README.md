@@ -45,6 +45,36 @@ Interactieve Nederlandstalige leeromgeving bij *Durūs al-Lughah al-ʿArabiyyah 
 
 ---
 
+## Didactische leeslaag (zonder inhoudelijke wijzigingen)
+
+De grammaticale brontekst, Arabische voorbeelden, oorspronkelijke vertalingen,
+woorden, dialogen, zinsontleding, oefendata en de Medina-lesvolgorde blijven
+exact zoals ze zijn. Deze uitbreiding past alleen weergave en leerknoppen aan:
+
+- **Rustige kleuren per inhoudsvorm:** groen voor uitlegregels, goud voor
+  oorspronkelijke voorbeelden, blauw voor tabellen/schema's. De tekst zelf krijgt
+  geen automatisch (mogelijk onjuist) woordsoortlabel.
+- **Arabisch eerst:** originele voorbeeldzinnen staan boven hun Nederlandse
+  vertaling; harakāt blijven behouden.
+- **Actief oefenen:** zet vertalingen uit en onthul de originele Nederlandse
+  vertaling per voorbeeld. Geen gewijzigde zinnen, antwoorden of lesinhoud.
+- **Per les verdergaan:** vanuit grammatica direct naar de bijbehorende
+  woordenschatkaartjes en bestaande grammaticaoefeningen; in Woordenschat
+  per les een aparte oefenknop naast de bestaande PDF-download.
+- **Voortgang:** elke woordenschatles toont een visuele balk met dezelfde
+  al opgeslagen beheersingspercentage. Er worden geen nieuwe leerscores verzonnen.
+- **Rechtstreekse links:** grammatica-URL's openen betrouwbaar na
+  het vertraagd laden van de basisapp.
+- **Controles:** de mobiele Chromium-test controleert nu ook zelftesten,
+  navigatie tussen leeronderdelen en de bestaande PDF's.
+
+Het ontwerp gebruikt de principes *signaling* en *coherence* (Fiorella & Mayer,
+*Cambridge Handbook of Multimedia Learning*, 2021) en *retrieval practice*
+(Carpenter e.a., *Nature Reviews Psychology*, 2022). Het voegt geen alternatieve
+grammaticaregels of woordlijsten toe.
+
+---
+
 ## Leesinstellingen en dialogen
 
 - **Grammatica:** in iedere les staat de schakelaar **Toon vertalingen**.
