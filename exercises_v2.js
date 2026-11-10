@@ -39,7 +39,7 @@ const IMGS = {
   13:['les13-oef13a-1.webp','les13-oef13a-2.webp','les13-oef13a-3.webp','les13-oef13a-4.webp','les13-oef13a-5.webp','les13-oef13a-6.webp','les13-oef13b-1.webp','les13-oef13b-2.webp','les13-oef13b-3.webp','les13-oef13b-4.webp','les13-oef13b-5.webp','les13-oef13b-6.webp','les13-oef13c-1.webp','les13-oef13c-2.webp','les13-oef13c-3.webp','les13-oef13c-4.webp'],
   14:['les14-oef1.webp','les14-oef2.webp','les14-oef3.webp','les14-oef4.webp','les14-oef5.webp','les14-oef6.webp'],
   15:['les15-oef1.webp','les15-oef2.webp','les15-oef3.webp','les15-oef4.webp','les15-oef5.webp','les15-oef6.webp'],
-  16:['les16-oef1.webp','les16-oef2.webp','les16-oef3.webp','les16-oef4.webp','les16-oef5.webp'],
+  16:['les16-oef1.webp','les16-oef2.webp','les16-oef3.webp','les16-oef4.webp'],
   17:['les17-oef1.webp','les17-oef2.webp','les17-oef3.webp','les17-oef4.webp'],
   18:['les18-oef1.webp','les18-oef2.webp','les18-oef3.webp','les18-oef4.webp','les18-oef5.webp'],
   19:['les19-oef1.webp','les19-oef2.webp','les19-oef3.webp','les19-oef4.webp'],
