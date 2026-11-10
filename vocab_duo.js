@@ -1,4 +1,4 @@
-/* Woordenschat flash · tik = vertaling, swipe / Volgende · foto boven, Arabisch kleiner */
+/* Woordenschat flash · tik = vertaling, swipe / Volgende · foto boven, Arabisch kleiner · geen fonetiek */
 (function(){
 'use strict';
 
@@ -145,7 +145,7 @@ style.textContent = `
   line-height:1.45!important;
   margin-top:4px!important;
 }
-.flash-card .hint,.flash-card .tag,.flash-card .translit,.card .translit,.vf-ph{display:none!important}
+.flash-card .hint,.flash-card .tag,.flash-card .translit,.card .translit,.vf-ph,.translit{display:none!important}
 `;
 document.head.appendChild(style);
 })();
