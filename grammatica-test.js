@@ -206,10 +206,10 @@
     return '<div class="gd-lesson-bar">' +
       '<button type="button" class="gd-close" data-action="overview" aria-label="Terug naar alle lessen">×</button>' +
       '<div class="gd-progress-wrap"><div class="gd-progress-title">' +
-      '<strong>Les ' + session.lesson + '</strong><span>' + (finished ? 'Afgerond' : intro ? 'Voorbereiding' : (completed + 1) + ' / ' + total) +
+      '<strong>Les ' + (session.lesson===null?'herhaling':session.lesson) + '</strong><span>' + (finished ? 'Afgerond' : intro ? 'Voorbereiding' : (completed + 1) + ' / ' + total) +
       '</span></div><div class="gd-progress" role="progressbar" aria-label="Voortgang oefenronde" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + percent + '">' +
       '<span style="width:' + percent + '%"></span></div></div>' +
-      '<a class="gd-source-link" href="' + lessonUrl(session.lesson) + '">Originele les</a></div>';
+      '<a class="gd-source-link" href="' + (session.lesson===null?'index.html#/grammatica':lessonUrl(session.lesson)) + '">Grammatica</a></div>';
   }
   function overview(){
     var d=readSave();refreshStreak(d);
@@ -247,7 +247,16 @@
   function currentTask() { return session.tasks[session.index]; }
   function renderTaskBody(task) {
     var type = task.type, ex = task.example;
-    if (type === 'choice') {
+    if (type === 'choice' || type === 'reverse' || type === 'pairs') {
+      var cue=type==='reverse'?'<div class="gd-translation-cue">'+esc(ex.nl)+'</div>':
+        '<div class="gd-ar-question gd-arabic" lang="ar" dir="rtl">'+esc(ex.ar)+'</div>';
+      return cue+'<div class="gd-options">'+task.options.map(function(option,i){
+        var selected=session.chosen===i;
+        return '<button type="button" class="gd-option'+(selected?' selected':'')+'" data-action="select" data-value="'+i+'" aria-pressed="'+selected+'"'+(session.feedback?' disabled':'')+'>'+
+          (type==='reverse'?'<span class="gd-arabic gd-ar-option" lang="ar" dir="rtl">'+esc(option)+'</span>':esc(option))+'</button>';
+      }).join('')+'</div>';
+    }
+    if (false) {
       return '<div class="gd-ar-question gd-arabic" lang="ar" dir="rtl">' + esc(ex.ar) + '</div>' +
         '<div class="gd-options">' + task.options.map(function (option, i) {
           var isPicked = session.chosen === i;
@@ -342,98 +351,110 @@
     app.innerHTML = session.stage === 'overview' ? overview() :
       session.stage === 'intro' ? intro() :
       session.stage === 'done' ? finished() : taskScreen();
+    if(session.stage==='done'){
+      var el=app.querySelector('.gd-countup');
+      if(el){var target=Number(el.dataset.target),start=performance.now();
+        function tick(now){if(!el.isConnected)return;var t=Math.min(1,(now-start)/650);el.textContent=Math.round(target*t);if(t<1)requestAnimationFrame(tick);}
+        if(matchMedia('(prefers-reduced-motion: reduce)').matches)el.textContent=target;else requestAnimationFrame(tick);
+      }
+    }
   }
-  function setLesson(n) {
-    if (!Object.prototype.hasOwnProperty.call(DATA, n)) { session.stage = 'overview'; render(); return; }
-    session.lesson = Number(n);
-    session.tasks = buildTasks(session.lesson);
-    session.index = 0;
-    session.correct = 0;
-    session.missed = [];
-    session.chosen = -1;
-    session.ordered = [];
-    session.feedback = null;
-    session.review = false;
-    session.stage = 'intro';
+  function setLesson(n){
+    if(!Object.prototype.hasOwnProperty.call(DATA,n)){session.stage='overview';render();return;}
+    session.lesson=Number(n);session.tasks=buildTasks(session.lesson,(Math.random()*0xFFFFFFFF)>>>0);
+    session.index=0;session.correct=0;session.missed=[];session.lastMissed=[];
+    session.chosen=-1;session.ordered=[];session.feedback=null;session.review=false;
+    session.hearts=5;session.combo=0;session.xp=0;session.wrong=0;session.attempts=0;
+    session.stage='intro';render();
+  }
+  function setWeak(){
+    var tasks=[];
+    Object.keys(DATA).map(Number).forEach(function(n){
+      getExamples(n).forEach(function(ex){
+        var m=mastery(n,ex.ar);
+        if(m.due&&m.due<=today()){
+          var opts=choicesFor(ex,getExamples(n),n+Date.now());
+          tasks.push(Object.assign({lesson:n},opts?{type:'choice',example:ex,options:opts}:{type:'reflect',example:ex}));
+        }
+      });
+    });
+    if(!tasks.length){session.stage='overview';render();return;}
+    session.lesson=null;session.tasks=seededShuffle(tasks,(Math.random()*0xFFFFFFFF)>>>0).slice(0,10);
+    session.index=0;session.correct=0;session.missed=[];session.lastMissed=[];
+    session.chosen=-1;session.ordered=[];session.feedback=null;session.review=true;
+    session.hearts=5;session.combo=0;session.xp=0;session.wrong=0;session.attempts=0;
+    session.stage='play';render();
+  }
+  function check(){
+    if(!answered()||session.feedback)return;
+    var task=currentTask(),good=false;
+    if(task.type==='choice')good=task.options[session.chosen]===plain(task.example.nl);
+    if(task.type==='reverse')good=task.options[session.chosen]===plain(task.example.ar);
+    if(task.type==='gap')good=task.options[session.chosen]===task.answer;
+    if(task.type==='order')good=session.ordered.map(function(i){return task.words[i];}).join(' ')===task.words.join(' ');
+    if(task.type==='pairs')good=task.options[session.chosen]===plain(task.pairs[0].nl);
+    credit(task,good);session.feedback={correct:good};render();
+  }
+  function next(){
+    session.index++;session.chosen=-1;session.ordered=[];session.feedback=null;
+    if(session.hearts===0||session.index>=session.tasks.length)finishRound();
     render();
   }
-  function check() {
-    if (!answered() || session.feedback) return;
-    var task = currentTask();
-    var correct = false;
-    if (task.type === 'choice') correct = task.options[session.chosen] === plain(task.example.nl);
-    if (task.type === 'gap') correct = task.options[session.chosen] === task.answer;
-    if (task.type === 'order') {
-      correct = session.ordered.map(function (idx) { return task.words[idx]; }).join(' ') === task.words.join(' ');
+  function onClick(event){
+    var node=event.target.closest('[data-action]');if(!node)return;
+    var action=node.getAttribute('data-action');
+    if(action==='overview'){session.stage='overview';history.replaceState(null,'','grammatica-test.html');return render();}
+    if(action==='start'){session.stage='play';return render();}
+    if(action==='weak')return setWeak();
+    if(action==='reset'){
+      if(confirm('Alleen de testvoortgang wissen?')){
+        try{localStorage.removeItem(SAVE_KEY);}catch(_e){}
+        session.stage='overview';render();
+      }
+      return;
     }
-    session.feedback = { correct: correct };
-    if (correct) session.correct++;
-    else session.missed.push(task);
-    render();
-  }
-  function next() {
-    session.index++;
-    session.chosen = -1;
-    session.ordered = [];
-    session.feedback = null;
-    if (session.index >= session.tasks.length) {
-      session.stage = 'done';
-      storeScore();
-    }
-    render();
-  }
-  function onClick(event) {
-    var node = event.target.closest('[data-action]');
-    if (!node) return;
-    var action = node.getAttribute('data-action');
-    if (action === 'overview') {
-      session.stage = 'overview';
-      if (history.replaceState) history.replaceState(null, '', 'grammatica-test.html');
+    if(action==='select'&&!session.feedback){session.chosen=Number(node.dataset.value);return render();}
+    if(action==='tile'&&!session.feedback){
+      var idx=Number(node.dataset.value);
+      if(session.ordered.indexOf(idx)<0)session.ordered.push(idx);
       return render();
     }
-    if (action === 'start') { session.stage = 'play'; return render(); }
-    if (action === 'select' && !session.feedback) {
-      session.chosen = Number(node.getAttribute('data-value')); return render();
+    if(action==='remove'&&!session.feedback){
+      session.ordered=session.ordered.filter(function(x){return x!==Number(node.dataset.value);});return render();
     }
-    if (action === 'tile' && !session.feedback) {
-      var idx = Number(node.getAttribute('data-value'));
-      if (session.ordered.indexOf(idx) < 0) session.ordered.push(idx);
-      return render();
+    if(action==='check')return check();
+    if(action==='reveal'&&!session.feedback){
+      credit(currentTask(),true);session.feedback={correct:true};return render();
     }
-    if (action === 'remove' && !session.feedback) {
-      session.ordered = session.ordered.filter(function (id) { return id !== Number(node.getAttribute('data-value')); });
-      return render();
+    if(action==='next'&&session.feedback)return next();
+    if(action==='retry'){
+      if(!session.lastMissed.length)return;
+      session.tasks=session.lastMissed.slice();session.missed=[];session.lastMissed=[];
+      session.correct=0;session.wrong=0;session.attempts=0;session.xp=0;
+      session.hearts=5;session.combo=0;session.index=0;session.chosen=-1;session.ordered=[];
+      session.feedback=null;session.review=true;session.stage='play';return render();
     }
-    if (action === 'check') return check();
-    if (action === 'reveal' && !session.feedback) {
-      session.feedback = { correct: null }; return render();
-    }
-    if (action === 'rate' && session.feedback && session.feedback.correct === null) {
-      var good = node.getAttribute('data-value') === '1';
-      session.feedback.correct = good;
-      if (good) session.correct++;
-      else session.missed.push(currentTask());
-      return render();
-    }
-    if (action === 'next' && session.feedback) return next();
-    if (action === 'retry') {
-      session.tasks = session.missed.slice();
-      session.missed = [];
-      session.correct = 0;
-      session.index = 0;
-      session.chosen = -1;
-      session.ordered = [];
-      session.feedback = null;
-      session.review = true;
-      session.stage = 'play';
-      return render();
-    }
-    if (action === 'restart') return setLesson(session.lesson);
+    if(action==='continue'){session.stage='overview';history.replaceState(null,'','grammatica-test.html');return render();}
   }
   function init() {
     app = document.getElementById('gd-app');
     if (!app) return;
     app.addEventListener('click', onClick);
+    app.addEventListener('change',function(e){
+      if(e.target.matches('[data-goal]')){
+        var d=readSave();d.goal=Number(e.target.value);refreshStreak(d);writeSave(d);render();
+      }
+    });
+    document.addEventListener('keydown',function(e){
+      if(session.stage!=='play'||e.altKey||e.ctrlKey||e.metaKey||e.target.matches('input,textarea,select'))return;
+      if(session.feedback){if(e.key==='Enter'){e.preventDefault();next();}return;}
+      if(/^[1-4]$/.test(e.key)){
+        var task=currentTask(),i=Number(e.key)-1;
+        if(task&&['choice','gap','reverse','pairs'].includes(task.type)&&i<task.options.length){
+          session.chosen=i;render();
+        }
+      }else if(e.key==='Enter'&&answered()){e.preventDefault();check();}
+    });
     var requested = new URLSearchParams(location.search).get('les');
     if (requested !== null && /^\d+$/.test(requested) && Object.prototype.hasOwnProperty.call(DATA, requested)) {
       setLesson(Number(requested));
