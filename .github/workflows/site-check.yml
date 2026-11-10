@@ -17,6 +17,8 @@ jobs:
       - name: JavaScript syntax controleren
         run: |
           node --check app_core.js
+          node --check lessons_v2.js
+          node --check parse_data.js
           node --check grammar_v2.js
           node --check vocab_duo.js
           node --check exercises_v2.js
@@ -30,6 +32,10 @@ jobs:
           Path("/tmp/al-mufrodat-inline.js").write_text("\n".join(inline), encoding="utf-8")
           PY
           node --check /tmp/al-mufrodat-inline.js
+      - name: Grammatica en dialogen met echte data testen
+        run: node scripts/test_readers.cjs
+      - name: Complete site- en assetscontrole
+        run: python scripts/site_audit.py
       - name: Controleren of alle PDF's aanwezig zijn
         run: |
           python - <<'PY'
