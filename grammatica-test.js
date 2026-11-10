@@ -1,9 +1,11 @@
-/* grammatica-test.js v6 b64 parts loader */
+/* grammatica-test.js v6 — 12-part b64 loader */
 (function(){
-  var urls = [0,1,2,3].map(function(i){ return 'grammatica-test.b64.'+i+'.txt?v=6'; });
+  var n = 12;
+  var urls = [];
+  for (var i=0;i<n;i++) urls.push('grammatica-test.p'+String(i).padStart(2,'0')+'.txt?v=6');
   function b64ToU8(s){
-    var bin = atob(s), n = bin.length, u = new Uint8Array(n);
-    for (var i=0;i<n;i++) u[i] = bin.charCodeAt(i);
+    var bin = atob(s), len = bin.length, u = new Uint8Array(len);
+    for (var i=0;i<len;i++) u[i] = bin.charCodeAt(i);
     return u;
   }
   function fail(e){
