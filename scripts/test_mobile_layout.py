@@ -120,6 +120,13 @@ def main():
             action.click()
             page.wait_for_function("window.state?.view === 'learn'")
             print("OK: leerroute grammatica → woordenschat → lesquiz werkt")
+            # Controleer ook de afzonderlijke grammaticaoefeningen vanuit de les.
+            page.goto(f"http://127.0.0.1:{server.server_port}/#/grammatica/6", wait_until="domcontentloaded")
+            page.wait_for_selector(".gram-next-exercise", timeout=20000)
+            page.locator(".gram-next-exercise").click()
+            page.wait_for_function("window.state?.view === 'ex-lesson'")
+            assert page.locator("#app").inner_text().strip(), "Oefenpagina is leeg"
+            print("OK: grammatica → oefeningen van dezelfde les werkt")
             print("OK: schakelaar werkt en volgende-lesknop navigeert naar Les 6")
             browser.close()
     finally:
