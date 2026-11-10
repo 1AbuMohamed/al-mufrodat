@@ -91,7 +91,7 @@
   function buildTasks(n, seed) {
     var examples = getExamples(n);
     if (!examples.length) return [];
-    var types = ['choice','order','gap','reverse','pairs','choice','order','gap','reverse','pairs'];
+    var types = seed === undefined ? ['choice','order','gap','choice','order','gap'] : ['choice','order','gap','reverse','pairs','choice','order','gap','reverse','pairs'];
     var tasks = [], base = seed === undefined ? n*89+7 : seed;
     for (var i=0;i<(seed === undefined ? 6 : MAX_TASKS);i++) {
       var type=types[i], pool=seededShuffle(examples,base+i*103), candidate=null;
