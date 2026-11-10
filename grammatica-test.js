@@ -211,38 +211,37 @@
       '<span style="width:' + percent + '%"></span></div></div>' +
       '<a class="gd-source-link" href="' + lessonUrl(session.lesson) + '">Originele les</a></div>';
   }
-  function overview() {
-    var scores = storedScores();
-    var keys = Object.keys(DATA).map(Number).sort(function (a, b) { return a - b; });
-    return '<div class="gd-shell gd-overview">' +
-      '<div class="gd-hero"><div class="gd-eyebrow">Medina-methode · proefversie</div>' +
-      '<h1>Leer grammatica door te doen</h1>' +
-      '<p>Dezelfde Medina-lessen, nu in korte interactieve stappen. De bestaande grammatica verandert niet.</p>' +
-      '<div class="gd-hero-key"><span>1. Bekijk een voorbeeld</span><span>2. Oefen</span><span>3. Herhaal fouten</span></div></div>' +
-      '<div class="gd-overview-top"><h2>Kies een les</h2><p>Je kunt alle lessen uitproberen. Alleen de testresultaten worden apart op dit apparaat opgeslagen.</p></div>' +
-      '<div class="gd-lesson-grid">' + keys.map(function (n) {
-        var count = getExamples(n).length;
-        var score = scores[n];
-        var scoreLabel = score ? 'Laatst geoefend: ' + score.correct + '/' + score.total : count ? count + ' voorbeeld' + (count === 1 ? '' : 'en') : 'Alleen originele uitleg';
-        return '<a class="gd-lesson-card" href="grammatica-test.html?les=' + n + '">' +
-          '<span class="gd-lesson-number">' + n + '</span>' +
-          '<span class="gd-lesson-detail"><strong>Les ' + n + '</strong><small>' + esc(scoreLabel) + '</small></span>' +
-          '<span class="gd-card-arrow" aria-hidden="true">→</span></a>';
-      }).join('') + '</div><p class="gd-privacy-note">Dit is een losse proefpagina. Je bestaande voortgang in Al-Mufrodat blijft ongewijzigd.</p></div>';
+  function overview(){
+    var d=readSave();refreshStreak(d);
+    var xp=d.daily[today()]||0,goal=d.goal||20,pct=Math.min(100,Math.round(100*xp/goal));
+    var current=firstNext(),keys=Object.keys(DATA).map(Number).sort(function(a,b){return a-b;});
+    return '<div class="gd-shell gd-overview"><div class="gd-stats">'+
+      '<span class="gd-stat gd-fire">'+icon('flame')+d.streak+'</span>'+
+      '<span class="gd-stat gd-xp">'+icon('star')+(d.xp||0)+' XP</span>'+
+      '<label class="gd-goal"><span class="gd-ring" style="--fill:'+pct+'%">'+pct+'%</span>'+
+      '<select data-goal aria-label="Dagdoel"><option value="20"'+(goal===20?' selected':'')+'>20 XP</option>'+
+      '<option value="30"'+(goal===30?' selected':'')+'>30 XP</option>'+
+      '<option value="50"'+(goal===50?' selected':'')+'>50 XP</option></select></label></div>'+
+      '<nav class="gd-path" aria-label="Leerpad">'+keys.map(function(n,i){
+        var c=crowns(n),weak=weakened(n),reading=!getExamples(n).length;
+        var cls=reading?'reading':c?'complete':weak?'weak':n===current?'current':'open';
+        return '<div class="gd-path-row offset-'+(i%4)+'"><a class="gd-node '+cls+(n===current?' active':'')+'" href="grammatica-test.html?les='+n+'" aria-label="Les '+n+'">'+
+          (n===current?'<span class="gd-start-bubble">START</span>':'')+
+          '<span class="gd-node-symbol">'+(reading?icon('book'):c?icon('crown'):weak?'◌':icon('star'))+'</span>'+
+          '<span class="gd-node-name">Les '+n+'</span>'+
+          (c?'<span class="gd-crown-count">'+c+'/5</span>':'')+
+          (reading?'<span class="gd-node-sub">Lees les</span>':'')+'</a></div>';
+      }).join('')+'</nav><button class="gd-weak-button" data-action="weak">Oefen zwakke punten</button>'+
+      '<button class="gd-reset" data-action="reset">Reset testvoortgang</button>'+
+      '<div class="gd-fixed-continue"><a class="gd-primary" href="grammatica-test.html?les='+current+'">Ga verder</a></div></div>';
   }
-  function intro() {
-    var n = session.lesson;
-    var exercises = session.tasks.length;
-    return '<div class="gd-shell gd-play">' + topBar() +
-      '<div class="gd-card gd-intro"><div class="gd-stage-tag">Stap 1 · begrijpen</div>' +
-      '<h1>Les ' + n + ': eerst kijken, dan proberen</h1>' +
-      '<p class="gd-support">Hieronder staat uitsluitend bestaande uitleg uit de Medina-les.</p>' +
-      '<div class="gd-source-box">' + rulesHtml(n) + '</div>' + introSample(n) +
-      (exercises ?
-        '<p class="gd-intro-bottom">Nu volgen ' + exercises + ' korte oefening' + (exercises === 1 ? '' : 'en') + ' met de oorspronkelijke voorbeeldzinnen.</p>' +
-        '<button type="button" class="gd-primary gd-full" data-action="start">Start oefenen <span aria-hidden="true">→</span></button>' :
-        '<p class="gd-intro-bottom">Deze les heeft geen afzonderlijke Arabisch–Nederlandse voorbeelden om er betrouwbare automatische vragen van te maken. Er is daarom geen oefentoets verzonnen.</p>' +
-        '<a class="gd-primary gd-full gd-as-link" href="' + lessonUrl(n) + '">Lees de oorspronkelijke les →</a>') +
+  function intro(){
+    var n=session.lesson;
+    return '<div class="gd-shell gd-play">'+topBar()+
+      '<div class="gd-card gd-intro"><h1>Les '+n+'</h1><div class="gd-stage-tag">Eerst lezen</div>'+
+      '<div class="gd-source-box">'+rulesHtml(n)+'</div>'+
+      (session.tasks.length?'<button class="gd-primary gd-full" data-action="start">Start</button>':
+      '<a class="gd-primary gd-full gd-as-link" href="'+lessonUrl(n)+'">Lees les</a>')+
       '</div></div>';
   }
   function currentTask() { return session.tasks[session.index]; }
@@ -288,11 +287,13 @@
     return '<div class="gd-ar-question gd-arabic" lang="ar" dir="rtl">' + esc(ex.ar) + '</div>' +
       '<p class="gd-subinstruction">Denk eerst zelf na. Onthul daarna de oorspronkelijke vertaling.</p>';
   }
-  function taskHeading(type) {
-    if (type === 'choice') return ['Begrijpen', 'Welke vertaling hoort bij deze zin?'];
-    if (type === 'gap') return ['Aanvullen', 'Welk Arabisch woord ontbreekt?'];
-    if (type === 'order') return ['Zinsbouw', 'Zet de woorden in de juiste volgorde'];
-    return ['Zelfcontrole', 'Kun je dit voorbeeld begrijpen?'];
+  function taskHeading(type){
+    if(type==='choice')return ['Vertaling','Kies de vertaling'];
+    if(type==='reverse')return ['Arabisch','Kies het Arabisch'];
+    if(type==='gap')return ['Aanvullen','Vul het woord in'];
+    if(type==='order')return ['Zinsbouw','Bouw de zin'];
+    if(type==='pairs')return ['Koppelen','Koppel de woorden'];
+    return ['Lezen','Bekijk de vertaling'];
   }
   function answered() {
     var task = currentTask();
@@ -301,57 +302,40 @@
     if (task.type === 'reflect') return true;
     return session.chosen >= 0;
   }
-  function taskFeedback(task) {
-    if (!session.feedback) return '';
-    var isGood = session.feedback.correct;
-    var text = task.type === 'reflect' ? 'Dit is de oorspronkelijke vertaling.' :
-      isGood ? 'Goed gezien!' : 'Nog een keer oefenen helpt.';
-    return '<section class="gd-feedback ' + (isGood ? 'good' : 'review') + '" role="status" aria-live="polite">' +
-      '<strong>' + text + '</strong>' +
-      '<span class="gd-feedback-label">Origineel voorbeeld uit Medina-les ' + session.lesson + '</span>' +
-      '<p class="gd-arabic" lang="ar" dir="rtl">' + esc(task.example.ar) + '</p>' +
-      '<p class="gd-feedback-nl">' + esc(task.example.nl) + '</p></section>';
+  function taskFeedback(task){
+    if(!session.feedback)return '';
+    var good=session.feedback.correct;
+    return '<section class="gd-feedback-sheet '+(good?'good':'review')+'" role="status" aria-live="assertive">'+
+      '<div class="gd-feedback-inner"><strong>'+(good?['Goed!','Prima!','Uitstekend!'][session.index%3]:'Juiste antwoord:')+'</strong>'+
+      (session.combo>=3?'<span class="gd-combo">'+session.combo+'× combo</span>':'')+
+      '<p class="gd-arabic" lang="ar" dir="rtl">'+esc(task.example.ar)+'</p>'+
+      '<p>'+esc(task.example.nl)+'</p>'+
+      '<button class="gd-primary" data-action="next">Verder</button></div></section>';
   }
-  function taskScreen() {
-    var task = currentTask();
-    if (!task) return finished();
-    var headings = taskHeading(task.type);
-    var isReflect = task.type === 'reflect';
-    var action = session.feedback ? (
-      isReflect && session.feedback.correct === null ?
-        '<div class="gd-self-grade"><button type="button" class="gd-soft" data-action="rate" data-value="0">Nog oefenen</button>' +
-        '<button type="button" class="gd-primary" data-action="rate" data-value="1">Ik wist het</button></div>' :
-        '<button type="button" class="gd-primary gd-full" data-action="next">' +
-        (session.index + 1 >= session.tasks.length ? 'Bekijk resultaat' : 'Verder') + ' <span aria-hidden="true">→</span></button>'
-    ) : '<button type="button" class="gd-primary gd-full" data-action="' +
-      (isReflect ? 'reveal' : 'check') + '"' + (answered() ? '' : ' disabled') + '>' +
-      (isReflect ? 'Toon vertaling' : 'Controleren') + '</button>';
-
-    return '<div class="gd-shell gd-play">' + topBar() +
-      '<div class="gd-card gd-task">' +
-      '<div class="gd-stage-tag">' + headings[0] + '</div>' +
-      '<h1>' + headings[1] + '</h1><div class="gd-task-main">' + renderTaskBody(task) + '</div>' +
-      '<details class="gd-guide"><summary>Bekijk de originele uitleg</summary><div>' + rulesHtml(session.lesson) + '</div></details>' +
-      taskFeedback(task) + '<div class="gd-actions">' + action + '</div>' +
-      '</div></div>';
+  function taskScreen(){
+    var task=currentTask();if(!task)return finished();
+    var h=taskHeading(task.type),action=task.type==='reflect'?'reveal':'check';
+    return '<div class="gd-shell gd-play">'+topBar()+
+      '<div class="gd-hearts" aria-label="'+session.hearts+' van 5 hartjes">'+
+      Array.from({length:5},function(_,i){return '<span class="'+(i<session.hearts?'alive':'lost')+'">'+icon('heart')+'</span>';}).join('')+
+      '</div><div class="gd-card gd-task"><div class="gd-stage-tag">'+h[0]+'</div>'+
+      '<h1>Les '+(task.lesson===undefined?session.lesson:task.lesson)+'</h1>'+
+      '<p class="gd-task-prompt">'+h[1]+'</p><div class="gd-task-main">'+renderTaskBody(task)+'</div>'+
+      '<details class="gd-guide"><summary>Uitleg</summary><div>'+rulesHtml(task.lesson===undefined?session.lesson:task.lesson)+'</div></details>'+
+      '<div class="gd-actions"><button class="gd-primary gd-full" data-action="'+action+'"'+(answered()?'':' disabled')+'>'+
+      (action==='reveal'?'Toon vertaling':'Controleren')+'</button></div></div>'+taskFeedback(task)+'</div>';
   }
-  function finished() {
-    var total = session.tasks.length;
-    var missed = session.missed.length;
-    return '<div class="gd-shell gd-play">' + topBar() +
-      '<div class="gd-card gd-finish"><span class="gd-finish-icon" aria-hidden="true">✓</span>' +
-      '<div class="gd-stage-tag">Oefenronde afgerond</div>' +
-      '<h1>Goed gewerkt met les ' + session.lesson + '</h1>' +
-      '<p>Je hebt ' + session.correct + ' van de ' + total + ' opdrachten goed beantwoord.' +
-      (session.review ? ' Dit was een herhalingsronde.' : '') + '</p>' +
-      (missed ? '<div class="gd-remaining">' + missed + ' opdracht' + (missed === 1 ? '' : 'en') +
-        ' om nog eens te proberen.</div>' : '<div class="gd-remaining done">Je hebt geen openstaande fouten in deze ronde.</div>') +
-      '<div class="gd-finish-actions">' +
-      (missed ? '<button type="button" class="gd-primary gd-full" data-action="retry">Herhaal mijn fouten</button>' : '') +
-      '<button type="button" class="gd-soft gd-full" data-action="restart">Oefen les ' + session.lesson + ' opnieuw</button>' +
-      '<a class="gd-outline-link" href="' + lessonUrl(session.lesson) + '">Naar de volledige grammaticales</a>' +
-      '<button type="button" class="gd-link-button" data-action="overview">Alle lessen bekijken</button>' +
-      '</div></div></div>';
+  function finished(){
+    var d=readSave(),acc=session.attempts?Math.round(100*session.correct/session.attempts):0,n=session.lesson;
+    return '<div class="gd-shell gd-play">'+topBar()+
+      '<div class="gd-card gd-finish"><span class="gd-finish-icon">'+icon('crown')+'</span>'+
+      '<h1>Les '+(n===null?'herhaling':n)+'</h1>'+
+      '<div class="gd-result-grid"><span><strong class="gd-countup" data-target="'+session.xp+'">0</strong><small>XP</small></span>'+
+      '<span><strong>'+acc+'%</strong><small>Nauwkeurigheid</small></span>'+
+      '<span><strong>'+d.streak+'</strong><small>Streak</small></span>'+
+      '<span><strong>'+(n===null?'—':crowns(n)+'/5')+'</strong><small>Kronen</small></span></div>'+
+      '<div class="gd-finish-actions"><button class="gd-primary gd-full" data-action="continue">Doorgaan</button>'+
+      '<button class="gd-soft gd-full" data-action="retry"'+(session.lastMissed.length?'':' disabled')+'>Herhaal fouten</button></div></div></div>';
   }
   function render() {
     if (!app) return;
