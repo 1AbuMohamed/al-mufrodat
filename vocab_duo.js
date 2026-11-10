@@ -1,0 +1,149 @@
+/* Woordenschat flash · simpel: tik = vertaling, swipe / Volgende */
+(function(){
+'use strict';
+
+var LS_PH = 'alm_show_phonetic_v1';
+var showPhonetic = true;
+try { showPhonetic = localStorage.getItem(LS_PH) !== '0'; } catch(e){}
+
+function savePh(){ try { localStorage.setItem(LS_PH, showPhonetic ? '1' : '0'); } catch(e){} }
+
+function escLocal(s){
+  if (typeof esc === 'function') return esc(s);
+  if (s == null) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+window.renderFlash = function renderFlash(){
+  if (typeof state === 'undefined') return '<div class="empty">Laden…</div>';
+  var pool = state.pool || [];
+  if (!pool.length) {
+    return '<div class="desktop-narrow"><button class="back" data-act="nav" data-v="vocab"><span>←</span></button><p class="empty">Geen woorden.</p></div>';
+  }
+  if (state.idx == null || state.idx < 0) state.idx = 0;
+  if (state.idx >= pool.length) state.idx = pool.length - 1;
+  var w = pool[state.idx];
+  var f = !!state.flipped;
+  var dir = (typeof flashDir !== 'undefined') ? flashDir : 'ar2nl';
+  var arFirst = dir !== 'nl2ar';
+  var pct = pool.length ? Math.round(100 * (state.idx + 1) / pool.length) : 0;
+  var arHtml = (typeof wrapTash === 'function') ? wrapTash(w.ar, 'plain') : escLocal(w.ar);
+
+  var main, sub;
+  if (!f) {
+    if (arFirst) {
+      main = '<div class="vf-ar ar ar-mark" lang="ar">' + arHtml + '</div>';
+      sub = showPhonetic && w.translit ? '<div class="vf-ph">' + escLocal(w.translit) + '</div>' : '';
+    } else {
+      main = '<div class="vf-nl">' + escLocal(w.nl) + '</div>';
+      sub = '';
+    }
+  } else {
+    if (arFirst) {
+      main = '<div class="vf-nl">' + escLocal(w.nl) + '</div>';
+      sub = '<div class="vf-ar-sm ar ar-mark" lang="ar">' + arHtml + '</div>' +
+        (showPhonetic && w.translit ? '<div class="vf-ph">' + escLocal(w.translit) + '</div>' : '');
+    } else {
+      main = '<div class="vf-ar ar ar-mark" lang="ar">' + arHtml + '</div>';
+      sub = (showPhonetic && w.translit ? '<div class="vf-ph">' + escLocal(w.translit) + '</div>' : '') +
+        '<div class="vf-nl-sm">' + escLocal(w.nl) + '</div>';
+    }
+  }
+
+  return '<div class="desktop-narrow vf-wrap">' +
+    '<div class="vf-top">' +
+      '<button class="back" data-act="nav" data-v="vocab" style="margin:0"><span>←</span></button>' +
+      '<div class="vf-prog"><i style="width:' + pct + '%"></i></div>' +
+      '<span class="vf-count">' + (state.idx + 1) + '/' + pool.length + '</span>' +
+    '</div>' +
+    '<div class="vf-tools">' +
+      '<button type="button" class="vf-chip' + (arFirst ? ' on' : '') + '" data-act="set-flash-dir" data-d="ar2nl">AR</button>' +
+      '<button type="button" class="vf-chip' + (!arFirst ? ' on' : '') + '" data-act="set-flash-dir" data-d="nl2ar">NL</button>' +
+      '<button type="button" class="vf-chip' + (showPhonetic ? ' on' : '') + '" id="vf-ph-toggle" title="Fonetisch">Aa</button>' +
+    '</div>' +
+    '<div class="vf-card' + (f ? ' is-flipped' : '') + '" id="vf-card" data-act="flip" role="button" tabindex="0">' +
+      main + sub +
+      (!f ? '<div class="vf-tap">tik voor vertaling</div>' : '') +
+    '</div>' +
+    '<div class="vf-nav">' +
+      '<button type="button" class="btn btn-secondary" data-act="flash-prev"' + (state.idx === 0 ? ' disabled' : '') + '>‹</button>' +
+      '<button type="button" class="btn btn-primary vf-next" data-act="flash-next"' + (state.idx >= pool.length - 1 ? ' disabled' : '') + '>Volgende ›</button>' +
+    '</div>' +
+  '</div>';
+};
+
+document.addEventListener('click', function(e){
+  var t = e.target;
+  if (t && (t.id === 'vf-ph-toggle' || (t.closest && t.closest('#vf-ph-toggle')))) {
+    e.preventDefault();
+    e.stopPropagation();
+    showPhonetic = !showPhonetic;
+    savePh();
+    if (typeof render === 'function') render();
+  }
+}, true);
+
+var sx = 0, sy = 0, tracking = false;
+document.addEventListener('touchstart', function(e){
+  var card = e.target && e.target.closest && e.target.closest('#vf-card');
+  if (!card) return;
+  var touch = e.changedTouches[0];
+  sx = touch.clientX; sy = touch.clientY; tracking = true;
+}, {passive: true});
+
+document.addEventListener('touchend', function(e){
+  if (!tracking) return;
+  tracking = false;
+  var card = e.target && e.target.closest && e.target.closest('#vf-card');
+  if (!card) return;
+  var touch = e.changedTouches[0];
+  var dx = touch.clientX - sx;
+  var dy = touch.clientY - sy;
+  if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return;
+  e.preventDefault();
+  if (typeof state === 'undefined' || !state.pool) return;
+  if (dx < 0) {
+    if (state.idx < state.pool.length - 1) {
+      state.idx++; state.flipped = false;
+      if (typeof render === 'function') render();
+    }
+  } else {
+    if (state.idx > 0) {
+      state.idx--; state.flipped = false;
+      if (typeof render === 'function') render();
+    }
+  }
+}, {passive: false});
+
+var style = document.createElement('style');
+style.textContent = `
+.vf-wrap{max-width:420px;margin:0 auto}
+.vf-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.vf-prog{flex:1;height:8px;background:var(--paper-deep);border-radius:99px;overflow:hidden}
+.vf-prog i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),#e8c46a);border-radius:99px;transition:width .25s ease}
+.vf-count{font-size:13px;font-weight:800;color:var(--muted);min-width:3em;text-align:end}
+.vf-tools{display:flex;gap:8px;margin-bottom:14px;justify-content:center}
+.vf-chip{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-weight:800;font-size:13px;cursor:pointer;color:var(--muted);font:inherit}
+.vf-chip.on{border-color:var(--forest);background:var(--forest);color:var(--on-forest)}
+.vf-card{
+  background:var(--surface);border:2px solid var(--line);border-radius:22px;
+  min-height:220px;padding:28px 22px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;cursor:pointer;box-shadow:0 3px 0 var(--line);
+  transition:border-color .15s,transform .12s;user-select:none;-webkit-user-select:none;
+  touch-action:pan-y;
+}
+.vf-card:active{transform:scale(.99)}
+.vf-card.is-flipped{border-color:var(--gold);box-shadow:0 3px 0 var(--gold)}
+.vf-ar{font-family:var(--ar);font-size:clamp(40px,11vw,56px);font-weight:700;line-height:1.35;direction:rtl}
+.vf-ar-sm{font-family:var(--ar);font-size:28px;font-weight:700;direction:rtl;margin-top:10px;color:var(--forest)}
+.vf-nl{font-size:26px;font-weight:800;line-height:1.3;letter-spacing:-.02em}
+.vf-nl-sm{font-size:16px;font-weight:600;color:var(--muted);margin-top:8px}
+.vf-ph{font-size:14px;color:var(--muted);margin-top:8px;font-weight:600}
+.vf-tap{margin-top:18px;font-size:12px;font-weight:700;color:var(--muted);opacity:.65}
+.vf-nav{display:flex;gap:10px;margin-top:16px}
+.vf-nav .btn{flex:1}
+.vf-next{flex:2!important}
+.session-top .tag,.flash-card .hint,.flash-card .tag,.learn-mini{display:none!important}
+`;
+document.head.appendChild(style);
+})();
