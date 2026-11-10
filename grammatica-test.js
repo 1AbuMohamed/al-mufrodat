@@ -1,2 +1,1 @@
-/* RESTORED - see next commit for full */
-console.error('grammatica-test.js temporarily incomplete');
+PLACEHOLDER_REPLACE_WITH_FULL_FILE
