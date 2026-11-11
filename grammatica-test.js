@@ -722,6 +722,77 @@
       (task.rule?'<p class="gd-theory-explanation">'+esc(task.rule)+'</p>':'')+
       '<button type="button" class="gd-primary gd-full" data-action="next">Verder</button></div></section>';
   }
+
+  // Offline leshulp: geen externe AI, geen verzonnen grammatica en geen dataverkeer.
+  var helper={open:false,history:[],question:''};
+  function helperReset(){helper.open=false;helper.history=[];helper.question='';}
+  function helperRule(task){
+    if(task.rule)return plain(task.rule);
+    var rows=theoryRows(task.lesson);
+    var needle=plain(task.word||task.example&&task.example.ar||'');
+    var match=rows.find(function(r){return needle&&plain(r.tekst).includes(needle);});
+    return plain((match||rows[0]||{}).tekst);
+  }
+  function helperReply(task,question){
+    var q=plain(question).toLowerCase(),rule=helperRule(task),answer=plain(task.answer||
+      (task.type==='choice'&&task.example&&task.example.nl)||
+      (task.type==='reverse'&&task.example&&task.example.ar)||'');
+    var ex=task.example,exText=ex&&plain(ex.ar),exNl=ex&&plain(ex.nl);
+    if(/(antwoord|oplossing|welke is juist|juiste)/.test(q)){
+      return {text:'Het antwoord is: '+(task.type==='find'?plain(task.word):task.type==='order'?exText:answer)+
+        (rule?' De bijbehorende regel: '+rule:''),source:true};
+    }
+    if(/(woord|zin|ontled|functie|moedaaf|madjroer|kasrah|naamval|waarom)/.test(q)){
+      if(rule)return {text:(exText?'We kijken naar: '+exText+'. ':'')+
+        'Volgens de regel uit Les '+task.lesson+': '+rule+
+        (task.type==='parse'?' Het gemarkeerde woord is '+plain(task.word)+'.':''),
+        source:true};
+    }
+    if(/(vertaal|beteken|nederlands)/.test(q)&&exNl&&exNl!=='-'){
+      return {text:'De betekenis van de voorbeeldzin is: '+exNl+
+        (exText?' ('+exText+')':''),source:true};
+    }
+    if(/(voorbeeld|toon|laat zien)/.test(q)&&exText){
+      return {text:'Voorbeeld uit Les '+task.lesson+': '+exText+
+        (exNl&&exNl!=='-'?' — '+exNl:'')+(rule?'. Regel: '+rule:''),source:true};
+    }
+    if(rule)return {text:'Dit is de relevante uitleg uit Les '+task.lesson+': '+rule+
+      ' Vraag gerust naar de betekenis, het voorbeeld of het juiste antwoord.',source:true};
+    return {text:'In Les '+task.lesson+' heb ik bij deze vraag geen extra uitleg uit de oorspronkelijke les gevonden. Bekijk de volledige les via de link hieronder.',source:false};
+  }
+  function helperUI(task){
+    return '<div class="gd-help-wrap"><button type="button" class="gd-help-trigger" data-action="help-toggle" aria-expanded="'+helper.open+'" aria-controls="gd-helper-panel">'+
+      '<span class="gd-help-avatar" aria-hidden="true">✦</span><span>Ik begrijp het niet</span><span class="gd-help-chevron" aria-hidden="true">'+(helper.open?'−':'+')+'</span></button>'+
+      (helper.open?'<section id="gd-helper-panel" class="gd-helper-panel" aria-label="Hulp bij deze vraag">'+
+      '<div class="gd-helper-heading"><span class="gd-help-avatar" aria-hidden="true">✦</span><div><strong>Grammatica-hulp</strong><small>Gebaseerd op Les '+task.lesson+' · werkt offline</small></div></div>'+
+      '<p class="gd-helper-intro">Stel een vraag over deze oefening. Ik gebruik de oorspronkelijke Medina-uitleg.</p>'+
+      '<div class="gd-helper-messages" aria-live="polite">'+helper.history.map(function(m){
+        return '<div class="gd-helper-msg '+(m.who==='user'?'from-user':'from-help')+'">'+esc(m.text)+'</div>';
+      }).join('')+'</div>'+
+      '<div class="gd-helper-suggestions">'+
+      '<button type="button" data-action="help-suggest" data-value="Waarom is dit zo?">Waarom is dit zo?</button>'+
+      '<button type="button" data-action="help-suggest" data-value="Leg de grammaticale functie uit">Leg de functie uit</button>'+
+      '<button type="button" data-action="help-suggest" data-value="Toon een voorbeeld">Toon een voorbeeld</button></div>'+
+      '<form class="gd-helper-form" data-helper-form><label for="gd-helper-question" class="gd-visually-hidden">Jouw vraag</label>'+
+      '<input id="gd-helper-question" name="question" maxlength="300" autocomplete="off" placeholder="Wat begrijp je niet?" value="'+esc(helper.question)+'">'+
+      '<button type="submit" aria-label="Vraag stellen">Stuur</button></form>'+
+      '<p class="gd-helper-note">Dit is een lesassistent, geen live AI-chat. Antwoorden komen uit het lesmateriaal.</p>'+
+      '<a href="'+lessonUrl(task.lesson)+'" class="gd-helper-link">Bekijk de volledige les</a>'+
+      '</section>':'')+'</div>';
+  }
+  function helperAsk(question){
+    var task=currentTask(),q=plain(question).slice(0,300);
+    if(!task||!q)return;
+    helper.history.push({who:'user',text:q});
+    helper.history.push({who:'help',text:helperReply(task,q).text});
+    helper.question='';helper.open=true;
+    render();
+    var box=app.querySelector('.gd-helper-messages');
+    if(box)box.scrollTop=box.scrollHeight;
+    var input=app.querySelector('#gd-helper-question');
+    if(input)input.focus({preventScroll:true});
+  }
+
   function taskScreen(){
     var t=currentTask();if(!t)return finished();
     return '<div class="gd-shell gd-play">'+bar()+
@@ -731,7 +802,7 @@
         t.type==='reverse'?'Kies de Arabische zin.':
         t.type==='gap'?'Welk woord ontbreekt?':
         t.type==='order'?'Zet de woorden op volgorde.':'Beantwoord de vraag.'))+'</h2>'+
-      taskBody(t)+
+      taskBody(t)+helperUI(t)+
       '<div class="gd-task-actions"><button type="button" class="gd-primary gd-full" data-action="check"'+(answered()?'':' disabled')+'>Controleren</button></div>'+
       '</div>'+taskFeedback(t)+'</div>';
   }
@@ -776,6 +847,7 @@
     session.lesson=lesson;session.tasks=tasks;session.index=0;session.stage=mode==='weak'?'play':'theory';
     session.theoryCards=lesson===null?[]:theoryCards(lesson);session.theoryIndex=0;
     session.chosen=-1;session.chosenWord=-1;session.ordered=[];
+    helperReset();
     session.feedback=null;session.correct=0;session.wrong=0;session.attempts=0;session.hearts=5;
     session.combo=0;session.bestCombo=0;session.xp=0;session.missed=[];session.lastMissed=[];
     session.review=mode==='weak';session.queued=false;
@@ -824,6 +896,7 @@
   }
   function next(){
     session.index++;session.chosen=-1;session.chosenWord=-1;session.ordered=[];session.feedback=null;
+    helperReset();
     if(session.index>=session.tasks.length && session.hearts>0 && !session.queued && session.missed.length){
       session.queued=true;session.tasks=session.tasks.concat(session.missed.slice());
     }
@@ -843,6 +916,13 @@
       }
       return;
     }
+    if(action==='help-toggle'&&session.stage==='play'){
+      helper.open=!helper.open;render();
+      var focus=app.querySelector(helper.open?'#gd-helper-question':'[data-action="help-toggle"]');
+      if(focus)focus.focus({preventScroll:true});
+      return;
+    }
+    if(action==='help-suggest'&&session.stage==='play')return helperAsk(node.dataset.value);
     if(action==='weak')return weakRound();
     if(action==='theory-prev'){session.theoryIndex=Math.max(0,session.theoryIndex-1);return render();}
     if(action==='theory-next'){
@@ -869,6 +949,12 @@
     app=document.getElementById('gd-app');
     if(!app)return;
     app.addEventListener('click',onClick);
+    app.addEventListener('submit',function(e){
+      if(!e.target.matches('[data-helper-form]'))return;
+      e.preventDefault();
+      var field=e.target.querySelector('[name="question"]');
+      if(field)helperAsk(field.value);
+    });
     app.addEventListener('change',function(e){
       if(e.target.matches('[data-goal]')){var d=readSave();d.goal=Number(e.target.value);refreshStreak(d);writeSave(d);render();}
     });
