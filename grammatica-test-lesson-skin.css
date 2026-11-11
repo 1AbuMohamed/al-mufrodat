@@ -1,5 +1,5 @@
 /* Les-, oefen- en eindschermen in dezelfde stijl als de startpagina (Duolingo-achtig).
- * Gebruikt de variabelen van body.lh-skin (donker/licht volgt de instelling van de startpagina). */
+ * Gebruikt de variabelen van body.lh-skin (donker/licht volgens de instelling van de startpagina). */
 body.lh-skin { background:var(--bg); color:var(--text); font-family:var(--font-ui); }
 body.lh-skin a { color:var(--blue-ink); }
 body.lh-skin .gd-shell { width:min(100%,640px); padding:20px 16px calc(48px + env(safe-area-inset-bottom)); }
@@ -80,3 +80,34 @@ body.lh-skin .gd-feedback-sheet .gd-arabic, body.lh-skin .gd-feedback-sheet .gd-
 body.lh-skin .gd-feedback-inner > strong { font-family:var(--font-ui); font-weight:800; }
 body.lh-skin .gd-feedback-sheet .gd-primary { --fill:var(--green); --shade:var(--green-shade); color:#fff; }
 body.lh-skin .gd-feedback-sheet.review .gd-primary { --fill:var(--red); --shade:#EA2B2B; color:#fff; }
+
+/* Contrast-fix: lichte regelkaarten houden donkere tekst */
+body.lh-skin .gd-source-rule,
+body.lh-skin .gd-theory-reading .gd-source-rule,
+body.lh-skin .gd-theory-question,
+body.lh-skin .gd-theory-explanation {
+  background: #ffffff !important;
+  color: #3c3c3c !important;
+  border: 2px solid #e5e5e5 !important;
+  border-inline-start: 5px solid var(--green, #58cc02) !important;
+  border-radius: var(--radius, 16px);
+}
+body.lh-skin .gd-source-rule :lang(ar),
+body.lh-skin .gd-theory-question :lang(ar),
+body.lh-skin .gd-source-rule .ar,
+body.lh-skin .gd-theory-question .ar {
+  color: #182c29 !important;
+}
+body.lh-skin .gd-intro-example {
+  background: var(--surface-2) !important;
+  color: var(--text) !important;
+  border: 2px solid var(--line) !important;
+}
+body.lh-skin .gd-intro-example .gd-arabic { color: var(--text) !important; }
+body.lh-skin .gd-intro-example .gd-dutch { color: var(--muted) !important; border-top-color: var(--line) !important; }
+body.lh-skin .gd-ar-question {
+  background: var(--surface-2) !important;
+  color: var(--text) !important;
+  border-color: var(--line) !important;
+}
+body.lh-skin .gd-ar-question.gd-arabic { color: var(--text) !important; }
