@@ -464,11 +464,40 @@
     d.items=d.items&&typeof d.items==='object'?d.items:{};
     d.concepts=d.concepts&&typeof d.concepts==='object'?d.concepts:{};
     d.daily=d.daily&&typeof d.daily==='object'?d.daily:{};
+    // Neem XP-dagen uit de oude startpagina over wanneer de nieuwe opslag nog leeg is.
+    if(!Object.keys(d.daily).length && d.days && typeof d.days==='object')d.daily=Object.assign({},d.days);
     d.freezeWeeks=d.freezeWeeks&&typeof d.freezeWeeks==='object'?d.freezeWeeks:{};
     d.goal=[20,30,50].includes(Number(d.goal))?Number(d.goal):20;
+    try{
+      var homeSettings=JSON.parse(localStorage.getItem('alm_grammar_test_settings_v1')||'{}');
+      if([20,30,50].includes(Number(homeSettings.goal)))d.goal=Number(homeSettings.goal);
+    }catch(_err){}
     return d;
   }
-  function writeSave(d){try{localStorage.setItem(SAVE_KEY_V2,JSON.stringify(d));}catch(_err){}}
+  function syncLegacyHome(d){
+    // De originele startpagina verwacht lesvoortgang, dagen en hit-dagen in
+    // dezelfde v2-opslag. Laat de nieuwe per-woord- en conceptdata intact.
+    d.items=d.items||{};
+    d.days=Object.assign({},d.days||{},d.daily||{});
+    d.hit=Array.isArray(d.hit)?d.hit:[];
+    Object.keys(d.days).forEach(function(day){
+      if(d.days[day]>=d.goal && !d.hit.includes(day))d.hit.push(day);
+    });
+    d.hit.sort();
+    d.perfectDay=d.perfectDay||{};
+    d.best=Math.max(Number(d.best)||0,Number(d.streak)||0);
+    Object.keys(DATA).forEach(function(key){
+      var n=Number(key),current=d.items[key]||{m:0,rounds:0};
+      var level=lessonCrowns(n,d);
+      if(level>Number(current.m||0))current.m=level;
+      if(current.m>0 && !current.last)current.last=today();
+      d.items[key]=current;
+    });
+  }
+  function writeSave(d){
+    syncLegacyHome(d);
+    try{localStorage.setItem(SAVE_KEY_V2,JSON.stringify(d));}catch(_err){}
+  }
   function exampleKey(n,ar){return n+'|'+plain(ar);}
   function conceptKey(t){return t.lesson+'|'+plain(t.concept || t.type);}
   function scoreItem(task,data){
@@ -538,6 +567,20 @@
     if(session.attempts>0 && session.wrong===0){
       var d=readSave();session.xp+=5;d.xp=(d.xp||0)+5;
       d.daily[today()]=(d.daily[today()]||0)+5;refreshStreak(d);writeSave(d);
+    }
+    // Het oude leerpad bewaart kronen en leestheorie naast onze nieuwe kenniskaart.
+    if(session.lesson!==null){
+      var d=readSave(),key=String(session.lesson),it=d.items[key]||{m:0,rounds:0};
+      it.m=Math.max(Number(it.m)||0,lessonCrowns(session.lesson,d));
+      it.last=today();
+      if(!getExamples(session.lesson).length)it.read=true;
+      if(!session.review)it.rounds=(Number(it.rounds)||0)+1;
+      it.ratio=session.attempts?session.correct/session.attempts:0;
+      d.items[key]=it;
+      if(!session.wrong&&session.attempts>0)d.perfectDay=Object.assign({},d.perfectDay||{[today()]:true});
+      if(!session.wrong&&session.attempts>0)d.perfectDay[today()]=true;
+      d.last=session.lesson;
+      writeSave(d);
     }
     // Houd het bestaande testcontract van v1 als historische score in stand.
     if(session.lesson!==null){
@@ -833,7 +876,18 @@
   }
   function render(){
     if(!app)return;
-    app.innerHTML=session.stage==='overview'?overview():session.stage==='theory'?intro():session.stage==='done'?finished():taskScreen();
+    var home=session.stage==='overview',oldHome=window.GrammarLabHome;
+    if(document.body&&document.body.classList){
+      document.body.classList.toggle('lh-on',home&&!!oldHome);
+      document.body.classList.toggle('lh-skin',!home&&!!oldHome);
+    }
+    if(home&&oldHome){
+      var d=readSave();syncLegacyHome(d);writeSave(d);
+      app.innerHTML=oldHome.view();
+      oldHome.afterRender();
+    } else {
+      app.innerHTML=home?overview():session.stage==='theory'?intro():session.stage==='done'?finished():taskScreen();
+    }
     if(session.stage==='done'){
       var counter=app.querySelector('.gd-countup');
       if(counter){
@@ -873,9 +927,9 @@
     try{if(history.replaceState)history.replaceState(null,'','grammatica-test.html?les='+n);}catch(_err){}
   }
 
-  function weakRound(){
+  function weakRound(onlyLesson){
     var d=readSave(),due=[],seen=new Set();
-    Object.keys(DATA).map(Number).forEach(function(n){
+    Object.keys(DATA).map(Number).filter(function(n){return onlyLesson==null||n===onlyLesson;}).forEach(function(n){
       var seed=(Math.random()*0xffffffff)>>>0;
       var pool=sourceParse(n,seed+1).concat(buildFindTasks(n,seed+2),buildWhyTasks(n,seed+3),
         buildTheoryTasks(n,seed+4),buildStudyTasks(n,seed+5,{count:10}));
@@ -889,6 +943,7 @@
       });
     });
     if(!due.length){
+      if(onlyLesson!=null){setLesson(onlyLesson);return;}
       var note=app.querySelector('#gd-home-message');
       if(note)note.textContent='Nog geen herhalingen nodig.';
       return;
@@ -919,7 +974,9 @@
     var node=event.target.closest('[data-action]');if(!node)return;
     var action=node.getAttribute('data-action');
     if(action==='overview'){
-      session.stage='overview';try{if(history.replaceState)history.replaceState(null,'','grammatica-test.html');}catch(_err){}return render();
+      session.stage='overview';if(window.GrammarLabHome)window.GrammarLabHome.enter();
+      try{if(history.replaceState)history.replaceState(null,'','grammatica-test.html');}catch(_err){}
+      return render();
     }
     if(action==='reset'){
       if(window.confirm('Alleen de testvoortgang wissen?')){
@@ -955,13 +1012,18 @@
       return startSession(session.lesson,session.lastMissed.slice(),'weak');
     }
     if(action==='continue'){
-      session.stage='overview';if(history.replaceState)history.replaceState(null,'','grammatica-test.html');return render();
+      session.stage='overview';if(window.GrammarLabHome)window.GrammarLabHome.enter();
+      try{if(history.replaceState)history.replaceState(null,'','grammatica-test.html');}catch(_err){}
+      return render();
     }
   }
   function init(){
     app=document.getElementById('gd-app');
     if(!app)return;
     app.addEventListener('click',onClick);
+    if(window.GrammarLabHome){
+      window.GrammarLabHome.mount(app,window.GrammarLabEngine);
+    }
     app.addEventListener('submit',function(e){
       if(!e.target.matches('[data-helper-form]'))return;
       e.preventDefault();
@@ -986,7 +1048,14 @@
     if(requested!==null && /^\d+$/.test(requested) && Object.prototype.hasOwnProperty.call(DATA,requested))setLesson(Number(requested));
     else render();
   }
-  window.GrammarLabEngine={open:function(n){setLesson(n);},refresh:render,isHome:function(){return session.stage==='overview';}};
+  window.GrammarLabEngine={
+    open:function(n,mode){
+      if(mode==='start'&&weakened(Number(n),readSave()))return weakRound(Number(n));
+      setLesson(n);
+    },
+    refresh:render,
+    isHome:function(){return session.stage==='overview';}
+  };
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 
 })();
