@@ -251,7 +251,7 @@
         roleTask(ex,'نِسَاءٍ','Ma‘doed',proof,'Ma‘doed');
       });
     }
-    if(n===16 && rules.some(function(r){return r.includes('irrationele naamwoorden als vrouwelijk enkelvoud');})){
+    if(n===16 && rules.some(function(r){return r.includes('irrationele naamwoorden wordt behandeld als vrouwelijk enkelvoud');})){
       var proof=sourceRule(n,'meervoud van irrationele naamwoorden wordt behandeld');
       rows.filter(function(ex){return plain(ex.ar)==='هٰذِهِ كُتُبٌ جَدِيْدَةٌ، هِيَ صَغِيْرَةٌ.';}).forEach(function(ex){
         roleTask(ex,'هٰذِهِ','vrouwelijk enkelvoud',proof,'irrationeel meervoud');
@@ -565,24 +565,44 @@
       '<button type="button" class="gd-reset" data-action="reset">Reset testvoortgang</button>'+
       '<div class="gd-fixed-continue"><a class="gd-primary" href="grammatica-test.html?les='+current+'">Ga verder</a></div></div>';
   }
+
   function theoryCards(n){
-    var items=(DATA[n]&&DATA[n].inhoud)||[],cards=[],pending=[];
-    items.forEach(function(item){
-      if(['regel','tekst','kop'].includes(item.type)){
-        var t=plain(item.tekst);
-        if(t.length>10 && !/^(?:voorbeelden?:?|merk op:?|les \d+[a-z]?|in deze les leren we het volgende:?)$/i.test(t)){
-          if(pending.length>=2){cards.push(pending);pending=[];}
-          pending.push({kind:'rule',text:t});
-        }
-      }else if(item.type==='voorbeeld' && plain(item.ar)){
-        // Toon de bestaande voorbeeldzin bij de voorafgaande uitleg.
-        if(pending.length){pending.push({kind:'example',ar:plain(item.ar),nl:plain(item.nl)});cards.push(pending);pending=[];}
+    var items=(DATA[n]&&DATA[n].inhoud)||[],notes=[],cards=[];
+    items.forEach(function(item,i){
+      var t=plain(item.tekst);
+      if(['regel','tekst','kop'].includes(item.type)&&t.length>10 &&
+        !/^(?:voorbeelden?:?|merk op:?|les \d+[a-z]?|in deze les leren we het volgende:?|woordenlijst van les)/i.test(t)){
+        notes.push({kind:'rule',text:t,index:i});
       }
     });
-    if(pending.length)cards.push(pending);
+    for(var i=0;i<notes.length;i+=2){
+      var group=notes.slice(i,i+2),card=group.map(function(r){return {kind:'rule',text:r.text};});
+      var near=items.map(function(item,j){return {item:item,index:j};}).filter(function(pair){
+        return pair.item.type==='voorbeeld'&&plain(pair.item.ar);
+      });
+      if(near.length){
+        var words=quoteTokens(group.map(function(x){return x.text;}).join(' '));
+        near.sort(function(x,y){
+          function rank(p){
+            var same=words.some(function(q){
+              return splitArabic(p.item.ar).some(function(w){return normalizeArabic(w)===normalizeArabic(q);});
+            });
+            return Math.abs(p.index-group[0].index)+(same?-20:0);
+          }
+          return rank(x)-rank(y);
+        });
+        card.push({kind:'example',ar:plain(near[0].item.ar),nl:plain(near[0].item.nl)});
+      }
+      cards.push(card);
+    }
+    if(!cards.length){
+      var examples=sourceExamples(n);
+      examples.forEach(function(ex){cards.push([{kind:'example',ar:plain(ex.ar),nl:plain(ex.nl)}]);});
+    }
     return cards;
   }
-  function bar(){
+  
+    function bar(){
     var theory=session.stage==='theory',end=session.stage==='done';
     var length=theory?Math.max(1,session.theoryCards.length):Math.max(1,session.tasks.length);
     var completed=theory?session.theoryIndex:end?length:session.index;
@@ -725,6 +745,10 @@
     if(session.feedback){
       var next=app.querySelector('[data-action="next"]');
       if(next)next.focus({preventScroll:true});
+    } else if(session.stage==='play'){
+      var selected=app.querySelector('[data-action="word"][aria-pressed="true"]') ||
+        app.querySelector('[data-action="select"][aria-pressed="true"]');
+      if(selected)selected.focus({preventScroll:true});
     }
   }
   function startSession(lesson,tasks,mode){
@@ -741,25 +765,33 @@
     if(!Object.prototype.hasOwnProperty.call(DATA,n)){session.stage='overview';render();return;}
     var seed=(Math.random()*0xffffffff)>>>0;
     startSession(Number(n),buildStudyTasks(Number(n),seed,{count:10}),'normal');
-    if(history.replaceState)history.replaceState(null,'','grammatica-test.html?les='+n);
+    try{if(history.replaceState)history.replaceState(null,'','grammatica-test.html?les='+n);}catch(_err){}
   }
+
   function weakRound(){
-    var d=readSave(),due=[];
+    var d=readSave(),due=[],seen=new Set();
     Object.keys(DATA).map(Number).forEach(function(n){
-      var source=buildStudyTasks(n,(Math.random()*0xffffffff)>>>0,{count:10});
-      source.forEach(function(t){
-        var item=scoreItem(t,d),concept=d.concepts[conceptKey(t)];
-        if((item&&item.due&&item.due<=today())||(concept&&concept.due&&concept.due<=today()))due.push(t);
+      var seed=(Math.random()*0xffffffff)>>>0;
+      var pool=sourceParse(n,seed+1).concat(buildFindTasks(n,seed+2),buildWhyTasks(n,seed+3),
+        buildTheoryTasks(n,seed+4),buildStudyTasks(n,seed+5,{count:10}));
+      pool.forEach(function(t){
+        var eKey=t.example&&plain(t.example.ar)?exampleKey(n,t.example.ar):null;
+        var item=eKey?d.items[eKey]:null,concept=d.concepts[conceptKey(t)];
+        if((item&&item.due&&item.due<=today())||(concept&&concept.due&&concept.due<=today())){
+          var sig=t.lesson+'|'+t.type+'|'+t.concept+'|'+plain(t.word);
+          if(!seen.has(sig)){due.push(t);seen.add(sig);}
+        }
       });
     });
     if(!due.length){
       var note=app.querySelector('#gd-home-message');
-      if(note){note.textContent='Nog geen herhalingen nodig.';note.focus();}
+      if(note)note.textContent='Nog geen herhalingen nodig.';
       return;
     }
     startSession(null,seededShuffle(due,(Math.random()*0xffffffff)>>>0).slice(0,10),'weak');
   }
-  function check(){
+  
+    function check(){
     if(!answered()||session.feedback)return;
     var t=currentTask(),good=false;
     if(['theory','rule','why','choice','reverse','gap'].includes(t.type))good=t.options[session.chosen]===(
@@ -781,7 +813,7 @@
     var node=event.target.closest('[data-action]');if(!node)return;
     var action=node.getAttribute('data-action');
     if(action==='overview'){
-      session.stage='overview';if(history.replaceState)history.replaceState(null,'','grammatica-test.html');return render();
+      session.stage='overview';try{if(history.replaceState)history.replaceState(null,'','grammatica-test.html');}catch(_err){}return render();
     }
     if(action==='reset'){
       if(window.confirm('Alleen de testvoortgang wissen?')){
