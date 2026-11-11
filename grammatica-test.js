@@ -1125,6 +1125,10 @@
       return startSession(session.lesson,session.lastMissed.slice(),'weak');
     }
     if(action==='continue'){
+      // Na een afgeronde les direct door naar de volgende les (met zijn theorie); alleen bij de laatste les of een herhaalronde terug naar het leerpad.
+      var finishedLesson=session.lesson;
+      var following=finishedLesson===null?null:Object.keys(DATA).map(Number).sort(function(a,b){return a-b;}).find(function(k){return k>finishedLesson;});
+      if(following!==undefined&&following!==null&&!session.review){return setLesson(following);}
       session.stage='overview';if(window.GrammarLabHome)window.GrammarLabHome.enter();
       try{if(history.replaceState)history.replaceState(null,'','grammatica-test.html');}catch(_err){}
       return render();

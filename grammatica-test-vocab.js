@@ -309,8 +309,9 @@
       '<span><strong>' + accuracy + '%</strong><small>Nauwkeurigheid</small></span>' +
       '<span><strong>' + st.mastered + '/' + st.total + '</strong><small>Beheerst</small></span></div>' +
       '<p>' + S.correct + ' van de ' + S.attempts + ' antwoorden juist.</p>' +
-      '<div class="gd-finish-actions"><button type="button" class="gd-primary gd-full" data-vl="exit">Doorgaan</button>' +
-      '<button type="button" class="gd-soft gd-full" data-vl="again">Nog een ronde</button></div></div></div>';
+      '<div class="gd-finish-actions"><button type="button" class="gd-primary gd-full" data-vl="continue">Doorgaan</button>' +
+      '<button type="button" class="gd-soft gd-full" data-vl="again">Nog een ronde</button>' +
+      '<button type="button" class="gd-soft gd-full" data-vl="exit">Terug naar het leerpad</button></div></div></div>';
   }
   function failScreen() {
     commitXp();
@@ -337,6 +338,13 @@
     var a = t.getAttribute('data-vl');
     if (a === 'exit') return leave();
     if (a === 'start') { S.screen = 'play'; S.qs = build(S.n); S.i = 0; render(); return; }
+    if (a === 'continue') {
+      var nums = lessonNums(), cur = S.n, follow = nums.filter(function (x) { return x > cur; })[0];
+      if (follow === undefined) return leave();
+      var started = stats(follow, jget(K_PROG, {})).seen > 0;
+      commitXp(); S = null;
+      return open(follow, started ? 'play' : 'words');
+    }
     if (a === 'again') { var n = S.n; commitXp(); S = null; return open(n, 'play'); }
     if (a === 'pick') { if (!S.fb) { S.chosen = Number(t.getAttribute('data-i')); render(); } return; }
     if (a === 'check') return check();
