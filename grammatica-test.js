@@ -135,9 +135,9 @@
     });
     // Meerdere authentieke regels als antwoordopties: ook geschikt voor les 0, 17 en 23.
     var across=Object.keys(DATA).map(Number).filter(function(x){return x!==n;})
-      .flatMap(function(x){return theoryPool(x);}).filter(function(x){return x.length>27 && x.length<290;});
-    rules.filter(function(r){return r.length>25 && r.length<330;}).forEach(function(rule,i){
-      var wrong=rules.filter(function(r){return r!==rule && r.length>25 && r.length<330;}).concat(across);
+      .flatMap(function(x){return theoryPool(x);}).filter(function(x){return x.length>27 && x.length<140;});
+    rules.filter(function(r){return r.length>25 && r.length<140;}).forEach(function(rule,i){
+      var wrong=rules.filter(function(r){return r!==rule && r.length>25 && r.length<140;}).concat(across);
       var opts=makeOptions(rule,wrong,seed+i*61,3);
       if(opts.length>=2)tasks.push({type:'rule',lesson:n,prompt:'Welke regel hoort bij Les '+n+'?',answer:rule,options:opts,rule:rule,concept:'regel:'+i});
     });
@@ -819,7 +819,7 @@
     var n=session.lesson,cards=session.theoryCards,p=session.theoryIndex,rows=cards[p]||[];
     var final=p>=cards.length-1;
     return '<div class="gd-shell gd-play">'+bar()+
-      '<div class="gd-card gd-intro"><div class="gd-stage-tag">Eerst lezen</div><h1>Les '+n+'</h1>'+
+      '<div class="gd-card gd-intro"><div class="gd-stage-tag">Theorie · kaart '+(p+1)+' van '+cards.length+'</div><h1>Les '+n+'</h1>'+
       '<div class="gd-source-box gd-theory-reading'+(rows.some(function(r){return r.kind==='lab';})?' gd-lab-reading':'')+'">'+rows.map(function(r){
         if(r.kind==='lab')return labCardHtml(r.card);
         return r.kind==='example'?
@@ -894,18 +894,45 @@
     if(t.type==='reflect')return true;
     return session.chosen>=0;
   }
+  var TERM_HELP={
+    Moebtada:'Moebtada: het onderwerp waar een naamwoordelijke zin over gaat.',
+    "Moebtada'":'Moebtada: het onderwerp waar een naamwoordelijke zin over gaat.',
+    Chabar:'Chabar: het gezegde, oftewel wat er over de Moebtada wordt gezegd.',
+    'Harf Djarr':'Harf Djarr: een voorzetsel (zoals فِي, عَلَى, مِنْ, إِلَى). Het maakt het volgende woord Madjroer (-ie).',
+    Madjroer:'Madjroer: het woord staat op een -ie-uitgang (kasrah), na een voorzetsel of als Moedaaf Ilaih.',
+    Moedaaf:'Moedaaf: het eerste deel (het bezit) in een bezitsconstructie; krijgt nooit اَلْ en nooit tanwien.',
+    'Moedaaf Ilaih':'Moedaaf Ilaih: het tweede deel (de bezitter) in een bezitsconstructie; is altijd Madjroer (-ie).',
+    'Na‘t':'Na‘t: bijvoeglijk naamwoord dat achter het zelfstandig naamwoord komt en zich op 4 punten aanpast.',
+    'Man‘oet':'Man‘oet: het zelfstandig naamwoord dat door de Na‘t wordt beschreven.',
+    'Faa‘il':'Faa‘il: het onderwerp (de uitvoerder) bij een werkwoord (Fi‘l), altijd Marfoe‘ (-oe).',
+    'Fi‘l':'Fi‘l: het werkwoord (de handeling of toestand in de zin).',
+    'Maf‘oel bih':'Maf‘oel bih: het lijdend voorwerp van een werkwoord, altijd Mansoeb (-a).',
+    Dhamier:'Dhamier: persoonlijk voornaamwoord (zoals ik, hij, zij, ons, jouw).',
+    'Ism Isjaarah':'Ism Isjaarah: aanwijzend voornaamwoord (zoals هٰذَا, هٰذِهِ, ذٰلِكَ, تِلْكَ).',
+    'Ism Istifhaam':'Ism Istifhaam: vraagwoord (zoals مَا = wat, مَنْ = wie, أَيْنَ = waar, كَمْ = hoeveel).',
+    'Harf Istifhaam':'Harf Istifhaam: vraagpartikel aan het begin van een ja/nee-vraag (أَ of هَلْ).',
+    'Harf Atf':'Harf Atf: verbindingswoord (zoals وَ = en).',
+    Zarf:'Zarf: bijwoord van plaats of tijd (zoals خَلْفَ, أَمَامَ, تَحْتَ, قَبْلَ, بَعْدَ); staat als Moedaaf.',
+    'Ma‘doed':'Ma‘doed: het getelde woord na een telwoord (bij 3 t/m 10 meervoud en Madjroer).',
+    'Marfoe‘':'Marfoe‘: de standaard -oe-uitgang (Dammah) bij het onderwerp of gezegde.',
+    Mansoeb:'Mansoeb: de -a-uitgang (Fathah), onder andere bij het lijdend voorwerp of na كَمْ.',
+    Ism:'Ism: elk zelfstandig naamwoord, eigennaam, bijvoeglijk naamwoord of voornaamwoord.',
+    Harf:'Harf: een klein functiewoord/partikel (zoals een voorzetsel, vraagpartikel of voegwoord).'
+  };
   function taskFeedback(task){
     if(!session.feedback)return '';
     var good=session.feedback.correct,headline=good?['Goed!','Prima!','Uitstekend!'][session.index%3]:'Juiste antwoord:';
     var answer=task.type==='zinsontleding'?'':task.type==='parse'?task.word+' — '+task.answer:task.type==='find'?task.word:
       task.type==='order'?plain(task.example.ar):task.type==='gap'?task.answer:task.answer||task.example&&task.example.nl||'';
+    var termNote=(task.type==='ontleed'||task.type==='parse')&&TERM_HELP[task.answer]?TERM_HELP[task.answer]:'';
     return '<section class="gd-feedback gd-feedback-sheet '+(good?'good':'review')+'" role="status" aria-live="assertive">'+
       '<div class="gd-feedback-inner"><strong>'+headline+'</strong>'+
       (session.combo>=3?'<span class="gd-combo">'+session.combo+'× combo</span>':'')+
       (answer?'<p class="gd-correct-answer">'+(task.rich?rich(answer):esc(answer))+'</p>':'')+
-      (task.type==='zinsontleding'&&P()?P().solution(task):
+      (task.type==='zinsontleding'&&P()?P().solution(task)+(task.nl?'<p class="gd-parse-nl">'+esc(task.nl)+'</p>':''):
         (task.example?'<p class="gd-arabic" lang="ar" dir="rtl">'+esc(task.example.ar)+'</p>'+
         (plain(task.example.nl)&&plain(task.example.nl)!=='-'?'<p>'+esc(task.example.nl)+'</p>':''):''))+
+      (termNote?'<p class="gd-theory-explanation">'+esc(termNote)+'</p>':'')+
       (task.rule&&task.type!=='ontleed'?'<p class="gd-theory-explanation">'+(task.rich?rich(task.rule):esc(task.rule))+'</p>':'')+
       (task.type==='ontleed'?ontleedTable(task.sentence,task.wordIndex):'')+
       (P()&&P().fastOn()?'<div class="gd-autonext" aria-hidden="true"><i></i></div>':'')+
