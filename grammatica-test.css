@@ -481,3 +481,8 @@ body{overflow-x:hidden}
 .gd-visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .gd-help-trigger:focus-visible,.gd-helper-form input:focus-visible,.gd-helper-suggestions button:focus-visible,.gd-helper-form button:focus-visible{outline:3px solid #d99b27;outline-offset:3px}
 @media(max-width:370px){.gd-helper-panel{padding:12px}.gd-helper-suggestions button{font-size:11px}.gd-helper-form button{flex-basis:52px}}
+
+/* Herstelde geluidsschakelaar uit de oudere Grammatica Lab-versie. */
+.gd-sound-toggle{display:flex;align-items:center;justify-content:center;gap:8px;margin:18px auto 4px;padding:11px 18px;min-height:48px;border:2px solid #bad6c6;border-bottom-width:4px;border-radius:14px;background:#f1f9f3;color:#135b40;font:inherit;font-weight:850;cursor:pointer}
+.gd-sound-toggle[aria-pressed="false"]{background:#f1f1ef;color:#53665b;border-color:#cfd8d0}
+.gd-sound-toggle:focus-visible{outline:3px solid #d99b27;outline-offset:3px}
