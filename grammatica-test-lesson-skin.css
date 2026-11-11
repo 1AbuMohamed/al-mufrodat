@@ -1,0 +1,82 @@
+/* Les-, oefen- en eindschermen in dezelfde stijl als de startpagina (Duolingo-achtig).
+ * Gebruikt de variabelen van body.lh-skin (donker/licht volgt de instelling van de startpagina). */
+body.lh-skin { background:var(--bg); color:var(--text); font-family:var(--font-ui); }
+body.lh-skin a { color:var(--blue-ink); }
+body.lh-skin .gd-shell { width:min(100%,640px); padding:20px 16px calc(48px + env(safe-area-inset-bottom)); }
+body.lh-skin .gd-play { max-width:640px; }
+body.lh-skin .loading { color:var(--muted); }
+
+/* bovenbalk met voortgang */
+body.lh-skin .gd-lesson-bar { gap:12px; margin-bottom:24px; }
+body.lh-skin .gd-home { width:44px; height:44px; padding:0; display:grid; place-items:center; margin:0; color:var(--muted); border-radius:12px; }
+body.lh-skin .gd-home:hover, body.lh-skin .gd-home:focus { background:var(--surface-2); color:var(--text); outline:0; }
+body.lh-skin .gd-home:focus-visible { outline:3px solid var(--blue); outline-offset:2px; }
+body.lh-skin .gd-progress-title { font-size:13px; letter-spacing:.03em; }
+body.lh-skin .gd-progress-title strong { color:var(--text); font-weight:800; }
+body.lh-skin .gd-progress-title span { color:var(--muted); font-weight:700; }
+body.lh-skin .gd-progress { height:16px; border-radius:8px; background:var(--line); }
+body.lh-skin .gd-progress span { background:var(--green); border-radius:8px; }
+body.lh-skin .gd-bar-hearts { font-size:18px; color:var(--red); white-space:nowrap; font-weight:800; }
+body.lh-skin .gd-source-link { color:var(--blue-ink); font:800 12px var(--font-ui); letter-spacing:.05em; text-transform:uppercase; }
+
+/* kaarten */
+body.lh-skin .gd-card { background:var(--surface); border:2px solid var(--line); border-radius:var(--radius); box-shadow:none; padding:clamp(18px,4.5vw,28px); }
+body.lh-skin .gd-stage-tag { background:transparent; color:var(--blue-ink); padding:0; border-radius:0; font:800 13px var(--font-ui); letter-spacing:.08em; }
+body.lh-skin .gd-card h1, body.lh-skin .gd-task-title { font-family:var(--font-ui); font-weight:800; color:var(--text); letter-spacing:0; }
+body.lh-skin .gd-card h1 { font-size:clamp(24px,5vw,30px); line-height:1.2; margin:10px 0 14px; }
+body.lh-skin .gd-support, body.lh-skin .gd-subinstruction, body.lh-skin .gd-intro-bottom, body.lh-skin .gd-placeholder { color:var(--muted); font-size:15px; }
+body.lh-skin .gd-source-box { background:var(--surface-2); border:2px solid var(--line); border-left:2px solid var(--line); border-radius:var(--radius); }
+body.lh-skin .gd-source-rule { font-size:15px; color:var(--text); }
+body.lh-skin .gd-intro-example { border:2px solid var(--line); border-left:2px solid var(--line); border-radius:var(--radius); background:transparent; }
+body.lh-skin .gd-small-label { color:var(--gold-ink); font:800 12px var(--font-ui); letter-spacing:.08em; }
+body.lh-skin .gd-arabic { color:var(--text); }
+body.lh-skin .gd-dutch { color:var(--text); border-top:2px solid var(--line); font-size:16px; }
+body.lh-skin .gd-ar-question { background:var(--surface-2); border:2px solid var(--line); border-radius:var(--radius); }
+
+/* knoppen = .btn van de startpagina */
+body.lh-skin .gd-primary, body.lh-skin .gd-soft, body.lh-skin .gd-secondary {
+  --fill:var(--green-fill); --shade:var(--green-shade);
+  min-height:var(--tap); padding:0 20px; border:2px solid var(--shade); border-radius:var(--radius);
+  background:var(--fill); color:var(--on-fill); box-shadow:0 4px 0 var(--shade);
+  font:800 15px var(--font-ui); letter-spacing:.05em; text-transform:uppercase; text-decoration:none;
+}
+body.lh-skin .gd-primary:hover:not(:disabled) { background:var(--fill); filter:brightness(1.05); }
+body.lh-skin .gd-primary:active:not(:disabled), body.lh-skin .gd-soft:active, body.lh-skin .gd-secondary:active { transform:translateY(4px); box-shadow:none; border-bottom-width:2px; }
+body.lh-skin .gd-primary:disabled { background:var(--line); border-color:var(--line); color:var(--disabled); box-shadow:none; }
+body.lh-skin .gd-soft, body.lh-skin .gd-secondary { --fill:transparent; --shade:var(--line); color:var(--text); background:transparent; }
+body.lh-skin .gd-soft:hover, body.lh-skin .gd-secondary:hover { background:var(--surface-2); border-color:var(--line); }
+body.lh-skin .gd-outline-link, body.lh-skin .gd-link-button { color:var(--blue-ink); font:800 13px var(--font-ui); letter-spacing:.05em; text-transform:uppercase; text-decoration:none; text-align:center; }
+
+/* antwoordopties */
+body.lh-skin .gd-option, body.lh-skin .gd-word, body.lh-skin .gd-tile {
+  background:var(--surface); color:var(--text); border:2px solid var(--line); border-bottom-width:4px; border-radius:var(--radius);
+  font-family:var(--font-ui); font-weight:700; font-size:17px;
+}
+body.lh-skin .gd-option-ar, body.lh-skin .gd-word, body.lh-skin .gd-tile { font-family:var(--font-ar); }
+body.lh-skin .gd-option:hover:not(:disabled), body.lh-skin .gd-tile:hover:not(:disabled) { background:var(--surface-2); border-color:var(--line); }
+body.lh-skin .gd-option.selected, body.lh-skin .gd-word.chosen {
+  border-color:var(--blue); background:var(--surface-2); color:var(--blue-ink);
+}
+body.lh-skin .gd-tile.placed { border-color:var(--blue); background:var(--surface-2); color:var(--blue-ink); }
+body.lh-skin .gd-tile.used { opacity:.3; }
+body.lh-skin .gd-answer-area, body.lh-skin .gd-order-slots { border:2px dashed var(--line); background:transparent; border-radius:var(--radius); }
+body.lh-skin .gd-order-prompt, body.lh-skin .gd-translation-cue { background:var(--surface-2); border:2px solid var(--line); border-left:2px solid var(--line); color:var(--text); border-radius:var(--radius); font-weight:700; }
+body.lh-skin .gd-gap-slot { color:var(--blue-ink); }
+body.lh-skin .gd-guide, body.lh-skin .gd-label-tip, body.lh-skin .gd-theory-example, body.lh-skin .gd-feedback-rule { background:var(--surface-2); border:2px solid var(--line); border-radius:var(--radius); color:var(--text); }
+body.lh-skin .gd-guide summary { color:var(--blue-ink); }
+body.lh-skin .gd-parse-word { background:var(--surface); border:2px solid var(--line); border-bottom-width:4px; border-radius:var(--radius); color:var(--text); }
+body.lh-skin .gd-parse-word.selected { border-color:var(--blue); box-shadow:none; }
+body.lh-skin .gd-parse-word.filled { background:var(--surface-2); }
+body.lh-skin .gd-parse-word small, body.lh-skin .gd-label-tip strong { color:var(--blue-ink); }
+body.lh-skin .gd-dot { background:var(--line); }
+body.lh-skin .gd-dot.on { background:var(--blue); }
+body.lh-skin .gd-dot.done { background:var(--green); }
+
+/* feedbackbalk onderaan */
+body.lh-skin .gd-feedback-sheet { border-radius:20px 20px 0 0; box-shadow:none; border:0; border-top:2px solid var(--line); }
+body.lh-skin .gd-feedback-sheet.good { background:var(--surface-2); color:var(--green); }
+body.lh-skin .gd-feedback-sheet.review { background:var(--surface-2); color:var(--red-ink); }
+body.lh-skin .gd-feedback-sheet .gd-arabic, body.lh-skin .gd-feedback-sheet .gd-dutch-answer, body.lh-skin .gd-feedback-sheet .gd-feedback-rule p { color:inherit; }
+body.lh-skin .gd-feedback-inner > strong { font-family:var(--font-ui); font-weight:800; }
+body.lh-skin .gd-feedback-sheet .gd-primary { --fill:var(--green); --shade:var(--green-shade); color:#fff; }
+body.lh-skin .gd-feedback-sheet.review .gd-primary { --fill:var(--red); --shade:#EA2B2B; color:#fff; }

@@ -399,7 +399,10 @@
   function render() {
     if (!app) return;
     var home = session.stage === 'overview' && !!window.GrammarLabHome;
-    if (document.body && document.body.classList) document.body.classList.toggle('lh-on', home);
+    if (document.body && document.body.classList) {
+      document.body.classList.toggle('lh-on', home);
+      document.body.classList.add('lh-skin');
+    }
     app.innerHTML = session.stage === 'overview' ? overview() :
       session.stage === 'intro' ? intro() :
       session.stage === 'done' ? finished() : taskScreen();

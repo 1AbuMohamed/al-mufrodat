@@ -1,6 +1,6 @@
 /* Grammatica Lab · startpagina (Duolingo-achtige indeling, eigen iconen en teksten).
  * Alle variabelen zijn gescopet op body.lh-on zodat de lesschermen ongewijzigd blijven. */
-body.lh-on {
+body.lh-on, body.lh-skin {
   --bg:#131F24; --surface:#131F24; --surface-2:#202F36;
   --line:#37464F; --line-shade:#2A373E; --text:#FFFFFF; --muted:#AFAFAF; --disabled:#52656D;
   --blue:#1CB0F6; --blue-fill:#84D8FF; --blue-shade:#1899D6; --blue-ink:#1CB0F6;
@@ -13,19 +13,19 @@ body.lh-on {
   background:var(--bg); color:var(--text); font-family:var(--font-ui);
 }
 @media (prefers-color-scheme: light) {
-  html:not([data-theme="dark"]) body.lh-on {
+  html:not([data-theme="dark"]) body.lh-on, html:not([data-theme="dark"]) body.lh-skin {
     --bg:#FFFFFF; --surface:#FFFFFF; --surface-2:#DDF4FF; --line:#E5E5E5; --line-shade:#CFCFCF;
     --text:#4B4B4B; --muted:#777777; --disabled:#AFAFAF; --blue-ink:#0B6FA0; --gold-ink:#8A6300;
     --red-ink:#C62828; --flame-ink:#B45F00;
   }
 }
-html[data-theme="light"] body.lh-on {
+html[data-theme="light"] body.lh-on, html[data-theme="light"] body.lh-skin {
   --bg:#FFFFFF; --surface:#FFFFFF; --surface-2:#DDF4FF; --line:#E5E5E5; --line-shade:#CFCFCF;
   --text:#4B4B4B; --muted:#777777; --disabled:#AFAFAF; --blue-ink:#0B6FA0; --gold-ink:#8A6300;
   --red-ink:#C62828; --flame-ink:#B45F00;
 }
-body.lh-on .site-header { display:none; }
-body.lh-on { overflow-x:hidden; }
+body.lh-on .site-header, body.lh-skin .site-header { display:none; }
+body.lh-on, body.lh-skin { overflow-x:hidden; }
 
 .lh, .lh * { box-sizing:border-box; }
 .lh { min-height:100vh; color:var(--text); font-size:17px; line-height:1.4; }
