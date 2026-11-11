@@ -77,8 +77,11 @@
     return plain(t).replace(/[\u064b-\u065f\u0670\u06d6-\u06ed]/g,'').replace(/[.,!?؟،؛()\[\]«»0-9]/g,'');
   }
   function sourceExamples(n) {
+    var seen=new Set();
     return ((DATA[n] && DATA[n].inhoud)||[]).filter(function(r){
-      return r.type==='voorbeeld' && plain(r.ar) && !/^(?:\-|voorbeeld:?)$/i.test(plain(r.ar));
+      var k=plain(r.ar)+'|'+plain(r.nl);
+      if(r.type!=='voorbeeld' || !plain(r.ar) || /^(?:\-|voorbeeld:?)$/i.test(plain(r.ar)) || seen.has(k))return false;
+      seen.add(k);return true;
     });
   }
   function sourceRule(n,term) {
@@ -101,6 +104,18 @@
         quoteTokens(t).forEach(function(q){if(!allQuotes.includes(q))allQuotes.push(q);});
       });
     });
+    // Les 0: diakritische tekens worden letterlijk uit de vijf bronregels gebruikt.
+    if(n===0){
+      var symbols=rules.map(function(r){
+        var m=/«([^»]*◌[^»]*)»/.exec(r),label=/^\d+\.\s*([^\s]+)/.exec(r);
+        return m&&label?{symbol:m[1],label:label[1],rule:r}:null;
+      }).filter(Boolean);
+      symbols.forEach(function(t,i){
+        var opts=makeOptions(t.symbol,symbols.map(function(s){return s.symbol;}),seed+i*19,4);
+        tasks.push({type:'theory',lesson:n,prompt:'Welk teken hoort bij '+t.label+'?',context:t.label,
+          answer:t.symbol,options:opts,rule:t.rule,concept:'teken:'+t.label});
+      });
+    }
     rules.forEach(function(rule,i){
       var words=quoteTokens(rule).filter(function(x){return x.length<24 && !x.includes(' ') && !x.includes('→');});
       if(words.length){
@@ -151,9 +166,10 @@
     function roleTask(ex,word,role,proof,concept) {
       if(!proof)return;
       var parts=splitArabic(ex.ar);
-      var index=parts.findIndex(function(t){return normalizeArabic(t)===normalizeArabic(word);});
+      var index=parts.findIndex(function(t){return plain(t)===plain(word);});
+      if(index<0)index=parts.findLastIndex(function(t){return normalizeArabic(t)===normalizeArabic(word);});
       if(index<0)return;
-      var roles=['Moedaaf','Moedaaf Ilaih','Harf Djarr','Na‘t','Man‘oet','Ma‘doed','Madjroer','Marfoe‘','Mansoeb','predicaat','lijdend voorwerp'];
+      var roles=['Moedaaf','Moedaaf Ilaih','Harf Djarr','Na‘t','Man‘oet','Ma‘doed','Madjroer','Marfoe‘','Mansoeb','predicaat','lijdend voorwerp','vrouwelijk enkelvoud'];
       tasks.push({type:'parse',lesson:n,example:ex,wordIndex:index,word:parts[index],
         prompt:'Welke grammaticale functie heeft het gemarkeerde woord?',answer:role,
         options:makeOptions(role,roles,seed+tasks.length*17,4),rule:proof,concept:concept||'functie:'+role});
@@ -233,6 +249,12 @@
       var proof=sourceRule(n,'vrouwelijke Ma‘doed');
       rows.filter(function(ex){return plain(ex.ar)==='عَشْرُ نِسَاءٍ';}).forEach(function(ex){
         roleTask(ex,'نِسَاءٍ','Ma‘doed',proof,'Ma‘doed');
+      });
+    }
+    if(n===16 && rules.some(function(r){return r.includes('irrationele naamwoorden als vrouwelijk enkelvoud');})){
+      var proof=sourceRule(n,'meervoud van irrationele naamwoorden wordt behandeld');
+      rows.filter(function(ex){return plain(ex.ar)==='هٰذِهِ كُتُبٌ جَدِيْدَةٌ، هِيَ صَغِيْرَةٌ.';}).forEach(function(ex){
+        roleTask(ex,'هٰذِهِ','vrouwelijk enkelvoud',proof,'irrationeel meervoud');
       });
     }
     if(n===23 && rules.some(function(r){return r.includes('Moedaaf Ilaih');})){
