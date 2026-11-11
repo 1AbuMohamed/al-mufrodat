@@ -561,6 +561,17 @@
     };
     return '<svg class="gd-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+paths[name]+'</svg>';
   }
+  function soundEnabled(){
+    try{return JSON.parse(localStorage.getItem('alm_grammar_test_settings_v1')||'{}').sound!==false;}
+    catch(_err){return true;}
+  }
+  function toggleSound(){
+    try{
+      var key='alm_grammar_test_settings_v1',settings=JSON.parse(localStorage.getItem(key)||'{}');
+      settings.sound=!soundEnabled();localStorage.setItem(key,JSON.stringify(settings));
+    }catch(_err){}
+    render();
+  }
   function overview(){
     var d=readSave();refreshStreak(d);
     var pct=Math.min(100,Math.round(100*(d.daily[today()]||0)/d.goal)),current=nextLesson(d);
@@ -583,6 +594,7 @@
           (reading?'<span class="gd-node-sub">Lees les</span>':'')+'</a></div>';
       }).join('')+'</nav><button type="button" class="gd-weak-button" data-action="weak">Oefen zwakke punten</button>'+
       '<p class="gd-alert" id="gd-home-message" aria-live="polite"></p>'+
+      '<button type="button" class="gd-sound-toggle" data-action="sound-toggle" aria-pressed="'+soundEnabled()+'">'+(soundEnabled()?'🔊 Geluid aan':'🔇 Geluid uit')+'</button>'+ 
       '<button type="button" class="gd-reset" data-action="reset">Reset testvoortgang</button>'+
       '<div class="gd-fixed-continue"><a class="gd-primary" href="grammatica-test.html?les='+current+'">Ga verder</a></div></div>';
   }
@@ -923,6 +935,7 @@
       return;
     }
     if(action==='help-suggest'&&session.stage==='play')return helperAsk(node.dataset.value);
+    if(action==='sound-toggle')return toggleSound();
     if(action==='weak')return weakRound();
     if(action==='theory-prev'){session.theoryIndex=Math.max(0,session.theoryIndex-1);return render();}
     if(action==='theory-next'){
