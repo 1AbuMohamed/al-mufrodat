@@ -340,7 +340,9 @@
     choicesFor: choicesFor,
     theoryRows: theoryRows,
     buildTheoryTasks: buildTheoryTasks,
-    buildParsingTasks: buildParsingTasks,
+    buildParsingTasks: sourceParse,
+    buildWhyTasks: buildWhyTasks,
+    buildFindTasks: buildFindTasks,
     buildStudyTasks: buildStudyTasks
   };
 
