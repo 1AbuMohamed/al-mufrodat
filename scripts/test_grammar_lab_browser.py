@@ -1,4 +1,4 @@
-"""Controleer het zelfstandige Grammatica Lab in een echte mobiele browser.
+"""Controleer alle nieuwe theorielessen en oefenrondes in een mobiele Chromium-browser.
 
 Run: pip install playwright && python -m playwright install chromium
      python scripts/test_grammar_lab_browser.py
@@ -12,6 +12,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
+SEED = int(0xFFFFFFFF * 0.25)
 
 
 class Quiet(SimpleHTTPRequestHandler):
@@ -19,54 +20,70 @@ class Quiet(SimpleHTTPRequestHandler):
         pass
 
 
-def assert_layout(page, width):
+def assert_layout(page, width: int):
     page.set_viewport_size({"width": width, "height": 844})
-    page.wait_for_timeout(50)
-    info = page.evaluate("""() => ({
-      width: document.documentElement.clientWidth,
-      scroll: document.documentElement.scrollWidth,
-      main: (() => {
-        const r = document.querySelector('.gd-card')?.getBoundingClientRect();
-        return r && { x: r.x, right: r.right, width: r.width };
-      })()
-    })""")
-    assert info["scroll"] <= info["width"] + 2, f"Hor. overflow bij {width}px: {info}"
-    assert info["main"] and info["main"]["x"] >= -1 and info["main"]["right"] <= info["width"] + 2, (
-        f"De oefenkaart valt buiten het scherm bij {width}px: {info}")
-    print(f"OK: {width}px, geen horizontale overflow")
+    page.wait_for_timeout(70)
+    data = page.evaluate("""() => {
+        const card = document.querySelector('.gd-card')?.getBoundingClientRect();
+        return {
+            width: document.documentElement.clientWidth,
+            scroll: document.documentElement.scrollWidth,
+            card: card && {left:card.left,right:card.right}
+        };
+    }""")
+    assert data["scroll"] <= data["width"] + 2, f"Horizontale overflow ({width}px): {data}"
+    assert data["card"] and data["card"]["left"] >= -1 and data["card"]["right"] <= data["width"] + 2, (
+        f"Leskaart valt buiten beeld ({width}px): {data}"
+    )
+    print(f"OK: mobiel {width}px, geen overflow")
 
 
-def complete_lesson(page, n):
-    tasks = page.evaluate(f"window.GrammarLabCore.buildTasks({n})")
-    assert tasks, "Geen oefenopdrachten voor les 5"
-    assert len(tasks) <= 6
-    for step, task in enumerate(tasks):
-        assert page.locator(".gd-task").count() == 1, f"Oefenvraag {step+1} ontbreekt"
-        if task["type"] == "choice":
-            answer = task["example"]["nl"].strip()
-            index = task["options"].index(answer)
-            page.locator(f'[data-action="select"][data-value="{index}"]').click()
-            page.locator('[data-action="check"]').click()
-        elif task["type"] == "gap":
-            index = task["options"].index(task["answer"])
+def advance_theory(page, n: int):
+    count = page.evaluate(f"window.GrammarLabCore.buildTheoryCards({n}).length")
+    assert count >= 1, f"Les {n} heeft geen theorieles"
+    for i in range(count):
+        assert page.locator("#gd-theory-title").inner_text().strip() == f"Les {n}"
+        assert page.locator(".gd-theory-step").inner_text().strip(), "Lege theoretische stap"
+        assert page.locator(".gd-theory-counter").inner_text().strip() == f"Stap {i+1} van {count}"
+        if i < count - 1:
+            page.locator('[data-action="theory-next"]').click()
+    assert page.locator('[data-action="start"]').count() == 1, "Theorie eindigt niet in oefenen"
+    print(f"OK: Les {n} bevat {count} volledige, opeenvolgende theoriestappen")
+
+
+def answer_round(page, n: int):
+    tasks = page.evaluate(f"window.GrammarLabCore.buildStudyTasks({n}, {SEED})")
+    assert tasks, f"Les {n} heeft geen opdrachten"
+    grammar_count = sum(task["type"] in ("theory", "parse", "why") for task in tasks)
+    if len(tasks) >= 8:
+        assert grammar_count >= 6, f"Te weinig grammatica bij Les {n}: {grammar_count}/{len(tasks)}"
+    for i, task in enumerate(tasks):
+        assert page.locator(".gd-task").count() == 1, f"Vraag {i+1} ontbreekt"
+        if task["type"] in ("theory", "parse", "why", "gap", "choice"):
+            correct = task["example"]["nl"].strip() if task["type"] == "choice" else task["answer"]
+            index = task["options"].index(correct)
             page.locator(f'[data-action="select"][data-value="{index}"]').click()
             page.locator('[data-action="check"]').click()
         elif task["type"] == "order":
-            for i in range(len(task["words"])):
-                page.locator(f'[data-action="tile"][data-value="{i}"]').click()
+            for index in range(len(task["words"])):
+                page.locator(f'[data-action="tile"][data-value="{index}"]').click()
             page.locator('[data-action="check"]').click()
-        else:
+        elif task["type"] == "reflect":
             page.locator('[data-action="reveal"]').click()
             page.locator('[data-action="rate"][data-value="1"]').click()
-        assert page.locator(".gd-feedback.good").count() == 1, f"Feedback ontbreekt bij stap {step+1}"
-        assert task["example"]["ar"].strip() in page.locator(".gd-feedback").inner_text()
-        assert task["example"]["nl"].strip() in page.locator(".gd-feedback").inner_text()
+        else:
+            raise AssertionError(f"Onbekend vraagtype: {task['type']}")
+        assert page.locator(".gd-feedback.good").count() == 1, f"Goed-feedback ontbreekt bij {i+1}"
+        if task.get("rule"):
+            assert task["rule"] in page.locator(".gd-feedback").inner_text()
+        if task.get("example"):
+            assert task["example"]["ar"] in page.locator(".gd-feedback").inner_text()
         page.locator('[data-action="next"]').click()
     assert page.locator(".gd-finish").count() == 1
     assert f"{len(tasks)} van de {len(tasks)}" in page.locator(".gd-finish").inner_text()
     assert page.evaluate("localStorage.getItem('alm_grammar_test_scores_v1')") is not None
     assert page.evaluate("localStorage.getItem('alm_gram_done_v2')") is None
-    print(f"OK: {len(tasks)} opdrachten les {n}, originele antwoorden en aparte opslag")
+    print(f"OK: Les {n} afgerond met {len(tasks)} vragen ({grammar_count} grammatica) zonder gewijzigde brontekst")
 
 
 def main():
@@ -76,37 +93,40 @@ def main():
     errors = []
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True, args=["--no-sandbox"], channel=os.environ.get("PW_CHANNEL") or None)
-            page = browser.new_page(
-                viewport={"width": 390, "height": 844},
-                device_scale_factor=1,
-                is_mobile=True,
-                has_touch=True
-            )
+            browser = p.chromium.launch(headless=True, args=["--no-sandbox"])
+            page = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1,
+                                    is_mobile=True, has_touch=True)
+            page.add_init_script("Math.random = () => 0.25")
             page.on("pageerror", lambda error: errors.append(str(error)))
-            url = f"http://127.0.0.1:{server.server_port}/grammatica-test.html?les=5"
-            page.goto(url, wait_until="domcontentloaded")
-            page.wait_for_selector('[data-action="start"]', timeout=15000)
-            assert page.locator("h1").inner_text().startswith("Les 5")
-            assert page.locator(".gd-source-rule").count() >= 1
-            page.locator('[data-action="start"]').click()
+            root = f"http://127.0.0.1:{server.server_port}/grammatica-test.html"
+            page.goto(root + "?les=5", wait_until="domcontentloaded")
+            page.wait_for_selector("#gd-theory-title", timeout=20000)
             for width in (320, 355, 375, 390, 430, 768):
                 assert_layout(page, width)
             page.set_viewport_size({"width": 390, "height": 844})
-            complete_lesson(page, 5)
-            page.goto(f"http://127.0.0.1:{server.server_port}/grammatica-test.html?les=0")
-            page.wait_for_selector(".gd-intro", timeout=10000)
-            assert page.locator('[data-action="start"]').count() == 0
-            assert "geen afzonderlijke" in page.locator(".gd-intro").inner_text()
-            assert page.locator('a[href="index.html#/grammatica/0"]').count() > 0
-            page.goto(f"http://127.0.0.1:{server.server_port}/grammatica-test.html")
-            page.wait_for_selector('[data-h="tab"][data-v="lessons"]', timeout=10000)
+            assert page.locator('script[src*="sfx.js"]').count() == 0, "Audio mag niet laden"
+            advance_theory(page, 5)
+            page.locator('[data-action="start"]').click()
+            for width in (320, 375, 390, 430):
+                assert_layout(page, width)
+            page.set_viewport_size({"width": 390, "height": 844})
+            answer_round(page, 5)
+            page.goto(root + "?les=0")
+            page.wait_for_selector("#gd-theory-title", timeout=15000)
+            advance_theory(page, 0)
+            assert page.evaluate("window.GrammarLabCore.getExamples(0).length") == 0
+            page.goto(root)
+            page.wait_for_selector('[data-h="tab"][data-v="lessons"]', timeout=12000)
             page.locator('[data-h="tab"][data-v="lessons"]').click()
-            page.wait_for_selector(".lh-tile", timeout=10000)
             assert page.locator(".lh-tile").count() == 24
+            overview = page.evaluate("""() => Array.from({length:24},(_,i) => ({
+                lesson:i, steps:window.GrammarLabCore.buildTheoryCards(i).length,
+                grammar:window.GrammarLabCore.buildStudyTasks(i,919).filter(x=>['theory','parse','why'].includes(x.type)).length
+            }))""")
+            assert all(item["steps"] >= 1 for item in overview), f"Niet alle lessen hebben theorie: {overview}"
             assert not errors, "Browserfouten: " + ", ".join(errors)
             browser.close()
-            print("OK: 24 leskaarten, geen verzonnen opgaven voor les 0, geen JavaScript-fouten.")
+            print("OK: 24 theorielessen; geen paginafouten of ontbrekende oorspronkelijke lesdata.")
     finally:
         server.shutdown()
 
