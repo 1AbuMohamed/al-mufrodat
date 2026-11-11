@@ -6,6 +6,9 @@ on:
       - 'grammatica-test.html'
       - 'grammatica-test.js'
       - 'grammatica-test.css'
+      - 'grammatica-test-lab.css'
+      - 'lab_content.js'
+      - 'scripts/test_lab_content.cjs'
       - 'lessons_v2.js'
       - 'scripts/test_grammar_lab.cjs'
       - 'scripts/test_grammar_lab_browser.py'
@@ -15,6 +18,9 @@ on:
       - 'grammatica-test.html'
       - 'grammatica-test.js'
       - 'grammatica-test.css'
+      - 'grammatica-test-lab.css'
+      - 'lab_content.js'
+      - 'scripts/test_lab_content.cjs'
       - 'lessons_v2.js'
       - 'scripts/test_grammar_lab.cjs'
       - 'scripts/test_grammar_lab_browser.py'
@@ -33,6 +39,7 @@ jobs:
         run: |
           node --check grammatica-test.js
           node scripts/test_grammar_lab.cjs
+          node scripts/test_lab_content.cjs
       - name: Mobiele browsercontrole
         run: |
           python -m pip install --quiet playwright

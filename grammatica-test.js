@@ -6,6 +6,7 @@
   'use strict';
 
   var DATA = window.GRAMMATICA || {};
+  var LAB = window.GRAMMATICA_LAB || {};
   var SAVE_KEY = 'alm_grammar_test_scores_v1';
   var SAVE_KEY_V2 = 'alm_grammar_test_v2';
   var MAX_TASKS = 6;
@@ -308,7 +309,98 @@
     });
     return seededShuffle(tasks,seed);
   }
+  // ---- Leerlaag (lab_content.js): eigen theorie, vragen en zinsontleding ----
+  function rich(value) {
+    return esc(value).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/([\u0600-\u06FF\u25CC]+(?:[ \u00a0]+[\u0600-\u06FF\u25CC]+)*)/g,
+        '<span class="gd-ar" lang="ar" dir="rtl">$1</span>');
+  }
+  var SOORT_POOL = ['Ism', 'Fi‘l', 'Harf'];
+  function labValues(index) {
+    var seen = [];
+    Object.keys(LAB).forEach(function (k) {
+      ((LAB[k] && LAB[k].ontleding) || []).forEach(function (s) {
+        s.woorden.forEach(function (w) { if (w[index] && seen.indexOf(w[index]) < 0) seen.push(w[index]); });
+      });
+    });
+    return seen;
+  }
+  function hasLab(n) { return !!(LAB[n] && (LAB[n].uitleg || LAB[n].vragen || LAB[n].ontleding)); }
+  function labQuestionTasks(n, seed) {
+    var lab = LAB[n];
+    if (!lab || !lab.vragen) return [];
+    return lab.vragen.map(function (q, i) {
+      return { type: 'lab', lesson: n, rich: true, prompt: q.v, answer: q.o[q.g],
+        options: seededShuffle(q.o.slice(), seed + i * 13), rule: q.u || '', concept: 'lab:' + i };
+    });
+  }
+  function labParseTasks(n, seed) {
+    var lab = LAB[n], tasks = [];
+    if (!lab || !lab.ontleding) return tasks;
+    lab.ontleding.forEach(function (s, si) {
+      s.woorden.forEach(function (w, wi) {
+        if (w[6]) return;
+        var kind, answer, pool, prompt;
+        if (w[3]) { kind = 'functie'; answer = w[3]; pool = labValues(3); prompt = 'Welke functie heeft dit woord in de zin?'; }
+        else if (w[4]) { kind = 'naamval'; answer = w[4]; pool = ['Marfoe‘', 'Mansoeb', 'Madjroer']; prompt = 'In welke naamval staat dit woord?'; }
+        else if (w[2]) { kind = 'naam'; answer = w[2]; pool = labValues(2); prompt = 'Wat voor woord is dit precies?'; }
+        else { kind = 'soort'; answer = w[1]; pool = SOORT_POOL; prompt = 'Is dit een Ism, een Fi‘l of een Harf?'; }
+        var options = makeOptions(answer, pool, seed + si * 7 + wi * 3, kind === 'soort' ? 3 : 4);
+        if (options.length < 2) return;
+        tasks.push({ type: 'ontleed', lesson: n, rich: true, sentence: s, wordIndex: wi, word: w[0], kind: kind,
+          prompt: prompt, answer: answer, options: options,
+          rule: s.nl, concept: 'ontleed:' + si + ':' + wi });
+      });
+    });
+    return tasks;
+  }
+  function labStudyTasks(n, seed, options) {
+    var total = Math.max((options && options.count) || 10, 12);
+    var qs = seededShuffle(labQuestionTasks(n, seed), seed + 1);
+    var ps = seededShuffle(labParseTasks(n, seed), seed + 2).slice(0, 5);
+    var extra = seededShuffle(buildTasks(n).filter(function (t) { return t.type === 'order' || t.type === 'gap'; }), seed + 3)
+      .map(function (t) { return Object.assign({ lesson: n, concept: 'voorbeeld:' + plain(t.example.ar) }, t); }).slice(0, 2);
+    var out = [], pattern = ['q', 'q', 'p', 'q', 'q', 'p', 'e', 'q', 'p', 'q', 'p', 'e', 'q', 'p'];
+    var bag = { q: qs, p: ps, e: extra };
+    pattern.forEach(function (k) {
+      if (out.length >= total) return;
+      var task = bag[k].shift();
+      if (task) out.push(task);
+    });
+    ['q', 'p', 'e'].forEach(function (k) { while (out.length < total && bag[k].length) out.push(bag[k].shift()); });
+    return out;
+  }
+  function labCardHtml(c) {
+    return '<div class="gd-lab-card"><h2 class="gd-lab-kop">' + rich(c.kop) + '</h2>' +
+      (c.tekst || []).map(function (p) { return '<p class="gd-lab-p">' + rich(p) + '</p>'; }).join('') +
+      (c.vb && c.vb.length ? '<div class="gd-lab-vb">' + c.vb.map(function (v) {
+        return '<div class="gd-theory-example"><p class="gd-arabic" lang="ar" dir="rtl">' + esc(v[0]) + '</p><p>' + rich(v[1]) + '</p></div>';
+      }).join('') + '</div>' : '') +
+      (c.tip ? '<p class="gd-lab-tip"><strong>Let op:</strong> ' + rich(c.tip) + '</p>' : '') + '</div>';
+  }
+  function ontleedTable(sentence, focus) {
+    return '<div class="gd-parse-table"><p class="gd-parse-title">Volledige ontleding</p>' +
+      '<p class="gd-arabic" lang="ar" dir="rtl">' + esc(sentence.ar) + '</p><p class="gd-parse-nl">' + esc(sentence.nl) + '</p>' +
+      '<ul>' + sentence.woorden.map(function (w, i) {
+        var pills = w[5] ? '<span class="gd-pill gd-pill-naam">' + esc(w[5]) + '</span>' :
+          '<span class="gd-pill gd-pill-naam">' + esc(w[2] || w[1]) + '</span>' +
+          (w[3] ? '<span class="gd-pill gd-pill-functie">' + esc(w[3]) + '</span>' : '') +
+          (w[4] ? '<span class="gd-pill gd-pill-kas">' + esc(w[4]) + '</span>' : '');
+        return '<li' + (i === focus ? ' class="focus"' : '') + '><span class="gd-pt-word" lang="ar" dir="rtl">' + esc(w[0]) + '</span><span class="gd-pills">' + pills + '</span></li>';
+      }).join('') + '</ul></div>';
+  }
+  function sentenceChips(task) {
+    return '<div class="gd-sentence-words gd-parse-sentence" lang="ar" dir="rtl">' +
+      task.sentence.woorden.map(function (w, i) {
+        return '<span class="gd-word-chip' + (i === task.wordIndex ? ' target' : '') + '">' + esc(w[0]) + '</span>';
+      }).join(' ') + '</div>';
+  }
+
   function buildStudyTasks(n,seed,options) {
+    if (hasLab(n) && LAB[n].vragen) {
+      var labTasks = labStudyTasks(n, seed, options);
+      if (labTasks.length) return labTasks;
+    }
     var sets={
       parse:sourceParse(n,seed+101),find:buildFindTasks(n,seed+211),
       why:buildWhyTasks(n,seed+331),theory:buildTheoryTasks(n,seed+449)
@@ -443,7 +535,11 @@
     buildParsingTasks: sourceParse,
     buildWhyTasks: buildWhyTasks,
     buildFindTasks: buildFindTasks,
-    buildStudyTasks: buildStudyTasks
+    buildStudyTasks: buildStudyTasks,
+    hasLab: hasLab,
+    labQuestionTasks: labQuestionTasks,
+    labParseTasks: labParseTasks,
+    rich: rich
   };
 
 
@@ -649,6 +745,9 @@
   }
 
   function theoryCards(n){
+    if(LAB[n]&&LAB[n].uitleg&&LAB[n].uitleg.length){
+      return LAB[n].uitleg.map(function(c){return [{kind:'lab',card:c}];});
+    }
     var items=(DATA[n]&&DATA[n].inhoud)||[],notes=[],cards=[];
     items.forEach(function(item,i){
       var t=plain(item.tekst);
@@ -702,7 +801,8 @@
     var final=p>=cards.length-1;
     return '<div class="gd-shell gd-play">'+bar()+
       '<div class="gd-card gd-intro"><div class="gd-stage-tag">Eerst lezen</div><h1>Les '+n+'</h1>'+
-      '<div class="gd-source-box gd-theory-reading">'+rows.map(function(r){
+      '<div class="gd-source-box gd-theory-reading'+(rows.some(function(r){return r.kind==='lab';})?' gd-lab-reading':'')+'">'+rows.map(function(r){
+        if(r.kind==='lab')return labCardHtml(r.card);
         return r.kind==='example'?
           '<div class="gd-theory-example"><p class="gd-arabic" lang="ar" dir="rtl">'+esc(r.ar)+'</p>'+
           (r.nl&&r.nl!=='-'?'<p>'+esc(r.nl)+'</p>':'')+'</div>':
@@ -718,7 +818,7 @@
     return '<div class="gd-options">'+task.options.map(function(option,i){
       var selected=session.chosen===i;
       return '<button type="button" class="gd-option'+(selected?' selected':'')+'" data-action="select" data-value="'+i+'" aria-pressed="'+selected+'"'+(session.feedback?' disabled':'')+
-        (arabic?' lang="ar" dir="rtl"':'')+'><span>'+(i+1)+'.</span> '+esc(option)+'</button>';
+        (arabic&&!task.rich?' lang="ar" dir="rtl"':'')+'><span>'+(i+1)+'.</span> '+(task.rich?rich(option):esc(option))+'</button>';
     }).join('')+'</div>';
   }
   function sentenceButtons(task){
@@ -731,6 +831,8 @@
       }).join('')+'</div>';
   }
   function taskBody(task){
+    if(task.type==='lab')return optionsHtml(task,false);
+    if(task.type==='ontleed')return sentenceChips(task)+optionsHtml(task,false);
     if(['theory','rule','why'].includes(task.type)){
       return (task.context?'<p class="gd-theory-question">'+esc(task.context)+'</p>':'')+optionsHtml(task,task.type==='theory');
     }
@@ -777,10 +879,11 @@
     return '<section class="gd-feedback gd-feedback-sheet '+(good?'good':'review')+'" role="status" aria-live="assertive">'+
       '<div class="gd-feedback-inner"><strong>'+headline+'</strong>'+
       (session.combo>=3?'<span class="gd-combo">'+session.combo+'× combo</span>':'')+
-      '<p class="gd-correct-answer">'+esc(answer)+'</p>'+
+      '<p class="gd-correct-answer">'+(task.rich?rich(answer):esc(answer))+'</p>'+
       (task.example?'<p class="gd-arabic" lang="ar" dir="rtl">'+esc(task.example.ar)+'</p>'+
       (plain(task.example.nl)&&plain(task.example.nl)!=='-'?'<p>'+esc(task.example.nl)+'</p>':''):'')+
-      (task.rule?'<p class="gd-theory-explanation">'+esc(task.rule)+'</p>':'')+
+      (task.rule&&task.type!=='ontleed'?'<p class="gd-theory-explanation">'+(task.rich?rich(task.rule):esc(task.rule))+'</p>':'')+
+      (task.type==='ontleed'?ontleedTable(task.sentence,task.wordIndex):'')+
       '<button type="button" class="gd-primary gd-full" data-action="next">Verder</button></div></section>';
   }
 
@@ -858,7 +961,7 @@
     var t=currentTask();if(!t)return finished();
     return '<div class="gd-shell gd-play">'+bar()+
       '<div class="gd-card gd-task"><div class="gd-stage-tag">Oefening '+(session.index+1)+' / '+session.tasks.length+'</div>'+
-      '<h1>Les '+t.lesson+'</h1><h2 class="gd-task-title">'+esc(t.prompt || (
+      '<h1>Les '+t.lesson+'</h1><h2 class="gd-task-title">'+(t.rich?rich:esc)(t.prompt || (
         t.type==='choice'?'Wat betekent deze zin?':
         t.type==='reverse'?'Kies de Arabische zin.':
         t.type==='gap'?'Welk woord ontbreekt?':
@@ -963,7 +1066,7 @@
     function check(){
     if(!answered()||session.feedback)return;
     var t=currentTask(),good=false;
-    if(['theory','rule','why','choice','reverse','gap'].includes(t.type))good=t.options[session.chosen]===(
+    if(['theory','rule','why','choice','reverse','gap','lab','ontleed'].includes(t.type))good=t.options[session.chosen]===(
       t.type==='choice'?plain(t.example.nl):t.type==='reverse'?plain(t.example.ar):t.type==='gap'?t.answer:t.answer);
     if(t.type==='find')good=session.chosenWord===t.wordIndex;
     if(t.type==='parse')good=session.chosenWord===t.wordIndex && t.options[session.chosen]===t.answer;

@@ -4,6 +4,14 @@ Alle wijzigingen in het kader van het herstel en de herbouw van de grammatica, d
 
 ---
 
+## [Grammatica Lab: leerlaag met theorie, vragen en zinsontleding] – 2026-11-11
+
+- **Nieuw `lab_content.js`:** per les uitgebreide theorie in kleine kaarten (eerst lezen), meerkeuzevragen over die theorie en zinsontleding. Het boek (`lessons_v2.js`) is niet gewijzigd.
+- **Zinsontleding uitsluitend met Arabische termen** (Nederlands gespeld zoals in het boek): Ism, Fi‘l, Harf, Ism Isjaarah, Harf Djarr, Dhamier, Moebtada, Chabar, Faa‘il, Moedaaf, Moedaaf Ilaih, Marfoe‘, Madjroer, Mansoeb.
+- **Alle Arabische zinnen** in de ontleding komen letterlijk uit het boek; `scripts/test_lab_content.cjs` controleert dat.
+- **Opmaak:** groene/rode feedbackbalk, gemarkeerd woord bij ontleden, volledige ontleding met gekleurde labels, rustigere theoriekaarten (`grammatica-test-lab.css`).
+- **Dekking:** les 1 t/m 5. Overige lessen gebruiken tot hun uitbreiding de bestaande brongebonden oefeningen.
+
 ## [Gebruikersverfijningen & Didactische Vereenvoudiging] – 2026-11-09
 
 ### 1. Grammaticales zonder drie lagen tabs (Punt 1 & 2)
