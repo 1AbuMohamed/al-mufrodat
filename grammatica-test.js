@@ -65,38 +65,73 @@
         !/^(?:Voorbeelden?:|Merk op:|In deze les leren we het volgende:|\d+\))$/i.test(plain(row.tekst));
     });
   }
-  function quoteTokens(text) {
-    return Array.from(String(text).matchAll(/«([^»]+)»/g),function(m){return m[1];})
-      .filter(function(x){return /[\u0600-\u06ff]/.test(x) && !/[◌→]/.test(x);});
+
+  // Begripsvragen: vervang alleen een letterlijk woord of Arabische vorm
+  // in de originele Medina-regel. Elke antwoordoptie komt uit de bron.
+  var TERM_FAMILIES=[
+    ['Moedaaf Ilaih','Moedaaf','Harf Djarr','Na‘t','Man‘oet','Moebtada','Khabar'],
+    ['Marfoe‘','Madjroer','Mansoeb','nominatief','genitief','accusatief'],
+    ['Fathah','Kasrah','Dammah','Soekoen','Shaddah','Tanwien'],
+    ['enkelvoud','tweevoud','meervoud'],['mannelijk','vrouwelijk'],
+    ['zonneletters','maanletters'],
+    ['zelfstandig naamwoord','bijvoeglijk naamwoord','voorzetsel','predicaat','lijdend voorwerp']
+  ];
+  function quoteTokens(text){
+    return Array.from(String(text).matchAll(/«([^»]{1,48})»/g),function(m){return m[1];})
+      .filter(function(x){return /[\u0600-\u06ff◌]/.test(x);});
   }
-  function buildTheoryTasks(n,seed) {
-    var rows=theoryRows(n), examples=getExamples(n);
-    var tokens=[...new Set(rows.flatMap(function(r){return quoteTokens(r.tekst);}))];
-    var tasks=[];
+  function knownQuotes(n){
+    return [...new Set(theoryRows(n).flatMap(function(r){return quoteTokens(r.tekst);}))].filter(function(x){return x.length<=32;});
+  }
+  function choiceSet(answer,own,other,seed){
+    var wrong=[...new Set(own.concat(other))].filter(function(x){return x!==answer&&plain(x)&&x.length<=Math.max(65,answer.length+35);});
+    if(wrong.length<2)return null;
+    return seededShuffle([answer].concat(seededShuffle(wrong,seed+17).slice(0,3)),seed+33);
+  }
+  function theoryCandidates(n){
+    var rows=theoryRows(n),ownQuotes=knownQuotes(n);
+    var worldQuotes=[...new Set(Object.keys(DATA).flatMap(function(k){return knownQuotes(k);}))];
+    var terms=TERM_FAMILIES.flat().sort(function(a,b){return b.length-a.length;});
+    var ownTerms=terms.filter(function(t){return rows.some(function(r){return plain(r.tekst).toLowerCase().includes(t.toLowerCase());});});
+    var pool=[];
     rows.forEach(function(row,i){
-      var found=quoteTokens(row.tekst);
-      if(!found.length)return;
-      var answer=found[0],others=tokens.filter(function(x){return x!==answer;});
-      if(others.length<2)return;
-      var rule=plain(row.tekst), pos=rule.indexOf('«'+answer+'»');
-      if(pos<0)return;
-      var prompt=rule.slice(0,pos)+'____'+rule.slice(pos+answer.length+2);
-      tasks.push({type:'theory',example:null,rule:rule,prompt:prompt,
-        answer:answer,options:seededShuffle([answer].concat(seededShuffle(others,seed+i).slice(0,3)),seed+i+7)});
-    });
-    if(!tasks.length && rows.length){
-      var others=Object.keys(DATA).map(Number).filter(function(x){return x!==n;})
-        .flatMap(function(x){return theoryRows(x).map(function(r){return plain(r.tekst);});})
-        .filter(function(t){return t.length>28;});
-      rows.filter(function(r){return plain(r.tekst).length>28;}).slice(0,5).forEach(function(row,i){
-        var answer=plain(row.tekst);
-        tasks.push({type:'theory',example:null,rule:answer,prompt:'Welke regel staat in deze les?',
-          answer:answer,options:seededShuffle([answer].concat(seededShuffle(others,seed+i).slice(0,3)),seed+i+19)});
+      var rule=plain(row.tekst);if(rule.length<22)return;
+      var hits=[];
+      for(var match of rule.matchAll(/«([^»]{1,48})»/g)){
+        if(match[1].length<=32&&/[\u0600-\u06ff◌]/.test(match[1]))
+          hits.push({start:match.index+1,end:match.index+1+match[1].length,answer:match[1],kind:'arabic'});
+      }
+      for(var term of terms){
+        var escaped=term.replace(/([.*+?^$()|[\]\\])/g,'\\$1');
+        var rx=new RegExp(escaped,'gi'),m;
+        while((m=rx.exec(rule))!==null){
+          if(hits.some(function(x){return m.index<x.end&&m.index+m[0].length>x.start;}))continue;
+          var before=rule[m.index-1]||'',after=rule[m.index+m[0].length]||'';
+          if(/[\p{L}]/u.test(before)||/[\p{L}]/u.test(after))continue;
+          hits.push({start:m.index,end:m.index+m[0].length,answer:m[0],kind:'term',term:term});
+          break;
+        }
+      }
+      seededShuffle(hits,n*83+i*7).slice(0,2).forEach(function(x,j){
+        var options;
+        if(x.kind==='arabic')options=choiceSet(x.answer,ownQuotes,worldQuotes,n*199+i*7+j);
+        else {
+          var family=TERM_FAMILIES.find(function(a){return a.includes(x.term);})||terms;
+          options=choiceSet(x.answer,ownTerms.filter(function(t){return family.includes(t);}),family,n*199+i*7+j);
+        }
+        if(!options)return;
+        pool.push({type:'theory',lesson:Number(n),example:null,rule:rule,
+          prompt:rule.slice(0,x.start)+'____'+rule.slice(x.end),answer:x.answer,options:options,
+          skill:'regel '+(i+1)});
       });
-    }
-    return seededShuffle(tasks,seed).slice(0,5);
+    });
+    return pool;
   }
-  function buildParsingTasks(n,seed) {
+  function buildTheoryTasks(n,seed){
+    return seededShuffle(theoryCandidates(n),seed===undefined?n*97+11:seed);
+  }
+
+    function buildParsingTasks(n,seed) {
     var examples=getExamples(n),rows=theoryRows(n), tasks=[];
     // Alleen expliciete grammaticale functies uit de oorspronkelijke les.
     // Geen automatische roltoekenning op basis van losse trefwoorden:
