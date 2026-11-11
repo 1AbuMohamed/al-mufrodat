@@ -141,17 +141,27 @@
     [3,'بَيْتٌ → اَلْبَيْتُ','اَلْبَيْتُ','bepaald','Arabische bepaald lidwoord','vorm'],
     [4,'فِي الْبَيْتِ','فِي','Harf Djarr','Na een voorzetsel (Harf Djarr)'],
     [4,'فِي الْبَيْتِ','الْبَيْتِ','Madjroer','Over een naamwoord dat vooraf wordt gegaan door een voorzetsel'],
+    [4,'عَلَى الْمَكْتَبِ','عَلَى','Harf Djarr','Na een voorzetsel (Harf Djarr)'],
+    [4,'عَلَى الْمَكْتَبِ','الْمَكْتَبِ','Madjroer','Over een naamwoord dat vooraf wordt gegaan door een voorzetsel'],
     [4,'فِيْ بَيْتٍ','فِيْ','Harf Djarr','Na een voorzetsel (Harf Djarr)'],
     [5,'كِتَابُ بِلَالٍ','كِتَابُ','Moedaaf','In «كِتَابُ بِلَالٍ»'],
     [5,'كِتَابُ بِلَالٍ','بِلَالٍ','Moedaaf Ilaih','In «كِتَابُ بِلَالٍ»'],
+    [5,'بَيْتُ الْإِمَامِ','بَيْتُ','Moedaaf','In «كِتَابُ بِلَالٍ»'],
+    [5,'بَيْتُ الْإِمَامِ','الْإِمَامِ','Moedaaf Ilaih','In «كِتَابُ بِلَالٍ»'],
     [6,'مُدَرِّسٌ → مُدَرِّسَةٌ','مُدَرِّسَةٌ','vrouwelijk','Zelfstandige naamwoorden en bijvoeglijke naamwoorden worden vrouwelijk gemaakt','vorm'],
+    [6,'هٰذَا لِبِلَالٍ، وَذٰلِكَ لِحَامِدٍ.','لِ','Harf Djarr','«لِ» is een voorzetsel (Harf Djarr)'],
     [7,'هٰذِهِ آمِنَةُ، وَتِلْكَ مَرْيَمُ.','تِلْكَ','vrouwelijk','Dit is de vrouwelijke vorm','vorm'],
     [8,'هٰذَا الْكِتَابُ جَدِيْدٌ.','هٰذَا','aanwijzend voornaamwoord','Alle aanwijzende voornaamwoorden'],
     [9,'بَيْتٌ جَدِيْدٌ','بَيْتٌ','Man‘oet','In het Arabisch wordt het bijvoeglijk naamwoord Na‘t'],
     [9,'بَيْتٌ جَدِيْدٌ','جَدِيْدٌ','Na‘t','In het Arabisch wordt het bijvoeglijk naamwoord Na‘t'],
+    [9,'هٰذَا بَيْتٌ جَدِيْدٌ.','بَيْتٌ','Man‘oet','In het Arabisch wordt het bijvoeglijk naamwoord Na‘t'],
+    [9,'هٰذَا بَيْتٌ جَدِيْدٌ.','جَدِيْدٌ','Na‘t','In het Arabisch wordt het bijvoeglijk naamwoord Na‘t'],
     [10,'كِتَابُكَ','كَ','bezittelijk voornaamwoord','De bezittelijke voornaamwoorden «ـكَ»','vorm'],
     [11,'أُحِبُّ اللّٰهَ.','اللّٰهَ','accusatief','Het lijdend voorwerp van een werkwoord is accusatief'],
+    [11,'أُحِبُّ الرَّسُوْلَ.','الرَّسُوْلَ','accusatief','Het lijdend voorwerp van een werkwoord is accusatief'],
     [12,'مِنْ أَيْنَ أَنْتِ يَا آمِنَةُ؟','أَنْتِ','vrouwelijk enkelvoud','Nu leren we dat «أَنْتِ»','vorm'],
+    [12,'أَيْنَ بَيْتُكِ يَا مَرْيَمُ؟','كِ','bezittelijk voornaamwoord','Het bezittelijk voornaamwoord van «أَنْتِ»','vorm'],
+    [12,'أَيْنَ بَيْتُكَ يَا بِلَالُ؟','كَ','bezittelijk voornaamwoord','het bezittelijk voornaamwoord van «أَنْتَ»','vorm'],
     [13,'مُسْلِمٌ → مُسْلِمُوْنَ','مُسْلِمُوْنَ','meervoud','Het meervoud van zelfstandige naamwoorden','vorm'],
     [14,'بَيْتُ الْإِمَامِ الْجَدِيْدُ.','بَيْتُ','Moedaaf','Hier is «بَيْتُ» de Moedaaf'],
     [15,'بَعْدَ الدَّرْسِ','بَعْدَ','Moedaaf','Ze zijn altijd Moedaaf'],
@@ -159,12 +169,19 @@
     [16,'هٰؤُلَاءِ طُلَّابٌ جُدُدٌ، هُمْ صِغَارٌ.','طُلَّابٌ','rationeel','Rationele naamwoorden verwijzen naar mensen.','vorm'],
     [16,'هٰذِهِ كُتُبٌ جَدِيْدَةٌ، هِيَ صَغِيْرَةٌ.','كُتُبٌ','irrationeel','Irrationele naamwoorden verwijzen naar dingen, dieren en concepten.','vorm'],
     [18,'هٰذَانِ كِتَابَانِ','كِتَابَانِ','tweevoud','drie grammaticale getallen'],
+    [18,'هُمَا طَالِبَانِ جَدِيْدَانِ.','طَالِبَانِ','tweevoud','drie grammaticale getallen','vorm'],
     [19,'ثَلَاثَةُ كُتُبٍ','ثَلَاثَةُ','Moedaaf','De getallen 3 t/m 10 worden als Moedaaf gebruikt'],
     [19,'ثَلَاثَةُ كُتُبٍ','كُتُبٍ','Moedaaf Ilaih','omdat het Moedaaf Ilaih is'],
+    [19,'أَرْبَعَةُ بُيُوْتٍ','أَرْبَعَةُ','Moedaaf','De getallen 3 t/m 10 worden als Moedaaf gebruikt'],
+    [19,'أَرْبَعَةُ بُيُوْتٍ','بُيُوْتٍ','Moedaaf Ilaih','omdat het Moedaaf Ilaih is'],
+    [19,'خَمْسَةُ أَقْلَامٍ','خَمْسَةُ','Moedaaf','De getallen 3 t/m 10 worden als Moedaaf gebruikt'],
+    [19,'خَمْسَةُ أَقْلَامٍ','أَقْلَامٍ','Moedaaf Ilaih','omdat het Moedaaf Ilaih is'],
     [20,'عَشْرُ نِسَاءٍ','عَشْرُ','zonder Taa’ Marboetah','Nu, als de Ma‘doed vrouwelijk is','vorm'],
     [22,'كِتَابٌ → الْكِتَابُ','الْكِتَابُ','bepaald','Wanneer het zelfstandig naamwoord of bijvoeglijk naamwoord «اَلْ»','vorm'],
     [23,'الْبَيْتُ → فِي الْبَيْتِ','فِي','Harf Djarr','voorzetsel (Harf Djarr)'],
     [23,'الْبَيْتُ → فِي الْبَيْتِ','الْبَيْتِ','Madjroer','naamwoord genitief (Madjroer)']
+    [23,'بِلَالٌ → مِنْ بِلَالٍ','مِنْ','Harf Djarr','voorzetsel (Harf Djarr)'],
+    [23,'بِلَالٌ → مِنْ بِلَالٍ','بِلَالٍ','Madjroer','naamwoord genitief (Madjroer)']
   ];
   var ROLE_OPTIONS=['Moedaaf','Moedaaf Ilaih','Harf Djarr','Madjroer','Na‘t','Man‘oet','aanwijzend voornaamwoord','tweevoud','vrouwelijk','mannelijk','meervoud','enkelvoud','accusatief','genitief','bezittelijk voornaamwoord','partikel','bepaald','onbepaald','rationeel','irrationeel'];
   function buildParsingTasks(n,seed){
@@ -215,11 +232,19 @@
   function buildStudyTasks(n,seed){
     seed=seed===undefined?n*997+41:seed;
     var parsing=buildParsingTasks(n,seed+13),why=buildWhyTasks(n,seed+31,parsing);
-    var grammar=seededShuffle(buildTheoryTasks(n,seed).concat(parsing).concat(why),seed+71);
-    var weak=grammarWeakItems();
-    grammar.sort(function(a,b){return Number(!!weak[taskIdentity(b)])-Number(!!weak[taskIdentity(a)]);});
-    // Ten minste 70% grammatica waar de bron genoeg toetsbare regels geeft.
-    var picked=grammar.slice(0,8),nonGrammar=seededShuffle(buildTasks(n),seed+83);
+    var theory=buildTheoryTasks(n,seed),weak=grammarWeakItems(),grammar=[],used=new Set();
+    function pushUnique(task){
+      var key=taskIdentity(task);
+      if(!used.has(key) && grammar.length<8){used.add(key);grammar.push(task);}
+    }
+    // Zinsontleding komt daadwerkelijk aan bod zodra de oorspronkelijke les
+    // er een juiste analyse voor biedt; nooit volledig wegschudden.
+    seededShuffle(parsing,seed+21).slice(0,4).forEach(pushUnique);
+    seededShuffle(why,seed+31).slice(0,2).forEach(pushUnique);
+    theory.filter(function(t){return !!weak[taskIdentity(t)];}).forEach(pushUnique);
+    theory.forEach(pushUnique);
+    // Circa 70–80% grammatica, met ruimte voor originele zinsoefeningen.
+    var picked=seededShuffle(grammar,seed+71),nonGrammar=seededShuffle(buildTasks(n),seed+83);
     var unique=new Set(picked.map(taskIdentity));
     var limit=picked.length>=7?10:picked.length>=4?Math.min(8,picked.length+2):
       picked.length>=2?picked.length+1:Math.min(3,picked.length+2);
