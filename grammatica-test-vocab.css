@@ -27,7 +27,7 @@ body.lh-skin .vl .vl-exit .gd-icon { width:24px; height:24px; }
 .vl .gd-bar-hearts { display:flex; gap:3px; align-items:center; flex:none; }
 .vl .gd-bar-hearts .gd-icon { width:19px; height:19px; }
 .vl .gd-bar-hearts .alive { color:#FF4B4B; } .vl .gd-bar-hearts .alive svg { fill:#FF4B4B; }
-.vl .gd-bar-hearts .lost { color:var(--line); }
+.vl .gd-bar-hearts .lost { color:#FF4B4B; opacity:1; }
 .vl .gd-options { display:grid; gap:12px; }
 .vl .gd-option { width:100%; min-height:56px; padding:12px 16px; text-align:left; cursor:pointer; }
 .vl .gd-option-ar { text-align:center; font-size:26px; }

@@ -375,7 +375,7 @@ body{overflow-x:hidden}
 .gd-home{display:grid;place-items:center;width:49px;height:49px;flex:0 0 49px;border:0;border-radius:13px;background:#e5efe9;color:var(--forest)}
 .gd-bar-hearts{display:flex;gap:3px;align-items:center;flex-shrink:0}
 .gd-bar-hearts .gd-icon{width:19px;height:19px}
-.gd-bar-hearts .alive{color:#dc5853}.gd-bar-hearts .lost{color:#a9b9ae;opacity:.32}
+.gd-bar-hearts .alive{color:#ff4b4b;fill:#ff4b4b}.gd-bar-hearts .lost{color:#ff4b4b;opacity:1}
 .gd-card{border-radius:21px}
 .gd-card h1{font-size:clamp(24px,5.8vw,32px)}
 .gd-theory-reading{display:grid;gap:12px;max-height:none;overflow:visible;border:0;background:none;padding:0;margin:18px 0}

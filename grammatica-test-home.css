@@ -109,7 +109,7 @@ body.lh-on, body.lh-skin { overflow-x:hidden; }
 .lh-chip.flame svg { color:var(--flame); } .lh-chip.flame span { color:var(--flame-ink); }
 .lh-chip.flame.zero svg, .lh-chip.flame.zero span { color:var(--muted); }
 .lh-chip.bolt svg { color:var(--gold); } .lh-chip.bolt span { color:var(--gold-ink); }
-.lh-chip.heart svg { color:var(--red); } .lh-chip.heart span { color:var(--red-ink); }
+.lh-chip.heart svg { color:var(--red); fill:var(--red); } .lh-chip.heart span { color:var(--red-ink); }
 .lh-tip {
   position:absolute; top:calc(100% + 4px); right:0; z-index:60; width:min(280px, calc(100vw - 24px));
   padding:12px 14px; border:2px solid var(--line); border-radius:12px; background:var(--surface-2); font-size:15px; font-weight:700;

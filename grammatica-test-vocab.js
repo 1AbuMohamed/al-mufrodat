@@ -46,7 +46,8 @@
   function getP(map, id) { return map[id] || { box: 0, seen: 0, correct: 0 }; }
   function icon(name) {
     var paths = {
-      heart: '<path d="M20 5a5 5 0 0 0-7 0l-1 1-1-1a5 5 0 0 0-7 7l8 9 8-9a5 5 0 0 0 0-7Z"/>',
+      heart: '<path fill="currentColor" stroke="currentColor" d="M20 5a5 5 0 0 0-7 0l-1 1-1-1a5 5 0 0 0-7 7l8 9 8-9a5 5 0 0 0 0-7Z"/>',
+      heartBroken: '<path fill="currentColor" stroke="none" opacity=".78" d="M11.3 6.2 11 5a5 5 0 0 0-7 7l7.4 8.5.8-5.3-2.4-3 1.9-3.2Z"/><path fill="currentColor" stroke="none" opacity=".22" transform="translate(1.2 .6)" d="M13 5a5 5 0 0 1 7 7l-7.4 8.4 1-5.4-2.4-3 1.9-3.2Z"/>',
       crown: '<path d="m2 7 5 4 5-8 5 8 5-4-2 12H4Z"/>',
       home: '<path d="m3 10 9-7 9 7v11H3Z"/><path d="M9 21v-8h6v8"/>',
       close: '<path d="M6 6l12 12M18 6 6 18"/>'
@@ -226,7 +227,10 @@
   /* ---------- weergave ---------- */
   function bar(label, pct) {
     var hearts = '';
-    for (var i = 0; i < MAX_HEARTS; i++) hearts += '<span class="' + (i < S.hearts ? 'alive' : 'lost') + '">' + icon('heart') + '</span>';
+    for (var i = 0; i < MAX_HEARTS; i++) {
+      var alive = i < S.hearts;
+      hearts += '<span class="' + (alive ? 'alive' : 'lost') + '">' + icon(alive ? 'heart' : 'heartBroken') + '</span>';
+    }
     return '<div class="gd-lesson-bar">' +
       '<button type="button" class="vl-exit" data-vl="exit" aria-label="Terug naar het leerpad">' + icon('close') + '</button>' +
       '<div class="gd-progress-wrap"><div class="gd-progress-title"><strong>Woordenschat · Les ' + S.n + '</strong><span>' + esc(label) + '</span></div>' +

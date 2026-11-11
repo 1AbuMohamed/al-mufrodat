@@ -17,6 +17,7 @@ body.lh-skin .gd-progress-title span { color:var(--muted); font-weight:700; }
 body.lh-skin .gd-progress { height:16px; border-radius:8px; background:var(--line); }
 body.lh-skin .gd-progress span { background:var(--green); border-radius:8px; }
 body.lh-skin .gd-bar-hearts { font-size:18px; color:var(--red); white-space:nowrap; font-weight:800; }
+body.lh-skin .gd-bar-hearts .alive, body.lh-skin .gd-bar-hearts .lost { color:var(--red); opacity:1; }
 body.lh-skin .gd-source-link { color:var(--blue-ink); font:800 12px var(--font-ui); letter-spacing:.05em; text-transform:uppercase; }
 
 /* kaarten */

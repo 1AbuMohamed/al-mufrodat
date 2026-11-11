@@ -717,7 +717,8 @@
       flame:'<path d="M12 22c5 0 8-4 8-8 0-3-2-5-4-7 0 3-2 4-3 5C13 7 11 4 8 2c0 5-4 8-4 12 0 5 3 8 8 8Z"/>',
       star:'<path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z"/>',
       crown:'<path d="m2 7 5 4 5-8 5 8 5-4-2 12H4Z"/>',
-      heart:'<path d="M20 5a5 5 0 0 0-7 0l-1 1-1-1a5 5 0 0 0-7 7l8 9 8-9a5 5 0 0 0 0-7Z"/>',
+      heart:'<path fill="currentColor" stroke="currentColor" d="M20 5a5 5 0 0 0-7 0l-1 1-1-1a5 5 0 0 0-7 7l8 9 8-9a5 5 0 0 0 0-7Z"/>',
+      heartBroken:'<path fill="currentColor" stroke="none" opacity=".78" d="M11.3 6.2 11 5a5 5 0 0 0-7 7l7.4 8.5.8-5.3-2.4-3 1.9-3.2Z"/><path fill="currentColor" stroke="none" opacity=".22" transform="translate(1.2 .6)" d="M13 5a5 5 0 0 1 7 7l-7.4 8.4 1-5.4-2.4-3 1.9-3.2Z"/>',
       check:'<path d="m4 12 5 5L20 6"/>',
       book:'<path d="M12 6C9 4 6 4 2 5v15c4-1 7-1 10 1 3-2 6-2 10-1V5c-4-1-7-1-10 1Z"/><path d="M12 6v15"/>',
       home:'<path d="m3 10 9-7 9 7v11H3Z"/><path d="M9 21v-8h6v8"/>'
@@ -812,7 +813,7 @@
       '<span>'+(theory?'Theorie '+Math.min(length,completed+1)+' / '+length:end?'Afgerond':Math.min(length,completed+1)+' / '+length)+'</span></div>'+
       '<div class="gd-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pct+'"><span style="width:'+pct+'%"></span></div></div>'+
       '<div class="gd-bar-hearts" aria-label="'+session.hearts+' van 5 hartjes">'+
-      Array.from({length:5},function(_,i){return '<span class="'+(i<session.hearts?'alive':'lost')+'">'+svgIcon('heart')+'</span>';}).join('')+'</div>'+
+      Array.from({length:5},function(_,i){var alive=i<session.hearts;return '<span class="'+(alive?'alive':'lost')+'">'+svgIcon(alive?'heart':'heartBroken')+'</span>';}).join('')+'</div>'+
       (P()?'<button type="button" class="gd-fast'+(P().fastOn()?' on':'')+'" data-action="fast" aria-pressed="'+P().fastOn()+'" title="Snelle modus: direct nakijken en automatisch door">⚡ Snel</button>':'')+'</div>';
   }
   function intro(){
