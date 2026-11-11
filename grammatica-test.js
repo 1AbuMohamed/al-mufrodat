@@ -153,11 +153,32 @@
     conditional.forEach(function(rule,i){
       candidates.push({rule:rule,prompt:'Welke regel legt deze grammaticale verandering uit?',context:'Les '+n,answer:rule,concept:'waarom-voorwaarde:'+i});
     });
+    // Waarom-vragen met specifieke Arabische woorden: het antwoord is
+    // letterlijk de onderbouwende regel uit de betreffende Medina-les.
+    var reasonsByLesson={
+      4:[['Na een voorzetsel (Harf Djarr)','Waarom verandert de uitgang na een voorzetsel in een kasrah?','فِي الْبَيْتِ','voorzetsel']],
+      5:[['b. De Moedaaf Ilaih is genitief','Waarom is بِلَالٍ Madjroer in كِتَابُ بِلَالٍ?','كِتَابُ بِلَالٍ','Moedaaf Ilaih']],
+      8:[['Het verandert in een “-ie”','Waarom verandert een naamwoord na een voorzetsel naar de -ie-uitgang?','بِلَالٌ فِي الْبَيْتِ.','naamval']],
+      9:[['Het bijvoeglijk naamwoord heeft dezelfde naamval','Waarom krijgt جَدِيْدٍ dezelfde naamval als بَيْتٍ?','أَنَا فِيْ بَيْتٍ جَدِيْدٍ.','Na‘t']],
+      11:[['Het lijdend voorwerp van een werkwoord is accusatief','Waarom eindigt het lijdend voorwerp in أُحِبُّ اللّٰهَ op een -a?','أُحِبُّ اللّٰهَ.','lijdend voorwerp']],
+      15:[['Ze zijn altijd Moedaaf','Waarom is الدَّرْسِ genitief na بَعْدَ?','بَعْدَ الدَّرْسِ','Moedaaf Ilaih']],
+      18:[['Merk op dat het naamwoord dat na «كَمْ» komt','Waarom staat كِتَابًا na كَمْ in de accusatief?','كَمْ كِتَابًا؟','Mansoeb']],
+      19:[['Merk op dat de Ma‘doed in het meervoud staat','Waarom is كُتُبٍ genitief bij ثَلَاثَةُ?','ثَلَاثَةُ كُتُبٍ','Ma‘doed']],
+      20:[['Nu, als de Ma‘doed vrouwelijk is','Waarom valt de Taa’ Marboetah weg bij het getal voor een vrouwelijke Ma‘doed?','عَشْرُ نِسَاءٍ','Ma‘doed']],
+      23:[['Merk op dat een diptoot in deze twee situaties','Waarom krijgt een diptoot Fathah in plaats van Kasrah in de genitief?',null,'diptoten']]
+    };
+    (reasonsByLesson[n]||[]).forEach(function(spec){
+      var proof=rules.find(function(r){return r.includes(spec[0]);});
+      if(!proof)return;
+      var ex=spec[2] ? sourceExamples(n).find(function(e){return plain(e.ar)===spec[2];}) : null;
+      candidates.unshift({rule:proof,prompt:spec[1],context:ex?plain(ex.ar):'Les '+n,
+        example:ex||null,answer:proof,concept:'waarom:'+spec[3]});
+    });
     // Alle afleiders zijn ook authentieke, elders aangehaalde regels of redenen.
     var all=Object.keys(DATA).map(Number).flatMap(function(k){return theoryPool(k);});
     var reasons=candidates.map(function(c){return c.answer;}).concat(all.filter(function(x){return x.length>22&&x.length<310;}));
     return seededShuffle(candidates,seed).map(function(c,i){
-      return {type:'why',lesson:n,prompt:c.prompt,context:c.context,answer:c.answer,
+      return {type:'why',lesson:n,prompt:c.prompt,context:c.context,example:c.example||null,answer:c.answer,
         options:makeOptions(c.answer,reasons,seed+i*19,3),rule:c.rule,concept:c.concept};
     }).filter(function(t){return t.options.length>=2;});
   }
