@@ -59,7 +59,7 @@
       goal: [20, 30, 50].indexOf(s.goal) >= 0 ? s.goal : 20,
       theme: ['dark', 'light'].indexOf(s.theme) >= 0 ? s.theme : 'system',
       tab: s.tab === 'lessons' ? 'lessons' : 'path',
-      path: s.path === 'vocab' ? 'vocab' : s.path === 'letters' ? 'letters' : 'grammatica'
+      path: s.path === 'vocab' ? 'vocab' : 'grammatica'
     };
   }
   function saveSettings(patch) {
@@ -197,6 +197,7 @@
     check: '<path d="M20 6 9 17l-5-5"/>',
     target: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
     user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+    letter: '<text x="12" y="18" text-anchor="middle" font-size="20" font-family="Amiri, serif" fill="currentColor" stroke="none" lang="ar">ب</text>',
     dots: '<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>'
   };
   function ic(name, size, fill) {
@@ -208,7 +209,7 @@
 
   /* ---------- onderdelen ---------- */
   var NAV = [
-    ['leer', 'home', 'LEER'], ['oefen', 'target', 'OEFEN'], ['missies', 'chest', 'MISSIES'],
+    ['leer', 'home', 'LEER'], ['letters', 'letter', 'LETTERS'], ['oefen', 'target', 'OEFEN'], ['missies', 'chest', 'MISSIES'],
     ['profiel', 'user', 'PROFIEL'], ['more', 'dots', 'MEER']
   ];
 
@@ -349,15 +350,13 @@
   }
 
   function pathSwitch(s) {
-    if (!vocab() && !letters()) return '';
-    var cur = s.path === 'vocab' && vocab() ? 'vocab' : s.path === 'letters' && letters() ? 'letters' : 'grammatica';
+    if (!vocab()) return '';
     function b(id, label) {
-      var on = cur === id;
+      var on = (s.path === 'vocab' ? 'vocab' : 'grammatica') === id;
       return '<button type="button" role="tab" class="lh-pswitch' + (on ? ' on' : '') + '" data-h="path" data-v="' + id + '" data-f="path-' + id +
         '" aria-selected="' + on + '">' + label + '</button>';
     }
-    return '<div class="lh-pathswitch" role="tablist" aria-label="Leerpad">' + b('grammatica', 'GRAMMATICA') +
-      (vocab() ? b('vocab', 'WOORDENSCHAT') : '') + (letters() ? b('letters', 'LETTERS') : '') + '</div>';
+    return '<div class="lh-pathswitch" role="tablist" aria-label="Leerpad">' + b('grammatica', 'GRAMMATICA') + b('vocab', 'WOORDENSCHAT') + '</div>';
   }
   function vocabMain(s, pl) {
     var cur = pl.cur, t = vocab().totals();
@@ -371,7 +370,6 @@
       (s.tab === 'lessons' ? tilesHtml(pl) : pathHtml(pl));
   }
   function leerMain(p, s, pl) {
-    if (s.path === 'letters' && letters()) return pathSwitch(s) + letters().panel();
     if (isVocab()) return vocabMain(s, vocab().plan());
     var cur = pl.cur;
     var returning = hasProgress(p);
@@ -488,8 +486,9 @@
     if (sec === 'oefen') main = oefenMain(pl);
     else if (sec === 'missies') main = missiesMain(p, s);
     else if (sec === 'profiel') main = profielMain(p, s, pl);
+    else if (sec === 'letters' && letters()) main = letters().panel();
     else main = leerMain(p, s, pl);
-    if (sec === 'leer' || sec === 'oefen') rail = '<aside class="lh-rail" aria-label="Overzicht">' + railCards(p, s, pl) + '</aside>';
+    if (sec === 'leer' || sec === 'oefen' || sec === 'letters') rail = '<aside class="lh-rail" aria-label="Overzicht">' + railCards(p, s, pl) + '</aside>';
     var sheet = '';
     if (ui.sheet != null) {
       var o = (isVocab() ? vocab().plan() : pl).list.filter(function (x) { return x.n === ui.sheet; })[0];
@@ -604,7 +603,7 @@
       case 'close':
         var op = ui.opener; closeAll(); ui.refocus = op; return rerender();
       case 'path':
-        closeAll(); saveSettings({ path: v === 'vocab' || v === 'letters' ? v : 'grammatica' }); ui.needScroll = true; ui.refocus = 'path-' + v;
+        closeAll(); saveSettings({ path: v === 'vocab' ? 'vocab' : 'grammatica' }); ui.needScroll = true; ui.refocus = 'path-' + v;
         window.scrollTo && window.scrollTo(0, 0);
         return rerender();
       case 'vstart': closeAll(); return vocab() && vocab().open(n, 'play');
@@ -673,6 +672,7 @@
   window.GrammarLabHome = {
     mount: mount, view: view, afterRender: afterRender, enter: enter, record: record, markRead: markRead,
     soundOn: function () { return settings().sound; },
+    setSection: function (v) { if (v) ui.section = v; return ui.section; },
     _internals: { info: info, plan: plan, streak: streak, prog: prog }
   };
 })();

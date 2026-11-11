@@ -92,7 +92,7 @@ body.lh-on, body.lh-skin { overflow-x:hidden; }
     border-right:0; border-top:2px solid var(--line); overflow:visible;
   }
   .lh-logo { display:none; }
-  .lh-navitem { width:56px; min-width:56px; height:56px; padding:0; justify-content:center; }
+  .lh-navitem { flex:1 1 0; width:auto; min-width:0; max-width:64px; height:56px; padding:0; justify-content:center; }
 }
 
 /* ---------- bovenbalk ---------- */

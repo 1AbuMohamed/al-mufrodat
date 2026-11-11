@@ -284,6 +284,7 @@
     S = null;
     var home = window.GrammarLabHome;
     if (home && home.enter) { try { home.enter(); } catch (_e) {} }
+    if (home && home.setSection) { try { home.setSection('letters'); } catch (_e) {} }
     if (window.GrammarLabEngine && window.GrammarLabEngine.refresh) window.GrammarLabEngine.refresh();
     if (window.scrollTo) window.scrollTo(0, 0);
   }
