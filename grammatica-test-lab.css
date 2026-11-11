@@ -82,3 +82,8 @@ body.lh-skin .gd-lab-vb .gd-theory-example {
 /* Keuzeknoppen met Arabisch */
 .gd-option .gd-ar { font-size: 1.45em; line-height: 1.5; }
 .gd-task-title .gd-ar { font-size: 1.3em; }
+
+/* Zinsbalk volgt het thema (ook donker) */
+body.lh-skin .gd-parse-sentence { background: var(--surface-2); border: 2px solid var(--line); border-radius: var(--radius); }
+body.lh-skin .gd-parse-sentence .gd-word-chip { color: var(--muted); }
+body.lh-skin .gd-parse-sentence .gd-word-chip.target { color: var(--blue-ink); background: var(--surface); }

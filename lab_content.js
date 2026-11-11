@@ -1044,5 +1044,133 @@ window.GRAMMATICA_LAB = {
       { "ar": "خَرَجَ ثَلَاثَةُ طُلَّابٍ.", "nl": "Drie studenten gingen naar buiten.", "woorden": [["خَرَجَ", "Fi‘l", "", "", ""], ["ثَلَاثَةُ", "Ism", "", "Faa‘il", "Marfoe‘"], ["طُلَّابٍ.", "Ism", "", "Ma‘doed", "Madjroer"]] },
       { "ar": "رَأَيْتُ خَمْسَةَ رِجَالٍ.", "nl": "Ik zag vijf mannen.", "woorden": [["رَأَيْتُ", "Fi‘l", "", "", ""], ["خَمْسَةَ", "Ism", "", "Maf‘oel bih", "Mansoeb"], ["رِجَالٍ.", "Ism", "", "Ma‘doed", "Madjroer"]] }
     ]
+  },
+
+  "20": {
+    "uitleg": [
+      {
+        "kop": "Drie t/m tien bij een vrouwelijk woord",
+        "tekst": [
+          "In les 19 telde je mannelijke woorden: ثَلَاثَةُ أَبْنَاءٍ (“drie zonen”). Telt het getal een **vrouwelijke Ma‘doed**, dan valt de **Taa’ Marboetah** (ة) aan het einde van het getal weg: ثَلَاثُ بَنَاتٍ (“drie dochters”).",
+          "De rest blijft hetzelfde: het getal is de **Moedaaf**, de Ma‘doed staat in het meervoud en is **Madjroer**."
+        ],
+        "vb": [["ثَلَاثَةُ أَبْنَاءٍ", "drie zonen (m.)"], ["ثَلَاثُ بَنَاتٍ", "drie dochters (v.)"], ["أَرْبَعُ أَخَوَاتٍ", "vier zussen"], ["سِتُّ نِسَاءٍ", "zes vrouwen"], ["سِتَّةُ رِجَالٍ", "zes mannen"]],
+        "tip": "Zie je het getal met ة? Dan wordt een mannelijk woord geteld. Zonder ة? Dan een vrouwelijk woord."
+      },
+      {
+        "kop": "Bijzondere vormen: ثَمَانِيْ en عَشْرُ",
+        "tekst": [
+          "**ثَمَانِيْ** (“acht”, bij een vrouwelijk woord) heeft een Soekoen op de laatste letter. Bij “tien” verandert de klinker op de Shien: **عَشَرَةُ** (mannelijk, met Fathah) en **عَشْرُ** (vrouwelijk, met Soekoen)."
+        ],
+        "vb": [["عَشَرَةُ رِجَالٍ", "tien mannen"], ["عَشْرُ نِسَاءٍ", "tien vrouwen"]]
+      },
+      {
+        "kop": "“Eén” en “twee” bij vrouwelijke woorden",
+        "tekst": [
+          "Ook de vrouwelijke vorm van **وَاحِدٌ** is **وَاحِدَةٌ** en die van **اِثْنَانِ** is **اِثْنَتَانِ**. Ze volgen het naamwoord als **Na‘t**."
+        ],
+        "vb": [["لِيْ أُخْتٌ وَاحِدَةٌ", "Ik heb één zus."], ["لِيْ أُخْتَانِ اثْنَتَانِ", "Ik heb twee zussen."]]
+      }
+    ],
+    "vragen": [
+      { "v": "Wat gebeurt er met het getal 3 t/m 10 bij een vrouwelijke Ma‘doed?", "o": ["De Taa’ Marboetah valt weg", "Er komt een Taa’ Marboetah bij", "Niets", "Het wordt een Na‘t"], "g": 0, "u": "ثَلَاثَةُ → ثَلَاثُ." },
+      { "v": "Welke Arabische tekst betekent “drie dochters”?", "o": ["ثَلَاثُ بَنَاتٍ", "ثَلَاثَةُ بَنَاتٍ", "ثَلَاثُ أَبْنَاءٍ", "ثَلَاثَةُ أَبْنَاءٍ"], "g": 0, "u": "Dochters zijn vrouwelijk, dus het getal zonder ة." },
+      { "v": "Welke Arabische tekst betekent “zes mannen”?", "o": ["سِتَّةُ رِجَالٍ", "سِتُّ رِجَالٍ", "سِتُّ نِسَاءٍ", "سِتَّةُ نِسَاءٍ"], "g": 0, "u": "Mannen zijn mannelijk, dus het getal met ة." },
+      { "v": "Wat is de naamval van de Ma‘doed?", "o": ["Madjroer", "Marfoe‘", "Mansoeb", "Geen"], "g": 0, "u": "De Ma‘doed is Moedaaf Ilaih, dus Madjroer." },
+      { "v": "Wat betekent عَشْرُ نِسَاءٍ?", "o": ["tien vrouwen", "tien mannen", "twee vrouwen", "vijf vrouwen"], "g": 0, "u": "عَشْرُ = tien (bij vrouwelijk)." },
+      { "v": "Wat is de vrouwelijke vorm van وَاحِدٌ?", "o": ["وَاحِدَةٌ", "اِثْنَتَانِ", "وَاحِدَانِ", "وَاحِدَاتٌ"], "g": 0, "u": "وَاحِدَةٌ = één (v.)." },
+      { "v": "Wat is de vrouwelijke vorm van اِثْنَانِ?", "o": ["اِثْنَتَانِ", "اِثْنَةٌ", "وَاحِدَةٌ", "اِثْنَانَةٌ"], "g": 0, "u": "اِثْنَتَانِ = twee (v.)." },
+      { "v": "Hoe zeg je “Ik heb één zus.”?", "o": ["لِيْ أُخْتٌ وَاحِدَةٌ", "لِيْ أُخْتٌ وَاحِدٌ", "عِنْدِيْ أُخْتٌ وَاحِدَةٌ", "لِيْ أُخْتَانِ"], "g": 0, "u": "Voor familie gebruik je لِ; وَاحِدَةٌ past bij het vrouwelijke أُخْتٌ." }
+    ],
+    "ontleding": [
+      { "ar": "ثَلَاثُ بَنَاتٍ", "nl": "drie dochters", "woorden": [["ثَلَاثُ", "Ism", "", "Moedaaf", ""], ["بَنَاتٍ", "Ism", "", "Ma‘doed", "Madjroer"]] },
+      { "ar": "ثَلَاثَةُ أَبْنَاءٍ", "nl": "drie zonen", "woorden": [["ثَلَاثَةُ", "Ism", "", "Moedaaf", ""], ["أَبْنَاءٍ", "Ism", "", "Ma‘doed", "Madjroer"]] },
+      { "ar": "عَشْرُ نِسَاءٍ", "nl": "tien vrouwen", "woorden": [["عَشْرُ", "Ism", "", "Moedaaf", ""], ["نِسَاءٍ", "Ism", "", "Ma‘doed", "Madjroer"]] },
+      { "ar": "لِيْ أُخْتٌ وَاحِدَةٌ", "nl": "Ik heb één zus.", "woorden": [["لِيْ", "Harf", "Harf Djarr", "", "", "لِ = Harf Djarr · يْ = Dhamier", 1], ["أُخْتٌ", "Ism", "", "Man‘oet", "Marfoe‘"], ["وَاحِدَةٌ", "Ism", "", "Na‘t", "Marfoe‘"]] }
+    ]
+  },
+
+  "22": {
+    "uitleg": [
+      {
+        "kop": "Wanneer verdwijnt de Tanwien?",
+        "tekst": [
+          "De meeste naamwoorden krijgen een Tanwien. Die verdwijnt in drie gevallen:",
+          "**a.** wanneer het naamwoord **اَلْ** heeft (كِتَابٌ → الْكِتَابُ);",
+          "**b.** wanneer het een **Moedaaf** is (كِتَابٌ → كِتَابُ بِلَالٍ);",
+          "**c.** wanneer **يَا** ervoor staat (أُسْتَاذٌ → يَا أُسْتَاذُ)."
+        ],
+        "vb": [["كِتَابٌ → كِتَابُ بِلَالٍ", "een boek → het boek van Bilaal"], ["أُسْتَاذٌ → يَا أُسْتَاذُ", "een leraar → o leraar"]]
+      },
+      {
+        "kop": "Diptoten: nooit een Tanwien",
+        "tekst": [
+          "Sommige naamwoorden krijgen **nooit** een Tanwien. Zulke woorden heten **diptoten**. In het Arabisch heet dit **al-Mamnoe‘ minas Sarf** (of Ghair Moensarif)."
+        ],
+        "tip": "Een diptoot herken je aan zijn soort of zijn patroon. Leer de groepen hieronder."
+      },
+      {
+        "kop": "De groepen diptoten",
+        "tekst": [
+          "**1.** Vrouwelijke eigennamen: آمِنَةُ, زَيْنَبُ.",
+          "**2.** Mannelijke eigennamen op ة: حَمْزَةُ, أُسَامَةُ.",
+          "**3.** Mannelijke eigennamen op -aan: عُثْمَانُ, رَمَضَانُ.",
+          "**4.** Bijvoeglijke naamwoorden van het patroon فَعْلَانُ: كَسْلَانُ, مَلْآنُ.",
+          "**5.** Mannelijke eigennamen van het patroon أَفْعَلُ: أَحْمَدُ, أَنْوَرُ.",
+          "**6.** Bijvoeglijke naamwoorden van het patroon أَفْعَلُ: أَسْوَدُ, أَحْمَرُ.",
+          "**7.** Niet-Arabische eigennamen: وِلْيَمُ, لَنْدَنُ, بَاكِسْتَانُ.",
+          "**8.** Bepaalde gebroken meervouden: أَفْعِلَاءُ (أَصْدِقَاءُ), فُعَلَاءُ (زُمَلَاءُ), مَفَاعِلُ (مَسَاجِدُ), مَفَاعِيْلُ (مَفَاتِيْحُ)."
+        ]
+      }
+    ],
+    "vragen": [
+      { "v": "Welke is geen reden om de Tanwien weg te laten?", "o": ["Het woord is vrouwelijk", "Het woord heeft اَلْ", "Het woord is een Moedaaf", "Het woord staat na يَا"], "g": 0, "u": "Een gewoon vrouwelijk woord zoals سَيَّارَةٌ krijgt wel een Tanwien." },
+      { "v": "Wat is een diptoot?", "o": ["Een naamwoord dat nooit een Tanwien krijgt", "Een werkwoord", "Een voorzetsel", "Een tweevoud"], "g": 0, "u": "Diptoten zijn naamwoorden zonder Tanwien." },
+      { "v": "Welk woord is een diptoot?", "o": ["أَحْمَدُ", "كِتَابٌ", "بَيْتٌ", "قَلَمٌ"], "g": 0, "u": "أَحْمَدُ volgt het patroon أَفْعَلُ." },
+      { "v": "Welk woord is een diptoot?", "o": ["عُثْمَانُ", "طَالِبٌ", "رَجُلٌ", "وَلَدٌ"], "g": 0, "u": "Mannelijke eigennaam op -aan." },
+      { "v": "Welk woord is een diptoot?", "o": ["مَسَاجِدُ", "مَسْجِدٌ", "مُسْلِمٌ", "مُدَرِّسٌ"], "g": 0, "u": "مَسَاجِدُ volgt het meervoudspatroon مَفَاعِلُ." },
+      { "v": "Welk woord is een diptoot?", "o": ["آمِنَةُ", "مُدَرِّسَةٌ", "سَيَّارَةٌ", "غُرْفَةٌ"], "g": 0, "u": "Vrouwelijke eigennamen zijn diptoten." },
+      { "v": "Welk woord is een diptoot?", "o": ["أَسْوَدُ", "جَدِيْدٌ", "صَغِيْرٌ", "كَبِيْرٌ"], "g": 0, "u": "Bijvoeglijke naamwoorden van het patroon أَفْعَلُ." },
+      { "v": "Welk woord is een diptoot?", "o": ["لَنْدَنُ", "بَيْتٌ", "كِتَابٌ", "بَابٌ"], "g": 0, "u": "Niet-Arabische eigennamen." }
+    ],
+    "ontleding": [
+      { "ar": "كِتَابُ بِلَالٍ", "nl": "het boek van Bilaal", "woorden": [["كِتَابُ", "Ism", "", "Moedaaf", ""], ["بِلَالٍ", "Ism", "", "Moedaaf Ilaih", "Madjroer"]] },
+      { "ar": "يَا أُسْتَاذُ", "nl": "O leraar", "woorden": [["يَا", "Harf", "Harf an-Nidaa’", "", ""], ["أُسْتَاذُ", "Ism", "", "", "", "", 1]] }
+    ]
+  },
+
+  "23": {
+    "uitleg": [
+      {
+        "kop": "Twee redenen voor Madjroer",
+        "tekst": [
+          "Een naamwoord is **Madjroer** (genitief) in twee gevallen: **a.** na een **Harf Djarr** (voorzetsel) en **b.** als het een **Moedaaf Ilaih** is."
+        ],
+        "vb": [["بِلَالٌ → مِنْ بِلَالٍ", "Bilaal → van Bilaal"], ["الْبَيْتُ → فِي الْبَيْتِ", "het huis → in het huis"], ["بِلَالٌ → بِنْتُ بِلَالٍ", "Bilaal → de dochter van Bilaal"], ["الْمُدَرِّسُ → كِتَابُ الْمُدَرِّسِ", "de leraar → het boek van de leraar"]]
+      },
+      {
+        "kop": "Diptoten in de Madjroer: -a in plaats van -ie",
+        "tekst": [
+          "Een diptoot krijgt in beide gevallen een **Fathah** (-a) in plaats van een Kasrah. Je kent nu dus twee genitief-uitgangen: bij regelmatige naamwoorden **-ie**, bij diptoten **-a**.",
+          "Een diptoot heeft ook dan geen Tanwien."
+        ],
+        "vb": [["مِنْ أَحْمَدَ", "van Ahmad"], ["كِتَابُ أَحْمَدَ", "het boek van Ahmad"], ["مِنْ إِبْرَاهِيْمَ", "van Ibraahiem"], ["كِتَابُ إِبْرَاهِيْمَ", "het boek van Ibraahiem"]],
+        "tip": "Vergelijk: مِنْ بِلَالٍ (regelmatig, -ie met Tanwien) en مِنْ أَحْمَدَ (diptoot, -a)."
+      }
+    ],
+    "vragen": [
+      { "v": "In welke twee gevallen is een naamwoord Madjroer?", "o": ["Na een Harf Djarr en als Moedaaf Ilaih", "Na يَا en als Faa‘il", "Als Moebtada en als Chabar", "Als Na‘t en als Man‘oet"], "g": 0, "u": "Voorzetsel of bezitter." },
+      { "v": "Welke genitief-uitgang hebben regelmatige naamwoorden?", "o": ["-ie (Kasrah)", "-a (Fathah)", "-oe (Dammah)", "-n"], "g": 0, "u": "Regelmatig: Kasrah." },
+      { "v": "Welke genitief-uitgang hebben diptoten?", "o": ["-a (Fathah)", "-ie (Kasrah)", "-oe (Dammah)", "-aan"], "g": 0, "u": "Diptoten krijgen een Fathah." },
+      { "v": "Hoe zeg je “van Ahmad”?", "o": ["مِنْ أَحْمَدَ", "مِنْ أَحْمَدٍ", "مِنْ أَحْمَدِ", "مِنْ أَحْمَدُ"], "g": 0, "u": "أَحْمَدُ is een diptoot: Fathah, geen Tanwien." },
+      { "v": "Hoe zeg je “van Bilaal”?", "o": ["مِنْ بِلَالٍ", "مِنْ بِلَالَ", "مِنْ بِلَالُ", "مِنْ بِلَالًا"], "g": 0, "u": "بِلَالٌ is regelmatig: -ie met Tanwien." },
+      { "v": "Hoe zeg je “het boek van Ibraahiem”?", "o": ["كِتَابُ إِبْرَاهِيْمَ", "كِتَابُ إِبْرَاهِيْمٍ", "كِتَابٌ إِبْرَاهِيْمَ", "كِتَابَ إِبْرَاهِيْمَ"], "g": 0, "u": "Moedaaf zonder Tanwien; de diptoot krijgt -a." }
+    ],
+    "ontleding": [
+      { "ar": "مِنْ أَحْمَدَ", "nl": "van Ahmad", "woorden": [["مِنْ", "Harf", "Harf Djarr", "", ""], ["أَحْمَدَ", "Ism", "", "", "Madjroer"]] },
+      { "ar": "كِتَابُ أَحْمَدَ", "nl": "het boek van Ahmad", "woorden": [["كِتَابُ", "Ism", "", "Moedaaf", ""], ["أَحْمَدَ", "Ism", "", "Moedaaf Ilaih", "Madjroer"]] },
+      { "ar": "مِنْ بِلَالٍ", "nl": "van Bilaal", "woorden": [["مِنْ", "Harf", "Harf Djarr", "", ""], ["بِلَالٍ", "Ism", "", "", "Madjroer"]] },
+      { "ar": "فِي الْبَيْتِ", "nl": "in het huis", "woorden": [["فِي", "Harf", "Harf Djarr", "", ""], ["الْبَيْتِ", "Ism", "", "", "Madjroer"]] }
+    ]
   }
 };

@@ -10,7 +10,7 @@ Alle wijzigingen in het kader van het herstel en de herbouw van de grammatica, d
 - **Zinsontleding uitsluitend met Arabische termen** (Nederlands gespeld zoals in het boek): Ism, Fi‘l, Harf, Ism Isjaarah, Harf Djarr, Dhamier, Moebtada, Chabar, Faa‘il, Moedaaf, Moedaaf Ilaih, Marfoe‘, Madjroer, Mansoeb.
 - **Alle Arabische zinnen** in de ontleding komen letterlijk uit het boek; `scripts/test_lab_content.cjs` controleert dat.
 - **Opmaak:** groene/rode feedbackbalk, gemarkeerd woord bij ontleden, volledige ontleding met gekleurde labels, rustigere theoriekaarten (`grammatica-test-lab.css`).
-- **Dekking:** les 1 t/m 5. Overige lessen gebruiken tot hun uitbreiding de bestaande brongebonden oefeningen.
+- **Dekking:** les 1 t/m 16, 18, 19, 20, 22 en 23. Les 0, 17 en 21 (geen eigen regels) blijven bij de bestaande brongebonden oefeningen.
 
 ## [Gebruikersverfijningen & Didactische Vereenvoudiging] – 2026-11-09
 
