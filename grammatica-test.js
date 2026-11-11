@@ -79,9 +79,19 @@
       var rule=plain(row.tekst), pos=rule.indexOf('«'+answer+'»');
       if(pos<0)return;
       var prompt=rule.slice(0,pos)+'____'+rule.slice(pos+answer.length+2);
-      tasks.push({type:'theory',example:examples[0]||null,rule:rule,prompt:prompt,
+      tasks.push({type:'theory',example:null,rule:rule,prompt:prompt,
         answer:answer,options:seededShuffle([answer].concat(seededShuffle(others,seed+i).slice(0,3)),seed+i+7)});
     });
+    if(!tasks.length && rows.length){
+      var others=Object.keys(DATA).map(Number).filter(function(x){return x!==n;})
+        .flatMap(function(x){return theoryRows(x).map(function(r){return plain(r.tekst);});})
+        .filter(function(t){return t.length>28;});
+      rows.filter(function(r){return plain(r.tekst).length>28;}).slice(0,5).forEach(function(row,i){
+        var answer=plain(row.tekst);
+        tasks.push({type:'theory',example:null,rule:answer,prompt:'Welke regel staat in deze les?',
+          answer:answer,options:seededShuffle([answer].concat(seededShuffle(others,seed+i).slice(0,3)),seed+i+19)});
+      });
+    }
     return seededShuffle(tasks,seed).slice(0,5);
   }
   function buildParsingTasks(n,seed) {
@@ -124,7 +134,7 @@
     var result=theory.slice(0,4).concat(parse.slice(0,4));
     var extra=seededShuffle(legacy,seed+71);
     while(result.length<Math.min(10,Math.max(8,theory.length+parse.length+3))&&extra.length)result.push(extra.shift());
-    return seededShuffle(result,seed).slice(0,10);
+    return result.slice(0,10);
   }
 
   function splitArabic(text) { return plain(text).split(/\s+/).filter(Boolean); }
@@ -443,7 +453,7 @@
     var good = session.feedback.correct;
     return '<section class="gd-feedback gd-feedback-sheet ' + (good ? 'good' : 'review') + '" role="status" aria-live="assertive">' +
       '<div class="gd-feedback-inner">' +
-      '<strong>' + (good ? 'Goed beantwoord!' : 'Fout') + '</strong>' +
+      '<strong>' + (good ? 'Goed!' : 'Juiste antwoord:') + '</strong>' +
       (good ? '' : '<p class="gd-feedback-correct-label">Dit is het juiste antwoord:</p>') +
       (task.example ? '<p class="gd-arabic" lang="ar" dir="rtl">' + esc(task.example.ar) + '</p>' : '') +
       (task.example ? '<p class="gd-dutch-answer">' + esc(task.example.nl) + '</p>' : '') +
