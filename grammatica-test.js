@@ -395,21 +395,25 @@
     '</div>';
   }
 
-  function intro() {
-    var n = session.lesson;
-    var exercises = session.tasks.length;
-    return '<div class="gd-shell gd-play">' + topBar() +
-      '<div class="gd-card gd-intro">' +
-        '<div class="gd-stage-tag">Eerst de theorie</div>' +
-        '<h1>Les ' + n + '</h1>' +
-        '<p class="gd-support">Lees de regels en bekijk het voorbeeld. Daarna oefen je de theorie en zinsontleding.</p>' +
-        '<div class="gd-source-box gd-theory-reading">' + rulesHtml(n) + '</div>' + introSample(n) +
-        (exercises ?
-          '<p class="gd-intro-bottom">Nu volgen ' + exercises + ' korte oefening' + (exercises === 1 ? '' : 'en') + ' met de oorspronkelijke voorbeeldzinnen.</p>' +
-          '<button type="button" class="gd-primary gd-full" data-action="start">Start oefenen <span aria-hidden="true">→</span></button>' :
-          '<p class="gd-intro-bottom">Deze les heeft geen afzonderlijke Arabisch–Nederlandse voorbeelden om er betrouwbare automatische vragen van te maken. Er is daarom geen oefentoets verzonnen.</p>' +
-          '<a class="gd-primary gd-full gd-as-link" href="' + lessonUrl(n) + '">Lees de oorspronkelijke les ' + n + ' →</a>') +
-      '</div></div>';
+  function intro(){
+    var n=session.lesson,cards=session.theoryCards,idx=session.theoryIndex;
+    var total=Math.max(1,cards.length);
+    var atEnd=idx>=total-1;
+    var actions='<div class="gd-theory-actions">'+
+      (idx>0?'<button type="button" class="gd-soft gd-theory-back" data-action="theory-prev">← Vorige</button>':'')+
+      (atEnd ? (session.tasks.length ?
+        '<button type="button" class="gd-primary gd-theory-forward" data-action="start">Start oefenen →</button>' :
+        '<a class="gd-primary gd-theory-forward gd-as-link" href="'+lessonUrl(n)+'">Lees volledige les →</a>') :
+        '<button type="button" class="gd-primary gd-theory-forward" data-action="theory-next">Volgende →</button>')+
+      '</div>';
+    return '<div class="gd-shell gd-play gd-theory-screen">'+topBar()+
+      '<article class="gd-card gd-intro gd-theory-card"><div class="gd-theory-heading">'+
+      '<span class="gd-stage-tag">Eerst begrijpen</span><span class="gd-theory-counter">Stap '+(idx+1)+' van '+total+'</span></div>'+
+      '<h1 tabindex="-1" id="gd-theory-title">Les '+n+'</h1>'+
+      '<div class="gd-theory-meter" role="progressbar" aria-label="Theorie doornemen" aria-valuemin="0" aria-valuemax="'+total+'" aria-valuenow="'+(idx+1)+'">'+
+        '<span style="width:'+Math.round(100*(idx+1)/total)+'%"></span></div>'+
+      renderTheoryStep()+actions+
+      '</article></div>';
   }
 
   function currentTask() { return session.tasks[session.index]; }
@@ -561,10 +565,8 @@
       setLesson(n);
       if (!session.tasks.length) {
         if (window.GrammarLabHome) window.GrammarLabHome.markRead(n);
-      } else if (mode === 'start') {
-        session.stage = 'play';
-        render();
       }
+      // Ook de START-knop brengt de leerling eerst langs de bronuitleg.
     }
   };
 
@@ -572,6 +574,9 @@
     if (!Object.prototype.hasOwnProperty.call(DATA, n)) { session.stage = 'overview'; render(); return; }
     session.lesson = Number(n);
     session.tasks = buildStudyTasks(session.lesson,(Math.random()*0xffffffff)>>>0);
+    session.theoryCards = buildTheoryCards(session.lesson);
+    session.theoryIndex = 0;
+    session.theorySeen = false;
     session.index = 0;
     session.correct = 0;
     session.missed = [];
@@ -631,7 +636,17 @@
       if (history.replaceState) history.replaceState(null, '', 'grammatica-test.html');
       return render();
     }
-    if (action === 'start') { session.stage = 'play'; return render(); }
+    if (action === 'theory-prev' && session.stage === 'intro') {
+      session.theoryIndex = Math.max(0, session.theoryIndex - 1); return render();
+    }
+    if (action === 'theory-next' && session.stage === 'intro') {
+      session.theoryIndex = Math.min(session.theoryCards.length - 1, session.theoryIndex + 1); return render();
+    }
+    if (action === 'start' && session.stage === 'intro') {
+      if (session.theoryIndex < session.theoryCards.length - 1) return;
+      session.theorySeen = true;
+      session.stage = 'play'; return render();
+    }
     if (action === 'select' && !session.feedback) {
       session.chosen = Number(node.getAttribute('data-value')); return render();
     }
