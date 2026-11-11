@@ -438,3 +438,19 @@ body{overflow-x:hidden}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}
 }
+
+
+/* Zigzag zonder overflow op smalle telefoons */
+.gd-path-row.offset-0,.gd-path-row.offset-1,.gd-path-row.offset-2,.gd-path-row.offset-3{transform:none}
+.gd-path-row.offset-0>.gd-node{transform:translateX(-58px)}
+.gd-path-row.offset-1>.gd-node{transform:translateX(-20px)}
+.gd-path-row.offset-2>.gd-node{transform:translateX(28px)}
+.gd-path-row.offset-3>.gd-node{transform:translateX(56px)}
+.gd-path-row.offset-0>.gd-node:active{transform:translate(-58px,3px)}
+.gd-path-row.offset-1>.gd-node:active{transform:translate(-20px,3px)}
+.gd-path-row.offset-2>.gd-node:active{transform:translate(28px,3px)}
+.gd-path-row.offset-3>.gd-node:active{transform:translate(56px,3px)}
+@media(max-width:360px){
+ .gd-path-row.offset-0>.gd-node{transform:translateX(-48px)}
+ .gd-path-row.offset-3>.gd-node{transform:translateX(48px)}
+}
