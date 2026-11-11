@@ -61,5 +61,37 @@ for (const [key, lesson] of Object.entries(data)) {
 assert.equal(lessonCount, 24);
 assert.equal(core.buildTasks(0).length, 0, 'Geen verzonnen Arabische oefening in les 0');
 assert.equal(core.buildTasks(17).length, 0, 'Geen verzonnen Arabische oefening in les 17');
+// Theorie en ontleding mogen alleen letterlijk uit de Medina-bron komen.
+let authenticGrammar=0, parsingTasks=0;
+for(let n=0;n<=23;n++){
+  const rows=data[n].inhoud;
+  const rules=new Set(rows.filter(x=>['regel','tekst','kop'].includes(x.type)).map(x=>x.tekst));
+  const examples=new Set(rows.filter(x=>x.type==='voorbeeld').map(x=>x.ar));
+  const cards=core.buildTheoryCards(n);
+  assert(cards.length>0,'Elke les moet de originele theorie in stappen tonen');
+  for(const card of cards){
+    assert(card.length>0&&card.every(x=>rows.includes(x)),'Theoriestappen mogen niet worden verzonnen');
+  }
+  const tasks=core.buildStudyTasks(n,913+n);
+  assert(tasks.length<=10,'Maximum tien vragen');
+  let grammar=0;
+  for(const task of tasks){
+    if(!['theory','parse','why'].includes(task.type))continue;
+    grammar++;authenticGrammar++;
+    assert(task.rule&&rules.has(task.rule),'Les '+n+': uitleg staat niet letterlijk in de bron');
+    assert(task.options.includes(task.answer),'Juiste antwoord ontbreekt');
+    if(task.type==='theory'){
+      assert.equal(task.prompt.replace('____',task.answer),task.rule,'Les '+n+': theorievraag is geen originele regel');
+    }else{
+      parsingTasks++;
+      assert(task.example&&examples.has(task.example.ar),'Les '+n+': ontleding gebruikt geen origineel voorbeeld');
+      assert(task.example.ar.includes(task.word),'Les '+n+': gemarkeerd woord ontbreekt in het Arabisch');
+    }
+  }
+  if(n!==21&&tasks.length>=4)assert(grammar/tasks.length>=.7,'Les '+n+': te weinig grammatica: '+grammar+'/'+tasks.length);
+}
+assert(parsingTasks>=10,'Te weinig geverifieerde ontledingsvragen');
+console.log('OK: '+authenticGrammar+' theorievragen, waarvan '+parsingTasks+' geverifieerde ontledings-/waaromvragen.');
+
 console.log('OK: ' + lessonCount + ' Medina-lessen; ' + availableTasks +
   ' authentieke oefenopdrachten; geen nieuwe Arabische zinnen of vertalingen.');
