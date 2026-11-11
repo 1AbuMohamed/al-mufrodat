@@ -48,9 +48,56 @@ def answer(page, task):
             page.locator(f'[data-action="tile"][data-value="{i}"]').click()
     elif kind == "find":
         page.locator(f'[data-action="word"][data-value="{task["wordIndex"]}"]').click()
+    elif kind == "zinsontleding":
+        for i, tok in enumerate(task["tokens"]):
+            page.locator(f'[data-action="plab"][data-value="{tok["r"]}"]').click()
+            page.locator(f'[data-action="pslot"][data-value="{i}"]').click()
     else:
         raise AssertionError(f"Onbekend opdrachttype: {kind}")
     page.locator('[data-action="check"]').click()
+
+
+def test_parse_drag_and_fast(page, base_url):
+    page.set_viewport_size({"width": 390, "height": 844})
+    page.goto(f"{base_url}?les=8", wait_until="domcontentloaded")
+    page.wait_for_selector('[data-action="parse-train"]', timeout=10000)
+    page.locator('[data-action="parse-train"]').click()
+    tasks = page.evaluate("window.GrammarLabEngine.tasks()")
+    assert len(tasks) == 10 and all(t["type"] == "zinsontleding" for t in tasks), "Verwacht 10 zinsontleding-vragen"
+
+    chips_text = " ".join(page.locator(".gd-plab").all_inner_texts())
+    for expected in ("moebtada", "khabar"):
+        assert expected in chips_text, f"Fonetische term ontbreekt: {expected}"
+
+    # Drag-and-drop via pointer events (.gd-plab -> .gd-pslot)
+    first_tok = tasks[0]["tokens"][0]
+    chip_box = page.locator(f'.gd-plab[data-value="{first_tok["r"]}"]').bounding_box()
+    slot_box = page.locator('.gd-pslot[data-drop="0"]').bounding_box()
+    cx, cy = chip_box["x"] + chip_box["width"] / 2, chip_box["y"] + chip_box["height"] / 2
+    sx, sy = slot_box["x"] + slot_box["width"] / 2, slot_box["y"] + slot_box["height"] / 2
+    page.mouse.move(cx, cy)
+    page.mouse.down()
+    page.mouse.move(sx, sy, steps=8)
+    page.mouse.up()
+    assert page.locator('.gd-pslot[data-drop="0"] .gd-pdrop').inner_text() != "sleep hierheen"
+    assert page.locator(".gd-ptip strong").inner_text() != ""
+
+    # Snelle modus aan + resterende woorden -> direct feedback + automatisch naar opdracht 2
+    page.locator('[data-action="fast"]').click()
+    assert page.evaluate("window.GrammarLabParse.fastOn()") is True
+    for i, tok in enumerate(tasks[0]["tokens"]):
+        if i == 0:
+            continue
+        page.locator(f'[data-action="plab"][data-value="{tok["r"]}"]').click()
+        page.locator(f'[data-action="pslot"][data-value="{i}"]').click()
+    assert page.locator(".gd-feedback.good").count() == 1, "Snelle modus moet direct nakijken"
+    page.wait_for_function(
+        "() => document.querySelector('.gd-stage-tag')?.textContent?.includes('Oefening 2 / 10')",
+        timeout=3000,
+    )
+    for vw in (320, 1440):
+        assert_layout(page, vw)
+    print("OK: zinsontleding drag-and-drop, fonetische termen, snelle modus en 10-zinnentraining werken.")
 
 
 def complete_lesson(page, n):
@@ -93,6 +140,7 @@ def main():
             assert cards >= 3, "Te weinig theoriekaarten"
             page.wait_for_selector(".gd-task", timeout=5000)
             complete_lesson(page, 5)
+            test_parse_drag_and_fast(page, base)
             page.goto(base, wait_until="domcontentloaded")
             page.wait_for_selector('[data-h="tab"][data-v="lessons"]', timeout=10000)
             page.locator('[data-h="tab"][data-v="lessons"]').click()

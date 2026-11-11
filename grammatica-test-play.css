@@ -1,0 +1,74 @@
+/* Grammatica Lab · snelle modus & drag-and-drop zinsontleding (Duolingo-stijl).
+ * Bouwt voort op body.lh-skin en de variabelen uit grammatica-test-home.css. */
+
+/* Snelle modus-knop in de lesbalk */
+.gd-fast {
+  min-height: 38px; padding: 0 11px; border: 2px solid var(--line, #d5ddd7); border-bottom-width: 4px;
+  border-radius: 12px; background: transparent; color: var(--muted, #6f7775);
+  font: 800 13px var(--font-ui, sans-serif); letter-spacing: .04em; cursor: pointer; white-space: nowrap;
+}
+.gd-fast:hover { background: var(--surface-2, #f1f5f2); }
+.gd-fast.on { border-color: var(--gold-shade, #cc9a00); background: var(--gold, #ffc800); color: #3b2a00; }
+
+/* Auto-doorgaan voortgangsbalk in feedback */
+.gd-autonext { height: 6px; margin: 10px 0 4px; border-radius: 3px; background: rgba(0, 0, 0, .14); overflow: hidden; }
+.gd-autonext i { display: block; height: 100%; width: 100%; background: currentColor; transform-origin: left; animation: gdAuto .9s linear forwards; }
+.gd-feedback-sheet.review .gd-autonext i { animation-duration: 2.2s; }
+@keyframes gdAuto { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* Vertalingshint bij invulvraag en zinsontleding */
+.gd-gap-hint { margin: 0 0 12px; font-size: 17px; font-weight: 700; color: var(--muted, #6f7775); text-align: center; }
+
+/* Knop extra zinsontleding */
+.gd-parse-train { margin-top: 10px; }
+
+/* Drag-and-drop zinsontleding */
+.gd-psentence { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 4px 0 14px; }
+.gd-pslot {
+  display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 94px; padding: 12px 10px 10px;
+  border: 2px solid var(--line, #d5ddd7); border-bottom-width: 4px; border-radius: 16px;
+  background: var(--surface, #fff); color: var(--text, #222); cursor: pointer; font: inherit;
+}
+.gd-pslot.focus, .gd-pslot.over { border-color: var(--blue, #1cb0f6); background: var(--surface-2, #ddf4ff); }
+.gd-pword { font-family: var(--font-ar, "Amiri"), serif; font-size: clamp(28px, 7vw, 40px); line-height: 1.6; font-weight: 700; }
+.gd-pdrop {
+  min-height: 28px; padding: 4px 10px; border-radius: 10px; border: 2px dashed var(--line, #c8d2cb);
+  font-size: 13px; font-weight: 800; color: var(--muted, #6f7775); display: inline-flex; align-items: center;
+}
+.gd-pdrop i { font-style: normal; opacity: .75; font-weight: 700; }
+.gd-pslot.filled .gd-pdrop { border-style: solid; border-color: var(--blue, #1cb0f6); background: var(--surface-2, #ddf4ff); color: var(--blue-ink, #1479b8); }
+.gd-pslot.ok { border-color: var(--green, #58cc02); }
+.gd-pslot.ok .gd-pdrop { border-color: var(--green, #58cc02); background: var(--lab-ok-bg, #d7ffb8); color: var(--lab-ok-ink, #3f8f00); }
+.gd-pslot.bad { border-color: var(--red, #ff4b4b); }
+.gd-pslot.bad .gd-pdrop { border-color: var(--red, #ff4b4b); background: var(--lab-bad-bg, #ffdfe0); color: var(--lab-bad-ink, #d33838); text-decoration: line-through; }
+.gd-pfix { font-size: 13px; font-weight: 800; color: var(--lab-ok-ink, #3f8f00); }
+
+.gd-pbank { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 12px; }
+.gd-plab {
+  min-height: 44px; padding: 8px 14px; font: 800 14px var(--font-ui, sans-serif); text-transform: lowercase; touch-action: none;
+  border: 2px solid var(--line, #d5ddd7); border-bottom-width: 4px; border-radius: 14px;
+  background: var(--surface, #fff); color: var(--text, #222); cursor: grab;
+}
+.gd-plab:hover:not([disabled]) { background: var(--surface-2, #f1f5f2); }
+.gd-plab.sel { border-color: var(--blue, #1cb0f6); background: var(--surface-2, #ddf4ff); color: var(--blue-ink, #1479b8); }
+.gd-plab.used { opacity: .68; }
+body.gd-dragging, body.gd-dragging * { user-select: none; cursor: grabbing !important; }
+.gd-pghost {
+  position: fixed; z-index: 9999; pointer-events: none; transform: translate(-50%, -65%) scale(1.06);
+  padding: 10px 16px; border: 2px solid var(--blue, #1cb0f6); border-bottom-width: 4px; border-radius: 14px;
+  background: var(--blue-fill, #84d8ff); color: var(--on-fill, #00354e); font: 800 15px var(--font-ui, sans-serif);
+}
+.gd-ptip {
+  margin: 12px 0 0; padding: 10px 14px; border-radius: 12px; border: 2px solid var(--line, #d5ddd7);
+  background: var(--surface-2, #f5f8f6); color: var(--text, #222); font-size: 14px; line-height: 1.45;
+}
+.gd-ptip strong { color: var(--blue-ink, #1479b8); }
+
+.gd-psols { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 4px; justify-content: center; }
+.gd-psol {
+  display: flex; flex-direction: column; align-items: center; padding: 6px 10px;
+  border-radius: 12px; background: rgba(255, 255, 255, .45); border: 2px solid rgba(0, 0, 0, .08);
+}
+html[data-theme="dark"] .gd-psol { background: rgba(0, 0, 0, .2); border-color: rgba(255, 255, 255, .12); }
+.gd-psol b { font-family: var(--font-ar, "Amiri"), serif; font-size: 24px; line-height: 1.5; }
+.gd-psol small { font-size: 12px; font-weight: 800; }

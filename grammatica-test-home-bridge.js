@@ -67,10 +67,15 @@
     var prevRefresh = eng.refresh;
     eng.refresh = function () {
       if (typeof prevRefresh === 'function') prevRefresh();
-      if (isHomeStage() || isOverviewDom(app)) {
+      if (isOverviewDom(app) || (isHomeStage() && !app.querySelector('.lh'))) {
         var doEnter = firstHome;
         firstHome = false;
         showHome(app, { enter: doEnter });
+      } else if (isHomeStage()) {
+        firstHome = false;
+        if (document.body && document.body.classList) {
+          document.body.classList.add('lh-on', 'lh-skin');
+        }
       } else {
         // In les: volgende home-terugkeer is "echt"
         firstHome = true;

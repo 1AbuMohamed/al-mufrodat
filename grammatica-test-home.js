@@ -56,6 +56,7 @@
     var s = jget(K_SET, {});
     return {
       sound: s.sound !== false,
+      fast: s.fast === true,
       goal: [20, 30, 50].indexOf(s.goal) >= 0 ? s.goal : 20,
       theme: ['dark', 'light'].indexOf(s.theme) >= 0 ? s.theme : 'system',
       tab: s.tab === 'lessons' ? 'lessons' : 'path',
@@ -444,6 +445,9 @@
         '<button type="button" class="btn btn-green" data-h="start" data-v="' + o.n + '">HERHAAL</button></li>';
     }).join('');
     return '<div class="lh-pagehead"><h1>Oefen</h1><p class="lh-sub">Herhaal wat je bijna vergeten bent.</p></div>' +
+      (window.GrammarLabParse ? '<section class="lh-card"><div class="lh-card-head"><h2>Zinsontleding</h2></div>' +
+        '<p class="lh-card-text">Sleep fonetische woordsoorten (moebtada, khabar, faa\'il…) naar elk woord in willekeurige Medina-zinnen.</p>' +
+        '<button type="button" class="btn btn-blue lh-full" data-h="parse-train">ZINSONTLEDING TRAINEN (10 ZINNEN)</button></section>' : '') +
       (pl.weak.length
         ? '<section class="lh-card"><div class="lh-card-head"><h2>Zwakke punten</h2></div><ul class="lh-weaklist">' + rows + '</ul>' +
           '<button type="button" class="btn btn-green lh-full" data-h="weak">OEFEN NU</button></section>'
@@ -472,6 +476,9 @@
       '<div class="lh-setting"><span class="lh-setlabel">Geluid</span>' +
       '<button type="button" class="lh-switch' + (s.sound ? ' on' : '') + '" data-h="set-sound" role="switch" aria-checked="' + s.sound +
       '"><span class="lh-knob"></span><span class="lh-sr">Geluid ' + (s.sound ? 'aan' : 'uit') + '</span></button></div>' +
+      '<div class="lh-setting"><span class="lh-setlabel">Snelle modus</span>' +
+      '<button type="button" class="lh-switch' + (s.fast ? ' on' : '') + '" data-h="set-fast" role="switch" aria-checked="' + s.fast +
+      '"><span class="lh-knob"></span><span class="lh-sr">Snelle modus ' + (s.fast ? 'aan' : 'uit') + '</span></button></div>' +
       seg('Dagdoel', 'goal', [[20, '20 XP'], [30, '30 XP'], [50, '50 XP']], s.goal) +
       seg('Thema', 'theme', [['system', 'Systeem'], ['dark', 'Donker'], ['light', 'Licht']], s.theme) +
       '<a class="lh-morelink" href="index.html#/grammatica">Originele grammatica</a>' +
@@ -613,8 +620,10 @@
       case 'start': return go(n, 'start');
       case 'go': var pl = plan(p); return pl.cur && go(pl.cur.n, 'theory');
       case 'weak': var pw = plan(p); return pw.weak[0] && go(pw.weak[0].n, 'start');
+      case 'parse-train': var curP = plan(p).cur; closeAll(); return engine && engine.parseTrain && engine.parseTrain(curP ? Math.max(1, curP.n) : 10);
       case 'seeall': closeAll(); ui.section = 'missies'; window.scrollTo && window.scrollTo(0, 0); return rerender();
       case 'set-sound': saveSettings({ sound: !settings().sound }); ui.refocus = null; return rerender();
+      case 'set-fast': saveSettings({ fast: !settings().fast }); ui.refocus = null; return rerender();
       case 'set-goal': saveSettings({ goal: Number(v) }); return rerender();
       case 'set-theme': saveSettings({ theme: v }); return rerender();
       case 'reset':

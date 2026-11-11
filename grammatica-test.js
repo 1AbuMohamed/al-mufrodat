@@ -11,6 +11,8 @@
   var SAVE_KEY_V2 = 'alm_grammar_test_v2';
   var MAX_TASKS = 6;
   var app = null;
+  var fastTimer = null;
+  function P() { return window.GrammarLabParse || null; }
   var session = {
     lesson: null,
     stage: 'overview',
@@ -20,6 +22,10 @@
     theoryIndex: 0,
     chosen: -1,
     ordered: [],
+    parse: {},
+    parsePick: null,
+    parseTip: null,
+    parseFocus: -1,
     feedback: null,
     correct: 0,
     missed: [],
@@ -191,7 +197,7 @@
       var index=parts.findIndex(function(t){return plain(t)===plain(word);});
       if(index<0)index=parts.findLastIndex(function(t){return normalizeArabic(t)===normalizeArabic(word);});
       if(index<0)return;
-      var roles=['Moedaaf','Moedaaf Ilaih','Harf Djarr','Na‘t','Man‘oet','Ma‘doed','Madjroer','Marfoe‘','Mansoeb','predicaat','lijdend voorwerp','vrouwelijk enkelvoud'];
+      var roles=['Moedaaf','Moedaaf Ilaih','Harf Djarr','Na‘t','Man‘oet','Ma‘doed','Madjroer','Marfoe‘','Mansoeb','Chabar','Maf‘oel bih','Moebtada'];
       tasks.push({type:'parse',lesson:n,example:ex,wordIndex:index,word:parts[index],
         prompt:role==='vrouwelijk enkelvoud'?'Welke vorm heeft dit woord bij het irrationele meervoud?':(['Mansoeb','Madjroer','Marfoe‘'].includes(role)?'Welke naamval heeft het gemarkeerde woord?':'Welke grammaticale functie heeft het gemarkeerde woord?'),answer:role,
         options:makeOptions(role,roles,seed+tasks.length*17,4),rule:proof,concept:concept||'functie:'+role});
@@ -224,7 +230,7 @@
     if(n===8 && rules.some(function(r){return r.includes('predicaat') && r.includes('هٰذَا الْكِتَابُ');})){
       var proof=sourceRule(n,'predicaat');
       rows.filter(function(ex){return plain(ex.ar)==='هٰذَا الْكِتَابُ جَدِيْدٌ.';}).forEach(function(ex){
-        roleTask(ex,'جَدِيْدٌ.','predicaat',proof,'predicaat');
+        roleTask(ex,'جَدِيْدٌ.','Chabar',proof,'Chabar');
       });
     }
     if(n===11 && rules.some(function(r){return r.includes('lijdend voorwerp')&&r.includes('accusatief');})){
@@ -232,7 +238,7 @@
       rows.filter(function(ex){
         return ['أُحِبُّ اللّٰهَ.','أُحِبُّ الرَّسُوْلَ.','أَتُحِبُّ اللّٰهَ؟','أَتُحِبُّ لُغَتَكَ؟'].includes(plain(ex.ar));
       }).forEach(function(ex){
-        var words=splitArabic(ex.ar);if(words.length===2)roleTask(ex,words[1],'lijdend voorwerp',proof,'lijdend voorwerp');
+        var words=splitArabic(ex.ar);if(words.length===2)roleTask(ex,words[1],'Maf‘oel bih',proof,'Maf‘oel bih');
       });
     }
     if(n===14 && rules.some(function(r){return r.includes('«بَيْتُ» de Moedaaf');})){
@@ -368,6 +374,10 @@
       if (task) out.push(task);
     });
     ['q', 'p', 'e'].forEach(function (k) { while (out.length < total && bag[k].length) out.push(bag[k].shift()); });
+    if (P() && P().available(n)) {
+      var dz = P().build(n, 3);
+      for (var zi = 0; zi < dz.length; zi++) out.splice(Math.min(out.length, 2 + zi * 4), 0, dz[zi]);
+    }
     return out;
   }
   function labCardHtml(c) {
@@ -443,7 +453,12 @@
       }
     }
     // Begin steeds met een regel of ontledingsvraag na de theorie.
-    return result.slice(0,target);
+    var final = result.slice(0,target);
+    if (P() && P().available(n)) {
+      var dz = P().build(n, 3);
+      for (var zi = 0; zi < dz.length; zi++) final.splice(Math.min(final.length, 2 + zi * 4), 0, dz[zi]);
+    }
+    return final;
   }
 
   function splitArabic(text) { return plain(text).split(/\s+/).filter(Boolean); }
@@ -466,7 +481,7 @@
     var others = [...new Set(all.map(function (x) { return plain(x.nl); }))]
       .filter(function (value) { return value !== plain(example.nl); });
     if (!others.length) return null;
-    return seededShuffle([plain(example.nl)].concat(seededShuffle(others, seed).slice(0, 2)), seed + 19);
+    return seededShuffle([plain(example.nl)].concat(seededShuffle(others, seed).slice(0, 3)), seed + 19);
   }
 
   function makeGap(example, all, seed) {
@@ -475,14 +490,16 @@
     var positions = words.map(function (word, i) { return /[\u0600-\u06ff]/.test(word) ? i : -1; })
       .filter(function (i) { return i >= 0; });
     if (!positions.length) return null;
-    var missing = positions[(seed + 1) % positions.length];
+    var longPos = positions.filter(function (i) { return words[i].length > 1; });
+    var pickFrom = longPos.length ? longPos : positions;
+    var missing = pickFrom[(seed + 1) % pickFrom.length];
     var answer = words[missing];
     var candidates = [...new Set(all.reduce(function (acc, x) { return acc.concat(splitArabic(x.ar)); }, []))]
       .filter(function (word) { return word !== answer && /[\u0600-\u06ff]/.test(word) && word.length > 1; });
     if (!candidates.length) return null;
     return {
       type: 'gap', example: example, words: words, missing: missing, answer: answer,
-      options: seededShuffle([answer].concat(seededShuffle(candidates, seed + 8).slice(0, 2)), seed + 22)
+      options: seededShuffle([answer].concat(seededShuffle(candidates, seed + 8).slice(0, 3)), seed + 22)
     };
   }
 
@@ -795,7 +812,8 @@
       '<span>'+(theory?'Theorie '+Math.min(length,completed+1)+' / '+length:end?'Afgerond':Math.min(length,completed+1)+' / '+length)+'</span></div>'+
       '<div class="gd-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pct+'"><span style="width:'+pct+'%"></span></div></div>'+
       '<div class="gd-bar-hearts" aria-label="'+session.hearts+' van 5 hartjes">'+
-      Array.from({length:5},function(_,i){return '<span class="'+(i<session.hearts?'alive':'lost')+'">'+svgIcon('heart')+'</span>';}).join('')+'</div></div>';
+      Array.from({length:5},function(_,i){return '<span class="'+(i<session.hearts?'alive':'lost')+'">'+svgIcon('heart')+'</span>';}).join('')+'</div>'+
+      (P()?'<button type="button" class="gd-fast'+(P().fastOn()?' on':'')+'" data-action="fast" aria-pressed="'+P().fastOn()+'" title="Snelle modus: direct nakijken en automatisch door">⚡ Snel</button>':'')+'</div>';
   }
   function intro(){
     var n=session.lesson,cards=session.theoryCards,p=session.theoryIndex,rows=cards[p]||[];
@@ -811,6 +829,7 @@
       }).join('')+'</div>'+
       '<div class="gd-theory-actions">'+(p?'<button class="gd-soft" data-action="theory-prev">Vorige</button>':'')+
       '<button class="gd-primary" data-action="theory-next">'+(final?'Start oefenen':'Verder')+'</button></div>'+
+      (P()&&P().available(n)?'<button type="button" class="gd-soft gd-full gd-parse-train" data-action="parse-train">Zinsontleding trainen (10 zinnen)</button>':'')+
       '<a class="gd-outline-link" href="'+lessonUrl(n)+'">Volledige originele les</a>'+
       '</div></div>';
   }
@@ -832,6 +851,7 @@
       }).join('')+'</div>';
   }
   function taskBody(task){
+    if(task.type==='zinsontleding'&&P())return P().body(task,session);
     if(task.type==='lab')return optionsHtml(task,false);
     if(task.type==='ontleed')return sentenceChips(task)+optionsHtml(task,false);
     if(['theory','rule','why'].includes(task.type)){
@@ -849,7 +869,8 @@
     if(task.type==='reverse')return '<div class="gd-translation-cue">'+esc(ex.nl)+'</div>'+optionsHtml(task,true);
     if(task.type==='gap'){
       var sentence=task.words.map(function(w,i){return i===task.missing?'______':esc(w);}).join(' ');
-      return '<div class="gd-ar-question gd-arabic" lang="ar" dir="rtl">'+sentence+'</div>'+optionsHtml(task,true);
+      return (plain(ex.nl)&&plain(ex.nl)!=='-'?'<p class="gd-gap-hint">'+esc(ex.nl)+'</p>':'')+
+        '<div class="gd-ar-question gd-arabic" lang="ar" dir="rtl">'+sentence+'</div>'+optionsHtml(task,true);
     }
     if(task.type==='order'){
       var built=session.ordered.map(function(id){
@@ -866,6 +887,7 @@
   function answered(){
     var t=currentTask();
     if(!t)return false;
+    if(t.type==='zinsontleding')return !!(P()&&P().complete(t,session));
     if(t.type==='order')return session.ordered.length===t.words.length;
     if(t.type==='find')return session.chosenWord>=0;
     if(t.type==='parse')return session.chosenWord>=0 && session.chosen>=0;
@@ -875,16 +897,18 @@
   function taskFeedback(task){
     if(!session.feedback)return '';
     var good=session.feedback.correct,headline=good?['Goed!','Prima!','Uitstekend!'][session.index%3]:'Juiste antwoord:';
-    var answer=task.type==='parse'?task.word+' — '+task.answer:task.type==='find'?task.word:
+    var answer=task.type==='zinsontleding'?'':task.type==='parse'?task.word+' — '+task.answer:task.type==='find'?task.word:
       task.type==='order'?plain(task.example.ar):task.type==='gap'?task.answer:task.answer||task.example&&task.example.nl||'';
     return '<section class="gd-feedback gd-feedback-sheet '+(good?'good':'review')+'" role="status" aria-live="assertive">'+
       '<div class="gd-feedback-inner"><strong>'+headline+'</strong>'+
       (session.combo>=3?'<span class="gd-combo">'+session.combo+'× combo</span>':'')+
-      '<p class="gd-correct-answer">'+(task.rich?rich(answer):esc(answer))+'</p>'+
-      (task.example?'<p class="gd-arabic" lang="ar" dir="rtl">'+esc(task.example.ar)+'</p>'+
-      (plain(task.example.nl)&&plain(task.example.nl)!=='-'?'<p>'+esc(task.example.nl)+'</p>':''):'')+
+      (answer?'<p class="gd-correct-answer">'+(task.rich?rich(answer):esc(answer))+'</p>':'')+
+      (task.type==='zinsontleding'&&P()?P().solution(task):
+        (task.example?'<p class="gd-arabic" lang="ar" dir="rtl">'+esc(task.example.ar)+'</p>'+
+        (plain(task.example.nl)&&plain(task.example.nl)!=='-'?'<p>'+esc(task.example.nl)+'</p>':''):''))+
       (task.rule&&task.type!=='ontleed'?'<p class="gd-theory-explanation">'+(task.rich?rich(task.rule):esc(task.rule))+'</p>':'')+
       (task.type==='ontleed'?ontleedTable(task.sentence,task.wordIndex):'')+
+      (P()&&P().fastOn()?'<div class="gd-autonext" aria-hidden="true"><i></i></div>':'')+
       '<button type="button" class="gd-primary gd-full" data-action="next">Verder</button></div></section>';
   }
 
@@ -963,11 +987,12 @@
     return '<div class="gd-shell gd-play">'+bar()+
       '<div class="gd-card gd-task"><div class="gd-stage-tag">Oefening '+(session.index+1)+' / '+session.tasks.length+'</div>'+
       '<h1>Les '+t.lesson+'</h1><h2 class="gd-task-title">'+(t.rich?rich:esc)(t.prompt || (
+        t.type==='zinsontleding'?'Ontleed de zin':
         t.type==='choice'?'Wat betekent deze zin?':
         t.type==='reverse'?'Kies de Arabische zin.':
         t.type==='gap'?'Welk woord ontbreekt?':
         t.type==='order'?'Zet de woorden op volgorde.':'Beantwoord de vraag.'))+'</h2>'+
-      taskBody(t)+helperUI(t)+
+      taskBody(t)+(t.type==='zinsontleding'?'':helperUI(t))+
       '<div class="gd-task-actions"><button type="button" class="gd-primary gd-full" data-action="check"'+(answered()?'':' disabled')+'>Controleren</button></div>'+
       '</div>'+taskFeedback(t)+'</div>';
   }
@@ -982,6 +1007,7 @@
       '<span><strong>'+(session.lesson===null?'—':lessonCrowns(session.lesson,d)+'/5')+'</strong><small>Kronen</small></span></div>'+
       '<p>'+session.correct+' van de '+session.attempts+' antwoorden juist.</p>'+
       '<div class="gd-finish-actions"><button class="gd-primary gd-full" data-action="continue">Doorgaan</button>'+
+      (P()&&P().available(session.lesson===null?10:session.lesson)?'<button type="button" class="gd-soft gd-full gd-parse-train" data-action="parse-train">Meer zinsontleding (10 zinnen)</button>':'')+
       '<button class="gd-soft gd-full" data-action="retry"'+(session.lastMissed.length?'':' disabled')+'>Herhaal fouten ('+session.lastMissed.length+')</button></div></div></div>';
   }
   function render(){
@@ -1023,15 +1049,23 @@
     }
   }
   function startSession(lesson,tasks,mode){
-    session.lesson=lesson;session.tasks=tasks;session.index=0;session.stage=mode==='weak'?'play':'theory';
+    clearTimeout(fastTimer);
+    session.lesson=lesson;session.tasks=tasks;session.index=0;session.stage=(mode==='weak'||mode==='parse')?'play':'theory';
     session.theoryCards=lesson===null?[]:theoryCards(lesson);session.theoryIndex=0;
     session.chosen=-1;session.chosenWord=-1;session.ordered=[];
+    session.parse={};session.parsePick=null;session.parseTip=null;session.parseFocus=-1;
     helperReset();
     session.feedback=null;session.correct=0;session.wrong=0;session.attempts=0;session.hearts=5;
     session.combo=0;session.bestCombo=0;session.xp=0;session.missed=[];session.lastMissed=[];
     session.review=mode==='weak';session.queued=false;
-    if(!session.theoryCards.length && mode!=='weak')session.stage='play';
+    if(!session.theoryCards.length && session.stage==='theory')session.stage='play';
     render();
+  }
+  function startParseTraining(n){
+    if(!P())return;
+    var level=Math.max(1,n!=null?Number(n):(session.lesson||10));
+    var tasks=P().build(level,10);
+    if(tasks.length)startSession(level,tasks,'parse');
   }
   function setLesson(n){
     if(!Object.prototype.hasOwnProperty.call(DATA,n)){session.stage='overview';render();return;}
@@ -1072,10 +1106,17 @@
     if(t.type==='find')good=session.chosenWord===t.wordIndex;
     if(t.type==='parse')good=session.chosenWord===t.wordIndex && t.options[session.chosen]===t.answer;
     if(t.type==='order')good=session.ordered.map(function(i){return t.words[i];}).join(' ')===t.words.join(' ');
+    if(t.type==='zinsontleding'&&P())good=P().grade(t,session);
     recordAnswer(t,good);session.feedback={correct:good};render();
+    if(P()&&P().fastOn()){
+      clearTimeout(fastTimer);
+      fastTimer=setTimeout(function(){if(session.feedback&&session.stage==='play')next();},good?900:2200);
+    }
   }
   function next(){
+    clearTimeout(fastTimer);
     session.index++;session.chosen=-1;session.chosenWord=-1;session.ordered=[];session.feedback=null;
+    session.parse={};session.parsePick=null;session.parseTip=null;session.parseFocus=-1;
     helperReset();
     if(session.index>=session.tasks.length && session.hearts>0 && !session.queued && session.missed.length){
       session.queued=true;session.tasks=session.tasks.concat(session.missed.slice());
@@ -1083,14 +1124,29 @@
     if(session.hearts===0 || session.index>=session.tasks.length)finishRound();
     render();
   }
+  function assignParse(key,slot){
+    var t=currentTask();
+    if(!t||t.type!=='zinsontleding'||session.feedback)return;
+    session.parse[slot]=key;session.parsePick=null;session.parseFocus=-1;session.parseTip=key;
+    if(P()&&P().fastOn()&&answered())return check();
+    render();
+  }
   function onClick(event){
+    if(window.__gdSuppressClick&&Date.now()-window.__gdSuppressClick<80){window.__gdSuppressClick=0;return;}
     var node=event.target.closest('[data-action]');if(!node)return;
     var action=node.getAttribute('data-action');
     if(action==='overview'){
+      clearTimeout(fastTimer);
       session.stage='overview';if(window.GrammarLabHome)window.GrammarLabHome.enter();
       try{if(history.replaceState)history.replaceState(null,'','grammatica-test.html');}catch(_err){}
       return render();
     }
+    if(action==='fast'&&P()){
+      P().setFast(!P().fastOn());
+      if(!P().fastOn())clearTimeout(fastTimer);
+      return render();
+    }
+    if(action==='parse-train'&&P())return startParseTraining(session.lesson);
     if(action==='reset'){
       if(window.confirm('Alleen de testvoortgang wissen?')){
         try{localStorage.removeItem(SAVE_KEY_V2);localStorage.removeItem(SAVE_KEY);}catch(_err){}
@@ -1114,9 +1170,32 @@
       return render();
     }
     if(session.stage==='play'&&!session.feedback){
-      if(action==='select'){session.chosen=Number(node.dataset.value);return render();}
-      if(action==='word'){session.chosenWord=Number(node.dataset.value);return render();}
-      if(action==='tile'){var id=Number(node.dataset.value);if(!session.ordered.includes(id))session.ordered.push(id);return render();}
+      if(action==='plab'){
+        var pk=node.dataset.value;
+        if(session.parseFocus>=0)return assignParse(pk,session.parseFocus);
+        session.parsePick=session.parsePick===pk?null:pk;session.parseTip=pk;return render();
+      }
+      if(action==='pslot'){
+        var si=Number(node.dataset.value);
+        if(session.parsePick)return assignParse(session.parsePick,si);
+        if(session.parse[si]){delete session.parse[si];return render();}
+        session.parseFocus=session.parseFocus===si?-1:si;return render();
+      }
+      if(action==='select'){
+        session.chosen=Number(node.dataset.value);
+        if(P()&&P().fastOn()&&answered())return check();
+        return render();
+      }
+      if(action==='word'){
+        session.chosenWord=Number(node.dataset.value);
+        if(P()&&P().fastOn()&&answered())return check();
+        return render();
+      }
+      if(action==='tile'){
+        var id=Number(node.dataset.value);if(!session.ordered.includes(id))session.ordered.push(id);
+        if(P()&&P().fastOn()&&answered())return check();
+        return render();
+      }
       if(action==='remove'){session.ordered=session.ordered.filter(function(id){return id!==Number(node.dataset.value);});return render();}
       if(action==='check')return check();
     }
@@ -1141,6 +1220,7 @@
     if(window.GrammarLabHome){
       window.GrammarLabHome.mount(app,window.GrammarLabEngine);
     }
+    if(P())P().bindDrag(function(key,slot){if(session.stage==='play')assignParse(key,slot);});
     app.addEventListener('submit',function(e){
       if(!e.target.matches('[data-helper-form]'))return;
       e.preventDefault();
@@ -1158,7 +1238,7 @@
       var t=currentTask();
       if(!t)return;
       if(/^[1-4]$/.test(e.key) && !session.feedback && t.options){
-        var idx=Number(e.key)-1;if(idx<t.options.length){session.chosen=idx;render();}
+        var idx=Number(e.key)-1;if(idx<t.options.length){session.chosen=idx;if(P()&&P().fastOn()&&answered())check();else render();}
       }else if(e.key==='Enter'&&!session.feedback&&answered()){e.preventDefault();check();}
     });
     var requested=new URLSearchParams(location.search).get('les');
@@ -1170,6 +1250,8 @@
       if(mode==='start'&&weakened(Number(n),readSave()))return weakRound(Number(n));
       setLesson(n);
     },
+    parseTrain:startParseTraining,
+    tasks:function(){return session.tasks;},
     refresh:render,
     isHome:function(){return session.stage==='overview';},
     // Woordenschat-rondes tellen mee voor XP, dagdoel en streak van het Lab.
