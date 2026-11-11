@@ -333,3 +333,53 @@ a { color: var(--forest); }
 .gd-task .gd-options{gap:11px}
 .gd-task .gd-option{min-height:54px;text-align:start}
 @media(prefers-reduced-motion:reduce){.gd-parse-word{transition:none}}
+
+
+/* Medina-theorie, stap voor stap: broninhoud blijft letterlijk intact. */
+body.lh-skin .gd-theory-screen {max-width:760px}
+body.lh-skin .gd-theory-card{padding:clamp(16px,4vw,30px)}
+body.lh-skin .gd-theory-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+body.lh-skin .gd-theory-counter{font-size:12px;font-weight:800;color:var(--muted,var(--text));white-space:nowrap}
+body.lh-skin .gd-theory-card h1{font-size:clamp(23px,5.5vw,30px);margin:6px 0 15px}
+body.lh-skin .gd-theory-meter{height:9px;border-radius:99px;background:var(--line);overflow:hidden;margin:0 0 22px}
+body.lh-skin .gd-theory-meter span{display:block;height:100%;border-radius:inherit;background:var(--green);transition:width .2s ease}
+body.lh-skin .gd-theory-step{display:grid;gap:14px}
+body.lh-skin .gd-theory-step .gd-theory-text{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.75;margin:0;font-size:15px;color:var(--text)}
+body.lh-skin .gd-theory-step .gd-source-regel{padding:16px;border:1px solid var(--line);border-inline-start:4px solid var(--green);background:var(--surface-2);border-radius:12px}
+body.lh-skin .gd-theory-step .gd-source-kop{font-size:18px;font-weight:850;color:var(--text)}
+body.lh-skin .gd-theory-step .gd-source-voetnoot{font-size:12px;color:var(--muted)}
+body.lh-skin .gd-theory-step .gd-source-tekst{padding:0 3px}
+body.lh-skin .gd-theory-step .gd-theory-example{border:1px solid var(--line);border-inline-start:4px solid #d2a34d;background:var(--surface);border-radius:13px;padding:14px}
+body.lh-skin .gd-theory-step .gd-theory-example .gd-arabic{font-family:var(--font-ar,"Amiri",serif);font-size:clamp(31px,6.5vw,41px);line-height:2;text-align:right;overflow-wrap:anywhere;color:var(--text)}
+body.lh-skin .gd-theory-step .gd-source-translation{margin:5px 0 0;padding-top:10px;border-top:1px solid var(--line);font-size:14px;line-height:1.65;color:var(--text)}
+body.lh-skin .gd-theory-table-scroll{max-width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:12px;overscroll-behavior-x:contain}
+body.lh-skin .gd-theory-table{border-collapse:collapse;width:100%;min-width:300px;background:var(--surface);font-size:13px;color:var(--text)}
+body.lh-skin .gd-theory-table th,body.lh-skin .gd-theory-table td{padding:11px 12px;border:1px solid var(--line);vertical-align:middle;text-align:start}
+body.lh-skin .gd-theory-table th{font-weight:850;background:var(--surface-2)}
+body.lh-skin .gd-theory-table .gd-table-ar{font-family:var(--font-ar,"Amiri",serif);font-size:21px;line-height:1.9;text-align:right}
+body.lh-skin .gd-theory-actions{margin-top:22px;display:flex;gap:10px;justify-content:flex-end}
+body.lh-skin .gd-theory-forward{flex:1;min-width:0}
+body.lh-skin .gd-theory-back{flex:0 0 auto}
+body.lh-skin .gd-theory-question{background:var(--surface-2);color:var(--text);border:1px solid var(--line)}
+body.lh-skin .gd-parsing-sentence{border-radius:14px;line-height:2.1}
+body.lh-skin .gd-parsing-prompt{font-weight:800;font-size:16px;line-height:1.6;color:var(--text)}
+body.lh-skin .gd-parsing-sentence .gd-parse-word{background:#fff1bf!important;color:#49320d!important;border:2px solid #d5ac58!important;border-bottom:4px solid #b18937!important;padding:1px 5px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+body.lh-skin .gd-grammar-option{display:flex;align-items:center;gap:10px;min-height:56px;text-align:start;line-height:1.6}
+body.lh-skin .gd-grammar-option .gd-option-nr{display:grid;place-items:center;flex:0 0 27px;height:27px;border:1px solid var(--line);border-radius:8px;font-size:12px;font-weight:850;color:var(--text);background:var(--surface-2)}
+body.lh-skin .gd-grammar-option .gd-option-body{flex:1;min-width:0;overflow-wrap:anywhere}
+body.lh-skin .gd-grammar-option.gd-option-ar .gd-option-body{font-family:var(--font-ar,"Amiri",serif);font-size:27px;line-height:1.7}
+body.lh-skin .gd-why-options .gd-option{font-size:14px;min-height:58px;text-transform:none;letter-spacing:0;font-weight:650}
+body.lh-skin .gd-feedback-sheet .gd-correct-answer{margin:10px 0;padding:10px 13px;background:var(--surface);color:var(--text);border-radius:10px;font-size:18px;font-weight:850;overflow-wrap:anywhere}
+body.lh-skin .gd-feedback-sheet .gd-correct-answer[lang="ar"]{font-family:var(--font-ar,"Amiri",serif);font-size:29px;text-align:right;line-height:1.8}
+body.lh-skin .gd-feedback-sheet .gd-theory-explanation{background:var(--surface);color:var(--text);border:1px solid var(--line);font-size:14px;line-height:1.7}
+body.lh-skin .lh-setting:has([data-h="set-sound"]){display:none}
+@media(max-width:430px){
+  body.lh-skin .gd-theory-step{gap:12px}
+  body.lh-skin .gd-theory-card{padding:16px 13px}
+  body.lh-skin .gd-theory-actions{gap:8px}
+  body.lh-skin .gd-theory-step .gd-source-regel{padding:13px}
+  body.lh-skin .gd-why-options .gd-option{font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){
+  body.lh-skin .gd-theory-meter span{transition:none}
+}
