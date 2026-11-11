@@ -383,3 +383,15 @@ body.lh-skin .lh-setting:has([data-h="set-sound"]){display:none}
 @media(prefers-reduced-motion:reduce){
   body.lh-skin .gd-theory-meter span{transition:none}
 }
+
+/* Arabische citaten binnen de ongewijzigde Nederlandse bronuitleg. */
+body.lh-skin .gd-inline-ar{
+  display:inline;direction:rtl;unicode-bidi:isolate;
+  font-family:var(--font-ar,"Amiri",serif);font-size:1.25em;
+  line-height:1.6;color:inherit;overflow-wrap:anywhere;
+}
+body.lh-skin .gd-theory-step .gd-theory-example .gd-arabic{
+  direction:rtl;unicode-bidi:plaintext;
+}
+body.lh-skin .gd-theory-actions button,
+body.lh-skin .gd-theory-actions a{min-height:52px}
