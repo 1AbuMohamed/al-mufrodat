@@ -137,34 +137,44 @@
   // gemarkeerd woord, grammaticale functie, unieke tekst uit de bronregel].
   // Zonder overeenkomst in de originele data wordt de vraag weggelaten.
   var PARSE_SPECS=[
+    [1,'أَهٰذَا بَيْتٌ؟','أَ','partikel','partikel «أَ»','vorm'],
+    [3,'بَيْتٌ → اَلْبَيْتُ','اَلْبَيْتُ','bepaald','Arabische bepaald lidwoord','vorm'],
     [4,'فِي الْبَيْتِ','فِي','Harf Djarr','Na een voorzetsel (Harf Djarr)'],
     [4,'فِي الْبَيْتِ','الْبَيْتِ','Madjroer','Over een naamwoord dat vooraf wordt gegaan door een voorzetsel'],
     [4,'فِيْ بَيْتٍ','فِيْ','Harf Djarr','Na een voorzetsel (Harf Djarr)'],
     [5,'كِتَابُ بِلَالٍ','كِتَابُ','Moedaaf','In «كِتَابُ بِلَالٍ»'],
     [5,'كِتَابُ بِلَالٍ','بِلَالٍ','Moedaaf Ilaih','In «كِتَابُ بِلَالٍ»'],
+    [6,'مُدَرِّسٌ → مُدَرِّسَةٌ','مُدَرِّسَةٌ','vrouwelijk','Zelfstandige naamwoorden en bijvoeglijke naamwoorden worden vrouwelijk gemaakt','vorm'],
+    [7,'هٰذِهِ آمِنَةُ، وَتِلْكَ مَرْيَمُ.','تِلْكَ','vrouwelijk','Dit is de vrouwelijke vorm','vorm'],
     [8,'هٰذَا الْكِتَابُ جَدِيْدٌ.','هٰذَا','aanwijzend voornaamwoord','Alle aanwijzende voornaamwoorden'],
     [9,'بَيْتٌ جَدِيْدٌ','بَيْتٌ','Man‘oet','In het Arabisch wordt het bijvoeglijk naamwoord Na‘t'],
     [9,'بَيْتٌ جَدِيْدٌ','جَدِيْدٌ','Na‘t','In het Arabisch wordt het bijvoeglijk naamwoord Na‘t'],
+    [10,'كِتَابُكَ','كَ','bezittelijk voornaamwoord','De bezittelijke voornaamwoorden «ـكَ»','vorm'],
+    [11,'أُحِبُّ اللّٰهَ.','اللّٰهَ','accusatief','Het lijdend voorwerp van een werkwoord is accusatief'],
+    [12,'مِنْ أَيْنَ أَنْتِ يَا آمِنَةُ؟','أَنْتِ','vrouwelijk enkelvoud','Nu leren we dat «أَنْتِ»','vorm'],
+    [13,'مُسْلِمٌ → مُسْلِمُوْنَ','مُسْلِمُوْنَ','meervoud','Het meervoud van zelfstandige naamwoorden','vorm'],
     [14,'بَيْتُ الْإِمَامِ الْجَدِيْدُ.','بَيْتُ','Moedaaf','Hier is «بَيْتُ» de Moedaaf'],
     [15,'بَعْدَ الدَّرْسِ','بَعْدَ','Moedaaf','Ze zijn altijd Moedaaf'],
     [15,'قَبْلَ الصَّلَاةِ','قَبْلَ','Moedaaf','Ze zijn altijd Moedaaf'],
     [18,'هٰذَانِ كِتَابَانِ','كِتَابَانِ','tweevoud','drie grammaticale getallen'],
     [19,'ثَلَاثَةُ كُتُبٍ','ثَلَاثَةُ','Moedaaf','De getallen 3 t/m 10 worden als Moedaaf gebruikt'],
     [19,'ثَلَاثَةُ كُتُبٍ','كُتُبٍ','Moedaaf Ilaih','omdat het Moedaaf Ilaih is'],
+    [20,'عَشْرُ نِسَاءٍ','عَشْرُ','zonder Taa’ Marboetah','Nu, als de Ma‘doed vrouwelijk is','vorm'],
+    [22,'كِتَابٌ → الْكِتَابُ','الْكِتَابُ','bepaald','Wanneer het zelfstandig naamwoord of bijvoeglijk naamwoord «اَلْ»','vorm'],
     [23,'الْبَيْتُ → فِي الْبَيْتِ','فِي','Harf Djarr','voorzetsel (Harf Djarr)'],
     [23,'الْبَيْتُ → فِي الْبَيْتِ','الْبَيْتِ','Madjroer','naamwoord genitief (Madjroer)']
   ];
-  var ROLE_OPTIONS=['Moedaaf','Moedaaf Ilaih','Harf Djarr','Madjroer','Na‘t','Man‘oet','aanwijzend voornaamwoord','tweevoud'];
+  var ROLE_OPTIONS=['Moedaaf','Moedaaf Ilaih','Harf Djarr','Madjroer','Na‘t','Man‘oet','aanwijzend voornaamwoord','tweevoud','vrouwelijk','mannelijk','meervoud','enkelvoud','accusatief','genitief','bezittelijk voornaamwoord','partikel','bepaald','onbepaald'];
   function buildParsingTasks(n,seed){
     var ex=((DATA[n]&&DATA[n].inhoud)||[]).filter(function(r){return r.type==='voorbeeld'&&plain(r.ar);});
     var rows=theoryRows(n);
     return seededShuffle(PARSE_SPECS.filter(function(p){return p[0]===Number(n);}).map(function(p,i){
       var example=ex.find(function(e){return plain(e.ar)===p[1];});
       var proof=rows.find(function(r){return plain(r.tekst).includes(p[4]);});
-      if(!example||!proof||!splitArabic(example.ar).includes(p[2]))return null;
+      if(!example||!proof||!splitArabic(example.ar).some(function(word){return word.includes(p[2]);}))return null;
       return {type:'parse',lesson:Number(n),example:example,word:p[2],answer:p[3],
         options:choiceSet(p[3],ROLE_OPTIONS,[],seed+i*17),
-        rule:plain(proof.tekst),skill:'zinsontleding: '+p[3]};
+        rule:plain(proof.tekst),skill:'zinsontleding: '+p[3],form:p[5]==='vorm'};
     }).filter(Boolean),seed);
   }
   function buildWhyTasks(n,seed,parses){
@@ -505,13 +515,15 @@
       var sentence=(type==='parse'||type==='why') ?
         '<div class="gd-ar-question gd-arabic gd-parsing-sentence" lang="ar" dir="rtl">'+
         splitArabic(ex.ar).map(function(w){
-          return w===task.word?'<mark class="gd-parse-word">'+esc(w)+'</mark>':esc(w);
+          var pos=w.indexOf(task.word);
+          return pos<0?esc(w):esc(w.slice(0,pos))+
+            '<mark class="gd-parse-word">'+esc(task.word)+'</mark>'+esc(w.slice(pos+task.word.length));
         }).join(' ')+'</div>' : '';
       var question=type==='theory' ?
         '<p class="gd-theory-question" dir="auto">'+esc(task.prompt)+'</p>' :
         '<p class="gd-subinstruction gd-parsing-prompt">'+(type==='why' ?
           'Waarom heeft het gemarkeerde woord deze functie?' :
-          'Welke grammaticale functie heeft het gemarkeerde woord?')+'</p>';
+          (task.form?'Welke grammaticale vorm heeft het gemarkeerde deel?':'Welke grammaticale functie heeft het gemarkeerde woord?'))+'</p>';
       return sentence+question+'<div class="gd-options'+(type==='why'?' gd-why-options':'')+'">'+
         task.options.map(function(option,i){
           var picked=session.chosen===i,arabic=isArabic(option);
