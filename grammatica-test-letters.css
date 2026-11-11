@@ -1,0 +1,46 @@
+/* Al-Mufrodat · Grammatica Lab: Arabisch alfabet. Gebruikt de kleuren en vormen van de startpagina. */
+.ll-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; padding:8px 0 24px; }
+.ll-tile {
+  display:flex; flex-direction:column; align-items:center; justify-content:space-between; gap:2px; min-width:0; min-height:112px;
+  padding:8px 4px 10px; border:2px solid var(--line); border-bottom-width:4px; border-radius:var(--radius);
+  background:var(--surface); color:var(--text); cursor:pointer; font-family:var(--font-ui);
+}
+.ll-tile:hover { background:var(--surface-2); }
+.ll-tile:focus-visible { outline:3px solid var(--blue); outline-offset:2px; }
+.ll-tile.mastered { border-color:var(--gold-shade); }
+.ll-tile.going { border-color:var(--blue); }
+.ll-ch { font-family:var(--font-ar); font-size:40px; line-height:1.5; padding-bottom:8px; }
+.ll-nm { max-width:100%; font-size:12px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ll-pill { display:block; width:40px; height:8px; border-radius:4px; background:var(--line); overflow:hidden; }
+.ll-pill i { display:block; height:100%; background:var(--blue); border-radius:4px; }
+.ll-tile.mastered .ll-pill i { background:var(--gold); }
+
+.ll-hero .lh-sub { margin-bottom:12px; }
+
+/* kennismaking en oefening */
+.ll-intro { list-style:none; margin:16px 0 8px; padding:0; display:grid; gap:12px; }
+.ll-intro-item { border:2px solid var(--line); border-radius:var(--radius); padding:14px; background:var(--surface); }
+.ll-intro-head { display:flex; align-items:center; gap:16px; }
+.ll-intro-ch { font-family:var(--font-ar); font-size:56px; line-height:1.2; min-width:64px; text-align:center; }
+.ll-intro-head strong { font-size:20px; }
+.ll-name-ar { font-family:var(--font-ar); font-size:22px; margin-inline-start:8px; }
+.ll-intro-head small { display:block; margin-top:2px; color:var(--muted); font-size:14px; }
+.ll-forms { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:12px; }
+.ll-form { display:flex; flex-direction:column; align-items:center; gap:2px; padding:6px 2px; border:2px solid var(--line); border-radius:12px; }
+.ll-form-ch { font-family:var(--font-ar); font-size:32px; line-height:1.3; }
+.ll-form small { font-size:11px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); }
+.ll-prompt { display:flex; flex-direction:column; align-items:center; margin:8px 0 16px; text-align:center; }
+.ll-big { font-family:var(--font-ar); font-size:96px; line-height:1.3; }
+.ll-hint { margin:4px 0 0; color:var(--muted); font-size:14px; }
+.ll-opt-glyph { font-size:40px !important; }
+.ll-fb-ch { font-family:var(--font-ar); font-size:34px; vertical-align:middle; }
+
+@media (max-width:699px) {
+  .ll-grid { grid-template-columns:repeat(4,1fr); gap:10px; padding:8px 16px 24px; }
+  .ll-tile { min-height:100px; }
+  .ll-ch { font-size:34px; }
+  .ll-big { font-size:80px; }
+  .lh-pswitch { font-size:12px !important; padding:0 4px !important; letter-spacing:.03em !important; }
+}
+@media (max-width:359px) { .ll-grid { grid-template-columns:repeat(3,1fr); } }
+@media (prefers-reduced-motion:reduce) { .ll-tile { transition:none; } }

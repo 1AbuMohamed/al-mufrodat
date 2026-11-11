@@ -47,6 +47,7 @@
   }
   function core() { return window.GrammarLabCore; }
   function vocab() { return window.GrammarLabVocab && window.AL_VOCAB ? window.GrammarLabVocab : null; }
+  function letters() { return window.GrammarLabLetters || null; }
   function isVocab() { return !!vocab() && settings().path === 'vocab'; }
   function data() { return window.GRAMMATICA || {}; }
 
@@ -58,7 +59,7 @@
       goal: [20, 30, 50].indexOf(s.goal) >= 0 ? s.goal : 20,
       theme: ['dark', 'light'].indexOf(s.theme) >= 0 ? s.theme : 'system',
       tab: s.tab === 'lessons' ? 'lessons' : 'path',
-      path: s.path === 'vocab' ? 'vocab' : 'grammatica'
+      path: s.path === 'vocab' ? 'vocab' : s.path === 'letters' ? 'letters' : 'grammatica'
     };
   }
   function saveSettings(patch) {
@@ -348,13 +349,15 @@
   }
 
   function pathSwitch(s) {
-    if (!vocab()) return '';
+    if (!vocab() && !letters()) return '';
+    var cur = s.path === 'vocab' && vocab() ? 'vocab' : s.path === 'letters' && letters() ? 'letters' : 'grammatica';
     function b(id, label) {
-      var on = (s.path === 'vocab' ? 'vocab' : 'grammatica') === id;
+      var on = cur === id;
       return '<button type="button" role="tab" class="lh-pswitch' + (on ? ' on' : '') + '" data-h="path" data-v="' + id + '" data-f="path-' + id +
         '" aria-selected="' + on + '">' + label + '</button>';
     }
-    return '<div class="lh-pathswitch" role="tablist" aria-label="Leerpad">' + b('grammatica', 'GRAMMATICA') + b('vocab', 'WOORDENSCHAT') + '</div>';
+    return '<div class="lh-pathswitch" role="tablist" aria-label="Leerpad">' + b('grammatica', 'GRAMMATICA') +
+      (vocab() ? b('vocab', 'WOORDENSCHAT') : '') + (letters() ? b('letters', 'LETTERS') : '') + '</div>';
   }
   function vocabMain(s, pl) {
     var cur = pl.cur, t = vocab().totals();
@@ -368,6 +371,7 @@
       (s.tab === 'lessons' ? tilesHtml(pl) : pathHtml(pl));
   }
   function leerMain(p, s, pl) {
+    if (s.path === 'letters' && letters()) return pathSwitch(s) + letters().panel();
     if (isVocab()) return vocabMain(s, vocab().plan());
     var cur = pl.cur;
     var returning = hasProgress(p);
@@ -600,7 +604,7 @@
       case 'close':
         var op = ui.opener; closeAll(); ui.refocus = op; return rerender();
       case 'path':
-        closeAll(); saveSettings({ path: v === 'vocab' ? 'vocab' : 'grammatica' }); ui.needScroll = true; ui.refocus = 'path-' + v;
+        closeAll(); saveSettings({ path: v === 'vocab' || v === 'letters' ? v : 'grammatica' }); ui.needScroll = true; ui.refocus = 'path-' + v;
         window.scrollTo && window.scrollTo(0, 0);
         return rerender();
       case 'vstart': closeAll(); return vocab() && vocab().open(n, 'play');
