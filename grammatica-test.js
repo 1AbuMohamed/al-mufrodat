@@ -498,9 +498,27 @@
 
   function renderTaskBody(task) {
     var type = task.type, ex = task.example;
-    if (type === 'theory' || type === 'parse') {
-      return (type === 'parse' ? '<div class="gd-ar-question gd-arabic" lang="ar" dir="rtl">'+splitArabic(ex.ar).map(function(w){return w===task.word?'<mark class="gd-parse-word">'+esc(w)+'</mark>':esc(w);}).join(' ')+'</div><p class="gd-subinstruction">Welke grammaticale functie heeft het gemarkeerde woord?</p>' : '<p class="gd-theory-question">'+esc(task.prompt)+'</p>')+
-        '<div class="gd-options">'+task.options.map(function(option,i){var picked=session.chosen===i;return '<button type="button" class="gd-option'+(picked?' selected':'')+'" data-action="select" data-value="'+i+'" aria-pressed="'+picked+'" '+(session.feedback?'disabled':'')+'>'+esc(option)+'</button>';}).join('')+'</div>';
+    if (type === 'theory' || type === 'parse' || type === 'why') {
+      var isArabic=function(value){return /[\u0600-\u06ff◌]/.test(value);};
+      var sentence=(type==='parse'||type==='why') ?
+        '<div class="gd-ar-question gd-arabic gd-parsing-sentence" lang="ar" dir="rtl">'+
+        splitArabic(ex.ar).map(function(w){
+          return w===task.word?'<mark class="gd-parse-word">'+esc(w)+'</mark>':esc(w);
+        }).join(' ')+'</div>' : '';
+      var question=type==='theory' ?
+        '<p class="gd-theory-question" dir="auto">'+esc(task.prompt)+'</p>' :
+        '<p class="gd-subinstruction gd-parsing-prompt">'+(type==='why' ?
+          'Waarom heeft het gemarkeerde woord deze functie?' :
+          'Welke grammaticale functie heeft het gemarkeerde woord?')+'</p>';
+      return sentence+question+'<div class="gd-options'+(type==='why'?' gd-why-options':'')+'">'+
+        task.options.map(function(option,i){
+          var picked=session.chosen===i,arabic=isArabic(option);
+          return '<button type="button" class="gd-option gd-grammar-option'+(picked?' selected':'')+
+            (arabic?' gd-option-ar':'')+'" data-action="select" data-value="'+i+
+            '" aria-pressed="'+picked+'" '+(session.feedback?'disabled':'')+
+            (arabic?' lang="ar" dir="rtl"':'')+'><span class="gd-option-nr" aria-hidden="true">'+(i+1)+'</span>'+
+            '<span class="gd-option-body">'+esc(option)+'</span></button>';
+        }).join('')+'</div>';
     }
     if (type === 'choice') {
       return '<div class="gd-ar-question gd-arabic" lang="ar" dir="rtl">' + esc(ex.ar) + '</div>' +
@@ -549,7 +567,7 @@
   function answered() {
     var task = currentTask();
     if (!task) return false;
-    if (['choice','gap','theory','parse'].includes(task.type)) return session.chosen >= 0;
+    if (['choice','gap','theory','parse','why'].includes(task.type)) return session.chosen >= 0;
     if (task.type === 'order') return session.ordered.length === task.words.length;
     return true;
   }
@@ -561,6 +579,7 @@
     var prompts = {
       theory: 'Pas de grammaticaregel toe',
       parse: 'Ontleed de Arabische zin',
+      why: 'Leg uit waarom',
       choice: 'Wat betekent deze Arabische zin?',
       gap: 'Vul het ontbrekende woord in',
       order: 'Zet de woorden in de juiste volgorde',
@@ -592,10 +611,14 @@
     return '<section class="gd-feedback gd-feedback-sheet ' + (good ? 'good' : 'review') + '" role="status" aria-live="assertive">' +
       '<div class="gd-feedback-inner">' +
       '<strong>' + (good ? 'Goed!' : 'Juiste antwoord:') + '</strong>' +
-      (good ? '' : '<p class="gd-feedback-correct-label">Dit is het juiste antwoord:</p>') +
+      (['theory','parse','why'].includes(task.type) ?
+        '<p class="gd-correct-answer"'+(/[\u0600-\u06ff◌]/.test(task.answer)?' lang="ar" dir="rtl"':'')+'>'+
+        esc(task.answer)+'</p>' : '') +
       (task.example ? '<p class="gd-arabic" lang="ar" dir="rtl">' + esc(task.example.ar) + '</p>' : '') +
-      (task.example ? '<p class="gd-dutch-answer">' + esc(task.example.nl) + '</p>' : '') +
-      (task.rule ? '<p class="gd-theory-explanation">'+esc(task.rule)+'</p>' : '') +
+      (task.example && task.example.nl && !/^(?:-|Voorbeeld:)$/i.test(plain(task.example.nl)) ?
+        '<p class="gd-dutch-answer">' + esc(task.example.nl) + '</p>' : '') +
+      (task.rule && task.rule!==task.answer ? '<p class="gd-theory-explanation">'+esc(task.rule)+'</p>' : '') +
+      (good && session.combo>=3 ? '<p class="gd-combo" aria-label="'+session.combo+' goede antwoorden achter elkaar">'+session.combo+'× combo</p>' : '') +
       '<button type="button" class="gd-primary gd-full" data-action="next">Volgende <span aria-hidden="true">→</span></button>' +
       '</div></section>';
   }
@@ -672,13 +695,14 @@
     if (!answered() || session.feedback) return;
     var task = currentTask();
     var correct = false;
-    if (task.type === 'theory' || task.type === 'parse') correct = task.options[session.chosen] === task.answer;
+    if (task.type === 'theory' || task.type === 'parse' || task.type === 'why') correct = task.options[session.chosen] === task.answer;
     if (task.type === 'choice') correct = task.options[session.chosen] === plain(task.example.nl);
     if (task.type === 'gap') correct = task.options[session.chosen] === task.answer;
     if (task.type === 'order') {
       correct = session.ordered.map(function (idx) { return task.words[idx]; }).join(' ') === task.words.join(' ');
     }
     session.feedback = { correct: correct };
+    rememberGrammarOutcome(task, correct);
     if (correct) {
       session.correct++;
       session.combo++;
