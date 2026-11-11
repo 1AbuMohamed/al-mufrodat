@@ -84,54 +84,120 @@
 
   /* ---------- geluid ---------- */
   // 1) Eigen opname: audio/letters/01.mp3 t/m 28.mp3 (als die bestaat).
-  // 2) Anders de Arabische stem van het toestel: eerst de naam van de letter, dan de klank (letter + fatha, bijv. بَ).
+  // 2) Anders TTS: eerst de Arabische naam, daarna de klank (letter + fatha).
   var FATHA = '\u064E';
   var fileOk = {};
+  var voicesReady = false;
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function note(text) {
     if (!app) return;
     var els = app.querySelectorAll('.ll-note'), k;
     for (k = 0; k < els.length; k++) els[k].textContent = text || '';
   }
+  function audioBase() {
+    try {
+      var path = (window.location.pathname || '/').replace(/[^/]*$/, '');
+      return window.location.origin + path + 'audio/letters/';
+    } catch (_e) {
+      return 'audio/letters/';
+    }
+  }
   function arVoice() {
     try {
-      var v = window.speechSynthesis.getVoices(), k;
-      for (k = 0; k < v.length; k++) if (/^ar/i.test(v[k].lang)) return v[k];
+      var v = window.speechSynthesis.getVoices(), k, any = null;
+      for (k = 0; k < v.length; k++) {
+        if (/^ar([-_]|$)/i.test(v[k].lang) || /arabic/i.test(v[k].name || '')) return v[k];
+        if (!any && /ar/i.test(v[k].lang || '')) any = v[k];
+      }
+      return any;
     } catch (_e) {}
     return null;
   }
-  function say(text, rate) {
-    var u = new window.SpeechSynthesisUtterance(text), v = arVoice();
+  function ensureVoices(cb) {
+    var ss = window.speechSynthesis;
+    if (!ss) return cb([]);
+    var v = ss.getVoices();
+    if (v && v.length) { voicesReady = true; return cb(v); }
+    var done = false;
+    function finish() {
+      if (done) return;
+      done = true;
+      try { ss.removeEventListener('voiceschanged', finish); } catch (_e) {}
+      voicesReady = true;
+      cb(ss.getVoices() || []);
+    }
+    try { ss.addEventListener('voiceschanged', finish); } catch (_e) {}
+    // Chrome laadt stemmen soms pas na een korte wacht
+    setTimeout(finish, 350);
+  }
+  function utter(text, rate, onEnd) {
+    var ss = window.speechSynthesis;
+    var u = new window.SpeechSynthesisUtterance(String(text));
+    var v = arVoice();
     u.lang = v ? v.lang : 'ar-SA';
     if (v) u.voice = v;
     u.rate = rate || 0.8;
-    window.speechSynthesis.speak(u);
+    u.pitch = 1;
+    if (onEnd) u.onend = onEnd;
+    u.onerror = function () { if (onEnd) onEnd(); };
+    ss.speak(u);
   }
   function speakTts(i) {
     var ss = window.speechSynthesis;
     if (!ss || !window.SpeechSynthesisUtterance) {
-      note('Dit apparaat kan geen geluid afspelen. Je kunt eigen opnames toevoegen in de map audio/letters.');
+      note('Dit apparaat kan geen spraak afspelen. Zet eigen opnames in audio/letters (01.mp3–28.mp3).');
       return;
     }
-    try {
-      ss.cancel();
-      var voices = ss.getVoices();
-      if (voices.length && !arVoice()) note('Geen Arabische stem op dit apparaat: het geluid kan afwijken.');
-      say(L[i][1], 0.75);
-      if (i !== 0) say(L[i][0] + FATHA, 0.7);
-    } catch (_e) {}
+    ensureVoices(function () {
+      try {
+        ss.cancel();
+        if (!arVoice()) {
+          note('Geen Arabische stem op dit apparaat — uitspraak kan afwijken. Eigen mp3’s in audio/letters werken beter.');
+        }
+        // Eerst naam, daarna klank (niet tegelijk — anders hoor je niets)
+        utter(L[i][1], 0.75, function () {
+          if (i === 0) return; // alif: alleen de naam
+          setTimeout(function () {
+            try { utter(L[i][0] + FATHA, 0.7); } catch (_e2) {}
+          }, 80);
+        });
+      } catch (_e) {
+        note('Geluid lukte niet. Controleer of het apparaatgeluid aan staat.');
+      }
+    });
   }
   function speakLetter(i) {
+    if (i == null || i < 0 || i >= L.length) return;
     note('');
+    // Warm TTS-stemmen op bij eerste tik
+    try { if (window.speechSynthesis) window.speechSynthesis.getVoices(); } catch (_e) {}
     var failed = false;
-    function fail() { if (failed) return; failed = true; fileOk[i] = false; speakTts(i); }
+    function fail() {
+      if (failed) return;
+      failed = true;
+      fileOk[i] = false;
+      speakTts(i);
+    }
     if (fileOk[i] === false) return speakTts(i);
     try {
-      var a = new Audio('audio/letters/' + pad(i + 1) + '.mp3');
+      var a = new Audio(audioBase() + pad(i + 1) + '.mp3');
+      a.preload = 'auto';
       a.onerror = fail;
-      a.onplaying = function () { fileOk[i] = true; };
+      a.onplaying = function () { fileOk[i] = true; note(''); };
+      // Timeout: als er na 600ms nog niets speelt, val terug op TTS
+      var timer = setTimeout(function () {
+        if (fileOk[i] !== true) {
+          try { a.pause(); } catch (_e3) {}
+          fail();
+        }
+      }, 600);
+      a.onplaying = function () {
+        clearTimeout(timer);
+        fileOk[i] = true;
+        note('');
+      };
       var pr = a.play();
-      if (pr && pr.catch) pr.catch(function () { if (fileOk[i] !== true) fail(); });
+      if (pr && pr.catch) pr.catch(function () { clearTimeout(timer); if (fileOk[i] !== true) fail(); });
     } catch (_e) { fail(); }
   }
   function speakBtn(i, label) {
