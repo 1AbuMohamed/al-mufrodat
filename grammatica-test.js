@@ -57,83 +57,201 @@
     return theoryRows(n).map(function(item){return plain(item.tekst);});
   }
 
+
+  // De bron blijft lessons_v2.js. Oefeningen vragen uitsluitend naar exacte
+  // bestaande voorbeeldwoorden, regelfragmenten en expliciet benoemde functies.
   function theoryRows(n) {
-    return ((DATA[n] && DATA[n].inhoud) || []).filter(function(row){
-      return ['regel','tekst','kop'].indexOf(row.type)>=0 && plain(row.tekst) &&
-        !/^(?:Voorbeelden?:|Merk op:|In deze les leren we het volgende:|\d+\))$/i.test(plain(row.tekst));
+    return ((DATA[n] && DATA[n].inhoud) || []).filter(function (row) {
+      var t=plain(row.tekst);
+      return ['regel','tekst','kop'].indexOf(row.type)>=0 && t.length>10 &&
+        !/^(?:voorbeelden?:?|merk op:?|in deze les leren we het volgende:?|les \d+[a-z]?|\d+\)|woordenlijst|[•\-\s]+)$/i.test(t);
     });
+  }
+  function quoted(text) {
+    return Array.from(String(text).matchAll(/«([^»]+)»/g),function(m){return m[1];});
   }
   function quoteTokens(text) {
-    return Array.from(String(text).matchAll(/«([^»]+)»/g),function(m){return m[1];})
-      .filter(function(x){return /[\u0600-\u06ff]/.test(x) && !/[◌→]/.test(x);});
+    return quoted(text).filter(function(x){return /[\u0621-\u064a]/.test(x) && !/[◌→]/.test(x);});
+  }
+  function normalizeArabic(t) {
+    return plain(t).replace(/[\u064b-\u065f\u0670\u06d6-\u06ed]/g,'').replace(/[.,!?؟،؛()\[\]«»0-9]/g,'');
+  }
+  function sourceExamples(n) {
+    return ((DATA[n] && DATA[n].inhoud)||[]).filter(function(r){
+      return r.type==='voorbeeld' && plain(r.ar) && !/^(?:\-|voorbeeld:?)$/i.test(plain(r.ar));
+    });
+  }
+  function sourceRule(n,term) {
+    return getRules(n).find(function(r){return r.indexOf(term)>=0;})||'';
+  }
+  function makeOptions(answer,others,seed,limit) {
+    var seen=new Set([answer]);
+    var shuffled=seededShuffle(others.filter(function(x){return plain(x)&&x!==answer;}),seed);
+    var out=[answer];
+    shuffled.forEach(function(item){if(!seen.has(item)&&out.length<(limit||4)){out.push(item);seen.add(item);}});
+    return seededShuffle(out,seed+53);
+  }
+  function theoryPool(n) {
+    return theoryRows(n).map(function(r){return plain(r.tekst);});
   }
   function buildTheoryTasks(n,seed) {
-    var rows=theoryRows(n), examples=getExamples(n);
-    var tokens=[...new Set(rows.flatMap(function(r){return quoteTokens(r.tekst);}))];
-    var tasks=[];
-    rows.forEach(function(row,i){
-      var found=quoteTokens(row.tekst);
-      if(!found.length)return;
-      var answer=found[0],others=tokens.filter(function(x){return x!==answer;});
-      if(others.length<2)return;
-      var rule=plain(row.tekst), pos=rule.indexOf('«'+answer+'»');
-      if(pos<0)return;
-      var prompt=rule.slice(0,pos)+'____'+rule.slice(pos+answer.length+2);
-      tasks.push({type:'theory',example:null,rule:rule,prompt:prompt,
-        answer:answer,options:seededShuffle([answer].concat(seededShuffle(others,seed+i).slice(0,3)),seed+i+7)});
-    });
-    if(!tasks.length && rows.length){
-      var others=Object.keys(DATA).map(Number).filter(function(x){return x!==n;})
-        .flatMap(function(x){return theoryRows(x).map(function(r){return plain(r.tekst);});})
-        .filter(function(t){return t.length>28;});
-      rows.filter(function(r){return plain(r.tekst).length>28;}).slice(0,5).forEach(function(row,i){
-        var answer=plain(row.tekst);
-        tasks.push({type:'theory',example:null,rule:answer,prompt:'Welke regel staat in deze les?',
-          answer:answer,options:seededShuffle([answer].concat(seededShuffle(others,seed+i).slice(0,3)),seed+i+19)});
+    var rules=theoryPool(n),tasks=[],allQuotes=[];
+    Object.keys(DATA).forEach(function(k){
+      theoryPool(Number(k)).forEach(function(t){
+        quoteTokens(t).forEach(function(q){if(!allQuotes.includes(q))allQuotes.push(q);});
       });
-    }
-    return seededShuffle(tasks,seed).slice(0,5);
+    });
+    rules.forEach(function(rule,i){
+      var words=quoteTokens(rule).filter(function(x){return x.length<24 && !x.includes(' ') && !x.includes('→');});
+      if(words.length){
+        var answer=words[0],needle='«'+answer+'»';
+        var question=rule.replace(needle,'____');
+        var pool=quoteTokens(rules.join(' ')).concat(allQuotes);
+        var opts=makeOptions(answer,pool,seed+i*37,4);
+        if(opts.length>=2)tasks.push({type:'theory',lesson:n,prompt:'Welk Arabisch woord hoort in deze regel?',context:question,answer:answer,options:opts,rule:rule,concept:'regel:'+i});
+      }
+    });
+    // Meerdere authentieke regels als antwoordopties: ook geschikt voor les 0, 17 en 23.
+    var across=Object.keys(DATA).map(Number).filter(function(x){return x!==n;})
+      .flatMap(function(x){return theoryPool(x);}).filter(function(x){return x.length>27 && x.length<290;});
+    rules.filter(function(r){return r.length>25 && r.length<330;}).forEach(function(rule,i){
+      var wrong=rules.filter(function(r){return r!==rule && r.length>25 && r.length<330;}).concat(across);
+      var opts=makeOptions(rule,wrong,seed+i*61,3);
+      if(opts.length>=2)tasks.push({type:'rule',lesson:n,prompt:'Welke regel hoort bij Les '+n+'?',answer:rule,options:opts,rule:rule,concept:'regel:'+i});
+    });
+    return seededShuffle(tasks,seed);
   }
-  function buildParsingTasks(n,seed) {
-    var examples=getExamples(n),rows=theoryRows(n), tasks=[];
-    // Alleen expliciete grammaticale functies uit de oorspronkelijke les.
-    // Geen automatische roltoekenning op basis van losse trefwoorden:
-    // een foutieve zinsontleding zou grammatica verkeerd aanleren.
-    // In les 5 benoemt de bron de twee delen van de idafa expliciet.
-    if(n===5){
-      examples.forEach(function(ex){
-        if(plain(ex.ar)==='كِتَابُ بِلَالٍ'){
-          ['كِتَابُ','بِلَالٍ'].forEach(function(word,i){
-            tasks.push({type:'parse',example:ex,word:word,
-              answer:i?'Moedaaf Ilaih':'Moedaaf',
-              options:seededShuffle(['Moedaaf','Moedaaf Ilaih','Harf Djarr','Moebtada'],seed+i),
-              rule:'In «كِتَابُ بِلَالٍ» is het eerste woord het ding dat in bezit is. Dit wordt Moedaaf genoemd. Het tweede woord «بِلَالٍ» is de bezitter. Dit wordt Moedaaf Ilaih genoemd.'});
-          });
+  function buildWhyTasks(n,seed) {
+    var rules=theoryPool(n), candidates=[];
+    var connector=/\b(omdat|vanwege|doordat|waardoor|zodat|aangezien|daarom)\b/i;
+    rules.forEach(function(rule,i){
+      var hit=connector.exec(rule);
+      if(!hit || hit.index<20) return;
+      var before=rule.slice(0,hit.index).trim(),reason=rule.slice(hit.index).trim();
+      if(reason.length<20||reason.length>240)return;
+      candidates.push({rule:rule,prompt:'Waarom? Wat is de reden bij deze regel?',context:before,answer:reason,concept:'waarom:'+i});
+    });
+    // Expliciete reden/voorwaarde die letterlijk in de bron staat.
+    var conditional=rules.filter(function(rule){
+      return /na een voorzetsel|vooraf wordt gegaan door|wanneer|als het|als de|in plaats van/i.test(rule) && rule.length>35 && rule.length<310;
+    });
+    conditional.forEach(function(rule,i){
+      candidates.push({rule:rule,prompt:'Welke regel legt deze grammaticale verandering uit?',context:'Les '+n,answer:rule,concept:'waarom-voorwaarde:'+i});
+    });
+    // Alle afleiders zijn ook authentieke, elders aangehaalde regels of redenen.
+    var all=Object.keys(DATA).map(Number).flatMap(function(k){return theoryPool(k);});
+    var reasons=candidates.map(function(c){return c.answer;}).concat(all.filter(function(x){return x.length>22&&x.length<310;}));
+    return seededShuffle(candidates,seed).map(function(c,i){
+      return {type:'why',lesson:n,prompt:c.prompt,context:c.context,answer:c.answer,
+        options:makeOptions(c.answer,reasons,seed+i*19,3),rule:c.rule,concept:c.concept};
+    }).filter(function(t){return t.options.length>=2;});
+  }
+  function sourceParse(n,seed) {
+    var rows=sourceExamples(n), rules=theoryPool(n),tasks=[];
+    function roleTask(ex,word,role,proof,concept) {
+      if(!proof)return;
+      var parts=splitArabic(ex.ar);
+      var index=parts.findIndex(function(t){return normalizeArabic(t)===normalizeArabic(word);});
+      if(index<0)return;
+      var roles=['Moedaaf','Moedaaf Ilaih','Harf Djarr','Na‘t','Man‘oet','Ma‘doed','Madjroer','Marfoe‘'];
+      tasks.push({type:'parse',lesson:n,example:ex,wordIndex:index,word:parts[index],
+        prompt:'Welke grammaticale functie heeft het gemarkeerde woord?',answer:role,
+        options:makeOptions(role,roles,seed+tasks.length*17,4),rule:proof,concept:concept||'functie:'+role});
+    }
+    if(n===5 && rules.some(function(r){return r.includes('Moedaaf Ilaih')&&r.includes('كِتَابُ بِلَالٍ');})){
+      var proof=sourceRule(n,'In «كِتَابُ بِلَالٍ»');
+      rows.filter(function(e){return ['كِتَابُ بِلَالٍ','بَيْتُ الْإِمَامِ'].includes(plain(e.ar));}).forEach(function(ex){
+        var words=splitArabic(ex.ar);if(words.length===2){
+          roleTask(ex,words[0],'Moedaaf',proof,'Moedaaf');
+          roleTask(ex,words[1],'Moedaaf Ilaih',proof,'Moedaaf Ilaih');
         }
       });
     }
     if(n===4||n===23){
-      var source=rows.map(function(r){return plain(r.tekst);}).join(' ');
-      if(/voorzetsel|Harf Djarr/i.test(source)){
-        examples.forEach(function(ex){
-          var words=splitArabic(ex.ar);
-          var preposition=words.find(function(w){return w==='فِي'||w==='مِنْ';});
-          if(!preposition)return;
-          tasks.push({type:'parse',example:ex,word:preposition,answer:'Harf Djarr',
-            options:seededShuffle(['Harf Djarr','Moedaaf','Moedaaf Ilaih','Moebtada'],seed+words.length),
-            rule:source.match(/[^.]*voorzetsel[^.]*\./i)?.[0]||source.slice(0,250)});
+      var proof=sourceRule(n,'Harf Djarr');
+      if(proof) rows.forEach(function(ex){
+        splitArabic(ex.ar).forEach(function(w){
+          if(['فِي','مِنْ','عَلَى','إِلَى'].includes(normalizeArabic(w)))roleTask(ex,w,'Harf Djarr',proof,'Harf Djarr');
         });
+      });
+    }
+    if(n===9 && rules.some(function(r){return r.includes('Na‘t')&&r.includes('Man‘oet');})){
+      var proof=sourceRule(n,'Na‘t');
+      rows.filter(function(ex){return plain(ex.ar)==='بَيْتٌ جَدِيْدٌ';}).forEach(function(ex){
+        roleTask(ex,'بَيْتٌ','Man‘oet',proof,'Man‘oet');
+        roleTask(ex,'جَدِيْدٌ','Na‘t',proof,'Na‘t');
+      });
+    }
+    if(n===19 && rules.some(function(r){return r.includes('Ma‘doed')&&r.includes('Moedaaf Ilaih');})){
+      var proof=sourceRule(n,'Merk op dat de Ma‘doed');
+      rows.filter(function(ex){return ['ثَلَاثَةُ كُتُبٍ','أَرْبَعَةُ بُيُوْتٍ'].includes(plain(ex.ar));}).forEach(function(ex){
+        var words=splitArabic(ex.ar);
+        if(words.length===2)roleTask(ex,words[1],'Ma‘doed',proof,'Ma‘doed');
+      });
+    }
+    return seededShuffle(tasks,seed);
+  }
+  function buildFindTasks(n,seed) {
+    var rules=theoryPool(n),examples=sourceExamples(n),tasks=[];
+    rules.forEach(function(rule,i){
+      var qs=quoteTokens(rule);
+      qs.forEach(function(q){
+        examples.forEach(function(ex){
+          var words=splitArabic(ex.ar),index=words.findIndex(function(w){return normalizeArabic(w)===normalizeArabic(q);});
+          if(index<0)return;
+          if(words.length<2||words.length>15)return;
+          tasks.push({type:'find',lesson:n,example:ex,word:words[index],wordIndex:index,
+            prompt:'Tik op het woord dat bij deze grammaticaregel hoort.',
+            context:rule.replace('«'+q+'»','____'),answer:index,rule:rule,concept:'herkennen:'+i});
+        });
+      });
+    });
+    return seededShuffle(tasks,seed);
+  }
+  function buildStudyTasks(n,seed,options) {
+    var sets={
+      parse:sourceParse(n,seed+101),find:buildFindTasks(n,seed+211),
+      why:buildWhyTasks(n,seed+331),theory:buildTheoryTasks(n,seed+449)
+    };
+    var translations=getExamples(n),legacy=buildTasks(n);
+    var other=seededShuffle(legacy,seed+577).map(function(t){return Object.assign({lesson:n,concept:'voorbeeld:'+plain(t.example.ar)},t);});
+    if(translations.length>1) translations.forEach(function(ex,i){
+      var otherArabic=translations.map(function(e){return plain(e.ar);}).filter(function(a){return a!==plain(ex.ar);});
+      if(otherArabic.length)other.push({type:'reverse',lesson:n,example:ex,prompt:'Kies de Arabische zin.',answer:plain(ex.ar),
+        options:makeOptions(plain(ex.ar),otherArabic,seed+i*31,4),concept:'voorbeeld:'+plain(ex.ar)});
+    });
+    sets.why=seededShuffle(sets.why,seed+3);
+    sets.theory=seededShuffle(sets.theory,seed+5);
+    var pool=[sets.parse,sets.find,sets.why,sets.theory,other];
+    var target=(options&&options.count)||10,used=new Set(),result=[];
+    // Eerst leerinhoud; minstens 7/10 opdrachten behandelen regel of ontleding
+    // wanneer de bron daarvoor voldoende verschillende opgaven levert.
+    var order=[0,1,2,3,0,1,2,3,4,3,2,1,0,4,3,2,1,0,4];
+    order.forEach(function(kind){
+      if(result.length>=target)return;
+      var choices=pool[kind], task;
+      while(choices.length && !task){
+        var probe=choices.shift();
+        var sig=probe.type+'|'+probe.concept+'|'+plain(probe.word)+'|'+plain(probe.answer);
+        if(!used.has(sig)){task=probe;used.add(sig);}
+      }
+      if(task)result.push(task);
+    });
+    var extra=seededShuffle(pool.flat(),seed+733);
+    while(result.length<target&&extra.length){
+      var t=extra.shift(),sig=t.type+'|'+t.concept+'|'+plain(t.word)+'|'+plain(t.answer);
+      if(!used.has(sig)){result.push(t);used.add(sig);}
+    }
+    // Weinig nieuwe theorie (bv. les 7,17,21) = extra brongebonden herhaling.
+    if(result.length<target){
+      var base=seededShuffle(result.slice(),seed+901);
+      var i=0;while(result.length<target && base.length){
+        var t=Object.assign({},base[i%base.length],{repeat:i+1});
+        result.push(t);i++;
       }
     }
-    return seededShuffle(tasks,seed).slice(0,5);
-  }
-  function buildStudyTasks(n,seed){
-    var theory=buildTheoryTasks(n,seed),parse=buildParsingTasks(n,seed+31);
-    var examples=getExamples(n),legacy=buildTasks(n);
-    var result=theory.slice(0,4).concat(parse.slice(0,4));
-    var extra=seededShuffle(legacy,seed+71);
-    while(result.length<Math.min(10,Math.max(8,theory.length+parse.length+3))&&extra.length)result.push(extra.shift());
-    return result.slice(0,10);
+    // Begin steeds met een regel of ontledingsvraag na de theorie.
+    return result.slice(0,target);
   }
 
   function splitArabic(text) { return plain(text).split(/\s+/).filter(Boolean); }
