@@ -126,6 +126,19 @@
         }
       });
     }
+    if(n===4||n===23){
+      var source=rows.map(function(r){return plain(r.tekst);}).join(' ');
+      if(/voorzetsel|Harf Djarr/i.test(source)){
+        examples.forEach(function(ex){
+          var words=splitArabic(ex.ar);
+          var preposition=words.find(function(w){return w==='فِي'||w==='مِنْ';});
+          if(!preposition)return;
+          tasks.push({type:'parse',example:ex,word:preposition,answer:'Harf Djarr',
+            options:seededShuffle(['Harf Djarr','Moedaaf','Moedaaf Ilaih','Moebtada'],seed+words.length),
+            rule:source.match(/[^.]*voorzetsel[^.]*\./i)?.[0]||source.slice(0,250)});
+        });
+      }
+    }
     return seededShuffle(tasks,seed).slice(0,5);
   }
   function buildStudyTasks(n,seed){
