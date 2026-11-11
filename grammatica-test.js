@@ -153,7 +153,7 @@
       var parts=splitArabic(ex.ar);
       var index=parts.findIndex(function(t){return normalizeArabic(t)===normalizeArabic(word);});
       if(index<0)return;
-      var roles=['Moedaaf','Moedaaf Ilaih','Harf Djarr','Na‘t','Man‘oet','Ma‘doed','Madjroer','Marfoe‘'];
+      var roles=['Moedaaf','Moedaaf Ilaih','Harf Djarr','Na‘t','Man‘oet','Ma‘doed','Madjroer','Marfoe‘','Mansoeb','predicaat','lijdend voorwerp'];
       tasks.push({type:'parse',lesson:n,example:ex,wordIndex:index,word:parts[index],
         prompt:'Welke grammaticale functie heeft het gemarkeerde woord?',answer:role,
         options:makeOptions(role,roles,seed+tasks.length*17,4),rule:proof,concept:concept||'functie:'+role});
@@ -171,7 +171,7 @@
       var proof=sourceRule(n,'Harf Djarr');
       if(proof) rows.forEach(function(ex){
         splitArabic(ex.ar).forEach(function(w){
-          if(['فِي','مِنْ','عَلَى','إِلَى'].includes(normalizeArabic(w)))roleTask(ex,w,'Harf Djarr',proof,'Harf Djarr');
+          if(['في','فيْ','من','على','إلى'].includes(normalizeArabic(w)))roleTask(ex,w,'Harf Djarr',proof,'Harf Djarr');
         });
       });
     }
@@ -182,11 +182,64 @@
         roleTask(ex,'جَدِيْدٌ','Na‘t',proof,'Na‘t');
       });
     }
-    if(n===19 && rules.some(function(r){return r.includes('Ma‘doed')&&r.includes('Moedaaf Ilaih');})){
-      var proof=sourceRule(n,'Merk op dat de Ma‘doed');
-      rows.filter(function(ex){return ['ثَلَاثَةُ كُتُبٍ','أَرْبَعَةُ بُيُوْتٍ'].includes(plain(ex.ar));}).forEach(function(ex){
+
+    if(n===8 && rules.some(function(r){return r.includes('predicaat') && r.includes('هٰذَا الْكِتَابُ');})){
+      var proof=sourceRule(n,'predicaat');
+      rows.filter(function(ex){return plain(ex.ar)==='هٰذَا الْكِتَابُ جَدِيْدٌ.';}).forEach(function(ex){
+        roleTask(ex,'جَدِيْدٌ.','predicaat',proof,'predicaat');
+      });
+    }
+    if(n===11 && rules.some(function(r){return r.includes('lijdend voorwerp')&&r.includes('accusatief');})){
+      var proof=sourceRule(n,'Het lijdend voorwerp');
+      rows.filter(function(ex){
+        return ['أُحِبُّ اللّٰهَ.','أُحِبُّ الرَّسُوْلَ.','أَتُحِبُّ اللّٰهَ؟','أَتُحِبُّ لُغَتَكَ؟'].includes(plain(ex.ar));
+      }).forEach(function(ex){
+        var words=splitArabic(ex.ar);if(words.length===2)roleTask(ex,words[1],'lijdend voorwerp',proof,'lijdend voorwerp');
+      });
+    }
+    if(n===14 && rules.some(function(r){return r.includes('«بَيْتُ» de Moedaaf');})){
+      var proof=sourceRule(n,'«بَيْتُ» de Moedaaf');
+      rows.filter(function(ex){return plain(ex.ar)==='بَيْتُ الْإِمَامِ الْجَدِيْدُ.';}).forEach(function(ex){
+        roleTask(ex,'بَيْتُ','Moedaaf',proof,'Moedaaf');
+      });
+    }
+    if(n===15 && rules.some(function(r){return r.includes('«قَبْلَ»')&&r.includes('Moedaaf');})){
+      var proof=sourceRule(n,'«قَبْلَ»');
+      rows.filter(function(ex){return ['بَعْدَ الدَّرْسِ','قَبْلَ الصَّلَاةِ'].includes(plain(ex.ar));}).forEach(function(ex){
         var words=splitArabic(ex.ar);
-        if(words.length===2)roleTask(ex,words[1],'Ma‘doed',proof,'Ma‘doed');
+        if(words.length===2){
+          roleTask(ex,words[0],'Moedaaf',proof,'Moedaaf');
+          roleTask(ex,words[1],'Madjroer',proof,'Madjroer');
+        }
+      });
+    }
+    if(n===18 && rules.some(function(r){return r.includes('na «كَمْ»')&&r.includes('Mansoeb');})){
+      var proof=sourceRule(n,'na «كَمْ»');
+      rows.filter(function(ex){return ['كَمْ كِتَابًا؟','كَمْ سَيَّارَةً؟'].includes(plain(ex.ar));}).forEach(function(ex){
+        var words=splitArabic(ex.ar);if(words.length===2)roleTask(ex,words[1],'Mansoeb',proof,'Mansoeb');
+      });
+    }
+    if(n===19 && rules.some(function(r){return r.includes('Ma‘doed')&&r.includes('Moedaaf Ilaih');})){
+      var proof=sourceRule(n,'Merk op dat de Ma‘doed'),proofNumber=sourceRule(n,'De getallen 3 t/m 10');
+      rows.filter(function(ex){return ['ثَلَاثَةُ كُتُبٍ','أَرْبَعَةُ بُيُوْتٍ','خَمْسَةُ أَقْلَامٍ','عَشَرَةُ رِجَالٍ'].includes(plain(ex.ar));}).forEach(function(ex){
+        var words=splitArabic(ex.ar);
+        if(words.length===2){
+          roleTask(ex,words[1],'Ma‘doed',proof,'Ma‘doed');
+          roleTask(ex,words[0],'Moedaaf',proofNumber,'Moedaaf');
+        }
+      });
+    }
+    if(n===20 && rules.some(function(r){return r.includes('vrouwelijke Ma‘doed');})){
+      var proof=sourceRule(n,'vrouwelijke Ma‘doed');
+      rows.filter(function(ex){return plain(ex.ar)==='عَشْرُ نِسَاءٍ';}).forEach(function(ex){
+        roleTask(ex,'نِسَاءٍ','Ma‘doed',proof,'Ma‘doed');
+      });
+    }
+    if(n===23 && rules.some(function(r){return r.includes('Moedaaf Ilaih');})){
+      var proof=sourceRule(n,'Moedaaf Ilaih');
+      rows.filter(function(ex){return ['بِلَالٌ → بِنْتُ بِلَالٍ','الْمُدَرِّسُ → كِتَابُ الْمُدَرِّسِ'].includes(plain(ex.ar));}).forEach(function(ex){
+        var words=splitArabic(ex.ar),target=words[words.length-1];
+        roleTask(ex,target,'Moedaaf Ilaih',proof,'Moedaaf Ilaih');
       });
     }
     return seededShuffle(tasks,seed);
@@ -198,6 +251,10 @@
       qs.forEach(function(q){
         examples.forEach(function(ex){
           var words=splitArabic(ex.ar),index=words.findIndex(function(w){return normalizeArabic(w)===normalizeArabic(q);});
+          if(index<0)index=words.findIndex(function(w){
+            var nw=normalizeArabic(w),nq=normalizeArabic(q);
+            return nw==='و'+nq || nw==='ف'+nq;
+          });
           if(index<0)return;
           if(words.length<2||words.length>15)return;
           tasks.push({type:'find',lesson:n,example:ex,word:words[index],wordIndex:index,
