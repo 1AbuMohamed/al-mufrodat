@@ -192,7 +192,7 @@
       if(index<0)return;
       var roles=['Moedaaf','Moedaaf Ilaih','Harf Djarr','Na‘t','Man‘oet','Ma‘doed','Madjroer','Marfoe‘','Mansoeb','predicaat','lijdend voorwerp','vrouwelijk enkelvoud'];
       tasks.push({type:'parse',lesson:n,example:ex,wordIndex:index,word:parts[index],
-        prompt:'Welke grammaticale functie heeft het gemarkeerde woord?',answer:role,
+        prompt:role==='vrouwelijk enkelvoud'?'Welke vorm heeft dit woord bij het irrationele meervoud?':(['Mansoeb','Madjroer','Marfoe‘'].includes(role)?'Welke naamval heeft het gemarkeerde woord?':'Welke grammaticale functie heeft het gemarkeerde woord?'),answer:role,
         options:makeOptions(role,roles,seed+tasks.length*17,4),rule:proof,concept:concept||'functie:'+role});
     }
     if(n===5 && rules.some(function(r){return r.includes('Moedaaf Ilaih')&&r.includes('كِتَابُ بِلَالٍ');})){
