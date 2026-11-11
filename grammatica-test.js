@@ -54,11 +54,86 @@
   function getRules(n) {
     var lesson = DATA[n];
     if (!lesson) return [];
-    return (lesson.inhoud || []).filter(function (item) {
-      return ['tekst', 'regel', 'kop'].indexOf(item.type) >= 0 &&
-        plain(item.tekst).length >= 35 &&
-        !/^Woordenlijst van les\b/i.test(plain(item.tekst));
-    }).slice(0, 3).map(function (item) { return plain(item.tekst); });
+    return theoryRows(n).map(function(item){return plain(item.tekst);});
+  }
+
+  function theoryRows(n) {
+    return ((DATA[n] && DATA[n].inhoud) || []).filter(function(row){
+      return ['regel','tekst','kop'].indexOf(row.type)>=0 && plain(row.tekst) &&
+        !/^(?:Voorbeelden?:|Merk op:|In deze les leren we het volgende:|\d+\))$/i.test(plain(row.tekst));
+    });
+  }
+  function quoteTokens(text) {
+    return Array.from(String(text).matchAll(/«([^»]+)»/g),function(m){return m[1];})
+      .filter(function(x){return /[\u0600-\u06ff]/.test(x) && !/[◌→]/.test(x);});
+  }
+  function buildTheoryTasks(n,seed) {
+    var rows=theoryRows(n), examples=getExamples(n);
+    var tokens=[...new Set(rows.flatMap(function(r){return quoteTokens(r.tekst);}))];
+    var tasks=[];
+    rows.forEach(function(row,i){
+      var found=quoteTokens(row.tekst);
+      if(!found.length)return;
+      var answer=found[0],others=tokens.filter(function(x){return x!==answer;});
+      if(others.length<2)return;
+      var rule=plain(row.tekst), pos=rule.indexOf('«'+answer+'»');
+      if(pos<0)return;
+      var prompt=rule.slice(0,pos)+'____'+rule.slice(pos+answer.length+2);
+      tasks.push({type:'theory',example:null,rule:rule,prompt:prompt,
+        answer:answer,options:seededShuffle([answer].concat(seededShuffle(others,seed+i).slice(0,3)),seed+i+7)});
+    });
+    if(!tasks.length && rows.length){
+      var others=Object.keys(DATA).map(Number).filter(function(x){return x!==n;})
+        .flatMap(function(x){return theoryRows(x).map(function(r){return plain(r.tekst);});})
+        .filter(function(t){return t.length>28;});
+      rows.filter(function(r){return plain(r.tekst).length>28;}).slice(0,5).forEach(function(row,i){
+        var answer=plain(row.tekst);
+        tasks.push({type:'theory',example:null,rule:answer,prompt:'Welke regel staat in deze les?',
+          answer:answer,options:seededShuffle([answer].concat(seededShuffle(others,seed+i).slice(0,3)),seed+i+19)});
+      });
+    }
+    return seededShuffle(tasks,seed).slice(0,5);
+  }
+  function buildParsingTasks(n,seed) {
+    var examples=getExamples(n),rows=theoryRows(n), tasks=[];
+    // Alleen expliciete grammaticale functies uit de oorspronkelijke les.
+    // Geen automatische roltoekenning op basis van losse trefwoorden:
+    // een foutieve zinsontleding zou grammatica verkeerd aanleren.
+    // In les 5 benoemt de bron de twee delen van de idafa expliciet.
+    if(n===5){
+      examples.forEach(function(ex){
+        if(plain(ex.ar)==='كِتَابُ بِلَالٍ'){
+          ['كِتَابُ','بِلَالٍ'].forEach(function(word,i){
+            tasks.push({type:'parse',example:ex,word:word,
+              answer:i?'Moedaaf Ilaih':'Moedaaf',
+              options:seededShuffle(['Moedaaf','Moedaaf Ilaih','Harf Djarr','Moebtada'],seed+i),
+              rule:'In «كِتَابُ بِلَالٍ» is het eerste woord het ding dat in bezit is. Dit wordt Moedaaf genoemd. Het tweede woord «بِلَالٍ» is de bezitter. Dit wordt Moedaaf Ilaih genoemd.'});
+          });
+        }
+      });
+    }
+    if(n===4||n===23){
+      var source=rows.map(function(r){return plain(r.tekst);}).join(' ');
+      if(/voorzetsel|Harf Djarr/i.test(source)){
+        examples.forEach(function(ex){
+          var words=splitArabic(ex.ar);
+          var preposition=words.find(function(w){return w==='فِي'||w==='مِنْ';});
+          if(!preposition)return;
+          tasks.push({type:'parse',example:ex,word:preposition,answer:'Harf Djarr',
+            options:seededShuffle(['Harf Djarr','Moedaaf','Moedaaf Ilaih','Moebtada'],seed+words.length),
+            rule:source.match(/[^.]*voorzetsel[^.]*\./i)?.[0]||source.slice(0,250)});
+        });
+      }
+    }
+    return seededShuffle(tasks,seed).slice(0,5);
+  }
+  function buildStudyTasks(n,seed){
+    var theory=buildTheoryTasks(n,seed),parse=buildParsingTasks(n,seed+31);
+    var examples=getExamples(n),legacy=buildTasks(n);
+    var result=theory.slice(0,4).concat(parse.slice(0,4));
+    var extra=seededShuffle(legacy,seed+71);
+    while(result.length<Math.min(10,Math.max(8,theory.length+parse.length+3))&&extra.length)result.push(extra.shift());
+    return result.slice(0,10);
   }
 
   function splitArabic(text) { return plain(text).split(/\s+/).filter(Boolean); }
@@ -144,7 +219,11 @@
     getRules: getRules,
     buildTasks: buildTasks,
     splitArabic: splitArabic,
-    choicesFor: choicesFor
+    choicesFor: choicesFor,
+    theoryRows: theoryRows,
+    buildTheoryTasks: buildTheoryTasks,
+    buildParsingTasks: buildParsingTasks,
+    buildStudyTasks: buildStudyTasks
   };
 
   function storedScores() {
@@ -264,10 +343,10 @@
     var exercises = session.tasks.length;
     return '<div class="gd-shell gd-play">' + topBar() +
       '<div class="gd-card gd-intro">' +
-        '<div class="gd-stage-tag">Stap 1 · begrijpen</div>' +
-        '<h1>Les ' + n + ': eerst kijken, dan proberen</h1>' +
-        '<p class="gd-support">Hieronder staat uitsluitend bestaande uitleg uit het Medina-boek.</p>' +
-        '<div class="gd-source-box">' + rulesHtml(n) + '</div>' + introSample(n) +
+        '<div class="gd-stage-tag">Eerst de theorie</div>' +
+        '<h1>Les ' + n + '</h1>' +
+        '<p class="gd-support">Lees de regels en bekijk het voorbeeld. Daarna oefen je de theorie en zinsontleding.</p>' +
+        '<div class="gd-source-box gd-theory-reading">' + rulesHtml(n) + '</div>' + introSample(n) +
         (exercises ?
           '<p class="gd-intro-bottom">Nu volgen ' + exercises + ' korte oefening' + (exercises === 1 ? '' : 'en') + ' met de oorspronkelijke voorbeeldzinnen.</p>' +
           '<button type="button" class="gd-primary gd-full" data-action="start">Start oefenen <span aria-hidden="true">→</span></button>' :
@@ -280,6 +359,10 @@
 
   function renderTaskBody(task) {
     var type = task.type, ex = task.example;
+    if (type === 'theory' || type === 'parse') {
+      return (type === 'parse' ? '<div class="gd-ar-question gd-arabic" lang="ar" dir="rtl">'+splitArabic(ex.ar).map(function(w){return w===task.word?'<mark class="gd-parse-word">'+esc(w)+'</mark>':esc(w);}).join(' ')+'</div><p class="gd-subinstruction">Welke grammaticale functie heeft het gemarkeerde woord?</p>' : '<p class="gd-theory-question">'+esc(task.prompt)+'</p>')+
+        '<div class="gd-options">'+task.options.map(function(option,i){var picked=session.chosen===i;return '<button type="button" class="gd-option'+(picked?' selected':'')+'" data-action="select" data-value="'+i+'" aria-pressed="'+picked+'" '+(session.feedback?'disabled':'')+'>'+esc(option)+'</button>';}).join('')+'</div>';
+    }
     if (type === 'choice') {
       return '<div class="gd-ar-question gd-arabic" lang="ar" dir="rtl">' + esc(ex.ar) + '</div>' +
         '<div class="gd-options">' + task.options.map(function (option, i) {
@@ -327,7 +410,7 @@
   function answered() {
     var task = currentTask();
     if (!task) return false;
-    if (task.type === 'choice' || task.type === 'gap') return session.chosen >= 0;
+    if (['choice','gap','theory','parse'].includes(task.type)) return session.chosen >= 0;
     if (task.type === 'order') return session.ordered.length === task.words.length;
     return true;
   }
@@ -337,6 +420,8 @@
     if (!task) return finished();
     var canCheck = answered();
     var prompts = {
+      theory: 'Pas de grammaticaregel toe',
+      parse: 'Ontleed de Arabische zin',
       choice: 'Wat betekent deze Arabische zin?',
       gap: 'Vul het ontbrekende woord in',
       order: 'Zet de woorden in de juiste volgorde',
@@ -367,10 +452,11 @@
     var good = session.feedback.correct;
     return '<section class="gd-feedback gd-feedback-sheet ' + (good ? 'good' : 'review') + '" role="status" aria-live="assertive">' +
       '<div class="gd-feedback-inner">' +
-      '<strong>' + (good ? 'Goed beantwoord!' : 'Fout') + '</strong>' +
+      '<strong>' + (good ? 'Goed!' : 'Juiste antwoord:') + '</strong>' +
       (good ? '' : '<p class="gd-feedback-correct-label">Dit is het juiste antwoord:</p>') +
-      '<p class="gd-arabic" lang="ar" dir="rtl">' + esc(task.example.ar) + '</p>' +
-      '<p class="gd-dutch-answer">' + esc(task.example.nl) + '</p>' +
+      (task.example ? '<p class="gd-arabic" lang="ar" dir="rtl">' + esc(task.example.ar) + '</p>' : '') +
+      (task.example ? '<p class="gd-dutch-answer">' + esc(task.example.nl) + '</p>' : '') +
+      (task.rule ? '<p class="gd-theory-explanation">'+esc(task.rule)+'</p>' : '') +
       '<button type="button" class="gd-primary gd-full" data-action="next">Volgende <span aria-hidden="true">→</span></button>' +
       '</div></section>';
   }
@@ -428,7 +514,7 @@
   function setLesson(n) {
     if (!Object.prototype.hasOwnProperty.call(DATA, n)) { session.stage = 'overview'; render(); return; }
     session.lesson = Number(n);
-    session.tasks = buildTasks(session.lesson);
+    session.tasks = buildStudyTasks(session.lesson,(Math.random()*0xffffffff)>>>0);
     session.index = 0;
     session.correct = 0;
     session.missed = [];
@@ -446,6 +532,7 @@
     if (!answered() || session.feedback) return;
     var task = currentTask();
     var correct = false;
+    if (task.type === 'theory' || task.type === 'parse') correct = task.options[session.chosen] === task.answer;
     if (task.type === 'choice') correct = task.options[session.chosen] === plain(task.example.nl);
     if (task.type === 'gap') correct = task.options[session.chosen] === task.answer;
     if (task.type === 'order') {
