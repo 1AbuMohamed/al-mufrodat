@@ -87,3 +87,8 @@ body.lh-skin .gd-lab-vb .gd-theory-example {
 body.lh-skin .gd-parse-sentence { background: var(--surface-2); border: 2px solid var(--line); border-radius: var(--radius); }
 body.lh-skin .gd-parse-sentence .gd-word-chip { color: var(--muted); }
 body.lh-skin .gd-parse-sentence .gd-word-chip.target { color: var(--blue-ink); background: var(--surface); }
+
+/* Kleine verfijningen */
+.gd-lab-kop { margin-top: 4px; }
+.gd-lab-card { margin-top: 6px; }
+.gd-lab-p strong { color: var(--text); }

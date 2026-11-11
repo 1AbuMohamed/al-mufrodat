@@ -374,7 +374,7 @@
     return '<div class="gd-lab-card"><h2 class="gd-lab-kop">' + rich(c.kop) + '</h2>' +
       (c.tekst || []).map(function (p) { return '<p class="gd-lab-p">' + rich(p) + '</p>'; }).join('') +
       (c.vb && c.vb.length ? '<div class="gd-lab-vb">' + c.vb.map(function (v) {
-        return '<div class="gd-theory-example"><p class="gd-arabic" lang="ar" dir="rtl">' + esc(v[0]) + '</p><p>' + rich(v[1]) + '</p></div>';
+        return '<div class="gd-theory-example"><p class="gd-arabic" lang="ar" dir="rtl">' + esc(v[0]).replace(/→/g, '←') + '</p><p>' + rich(v[1]) + '</p></div>';
       }).join('') + '</div>' : '') +
       (c.tip ? '<p class="gd-lab-tip"><strong>Let op:</strong> ' + rich(c.tip) + '</p>' : '') + '</div>';
   }
@@ -537,6 +537,7 @@
     buildFindTasks: buildFindTasks,
     buildStudyTasks: buildStudyTasks,
     hasLab: hasLab,
+    current: currentTask,
     labQuestionTasks: labQuestionTasks,
     labParseTasks: labParseTasks,
     rich: rich
