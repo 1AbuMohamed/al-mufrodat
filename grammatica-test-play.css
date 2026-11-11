@@ -12,8 +12,8 @@
 
 /* Auto-doorgaan voortgangsbalk in feedback */
 .gd-autonext { height: 6px; margin: 10px 0 4px; border-radius: 3px; background: rgba(0, 0, 0, .14); overflow: hidden; }
-.gd-autonext i { display: block; height: 100%; width: 100%; background: currentColor; transform-origin: left; animation: gdAuto .9s linear forwards; }
-.gd-feedback-sheet.review .gd-autonext i { animation-duration: 2.2s; }
+.gd-autonext i { display: block; height: 100%; width: 100%; background: currentColor; transform-origin: left; animation: gdAuto .5s linear forwards; }
+.gd-feedback-sheet.review .gd-autonext i { animation-duration: 1s; }
 @keyframes gdAuto { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
 /* Vertalingshint bij invulvraag en zinsontleding */

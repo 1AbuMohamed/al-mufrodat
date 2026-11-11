@@ -10,6 +10,7 @@
 
   var K_PROG = 'alm_progress';
   var K_XP = 'alm_vocab_xp';
+  var K_SET = 'alm_grammar_test_settings_v1';
   var MASTERY = 2;      // zelfde drempel als de gewone woordenschat (box >= 2)
   var MAX_HEARTS = 5;
   var TITLES = {
@@ -21,9 +22,22 @@
     21: 'Mijn School', 22: 'Kleuren & Sleutels', 23: 'Steden & Landen', 24: 'Reader · Tijd & Handelingen'
   };
 
-  var app = null, S = null, bound = false;
+  var app = null, S = null, bound = false, fastTimer = 0;
 
   /* ---------- hulpfuncties ---------- */
+  function fastOn() {
+    if (window.GrammarLabParse && window.GrammarLabParse.fastOn) return window.GrammarLabParse.fastOn();
+    return jget(K_SET, {}).fast === true;
+  }
+  function setFast(on) {
+    if (window.GrammarLabParse && window.GrammarLabParse.setFast) { window.GrammarLabParse.setFast(on); return; }
+    var s = jget(K_SET, {}); s.fast = !!on; jset(K_SET, s);
+  }
+  function scheduleFastNext(ok) {
+    clearTimeout(fastTimer);
+    if (!fastOn()) return;
+    fastTimer = setTimeout(function () { if (S && S.fb && S.screen === 'play') next(); }, ok ? 500 : 1000);
+  }
   function esc(v) {
     return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
@@ -129,6 +143,7 @@
 
   /* ---------- sessie ---------- */
   function open(n, mode) {
+    clearTimeout(fastTimer);
     n = Number(n);
     if (!wordsFor(n).length) return;
     app = document.getElementById('gd-app');
@@ -169,6 +184,7 @@
     }
   }
   function leave() {
+    clearTimeout(fastTimer);
     commitXp();
     S = null;
     var home = window.GrammarLabHome;
@@ -191,8 +207,10 @@
     if (!ok) S.wrongIds[q.word.id] = true;
     S.fb = { ok: ok };
     render();
+    scheduleFastNext(ok);
   }
   function next() {
+    clearTimeout(fastTimer);
     if (!S) return;
     if (S.hearts <= 0) { S.screen = 'fail'; S.fb = null; render(); return; }
     S.i++; S.chosen = -1; S.fb = null;
@@ -207,7 +225,12 @@
     if (okPair) {
       q.done[id] = true; q.sel = null;
       if (!q.slipped[id]) score(true, id, 5);
-      if (Object.keys(q.done).length >= q.words.length) { S.fb = { ok: true, match: true }; }
+      if (Object.keys(q.done).length >= q.words.length) {
+        S.fb = { ok: true, match: true };
+        render();
+        scheduleFastNext(true);
+        return;
+      }
       render();
       return;
     }
@@ -235,7 +258,8 @@
       '<button type="button" class="vl-exit" data-vl="exit" aria-label="Terug naar het leerpad">' + icon('close') + '</button>' +
       '<div class="gd-progress-wrap"><div class="gd-progress-title"><strong>Woordenschat · Les ' + S.n + '</strong><span>' + esc(label) + '</span></div>' +
       '<div class="gd-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"><span style="width:' + pct + '%"></span></div></div>' +
-      '<div class="gd-bar-hearts" aria-label="' + S.hearts + ' van ' + MAX_HEARTS + ' hartjes">' + hearts + '</div></div>';
+      '<div class="gd-bar-hearts" aria-label="' + S.hearts + ' van ' + MAX_HEARTS + ' hartjes">' + hearts + '</div>' +
+      '<button type="button" class="gd-fast' + (fastOn() ? ' on' : '') + '" data-vl="fast" aria-pressed="' + fastOn() + '" title="Snelle modus: direct nakijken en automatisch door">⚡ Snel</button></div>';
   }
 
   function wordsScreen() {
@@ -297,6 +321,7 @@
           (q.type === 'nl2ar' ? '<p>' + esc(w.nl) + '</p>' : '<p class="gd-arabic" lang="ar" dir="rtl">' + esc(w.ar) + '</p>');
       fb = '<section class="gd-feedback gd-feedback-sheet ' + (good ? 'good' : 'review') + '" role="status" aria-live="assertive">' +
         '<div class="gd-feedback-inner"><strong>' + headline + '</strong>' + detail +
+        (fastOn() ? '<div class="gd-autonext" aria-hidden="true"><i></i></div>' : '') +
         '<button type="button" class="gd-primary gd-full" data-vl="next">Verder</button></div></section>';
     }
     return '<div class="gd-shell gd-play vl">' + bar(Math.min(total, S.i + 1) + ' / ' + total, pct) +
@@ -341,16 +366,24 @@
     e.stopPropagation();
     var a = t.getAttribute('data-vl');
     if (a === 'exit') return leave();
-    if (a === 'start') { S.screen = 'play'; S.qs = build(S.n); S.i = 0; render(); return; }
+    if (a === 'fast') { setFast(!fastOn()); if (!fastOn()) clearTimeout(fastTimer); render(); return; }
+    if (a === 'start') { clearTimeout(fastTimer); S.screen = 'play'; S.qs = build(S.n); S.i = 0; render(); return; }
     if (a === 'continue') {
+      clearTimeout(fastTimer);
       var nums = lessonNums(), cur = S.n, follow = nums.filter(function (x) { return x > cur; })[0];
       if (follow === undefined) return leave();
       var started = stats(follow, jget(K_PROG, {})).seen > 0;
       commitXp(); S = null;
       return open(follow, started ? 'play' : 'words');
     }
-    if (a === 'again') { var n = S.n; commitXp(); S = null; return open(n, 'play'); }
-    if (a === 'pick') { if (!S.fb) { S.chosen = Number(t.getAttribute('data-i')); render(); } return; }
+    if (a === 'again') { clearTimeout(fastTimer); var n = S.n; commitXp(); S = null; return open(n, 'play'); }
+    if (a === 'pick') {
+      if (!S.fb) {
+        S.chosen = Number(t.getAttribute('data-i'));
+        if (fastOn()) check(); else render();
+      }
+      return;
+    }
     if (a === 'check') return check();
     if (a === 'next') return next();
     if (a === 'tile') return matchTap(t.getAttribute('data-side'), t.getAttribute('data-id'));
@@ -361,7 +394,10 @@
     if (!q) return;
     if (S.fb && e.key === 'Enter') { e.preventDefault(); return next(); }
     if (q.type === 'match') return;
-    if (/^[1-4]$/.test(e.key) && !S.fb && q.options && Number(e.key) <= q.options.length) { S.chosen = Number(e.key) - 1; render(); }
+    if (/^[1-4]$/.test(e.key) && !S.fb && q.options && Number(e.key) <= q.options.length) {
+      S.chosen = Number(e.key) - 1;
+      if (fastOn()) check(); else render();
+    }
     else if (e.key === 'Enter' && !S.fb && answered()) { e.preventDefault(); check(); }
   }
   function bind() {

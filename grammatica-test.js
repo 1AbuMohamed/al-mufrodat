@@ -1140,7 +1140,7 @@
     recordAnswer(t,good);session.feedback={correct:good};render();
     if(P()&&P().fastOn()){
       clearTimeout(fastTimer);
-      fastTimer=setTimeout(function(){if(session.feedback&&session.stage==='play')next();},good?900:2200);
+      fastTimer=setTimeout(function(){if(session.feedback&&session.stage==='play')next();},good?500:1000);
     }
   }
   function next(){
