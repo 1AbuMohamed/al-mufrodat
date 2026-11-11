@@ -574,7 +574,10 @@
     // Het oude leerpad bewaart kronen en leestheorie naast onze nieuwe kenniskaart.
     if(session.lesson!==null){
       var d=readSave(),key=String(session.lesson),it=d.items[key]||{m:0,rounds:0};
-      it.m=Math.max(Number(it.m)||0,lessonCrowns(session.lesson,d));
+      var oldMastery=Math.max(Number(it.m)||0,lessonCrowns(session.lesson,d));
+      if(!session.review&&session.attempts>0&&session.wrong===0)oldMastery=Math.min(5,oldMastery+1);
+      else if(!session.review&&session.attempts>0&&session.correct/session.attempts<0.5)oldMastery=Math.max(0,oldMastery-1);
+      it.m=oldMastery;
       it.last=today();
       if(!getExamples(session.lesson).length)it.read=true;
       if(!session.review)it.rounds=(Number(it.rounds)||0)+1;
