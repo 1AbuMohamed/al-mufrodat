@@ -152,7 +152,7 @@
       try {
         ss.cancel();
         if (!arVoice()) {
-          note('Geen Arabische stem op dit apparaat — uitspraak kan afwijken. Eigen mp3’s in audio/letters werken beter.');
+          note('Geen Arabische systeemstem gevonden; ik probeer toch voor te lezen.');
         }
         // Eerst naam, daarna klank (niet tegelijk — anders hoor je niets)
         utter(L[i][1], 0.75, function () {
@@ -188,9 +188,10 @@
       var timer = setTimeout(function () {
         if (fileOk[i] !== true) {
           try { a.pause(); } catch (_e3) {}
-          fail();
+          // Timeout: probeer TTS, maar forceer geen permanente "geen bestand"
+          if (!failed) { failed = true; speakTts(i); }
         }
-      }, 600);
+      }, 2000);
       a.onplaying = function () {
         clearTimeout(timer);
         fileOk[i] = true;
