@@ -97,22 +97,8 @@
   function buildParsingTasks(n,seed) {
     var examples=getExamples(n),rows=theoryRows(n), tasks=[];
     // Alleen expliciete grammaticale functies uit de oorspronkelijke les.
-    rows.forEach(function(row,i){
-      var rule=plain(row.tekst), quoted=quoteTokens(rule);
-      var roles=['Moedaaf Ilaih','Moedaaf','Harf Djarr','Madjroer','Marfoe‘'];
-      var role=roles.find(function(r){return rule.toLowerCase().includes(r.toLowerCase());});
-      if(!role||!quoted.length)return;
-      examples.forEach(function(ex){
-        var words=splitArabic(ex.ar);
-        var target=quoted.find(function(q){return words.includes(q);});
-        if(!target)return;
-        // Alleen rechtstreeks benoemde woorden, niet een afgeleide naamval.
-        var direct=rule.match(/(?:woord|«[^»]+»)[^.!?]{0,90}(?:wordt|is|heet)\s+(?:de\s+|het\s+|een\s+)?(Moedaaf Ilaih|Moedaaf|Harf Djarr|Madjroer|Marfoe‘)/i);
-        if(!direct)return;
-        var named=direct[1], choices=seededShuffle([named].concat(roles.filter(function(r){return r!==named;}).slice(0,3)),seed+i);
-        tasks.push({type:'parse',example:ex,word:target,answer:named,options:choices,rule:rule});
-      });
-    });
+    // Geen automatische roltoekenning op basis van losse trefwoorden:
+    // een foutieve zinsontleding zou grammatica verkeerd aanleren.
     // In les 5 benoemt de bron de twee delen van de idafa expliciet.
     if(n===5){
       examples.forEach(function(ex){
