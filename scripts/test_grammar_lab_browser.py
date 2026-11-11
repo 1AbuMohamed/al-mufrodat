@@ -121,9 +121,12 @@ def main():
             assert page.locator(".lh-tile").count() == 24
             overview = page.evaluate("""() => Array.from({length:24},(_,i) => ({
                 lesson:i, steps:window.GrammarLabCore.buildTheoryCards(i).length,
-                grammar:window.GrammarLabCore.buildStudyTasks(i,919).filter(x=>['theory','parse','why'].includes(x.type)).length
+                grammar:window.GrammarLabCore.buildStudyTasks(i,919).filter(x=>['theory','parse','why'].includes(x.type)).length,
+                tasks:window.GrammarLabCore.buildStudyTasks(i,919).length,
+                parse:window.GrammarLabCore.buildParsingTasks(i,919).length
             }))""")
             assert all(item["steps"] >= 1 for item in overview), f"Niet alle lessen hebben theorie: {overview}"
+            print("Dekking: " + " | ".join(f"Les {i['lesson']}: {i['grammar']}/{i['tasks']} grammatica, {i['parse']} ontleding" for i in overview))
             assert not errors, "Browserfouten: " + ", ".join(errors)
             browser.close()
             print("OK: 24 theorielessen; geen paginafouten of ontbrekende oorspronkelijke lesdata.")
