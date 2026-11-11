@@ -9,6 +9,11 @@ on:
       - 'grammatica-test-lab.css'
       - 'lab_content.js'
       - 'scripts/test_lab_content.cjs'
+      - 'scripts/test_vocab_lab.cjs'
+      - 'grammatica-test-vocab.js'
+      - 'grammatica-test-vocab.css'
+      - 'vocab_words.js'
+      - 'grammatica-test-home.js'
       - 'lessons_v2.js'
       - 'scripts/test_grammar_lab.cjs'
       - 'scripts/test_grammar_lab_browser.py'
@@ -21,6 +26,11 @@ on:
       - 'grammatica-test-lab.css'
       - 'lab_content.js'
       - 'scripts/test_lab_content.cjs'
+      - 'scripts/test_vocab_lab.cjs'
+      - 'grammatica-test-vocab.js'
+      - 'grammatica-test-vocab.css'
+      - 'vocab_words.js'
+      - 'grammatica-test-home.js'
       - 'lessons_v2.js'
       - 'scripts/test_grammar_lab.cjs'
       - 'scripts/test_grammar_lab_browser.py'
@@ -40,6 +50,8 @@ jobs:
           node --check grammatica-test.js
           node scripts/test_grammar_lab.cjs
           node scripts/test_lab_content.cjs
+          node --check grammatica-test-vocab.js
+          node scripts/test_vocab_lab.cjs
       - name: Mobiele browsercontrole
         run: |
           python -m pip install --quiet playwright

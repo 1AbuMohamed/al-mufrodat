@@ -1,0 +1,83 @@
+/* Woordenschat-leerpad in het Grammatica Lab: schakelaar, woordenlijst en oefenrondes. */
+
+/* ---- schakelaar Grammatica / Woordenschat ---- */
+.lh-pathswitch { display:flex; gap:8px; padding:4px; margin:12px 16px 4px; border:2px solid var(--line); border-radius:var(--radius); background:var(--surface); }
+.lh-pswitch {
+  flex:1; min-height:44px; padding:0 12px; border:0; border-radius:12px; background:transparent; color:var(--muted);
+  font:800 14px var(--font-ui); letter-spacing:.06em; cursor:pointer;
+}
+.lh-pswitch:hover { background:var(--surface-2); color:var(--text); }
+.lh-pswitch.on { background:var(--blue); color:#fff; box-shadow:0 3px 0 var(--blue-shade); }
+.lh-pswitch:focus-visible { outline:3px solid var(--blue); outline-offset:2px; }
+.lh-banner.vocab { background:#CE82FF; box-shadow:0 4px 0 #A568CC; }
+
+/* ---- uitleg/woorden/oefening ---- */
+body.lh-skin .vl .vl-exit {
+  width:44px; height:44px; flex:none; display:grid; place-items:center; padding:0; border:0; border-radius:12px;
+  background:transparent; color:var(--muted); cursor:pointer;
+}
+body.lh-skin .vl .vl-exit:hover { background:var(--surface-2); color:var(--text); }
+body.lh-skin .vl .vl-exit:focus-visible { outline:3px solid var(--blue); outline-offset:2px; }
+body.lh-skin .vl .vl-exit .gd-icon { width:24px; height:24px; }
+.vl .gd-lesson-bar { display:flex; align-items:center; gap:12px; margin-bottom:24px; }
+.vl .gd-progress-wrap { flex:1 1 auto; min-width:0; }
+.vl .gd-progress-title { display:flex; justify-content:space-between; gap:8px; white-space:nowrap; margin-bottom:8px; font-size:13px; }
+.vl .gd-progress { height:16px; border-radius:8px; background:var(--line); overflow:hidden; }
+.vl .gd-progress span { display:block; height:100%; background:var(--green); border-radius:8px; transition:width .25s; }
+.vl .gd-bar-hearts { display:flex; gap:3px; align-items:center; flex:none; }
+.vl .gd-bar-hearts .gd-icon { width:19px; height:19px; }
+.vl .gd-bar-hearts .alive { color:#FF4B4B; } .vl .gd-bar-hearts .alive svg { fill:#FF4B4B; }
+.vl .gd-bar-hearts .lost { color:var(--line); }
+.vl .gd-options { display:grid; gap:12px; }
+.vl .gd-option { width:100%; min-height:56px; padding:12px 16px; text-align:left; cursor:pointer; }
+.vl .gd-option-ar { text-align:center; font-size:26px; }
+.vl .gd-option.correct { border-color:var(--green); color:var(--green); background:var(--surface); }
+.vl .gd-option.wrong { border-color:var(--red); color:var(--red-ink); }
+.vl .gd-option:disabled { cursor:default; }
+.vl .gd-nl-question {
+  margin:0 0 16px; padding:16px 18px; border:2px solid var(--line); border-radius:var(--radius);
+  background:var(--surface-2); font:700 20px/1.4 var(--font-ui); color:var(--text);
+}
+.vl .gd-ar-question { display:flex; align-items:center; justify-content:center; min-height:110px; margin:0 0 16px; font-size:44px; }
+.vl .gd-task-actions { margin-top:24px; }
+.vl .gd-feedback-sheet { position:fixed; left:0; right:0; bottom:0; z-index:20; padding:20px 16px calc(20px + env(safe-area-inset-bottom)); }
+.vl .gd-feedback-inner { width:min(100%,640px); margin:0 auto; display:grid; gap:8px; }
+.vl.gd-play { padding-bottom:280px; }
+
+/* woordenlijst */
+.vl-words { list-style:none; margin:16px 0 24px; padding:0; display:grid; gap:10px; }
+.vl-word {
+  display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px 16px;
+  border:2px solid var(--line); border-radius:var(--radius); background:var(--surface);
+}
+.vl-word.known { border-color:var(--green); }
+.vl-word-ar { font-family:var(--font-ar); font-size:28px; line-height:1.5; color:var(--text); }
+.vl-word-nl { color:var(--muted); font:700 16px var(--font-ui); text-align:right; }
+
+/* paren maken */
+.vl-match { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
+.vl-col { display:grid; gap:10px; align-content:start; }
+.vl-tile {
+  min-height:56px; padding:8px 10px; border:2px solid var(--line); border-bottom-width:4px; border-radius:var(--radius);
+  background:var(--surface); color:var(--text); font:700 16px var(--font-ui); cursor:pointer; text-align:center;
+}
+.vl-tile.ar { font-family:var(--font-ar); font-size:24px; }
+.vl-tile:hover:not(:disabled) { background:var(--surface-2); }
+.vl-tile.selected { border-color:var(--blue); background:var(--surface-2); color:var(--blue-ink); }
+.vl-tile.bad { border-color:var(--red); color:var(--red-ink); animation:vl-shake .3s; }
+.vl-tile.done { border-color:var(--line); opacity:.35; cursor:default; }
+@keyframes vl-shake { 25% { transform:translateX(-4px); } 75% { transform:translateX(4px); } }
+@media (prefers-reduced-motion: reduce) { .vl-tile.bad { animation:none; } }
+
+.vl .gd-option.wrong, .vl .gd-option.wrong.selected { border-color:var(--red); color:var(--red-ink); background:var(--surface); }
+.vl .gd-option.correct.selected { border-color:var(--green); color:var(--green); }
+.vl .gd-finish p, .vl .gd-support { color:var(--muted); }
+.vl .gd-finish h1 { color:var(--text); }
+.vl .gd-feedback-sheet .gd-correct-answer { font:800 20px var(--font-ui); margin:0; }
+.vl .gd-feedback-sheet.good .gd-correct-answer, .vl .gd-feedback-sheet.good p { color:var(--green); }
+.vl .gd-feedback-sheet.review p { color:var(--red-ink); }
+.vl .gd-feedback-sheet p.gd-arabic { font-size:30px; text-align:right; margin:0; }
+
+.vl .gd-result-grid span { background:var(--surface-2); color:var(--text); border:2px solid var(--line); }
+.vl .gd-result-grid strong { color:var(--text); }
+.vl .gd-result-grid small { color:var(--muted); }

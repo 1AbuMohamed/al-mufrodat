@@ -46,6 +46,8 @@
     catch (_e) { return false; }
   }
   function core() { return window.GrammarLabCore; }
+  function vocab() { return window.GrammarLabVocab && window.AL_VOCAB ? window.GrammarLabVocab : null; }
+  function isVocab() { return !!vocab() && settings().path === 'vocab'; }
   function data() { return window.GRAMMATICA || {}; }
 
   /* ---------- opslag ---------- */
@@ -55,7 +57,8 @@
       sound: s.sound !== false,
       goal: [20, 30, 50].indexOf(s.goal) >= 0 ? s.goal : 20,
       theme: ['dark', 'light'].indexOf(s.theme) >= 0 ? s.theme : 'system',
-      tab: s.tab === 'lessons' ? 'lessons' : 'path'
+      tab: s.tab === 'lessons' ? 'lessons' : 'path',
+      path: s.path === 'vocab' ? 'vocab' : 'grammatica'
     };
   }
   function saveSettings(patch) {
@@ -167,6 +170,7 @@
     return { list: list, weak: weak, cur: cur };
   }
   function statusText(o, isCur) {
+    if (o.kind === 'vocab') return o.state === 'mastered' ? 'alle woorden beheerst' : o.state === 'going' ? o.mastered + ' van ' + o.total + ' woorden beheerst' : (isCur ? 'huidige les' : 'nog niet gestart');
     if (o.read) return o.state === 'mastered' ? 'gelezen' : 'alleen theorie';
     if (o.weak) return 'herhalen';
     if (o.state === 'mastered') return 'beheerst, 5 van 5';
@@ -248,6 +252,13 @@
     return '<span class="lh-crowns" role="img" aria-label="Beheersing ' + m + ' van 5">' + out + '</span>';
   }
   function lessonCard(o) {
+    if (o.kind === 'vocab') {
+      return '<h3 class="lh-pop-title">Les ' + o.n + '</h3>' +
+        (o.sub ? '<p class="lh-pop-sub">' + esc(o.sub) + '</p>' : '') +
+        crowns(o.m) + '<p class="lh-pop-note">' + o.mastered + ' van ' + o.total + ' woorden beheerst</p>' +
+        '<div class="lh-pop-btns"><button type="button" class="btn btn-ghost" data-h="vwords" data-v="' + o.n + '">WOORDEN</button>' +
+        '<button type="button" class="btn btn-blue" data-h="vstart" data-v="' + o.n + '">' + (o.state === 'mastered' ? 'HERHAAL' : 'START') + '</button></div>';
+    }
     var btns;
     if (o.read) {
       btns = '<button type="button" class="btn btn-blue" data-h="theory" data-v="' + o.n + '">LEES LES</button>';
@@ -282,7 +293,7 @@
     }
     var bubble = '';
     if (isCur && ui.pop !== o.n) {
-      bubble = '<button type="button" class="lh-bubble" data-h="start" data-v="' + o.n + '" data-f="bubble">' +
+      bubble = '<button type="button" class="lh-bubble" data-h="' + (o.kind === 'vocab' ? 'vstart' : 'start') + '" data-v="' + o.n + '" data-f="bubble">' +
         (o.weak ? 'HERHAAL' : 'START') + '</button>';
     }
     var pop = ui.pop === o.n
@@ -336,14 +347,35 @@
     return '<div class="lh-tabs" role="tablist" aria-label="Weergave">' + tab('path', 'LEERPAD') + tab('lessons', 'LESSEN') + '</div>';
   }
 
+  function pathSwitch(s) {
+    if (!vocab()) return '';
+    function b(id, label) {
+      var on = (s.path === 'vocab' ? 'vocab' : 'grammatica') === id;
+      return '<button type="button" role="tab" class="lh-pswitch' + (on ? ' on' : '') + '" data-h="path" data-v="' + id + '" data-f="path-' + id +
+        '" aria-selected="' + on + '">' + label + '</button>';
+    }
+    return '<div class="lh-pathswitch" role="tablist" aria-label="Leerpad">' + b('grammatica', 'GRAMMATICA') + b('vocab', 'WOORDENSCHAT') + '</div>';
+  }
+  function vocabMain(s, pl) {
+    var cur = pl.cur, t = vocab().totals();
+    var banner = cur ? '<div class="lh-banner vocab"><div><small>LES ' + cur.n + '</small><strong>' +
+      esc(cur.sub || 'Woordenschat') + '</strong></div>' +
+      '<button type="button" class="btn btn-white" data-h="vwords" data-v="' + cur.n + '">WOORDEN</button></div>' : '';
+    return pathSwitch(s) + banner + tabs(s) +
+      '<div class="lh-hero"><h1>Woordenschat oefenen</h1><p class="lh-sub">' + t.mastered + ' van ' + t.total + ' woorden beheerst' +
+      (cur ? ' · Les ' + cur.n : '') + '</p>' +
+      '<button type="button" class="btn btn-blue lh-go" data-h="vgo" data-f="go">GA VERDER</button></div>' +
+      (s.tab === 'lessons' ? tilesHtml(pl) : pathHtml(pl));
+  }
   function leerMain(p, s, pl) {
+    if (isVocab()) return vocabMain(s, vocab().plan());
     var cur = pl.cur;
     var returning = hasProgress(p);
     var sub = returning && cur ? 'Les ' + cur.n + (cur.sub ? ' · ' + esc(cur.sub) : '') : 'Maak kennis met de Medina-grammatica';
     var banner = cur ? '<div class="lh-banner"><div><small>LES ' + cur.n + '</small><strong>' +
       esc(cur.sub || 'Medina-grammatica') + '</strong></div>' +
       '<button type="button" class="btn btn-white" data-h="theory" data-v="' + cur.n + '">THEORIE</button></div>' : '';
-    return banner + tabs(s) +
+    return pathSwitch(s) + banner + tabs(s) +
       '<div class="lh-hero"><h1>Laten we Arabisch leren!</h1><p class="lh-sub">' + sub + '</p>' +
       '<button type="button" class="btn btn-blue lh-go" data-h="go" data-f="go">GA VERDER</button></div>' +
       (s.tab === 'lessons' ? tilesHtml(pl) : pathHtml(pl));
@@ -456,7 +488,7 @@
     if (sec === 'leer' || sec === 'oefen') rail = '<aside class="lh-rail" aria-label="Overzicht">' + railCards(p, s, pl) + '</aside>';
     var sheet = '';
     if (ui.sheet != null) {
-      var o = pl.list.filter(function (x) { return x.n === ui.sheet; })[0];
+      var o = (isVocab() ? vocab().plan() : pl).list.filter(function (x) { return x.n === ui.sheet; })[0];
       if (o) sheet = '<div class="lh-scrim" data-h="close"></div><div class="lh-sheet" role="dialog" aria-modal="true" aria-label="Les ' + o.n +
         '">' + lessonCard(o) + '<button type="button" class="lh-sheetclose" data-h="close" aria-label="Sluiten">×</button></div>';
     }
@@ -567,6 +599,13 @@
         closeAll(); ui.sheet = n; ui.opener = 'tile-' + n; return rerender();
       case 'close':
         var op = ui.opener; closeAll(); ui.refocus = op; return rerender();
+      case 'path':
+        closeAll(); saveSettings({ path: v === 'vocab' ? 'vocab' : 'grammatica' }); ui.needScroll = true; ui.refocus = 'path-' + v;
+        window.scrollTo && window.scrollTo(0, 0);
+        return rerender();
+      case 'vstart': closeAll(); return vocab() && vocab().open(n, 'play');
+      case 'vwords': closeAll(); return vocab() && vocab().open(n, 'words');
+      case 'vgo': var vp = vocab() && vocab().plan(); closeAll(); return vp && vp.cur && vocab().open(vp.cur.n, 'play');
       case 'theory': return go(n, 'theory');
       case 'start': return go(n, 'start');
       case 'go': var pl = plan(p); return pl.cur && go(pl.cur.n, 'theory');

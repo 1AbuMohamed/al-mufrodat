@@ -1167,7 +1167,14 @@
       setLesson(n);
     },
     refresh:render,
-    isHome:function(){return session.stage==='overview';}
+    isHome:function(){return session.stage==='overview';},
+    // Woordenschat-rondes tellen mee voor XP, dagdoel en streak van het Lab.
+    addXp:function(xp,perfect){
+      xp=Math.max(0,Number(xp)||0);if(!xp)return;
+      var d=readSave();d.xp=(d.xp||0)+xp;d.daily[today()]=(d.daily[today()]||0)+xp;
+      if(perfect){d.perfectDay=d.perfectDay||{};d.perfectDay[today()]=true;}
+      refreshStreak(d);writeSave(d);
+    }
   };
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 
