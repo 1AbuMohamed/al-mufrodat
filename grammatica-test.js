@@ -17,6 +17,8 @@
     index: 0,
     theoryCards: [],
     theoryIndex: 0,
+    theorySeen: false,
+    hasWrong: false,
     chosen: -1,
     ordered: [],
     feedback: null,
@@ -136,6 +138,59 @@
     return result.slice(0,10);
   }
 
+
+  // Bouw de theoretische leerstappen uit de ongewijzigde Medina-bron.
+  // De inhoudsvolgorde en spelling (inclusief harakāt) blijven behouden.
+  function sourceTheoryItems(n) {
+    var all = (DATA[n] && DATA[n].inhoud) || [];
+    return all.filter(function(item,i){
+      var before=all[i-1],before2=all[i-2];
+      var isGlossary=function(x){return x && x.type==='tekst' && /^Woordenlijst van les\b/i.test(plain(x.tekst));};
+      if(isGlossary(item))return false;
+      if(item.type==='tabel' && isGlossary(before))return false;
+      if((item.type==='regel'||item.type==='voetnoot') && /^\s*\*/.test(plain(item.tekst)) && before && before.type==='tabel' && isGlossary(before2))return false;
+      return ['tekst','regel','voorbeeld','tabel','kop','voetnoot'].includes(item.type);
+    });
+  }
+  function buildTheoryCards(n){
+    var items=sourceTheoryItems(n);
+    if(!items.length)return [];
+    // Grotere lessen worden in maximaal tien leesbare stappen verdeeld.
+    var target=Math.max(3,Math.ceil(items.length/10)),cards=[],part=[];
+    items.forEach(function(item,i){
+      part.push(item);
+      var next=items[i+1];
+      var naturalEnd=item.type==='voorbeeld' || item.type==='regel' || item.type==='tabel';
+      if(part.length>=target && (naturalEnd || part.length>=target+2) && next){
+        cards.push(part);part=[];
+      }
+    });
+    if(part.length)cards.push(part);
+    return cards;
+  }
+  function renderTheorySource(item){
+    if(item.type==='voorbeeld'){
+      return '<div class="gd-theory-example"><div class="gd-arabic" lang="ar" dir="rtl">'+esc(item.ar||'')+'</div>'+
+        (item.nl?'<p class="gd-source-translation">'+esc(item.nl)+'</p>':'')+'</div>';
+    }
+    if(item.type==='tabel'){
+      var header=item.kop&&item.kop.length?'<thead><tr>'+item.kop.map(function(k){return '<th>'+esc(k)+'</th>';}).join('')+'</tr></thead>':'';
+      var body=(item.rijen||[]).map(function(row){
+        return '<tr>'+row.map(function(cell){
+          var ar=/[\u0600-\u06ff]/.test(plain(cell));
+          return '<td'+(ar?' lang="ar" dir="rtl" class="gd-table-ar"':'')+'>'+esc(cell)+'</td>';
+        }).join('')+'</tr>';
+      }).join('');
+      return '<div class="gd-theory-table-scroll" role="region" aria-label="Grammaticatabel" tabindex="0"><table class="gd-theory-table">'+header+'<tbody>'+body+'</tbody></table></div>';
+    }
+    var name=item.type==='kop'?'h2':'p';
+    return '<'+name+' class="gd-theory-text gd-source-'+item.type+'">'+esc(item.tekst||'')+'</'+name+'>';
+  }
+  function renderTheoryStep(){
+    var cards=session.theoryCards,idx=session.theoryIndex,items=cards[idx]||[];
+    return '<div class="gd-theory-step" aria-live="polite">'+items.map(renderTheorySource).join('')+'</div>';
+  }
+
   function splitArabic(text) { return plain(text).split(/\s+/).filter(Boolean); }
 
   function seededShuffle(input, seed) {
@@ -223,7 +278,9 @@
     theoryRows: theoryRows,
     buildTheoryTasks: buildTheoryTasks,
     buildParsingTasks: buildParsingTasks,
-    buildStudyTasks: buildStudyTasks
+    buildStudyTasks: buildStudyTasks,
+    buildTheoryCards: buildTheoryCards,
+    sourceTheoryItems: sourceTheoryItems
   };
 
   function storedScores() {
