@@ -19,6 +19,7 @@
     theoryIndex: 0,
     theorySeen: false,
     hasWrong: false,
+    retriedInRound: false,
     chosen: -1,
     ordered: [],
     feedback: null,
@@ -383,6 +384,7 @@
       // Mirror naar v2 structuur
       // Dagvoortgang, streak en beheersing (startpagina)
       if (window.GrammarLabHome) {
+        if(getExamples(session.lesson).length===0)window.GrammarLabHome.markRead(session.lesson);
         window.GrammarLabHome.record({
           lesson: session.lesson, correct: session.correct, total: session.tasks.length,
           xp: session.xp, review: session.review
@@ -678,6 +680,7 @@
     session.theoryCards = buildTheoryCards(session.lesson);
     session.theoryIndex = 0;
     session.theorySeen = false;
+    session.retriedInRound = false;
     session.index = 0;
     session.correct = 0;
     session.missed = [];
@@ -704,6 +707,10 @@
     session.feedback = { correct: correct };
     rememberGrammarOutcome(task, correct);
     if (correct) {
+      if(task.__retry){
+        var retryKey=taskIdentity(task);
+        session.missed=session.missed.filter(function(item){return taskIdentity(item)!==retryKey;});
+      }
       session.correct++;
       session.combo++;
       session.xp += 10;
@@ -720,6 +727,12 @@
     session.chosen = -1;
     session.ordered = [];
     session.feedback = null;
+    if(session.index>=session.tasks.length && !session.retriedInRound &&
+      session.missed.length && session.hearts>1 && !session.review){
+      var replay=session.missed.slice(0,3).map(function(task){return Object.assign({},task,{__retry:true});});
+      session.tasks=session.tasks.concat(replay);
+      session.retriedInRound=true;
+    }
     if (session.index >= session.tasks.length) {
       session.stage = 'done';
       storeScore();
@@ -786,6 +799,7 @@
       session.ordered = [];
       session.feedback = null;
       session.review = true;
+      session.retriedInRound = true;
       session.stage = 'play';
       return render();
     }
@@ -796,6 +810,35 @@
     app = document.getElementById('gd-app');
     if (!app) return;
     app.addEventListener('click', onClick);
+    document.addEventListener('keydown',function(event){
+      if(session.stage==='intro'){
+        if(event.key==='ArrowLeft'&&session.theoryIndex>0){
+          event.preventDefault();session.theoryIndex--;render();
+        }else if(event.key==='ArrowRight'&&session.theoryIndex<session.theoryCards.length-1){
+          event.preventDefault();session.theoryIndex++;render();
+        }
+        return;
+      }
+      if(session.stage!=='play'||event.altKey||event.ctrlKey||event.metaKey)return;
+      var target=event.target;
+      if(target&&target.matches&&target.matches('input,textarea,select,[contenteditable="true"]'))return;
+      if(session.feedback){
+        if(event.key==='Enter'){event.preventDefault();next();}
+        return;
+      }
+      var task=currentTask();
+      if(/^[1-4]$/.test(event.key)&&task&&
+         ['choice','theory','parse','why','gap'].includes(task.type)){
+        var index=Number(event.key)-1;
+        if(task.options&&index<task.options.length){
+          event.preventDefault();session.chosen=index;render();
+          var selected=app.querySelector('.gd-option[data-value="'+index+'"]');
+          if(selected)selected.focus({preventScroll:true});
+        }
+      }else if(event.key==='Enter'&&answered()&&task.type!=='reflect'){
+        event.preventDefault();check();
+      }
+    });
     if (window.GrammarLabHome) window.GrammarLabHome.mount(app, window.GrammarLabEngine);
     var requested = new URLSearchParams(location.search).get('les');
     if (requested !== null && /^\d+$/.test(requested) && Object.prototype.hasOwnProperty.call(DATA, requested)) {
