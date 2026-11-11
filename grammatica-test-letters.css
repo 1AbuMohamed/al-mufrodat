@@ -35,6 +35,22 @@
 .ll-opt-glyph { font-size:40px !important; }
 .ll-fb-ch { font-family:var(--font-ar); font-size:34px; vertical-align:middle; }
 
+/* luisterknop */
+.ll-speak {
+  display:inline-flex; align-items:center; justify-content:center; gap:8px; flex:none; min-width:48px; min-height:48px; padding:0 12px;
+  border:2px solid var(--line); border-bottom-width:4px; border-radius:var(--radius); background:var(--surface);
+  color:var(--blue-ink,var(--blue)); font:800 14px var(--font-ui); letter-spacing:.05em; text-transform:uppercase; cursor:pointer;
+}
+.ll-speak:hover { background:var(--surface-2); }
+.ll-speak:active { transform:translateY(2px); border-bottom-width:2px; }
+.ll-speak:focus-visible { outline:3px solid var(--blue); outline-offset:2px; }
+.ll-speak .gd-icon { width:24px; height:24px; }
+.ll-intro-head .ll-speak { margin-inline-start:auto; }
+.ll-prompt .ll-speak { margin-top:12px; }
+.gd-feedback-inner .ll-speak { margin:4px 0 12px; }
+.ll-note { margin:8px 0 0; min-height:0; color:var(--muted); font-size:14px; text-align:center; }
+.ll-note:empty { display:none; }
+
 @media (max-width:699px) {
   .ll-grid { grid-template-columns:repeat(4,1fr); gap:10px; padding:8px 16px 24px; }
   .ll-tile { min-height:100px; }

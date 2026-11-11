@@ -73,12 +73,70 @@
     var paths = {
       heart: '<path d="M20 5a5 5 0 0 0-7 0l-1 1-1-1a5 5 0 0 0-7 7l8 9 8-9a5 5 0 0 0 0-7Z"/>',
       crown: '<path d="m2 7 5 4 5-8 5 8 5-4-2 12H4Z"/>',
-      close: '<path d="M6 6l12 12M18 6 6 18"/>'
+      close: '<path d="M6 6l12 12M18 6 6 18"/>',
+      speaker: '<path d="M4 9v6h4l5 4V5L8 9Z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/>'
     };
     return '<svg class="gd-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (paths[name] || '') + '</svg>';
   }
   function ar(text, cls) {
     return '<span class="' + (cls || '') + '" lang="ar" dir="rtl">' + esc(text) + '</span>';
+  }
+
+  /* ---------- geluid ---------- */
+  // 1) Eigen opname: audio/letters/01.mp3 t/m 28.mp3 (als die bestaat).
+  // 2) Anders de Arabische stem van het toestel: eerst de naam van de letter, dan de klank (letter + fatha, bijv. بَ).
+  var FATHA = '\u064E';
+  var fileOk = {};
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function note(text) {
+    if (!app) return;
+    var els = app.querySelectorAll('.ll-note'), k;
+    for (k = 0; k < els.length; k++) els[k].textContent = text || '';
+  }
+  function arVoice() {
+    try {
+      var v = window.speechSynthesis.getVoices(), k;
+      for (k = 0; k < v.length; k++) if (/^ar/i.test(v[k].lang)) return v[k];
+    } catch (_e) {}
+    return null;
+  }
+  function say(text, rate) {
+    var u = new window.SpeechSynthesisUtterance(text), v = arVoice();
+    u.lang = v ? v.lang : 'ar-SA';
+    if (v) u.voice = v;
+    u.rate = rate || 0.8;
+    window.speechSynthesis.speak(u);
+  }
+  function speakTts(i) {
+    var ss = window.speechSynthesis;
+    if (!ss || !window.SpeechSynthesisUtterance) {
+      note('Dit apparaat kan geen geluid afspelen. Je kunt eigen opnames toevoegen in de map audio/letters.');
+      return;
+    }
+    try {
+      ss.cancel();
+      var voices = ss.getVoices();
+      if (voices.length && !arVoice()) note('Geen Arabische stem op dit apparaat: het geluid kan afwijken.');
+      say(L[i][1], 0.75);
+      if (i !== 0) say(L[i][0] + FATHA, 0.7);
+    } catch (_e) {}
+  }
+  function speakLetter(i) {
+    note('');
+    var failed = false;
+    function fail() { if (failed) return; failed = true; fileOk[i] = false; speakTts(i); }
+    if (fileOk[i] === false) return speakTts(i);
+    try {
+      var a = new Audio('audio/letters/' + pad(i + 1) + '.mp3');
+      a.onerror = fail;
+      a.onplaying = function () { fileOk[i] = true; };
+      var pr = a.play();
+      if (pr && pr.catch) pr.catch(function () { if (fileOk[i] !== true) fail(); });
+    } catch (_e) { fail(); }
+  }
+  function speakBtn(i, label) {
+    return '<button type="button" class="ll-speak" data-ll="speak" data-i="' + i + '" aria-label="Luister naar de letter ' + esc(L[i][2]) + '">' +
+      icon('speaker') + (label ? '<span>' + label + '</span>' : '') + '</button>';
   }
 
   /* ---------- voortgang en leerpad ---------- */
@@ -215,10 +273,10 @@
       '<div class="gd-progress-wrap"><div class="gd-progress-title"><strong>Arabisch alfabet</strong><span>' + S.focus.length + ' letters</span></div></div></div>' +
       '<div class="gd-card"><div class="gd-stage-tag">Eerst bekijken</div><h1>Maak kennis met deze letters</h1>' +
       '<p class="gd-support">Arabisch lees je van rechts naar links. Veel letters veranderen van vorm, afhankelijk van hun plek in het woord.</p>' +
-      '<ul class="ll-intro">' + S.focus.map(function (i) {
+      '<p class="ll-note" role="status" aria-live="polite"></p><ul class="ll-intro">' + S.focus.map(function (i) {
         return '<li class="ll-intro-item"><div class="ll-intro-head">' + ar(glyph(i), 'll-intro-ch') +
           '<div><strong>' + esc(L[i][2]) + '</strong> ' + ar(L[i][1], 'll-name-ar') + '<small>klinkt als: ' + esc(L[i][3]) + '</small>' +
-          (L[i][4] ? '' : '<small>Verbindt niet met de volgende letter.</small>') + '</div></div>' + formsRow(i) + '</li>';
+          (L[i][4] ? '' : '<small>Verbindt niet met de volgende letter.</small>') + '</div>' + speakBtn(i) + '</div>' + formsRow(i) + '</li>';
       }).join('') + '</ul>' +
       '<div class="gd-finish-actions"><button type="button" class="gd-primary gd-full" data-ll="start">Start oefenen</button></div></div></div>';
   }
@@ -226,11 +284,11 @@
     var q = current(), total = S.qs.length, pct = Math.round(100 * S.i / Math.max(1, total));
     var asGlyph = q.type === 'n2g' || q.type === 's2g', prompt, title;
     if (q.type === 'g2n') { title = 'Hoe heet deze letter?'; prompt = ar(glyph(q.i), 'll-big'); }
-    else if (q.type === 'n2g') { title = 'Welke letter is dit?'; prompt = '<div class="gd-nl-question">' + esc(L[q.i][2]) + '</div>'; }
+    else if (q.type === 'n2g') { title = 'Welke letter is dit?'; prompt = '<div class="gd-nl-question">' + esc(L[q.i][2]) + '</div>' + speakBtn(q.i); }
     else if (q.type === 'f2n') { title = 'Welke letter zit hierin?'; prompt = ar(q.form, 'll-big') + '<p class="ll-hint">Deze vorm staat aan het ' + q.pos + '.</p>'; }
-    else { title = 'Welke letter klinkt zo?'; prompt = '<div class="gd-nl-question">' + esc(L[q.i][3]) + '</div>'; }
+    else { title = 'Welke letter klinkt zo?'; prompt = '<div class="gd-nl-question">' + esc(L[q.i][3]) + '</div>' + speakBtn(q.i); }
     var fb = '';
-    var body = '<h2 class="gd-task-title">' + title + '</h2>' + '<div class="ll-prompt">' + prompt + '</div>' +
+    var body = '<h2 class="gd-task-title">' + title + '</h2>' + '<div class="ll-prompt">' + prompt + '</div><p class="ll-note" role="status" aria-live="polite"></p>' +
       '<div class="gd-options ll-options">' + q.opts.map(function (o, k) {
         var picked = S.chosen === k, mark = '';
         if (S.fb) mark = o === q.i ? ' correct' : (picked ? ' wrong' : '');
@@ -244,7 +302,7 @@
       fb = '<section class="gd-feedback gd-feedback-sheet ' + (good ? 'good' : 'review') + '" role="status" aria-live="assertive">' +
         '<div class="gd-feedback-inner"><strong>' + headline + '</strong>' +
         '<p class="gd-correct-answer"><span class="ll-fb-ch" lang="ar" dir="rtl">' + esc(glyph(q.i)) + '</span> ' + esc(L[q.i][2]) + '</p>' +
-        '<p>klinkt als: ' + esc(L[q.i][3]) + '</p>' +
+        '<p>klinkt als: ' + esc(L[q.i][3]) + '</p>' + speakBtn(q.i, 'Luister') +
         '<button type="button" class="gd-primary gd-full" data-ll="next">Verder</button></div></section>';
     }
     return '<div class="gd-shell gd-play vl ll">' + bar(Math.min(total, S.i + 1) + ' / ' + total, pct) +
@@ -308,6 +366,7 @@
       return;
     }
     e.stopPropagation();
+    if (a === 'speak') return speakLetter(Number(t.getAttribute('data-i')));
     if (a === 'exit') return leave();
     if (a === 'start') { S.screen = 'play'; S.qs = build(S.focus); S.i = 0; render(); return; }
     if (a === 'continue') {
