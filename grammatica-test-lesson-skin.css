@@ -33,7 +33,7 @@ body.lh-skin .gd-arabic { color:var(--text); }
 body.lh-skin .gd-dutch { color:var(--text); border-top:2px solid var(--line); font-size:16px; }
 body.lh-skin .gd-ar-question { background:var(--surface-2); border:2px solid var(--line); border-radius:var(--radius); }
 
-/* knoppen = .btn van de startpagina */
+/* knoppen */
 body.lh-skin .gd-primary, body.lh-skin .gd-soft, body.lh-skin .gd-secondary {
   --fill:var(--green-fill); --shade:var(--green-shade);
   min-height:var(--tap); padding:0 20px; border:2px solid var(--shade); border-radius:var(--radius);
@@ -111,3 +111,20 @@ body.lh-skin .gd-ar-question {
   border-color: var(--line) !important;
 }
 body.lh-skin .gd-ar-question.gd-arabic { color: var(--text) !important; }
+
+/* Lab-theoriekaarten leesbaar in donker én licht */
+body.lh-skin .gd-lab-kop { color: var(--text); }
+body.lh-skin .gd-lab-p { color: var(--text); }
+body.lh-skin .gd-lab-vb .gd-theory-example {
+  background: var(--surface-2);
+  border: 2px solid var(--line);
+  color: var(--text);
+}
+body.lh-skin .gd-lab-vb-nl { color: var(--muted); }
+body.lh-skin .gd-lab-tip {
+  background: rgba(28,176,246,.12);
+  border-color: rgba(28,176,246,.3);
+  color: var(--text);
+}
+body.lh-skin .gd-task-title { color: var(--text); }
+body.lh-skin .gd-task-lesson { color: var(--text); }
