@@ -156,6 +156,8 @@
     [14,'بَيْتُ الْإِمَامِ الْجَدِيْدُ.','بَيْتُ','Moedaaf','Hier is «بَيْتُ» de Moedaaf'],
     [15,'بَعْدَ الدَّرْسِ','بَعْدَ','Moedaaf','Ze zijn altijd Moedaaf'],
     [15,'قَبْلَ الصَّلَاةِ','قَبْلَ','Moedaaf','Ze zijn altijd Moedaaf'],
+    [16,'هٰؤُلَاءِ طُلَّابٌ جُدُدٌ، هُمْ صِغَارٌ.','طُلَّابٌ','rationeel','Rationele naamwoorden verwijzen naar mensen.','vorm'],
+    [16,'هٰذِهِ كُتُبٌ جَدِيْدَةٌ، هِيَ صَغِيْرَةٌ.','كُتُبٌ','irrationeel','Irrationele naamwoorden verwijzen naar dingen, dieren en concepten.','vorm'],
     [18,'هٰذَانِ كِتَابَانِ','كِتَابَانِ','tweevoud','drie grammaticale getallen'],
     [19,'ثَلَاثَةُ كُتُبٍ','ثَلَاثَةُ','Moedaaf','De getallen 3 t/m 10 worden als Moedaaf gebruikt'],
     [19,'ثَلَاثَةُ كُتُبٍ','كُتُبٍ','Moedaaf Ilaih','omdat het Moedaaf Ilaih is'],
@@ -164,7 +166,7 @@
     [23,'الْبَيْتُ → فِي الْبَيْتِ','فِي','Harf Djarr','voorzetsel (Harf Djarr)'],
     [23,'الْبَيْتُ → فِي الْبَيْتِ','الْبَيْتِ','Madjroer','naamwoord genitief (Madjroer)']
   ];
-  var ROLE_OPTIONS=['Moedaaf','Moedaaf Ilaih','Harf Djarr','Madjroer','Na‘t','Man‘oet','aanwijzend voornaamwoord','tweevoud','vrouwelijk','mannelijk','meervoud','enkelvoud','accusatief','genitief','bezittelijk voornaamwoord','partikel','bepaald','onbepaald'];
+  var ROLE_OPTIONS=['Moedaaf','Moedaaf Ilaih','Harf Djarr','Madjroer','Na‘t','Man‘oet','aanwijzend voornaamwoord','tweevoud','vrouwelijk','mannelijk','meervoud','enkelvoud','accusatief','genitief','bezittelijk voornaamwoord','partikel','bepaald','onbepaald','rationeel','irrationeel'];
   function buildParsingTasks(n,seed){
     var ex=((DATA[n]&&DATA[n].inhoud)||[]).filter(function(r){return r.type==='voorbeeld'&&plain(r.ar);});
     var rows=theoryRows(n);
@@ -219,7 +221,8 @@
     // Ten minste 70% grammatica waar de bron genoeg toetsbare regels geeft.
     var picked=grammar.slice(0,8),nonGrammar=seededShuffle(buildTasks(n),seed+83);
     var unique=new Set(picked.map(taskIdentity));
-    var limit=picked.length>=7?10:picked.length>=4?Math.min(8,picked.length+2):Math.min(6,picked.length+2);
+    var limit=picked.length>=7?10:picked.length>=4?Math.min(8,picked.length+2):
+      picked.length>=2?picked.length+1:Math.min(3,picked.length+2);
     for(var task of nonGrammar){
       if(picked.length>=limit)break;
       var k=taskIdentity(task);if(unique.has(k))continue;
