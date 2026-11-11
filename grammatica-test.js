@@ -487,8 +487,11 @@
     d.perfectDay=d.perfectDay||{};
     d.best=Math.max(Number(d.best)||0,Number(d.streak)||0);
     Object.keys(DATA).forEach(function(key){
-      var n=Number(key),current=d.items[key]||{m:0,rounds:0};
-      var level=lessonCrowns(n,d);
+      var n=Number(key),level=lessonCrowns(n,d),current=d.items[key];
+      // Maak geen lege lesrecords aan: het oude leerpad moet nieuwe lessen
+      // nog altijd als niet gestart tonen.
+      if(!current&&!level)return;
+      current=current||{m:0,rounds:0};
       if(level>Number(current.m||0))current.m=level;
       if(current.m>0 && !current.last)current.last=today();
       d.items[key]=current;
