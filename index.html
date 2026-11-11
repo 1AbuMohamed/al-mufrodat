@@ -4,12 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Al-Mufrodat — Medina Arabisch · Woordenschat, Grammatica & Dialogen</title>
-<meta name="theme-color" content="#F5F0E8">
+<meta name="theme-color" content="#131F24">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="icon" type="image/svg+xml" href="assets/al-mufrodat-logo.svg">
 <meta name="description" content="Leer Arabische woordenschat, grammatica en dialogen met de Medina-methode. Download de woordenlijsten per les als PDF.">
 <link rel="stylesheet" href="styles.css?v=20261110logo">
 <link rel="stylesheet" href="polish.css?v=20261110medina">
+<link rel="stylesheet" href="duo-theme.css?v=1">
+<script src="duo-theme-boot.js?v=1"></script>
 <script src="lessons_v2.js?v=20261110logo"></script>
 <script src="grammar_v2.js?v=20261110medina"></script>
 <script src="parse_data.js?v=20261110logo"></script>
@@ -17,6 +19,7 @@
 <script src="conv_duo.js?v=20261110logo"></script>
 <script src="vocab_duo.js?v=20261110medina"></script>
 <style>
+@import url("duo-theme.css?v=1");
 .duo-head{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin-bottom:18px}
 .duo-stat{flex:1;min-width:100px;background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
 .duo-stat .k{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
@@ -42,12 +45,9 @@
 .qcard .q-pic{margin:0 0 10px!important}
 .qcard .qar,.qcard .big-ar{font-size:clamp(26px,7vw,38px)!important;margin-top:8px!important}
 .gram-sec-title{display:none!important}
-
-/* Woordenlijsten zijn lesmateriaal, geen aparte grammatica-sectie. */
 .vocab-pdf-link{display:inline-flex;align-items:center;justify-content:center;min-height:40px;align-self:flex-end;margin:8px 6px 4px;padding:7px 14px;border:1px solid var(--line);border-radius:12px;color:var(--forest);background:var(--surface);font-size:13px;font-weight:750;text-decoration:none}
 .vocab-pdf-link:hover,.vocab-pdf-link:focus-visible{border-color:var(--gold);background:var(--forest-soft);outline-offset:2px}
 .sb-brand-mark[src]{display:block;width:40px;height:40px;object-fit:contain;border:0;background:transparent;border-radius:0}
-/* Study actions styled in polish.css */
 </style>
 </head>
 <body>
@@ -56,6 +56,7 @@
 <div id="app"><p style="padding:2rem;font-family:system-ui">Laden…</p></div>
 <div id="tabbar-host"></div>
 <div class="toast" id="toast"></div>
+<script src="duo-theme-boot.js?v=1"></script>
 <script>
 (async function(){
   const GOOD = 'app_core.js';
@@ -76,128 +77,10 @@
     if (!inline.includes('const BASE_WORDS') || !inline.includes('function render(')) {
       throw new Error('Lokaal applicatiescript ontbreekt of is ongeldig');
     }
-
-    inline = inline
-      .replace(/function renderBook\(\)\{\s*if\(window\.renderBook\) return window\.renderBook\(\);\s*return '';\s*\}/, 'function renderBookFallback(){ return ""; }')
-      .replace(/function renderBookLesson\(\)\{\s*if\(window\.renderBookLesson\) return window\.renderBookLesson\(\);\s*return '';\s*\}/, 'function renderBookLessonFallback(){ return ""; }')
-      .replace(/html=\(window\.renderBook\?window\.renderBook\(\):renderBook\(\)\);/g, 'html=(typeof window.renderBook==="function"?window.renderBook():renderBookFallback());')
-      .replace(/html=\(window\.renderBookLesson\?window\.renderBookLesson\(\):renderBookLesson\(\)\);/g, 'html=(typeof window.renderBookLesson==="function"?window.renderBookLesson():renderBookLessonFallback());');
-
-    inline = inline.replace(
-      /if\(m==='gram'\)\{\s*sbMenuState\.gram = true;\s*state\.path='grammar';\s*if\(state\.view==='book-lesson'\)\{\s*state\.view='book';\s*state\.bookLesson=null;\s*try\{history\.pushState\(null,'','#\/grammatica'\)\}\s*catch\(e\)\{\}\s*\} else if\(state\.view!=='book'\)\{\s*state\.view='book';\s*state\.bookLesson=null;\s*try\{history\.pushState\(null,'','#\/grammatica'\)\}\s*catch\(e\)\{\}\s*\}\s*render\(\);\s*\(document\.getElementById\("app"\)\|\|window\)\.scrollTop=0;\s*return;\s*\}/,
-      "if(m==='gram'){const willOpen=!sbMenuState.gram;sbMenuState.gram=willOpen;if(willOpen){state.path='grammar';if(state.view!=='book'&&state.view!=='book-lesson'){state.view='book';state.bookLesson=null;try{history.pushState(null,'','#/grammatica')}catch(e){}}}render();if(willOpen&&window.__scrollPageTop)window.__scrollPageTop();return;}if(m==='ex'){const willOpenEx=!sbMenuState.ex;sbMenuState.ex=willOpenEx;if(willOpenEx){state.path='exercises';if(state.view!=='ex'&&state.view!=='ex-lesson'){state.view='ex';state.exLesson=null;try{history.pushState(null,'','#/oefeningen')}catch(e){}}}render();if(willOpenEx&&window.__scrollPageTop)window.__scrollPageTop();return;}"
-    );
-
-    inline = inline
-      .replace(/const gramOpen = \(path === 'grammar'\) \|\| \(state\.view === 'book'\) \|\| \(state\.view === 'book-lesson'\) \|\| !!sbMenuState\.gram;/, "const gramOpen = !!sbMenuState.gram;\n  const exOpen = !!sbMenuState.ex;")
-      .replace(/const convOpen = \(path === 'conv'\) \|\| \(state\.view === 'conv'\) \|\| \(state\.view === 'conv-unit'\) \|\| !!sbMenuState\.conv;/, "const convOpen = !!sbMenuState.conv;");
-
-    inline = inline.replace(/let sbMenuState = \{ gram: false, conv: false \};/, "let sbMenuState = { gram: false, conv: false, ex: false };\nwindow.sbMenuState = sbMenuState;");
-    inline = inline.replace(/else if\(act==='open-book'\)\{\s*state\.path='grammar';/, "else if(act==='open-book'){\n    sbMenuState.gram=true;\n    state.path='grammar';");
-    inline = inline.replace(/\(document\.getElementById\("app"\)\|\|window\)\.scrollTop=0/g, "(window.__scrollPageTop?window.__scrollPageTop():window.scrollTo(0,0))");
-    inline = inline.replace(/if\(\['book','book-lesson'\]\.includes\(state\.view\)\)return 'grammar';/, "if(['book','book-lesson'].includes(state.view))return 'grammar';\n  if(['ex','ex-lesson'].includes(state.view))return 'exercises';");
-    inline = inline.replace(/else if\(state\.view==='book-lesson'\)html=\(typeof window\.renderBookLesson===\"function\"\?window\.renderBookLesson\(\):renderBookLessonFallback\(\)\);/, "else if(state.view==='book-lesson')html=(typeof window.renderBookLesson===\"function\"?window.renderBookLesson():renderBookLessonFallback());\n  else if(state.view==='ex')html=(typeof window.renderExercises===\"function\"?window.renderExercises():'<p class=\"empty\">Oefeningen laden…</p>');\n  else if(state.view==='ex-lesson')html=(typeof window.renderExerciseLesson===\"function\"?window.renderExerciseLesson():'<p class=\"empty\">Oefening laden…</p>');");
-    // Compacte labels voor de mobiele hoofdtabbalk.
-    inline = inline.replace("{v:'vocab',l:'Woorden',", "{v:'vocab',l:'Woord',")
-      .replace("{v:'book',l:'Grammatica',", "{v:'book',l:'Gram.',")
-      .replace("{v:'conv',l:'Dialogen',", "{v:'conv',l:'Praat',");
-    inline = inline.replace(/book: 'Grammatica · Medina-boek',/, "book: 'Grammatica · Medina-boek',\n    ex: 'Oefeningen',\n    'ex-lesson': 'Oefeningen',");
-
-    inline = inline.replace(
-      /(<button type="button" class="sbn sbn-course \$\{path==='conv'\?'active':''\}" data-act="sb-menu" data-menu="conv"[\s\S]*?<\/div>\s*)\n\n\n\s*<button type="button" class="sbn \$\{state\.view==='words'/,
-      "$1\n\n      <button type=\"button\" class=\"sbn sbn-course ${path==='exercises'?'active':''}\" data-act=\"sb-menu\" data-menu=\"ex\" aria-expanded=\"${exOpen}\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\"><path d=\"M9 11l3 3L22 4\"/><path d=\"M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11\"/></svg>\n        <span>Oefeningen</span>\n        <span class=\"sb-chevron\">⌄</span>\n      </button>\n      <div class=\"sb-course-menu ${exOpen?'open':''}\">\n        ${exLinks}\n      </div>\n\n      <button type=\"button\" class=\"sbn ${state.view==='words'"
-    );
-
-    inline = inline.replace(
-      /const convLinks = Object\.entries\(CONVERSATIONS\)\.map\(\(\[u, c\]\) => \{[\s\S]*?\}\)\.join\(''\);/,
-      "const convLinks = Object.entries(CONVERSATIONS).map(([u, c]) => {\n    const active = state.view==='conv-unit' && String(state.convUnit)===String(u);\n    const num = String(u).padStart(2,'0');\n    return `<button type=\"button\" class=\"${active?'active':''}\" data-act=\"open-conv\" data-u=\"${u}\"><span>${num}</span>${esc(c.titleNl)}</button>`;\n  }).join('');\n\n  const exListNums = [];\n  for (let i = 1; i <= 23; i++) exListNums.push(i);\n  const exLinks = exListNums.map(n => {\n    const active = state.view==='ex-lesson' && Number(state.exLesson)===Number(n);\n    const num = String(n).padStart(2,'0');\n    const isDone = (window.EX2 && window.EX2.lessonDone) ? window.EX2.lessonDone(n) : false;\n    return `<button type=\"button\" class=\"${active?'active':''}\" data-act=\"open-ex\" data-l=\"${n}\"><span>${num}</span>Les ${n}${isDone?' ✓':''}</button>`;\n  }).join('');"
-    );
-
-    inline = inline.replace(/else if\(act==='open-book'\)\{/, "else if(act==='open-ex'){\n    const n = parseInt(btn.dataset.l, 10);\n    if(isNaN(n)) return;\n    sbMenuState.ex = true;\n    state.path = 'exercises';\n    state.view = 'ex-lesson';\n    state.exLesson = n;\n    try{history.pushState(null,'','#/oefeningen/'+n)}catch(e){}\n    render();\n    if(window.__scrollPageTop) window.__scrollPageTop();\n    return;\n  }\n  else if(act==='open-book'){");
-
-    inline = inline.replace(
-      /else if\(v==='book'\)\{state\.path='grammar';state\.view='book';state\.bookLesson=null;state\.bookTab='uitleg';if\(state\.g2\)state\.g2\.view='map';sbMenuState\.gram=true;try\{history\.pushState\(null,'','#\/grammatica'\)\}catch\(e\)\{\}\}/,
-      "else if(v==='book'){state.path='grammar';state.view='book';state.bookLesson=null;state.bookTab='uitleg';if(state.g2)state.g2.view='map';sbMenuState.gram=true;try{history.pushState(null,'','#/grammatica')}catch(e){}}\n    else if(v==='ex'||v==='oefeningen'){state.path='exercises';state.view='ex';state.exLesson=null;sbMenuState.ex=true;try{history.pushState(null,'','#/oefeningen')}catch(e){}}"
-    );
-
-    // De oude globale declaraties overschreven eerder de modernere renderers
-    // uit conv_duo.js en vocab_duo.js. Bewaar ze uitsluitend als fallback.
-    inline = inline.replace(/function renderConv\(\)\{/, 'function renderConvLegacy(){');
-    inline = inline.replace(/function renderConvUnit\(\)\{/, 'function renderConvUnitLegacy(){');
-    inline = inline.replace(/function renderFlash\(\)\{/, 'function renderFlashLegacy(){');
-
-    inline = inline.replace(/else if\(state\.view==='conv'\)html=renderConv\(\);/, "else if(state.view==='conv')html=(typeof window.renderConv===\"function\"?window.renderConv():renderConvLegacy());");
-    inline = inline.replace(/else if\(state\.view==='conv-unit'\)html=renderConvUnit\(\);/, "else if(state.view==='conv-unit')html=(typeof window.renderConvUnit===\"function\"?window.renderConvUnit():renderConvUnitLegacy());");
-    inline = inline.replace(/else if\(state\.view==='flash'\)html=renderFlash\(\);/, "else if(state.view==='flash')html=(typeof window.renderFlash===\"function\"?window.renderFlash():renderFlashLegacy());");
-    inline = inline.replace(/state\.convUnit=String\(btn\.dataset\.u\|\|''\);state\.view='conv-unit';state\.convOpen=\{\};state\.convShowAll=true;state\.convDi=0;state\.path='conv';/, "state.convUnit=String(btn.dataset.u||'');state.view='conv-unit';state.convOpen={};state.convShowAll=false;state.convDi=0;state.path='conv';");
-    inline = inline.replace(/<div class="hint">\$\{f\?'Tik of druk Spatie om terug te draaien':'Tik of druk Spatie voor antwoord'\}<\/div>/g, '');
-    inline = inline.replace(/<div class="vl-translit" style="margin-bottom:12px">Transcriptie-hint: <strong>\$\{esc\(w\.translit\|\|''\)\}<\/strong><\/div>/g, '');
-    inline = inline.replace(/<div class="translit">\$\{esc\(w\.translit\|\|''\)\}<\/div>/g, '');
-    inline = inline.replace(/ · \$\{esc\(w\.translit\|\|''\)\}/g, '');
-    inline = inline.replace(/\$\{esc\(w\.translit\|\|''\)\} · /g, '');
-
-    // flash-next op laatste kaart → quiz
-    inline = inline.replace(
-      /else if\(act==='flash-next'\)\{\s*state\.idx=Math\.min\(state\.pool\.length-1,state\.idx\+1\);state\.flipped=false;render\(\);\s*\}/,
-      "else if(act==='flash-next'){if(state.idx>=state.pool.length-1){startLearn(String(state.lesson));}else{state.idx=Math.min(state.pool.length-1,state.idx+1);state.flipped=false;render();}}"
-    );
-
-    // Grammatica boven Woordenschat
-    inline = inline.replace(
-      /(<button type="button" class="sbn \$\{path==='vocab'&&state\.view!=='words'&&state\.view!=='home'\?'active':''\}" data-act="nav" data-v="vocab">[\s\S]*?<\/button>\s*)\n\s*(<button type="button" class="sbn sbn-course \$\{path==='grammar'\?'active':''\}" data-act="sb-menu" data-menu="gram"[\s\S]*?<\/div>\s*)/,
-      "$2\n\n      $1"
-    );
-
-    // Het nieuwe logo vervangt het kleine tekstsymbool in de zijbalk.
-    inline = inline.replace(
-      '<div class="sb-brand-mark" lang="ar">م</div>',
-      '<img class="sb-brand-mark" src="assets/al-mufrodat-logo.svg" alt="" width="40" height="40" loading="eager">'
-    );
-
     const s = document.createElement('script');
     s.textContent = inline;
     document.body.appendChild(s);
-
-    window.__duoXP = (function(){ try { return parseInt(localStorage.getItem('alm_xp')||'0',10)||0; } catch(e){ return 0; } })();
-    window.__duoCombo = 0;
-
-    window.renderVocabHub = function renderVocabHub(){
-      const total = ALL.length, m = mastered(ALL), pct = total ? Math.round(100 * m / total) : 0;
-      const st = (typeof streak!=='undefined' && streak.last) ? (function(){
-        const t = new Date().toISOString().slice(0,10);
-        const y = new Date(Date.now()-864e5).toISOString().slice(0,10);
-        return (streak.last===t||streak.last===y) ? (streak.count||0) : 0;
-      })() : 0;
-      const xp = window.__duoXP||0;
-      let path = '';
-      lessonNums().forEach(function(n, i){
-        const ws = wordsFor(n);
-        const mm = mastered(ws);
-        const p = ws.length ? Math.round(100 * mm / ws.length) : 0;
-        const stt = p >= 100 ? 'done' : p > 0 ? 'busy' : '';
-        const title = VOCAB_TITLES[n] || (LESSON_META[n] || ['', ''])[0];
-        const meta = p >= 100 ? ('★ ' + mm + '/' + ws.length) : (mm + '/' + ws.length + ' · ' + p + '%');
-        const cta = p >= 100 ? 'Herhaal' : (p > 0 ? 'Ga verder' : 'Start');
-        if (i > 0) path += '<div class="duo-connector"></div>';
-        path += '<div class="duo-node-wrap ' + stt + '"><button type="button" class="duo-node ' + stt + '" data-act="start-flash" data-l="' + n + '"><span class="duo-bubble">' + (p>=100?'✓':String(n)) + '</span><span class="duo-node-body"><strong>Les ' + n + (title?' · '+esc(title):'') + '</strong><span>' + meta + '</span><span class="duo-mini-progress" role="progressbar" aria-label="Beheersing les ' + n + '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + p + '"><i style="width:' + p + '%"></i></span></span><span class="duo-node-cta">' + cta + ' ›</span></button>';
-        // Duidelijke leerroute per les: eerst kaarten, daarna actief ophalen.
-        path += '<div class="duo-lesson-actions"><button type="button" class="duo-practice-btn" data-act="start-learn" data-l="' + n + '" aria-label="Oefen de woordenschat van les ' + n + '">Oefen woorden</button>';
-        // 11 en 24 bevatten in de originele grammaticadata geen losse woordenlijst.
-        if (n >= 1 && n <= 23 && n !== 11) {
-          const fileNumber = String(n).padStart(2, '0');
-          path += '<a class="vocab-pdf-link" href="pdf/woordenlijst-les-' + fileNumber + '.pdf" download="Al-Mufrodat-woordenlijst-les-' + fileNumber + '.pdf" aria-label="Download woordenlijst van les ' + n + ' als PDF">↓ Woordenlijst PDF</a>';
-        }
-        path += '</div></div>';
-      });
-      return '<div class="desktop-page"><div style="margin-bottom:8px"><h1 style="font-size:24px;font-weight:800;margin:0 0 4px">Woordenschat</h1><p class="vocab-study-hint">Bekijk kaarten, oefen woorden en herhaal later nog eens.</p></div><div class="duo-head"><div class="duo-stat"><span class="k">Beheerst</span><span class="v">' + m + '/' + total + '</span></div><div class="duo-stat gold"><span class="k">Voortgang</span><span class="v">' + pct + '%</span></div><div class="duo-stat fire"><span class="k">Reeks</span><span class="v">🔥 ' + st + '</span></div><div class="duo-stat"><span class="k">XP</span><span class="v">' + xp + '</span></div></div><div class="duo-tools"><button class="btn btn-sm btn-primary" data-act="start-flash" data-l="all">Kaarten</button><button class="btn btn-sm btn-secondary" data-act="start-learn" data-l="all">Quiz</button><span class="grow"></span><button class="btn btn-secondary btn-sm" data-act="nav" data-v="words">Lijst</button></div><div class="duo-path">' + path + '</div></div>';
-    };
-    try { renderVocabHub = window.renderVocabHub; } catch (e) {}
-
-    if (typeof render === 'function' && window.state) {
-      // Bij asynchroon laden kan DOMContentLoaded al voorbij zijn.
-      // Pas een gedeelde grammaticalink daarom nogmaals expliciet toe.
-      if (!(typeof window.__applyGrammarDeepLink === 'function' && window.__applyGrammarDeepLink())) render();
-    }
+    if (typeof render === 'function') render();
   } catch (err) {
     console.error(err);
     document.getElementById('app').innerHTML = '<div style="padding:2rem;font-family:system-ui"><h1>Laden mislukt</h1><p>' + String(err.message || err) + '</p></div>';
