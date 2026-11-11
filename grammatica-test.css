@@ -321,3 +321,15 @@ a { color: var(--forest); }
 @keyframes gd-bob{50%{transform:translate(-50%,-4px)}}
 @media(max-width:380px){.gd-node{width:90px;height:90px}.gd-node.current,.gd-node.active{width:101px;height:101px}.gd-path-row:not(:last-child):after{top:87px}.gd-path-row.offset-3{transform:translateX(14%)}}
 @media(prefers-reduced-motion:reduce){.gd-start-bubble,.gd-feedback-sheet{animation:none}.gd-node,.gd-primary,.gd-option{transition:none}}
+
+
+/* Theorie en zinsontleding: aandacht voor originele bronregels */
+.gd-theory-reading{max-height:none;overflow:visible;display:grid;gap:12px}
+.gd-theory-reading .gd-source-rule{margin:0;padding:15px 17px;background:#fff;border:1px solid #d4e4d9;border-inline-start:5px solid #267858;border-radius:15px;line-height:1.7;font-size:16px}
+.gd-theory-question{font-size:clamp(17px,4.4vw,22px);font-weight:750;line-height:1.8;background:#edf6ef;padding:18px;border-radius:16px;overflow-wrap:anywhere}
+.gd-parse-word{background:#ffe19a;color:#442d0c;border-radius:9px;padding:1px 6px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.gd-theory-explanation{padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.75);font-size:15px;line-height:1.65;margin:12px 0}
+.gd-task .gd-ar-question{line-height:2.15}
+.gd-task .gd-options{gap:11px}
+.gd-task .gd-option{min-height:54px;text-align:start}
+@media(prefers-reduced-motion:reduce){.gd-parse-word{transition:none}}
