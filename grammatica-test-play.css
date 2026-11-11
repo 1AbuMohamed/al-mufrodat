@@ -23,25 +23,52 @@
 .gd-parse-train { margin-top: 10px; }
 
 /* Drag-and-drop zinsontleding */
-.gd-psentence { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 4px 0 14px; }
+.gd-psentence { display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch; gap: 10px; margin: 4px 0 14px; }
 .gd-pslot {
-  display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 94px; padding: 12px 10px 10px;
-  border: 2px solid var(--line, #d5ddd7); border-bottom-width: 4px; border-radius: 16px;
-  background: var(--surface, #fff); color: var(--text, #222); cursor: pointer; font: inherit;
+  display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 96px; max-width: 100%;
+  padding: 10px 10px 10px; border: 2px solid var(--line, #d5ddd7); border-bottom-width: 4px; border-radius: 16px;
+  background: var(--surface, #fff); color: var(--text, #222);
+}
+.gd-pslot-hit {
+  display: flex; flex-direction: column; align-items: center; gap: 5px; width: 100%; padding: 0; border: 0;
+  background: transparent; color: inherit; font: inherit; cursor: pointer;
 }
 .gd-pslot.focus, .gd-pslot.over { border-color: var(--blue, #1cb0f6); background: var(--surface-2, #ddf4ff); }
-.gd-pword { font-family: var(--font-ar, "Amiri"), serif; font-size: clamp(28px, 7vw, 40px); line-height: 1.6; font-weight: 700; }
+.gd-pword { font-family: var(--font-ar, "Amiri"), serif; font-size: clamp(28px, 7vw, 40px); line-height: 1.55; font-weight: 700; }
+.gd-pcount {
+  font-size: 11px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
+  padding: 2px 7px; border-radius: 999px; background: var(--surface-2, #ddf4ff); color: var(--blue-ink, #1479b8);
+}
 .gd-pdrop {
   min-height: 28px; padding: 4px 10px; border-radius: 10px; border: 2px dashed var(--line, #c8d2cb);
   font-size: 13px; font-weight: 800; color: var(--muted, #6f7775); display: inline-flex; align-items: center;
 }
-.gd-pdrop i { font-style: normal; opacity: .75; font-weight: 700; }
-.gd-pslot.filled .gd-pdrop { border-style: solid; border-color: var(--blue, #1cb0f6); background: var(--surface-2, #ddf4ff); color: var(--blue-ink, #1479b8); }
+.gd-pdrop i { font-style: normal; opacity: .82; font-weight: 700; }
+.gd-pchips { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; max-width: 100%; }
+.gd-pchip {
+  min-height: 28px; padding: 4px 9px; border-radius: 10px; border: 2px solid var(--blue, #1cb0f6);
+  background: var(--surface-2, #ddf4ff); color: var(--blue-ink, #1479b8);
+  font: 800 13px var(--font-ui, sans-serif); cursor: pointer; display: inline-flex; align-items: center; gap: 4px;
+}
+.gd-pchip.ok { border-color: var(--green, #58cc02); background: var(--lab-ok-bg, #d7ffb8); color: var(--lab-ok-ink, #3f8f00); }
+.gd-pchip.bad { border-color: var(--red, #ff4b4b); background: var(--lab-bad-bg, #ffdfe0); color: var(--lab-bad-ink, #d33838); text-decoration: line-through; }
 .gd-pslot.ok { border-color: var(--green, #58cc02); }
-.gd-pslot.ok .gd-pdrop { border-color: var(--green, #58cc02); background: var(--lab-ok-bg, #d7ffb8); color: var(--lab-ok-ink, #3f8f00); }
 .gd-pslot.bad { border-color: var(--red, #ff4b4b); }
-.gd-pslot.bad .gd-pdrop { border-color: var(--red, #ff4b4b); background: var(--lab-bad-bg, #ffdfe0); color: var(--lab-bad-ink, #d33838); text-decoration: line-through; }
-.gd-pfix { font-size: 13px; font-weight: 800; color: var(--lab-ok-ink, #3f8f00); }
+.gd-pfix { font-size: 13px; font-weight: 800; color: var(--lab-ok-ink, #3f8f00); text-align: center; }
+
+/* Gekoppelde woordgroep ("2 woorden samen") */
+.gd-pgroup {
+  display: inline-flex; flex-direction: column; align-items: stretch; gap: 8px; max-width: 100%;
+  padding: 8px; border-radius: 18px; border: 2px dashed var(--blue, #1cb0f6);
+  background: rgba(28, 176, 246, .06);
+}
+.gd-pgroup-words { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.gd-gslot {
+  flex-direction: row; flex-wrap: wrap; justify-content: center; padding: 7px 12px; min-width: 0; border-radius: 12px;
+}
+.gd-gslot .gd-pslot-hit { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 8px; width: auto; }
+.gd-glabel { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; color: var(--blue-ink, #1479b8); }
+.gd-psol-group { border-color: var(--blue, #1cb0f6) !important; }
 
 .gd-pbank { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 12px; }
 .gd-plab {

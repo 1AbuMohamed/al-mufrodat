@@ -929,7 +929,9 @@
       '<div class="gd-feedback-inner"><strong>'+headline+'</strong>'+
       (session.combo>=3?'<span class="gd-combo">'+session.combo+'× combo</span>':'')+
       (answer?'<p class="gd-correct-answer">'+(task.rich?rich(answer):esc(answer))+'</p>':'')+
-      (task.type==='zinsontleding'&&P()?P().solution(task)+(task.nl?'<p class="gd-parse-nl">'+esc(task.nl)+'</p>':''):
+      (task.type==='zinsontleding'&&P()?P().solution(task)+
+        (task.nl?'<p class="gd-parse-nl">'+esc(task.nl)+'</p>':'')+
+        ((task.groups&&task.groups.length)?'<p class="gd-theory-explanation">'+esc(task.groups.map(function(g){return g.why;}).join(' '))+'</p>':''):
         (task.example?'<p class="gd-arabic" lang="ar" dir="rtl">'+esc(task.example.ar)+'</p>'+
         (plain(task.example.nl)&&plain(task.example.nl)!=='-'?'<p>'+esc(task.example.nl)+'</p>':''):''))+
       (termNote?'<p class="gd-theory-explanation">'+esc(termNote)+'</p>':'')+
@@ -1153,9 +1155,10 @@
   }
   function assignParse(key,slot){
     var t=currentTask();
-    if(!t||t.type!=='zinsontleding'||session.feedback)return;
-    session.parse[slot]=key;session.parsePick=null;session.parseFocus=-1;session.parseTip=key;
-    if(P()&&P().fastOn()&&answered())return check();
+    if(!t||t.type!=='zinsontleding'||session.feedback||!P())return;
+    P().applySlot(t,session.parse,slot,key);
+    session.parsePick=null;session.parseFocus=-1;session.parseTip=key;
+    if(P().fastOn()&&answered())return check();
     render();
   }
   function onClick(event){
@@ -1199,14 +1202,18 @@
     if(session.stage==='play'&&!session.feedback){
       if(action==='plab'){
         var pk=node.dataset.value;
-        if(session.parseFocus>=0)return assignParse(pk,session.parseFocus);
+        if(session.parseFocus!==-1&&session.parseFocus!==null&&session.parseFocus!==undefined)return assignParse(pk,session.parseFocus);
         session.parsePick=session.parsePick===pk?null:pk;session.parseTip=pk;return render();
       }
       if(action==='pslot'){
-        var si=Number(node.dataset.value);
+        var rawSlot=node.dataset.value;
+        var si=/^\d+$/.test(rawSlot)?Number(rawSlot):rawSlot;
         if(session.parsePick)return assignParse(session.parsePick,si);
-        if(session.parse[si]){delete session.parse[si];return render();}
-        session.parseFocus=session.parseFocus===si?-1:si;return render();
+        session.parseFocus=String(session.parseFocus)===String(si)?-1:si;return render();
+      }
+      if(action==='punset'&&P()){
+        P().unsetSlot(session.parse,node.dataset.slot,node.dataset.role);
+        return render();
       }
       if(action==='select'){
         session.chosen=Number(node.dataset.value);

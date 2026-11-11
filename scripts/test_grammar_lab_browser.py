@@ -50,8 +50,12 @@ def answer(page, task):
         page.locator(f'[data-action="word"][data-value="{task["wordIndex"]}"]').click()
     elif kind == "zinsontleding":
         for i, tok in enumerate(task["tokens"]):
-            page.locator(f'[data-action="plab"][data-value="{tok["r"]}"]').click()
-            page.locator(f'[data-action="pslot"][data-value="{i}"]').click()
+            for role in (tok.get("roles") or [tok["r"]]):
+                page.locator(f'[data-action="plab"][data-value="{role}"]').click()
+                page.locator(f'[data-action="pslot"][data-value="{i}"]').click()
+        for grp in task.get("groups") or []:
+            page.locator(f'[data-action="plab"][data-value="{grp["r"]}"]').click()
+            page.locator(f'[data-action="pslot"][data-value="{grp["id"]}"]').click()
     else:
         raise AssertionError(f"Onbekend opdrachttype: {kind}")
     page.locator('[data-action="check"]').click()
@@ -64,6 +68,8 @@ def test_parse_drag_and_fast(page, base_url):
     page.locator('[data-action="parse-train"]').click()
     tasks = page.evaluate("window.GrammarLabEngine.tasks()")
     assert len(tasks) == 10 and all(t["type"] == "zinsontleding" for t in tasks), "Verwacht 10 zinsontleding-vragen"
+    assert any(any(len(tok.get("roles", [])) >= 2 for tok in t["tokens"]) for t in tasks), "Verwacht woorden met 2+ rollen"
+    assert any(len(t.get("groups", [])) >= 1 for t in tasks), "Verwacht 2-woordengroepen (samen)"
 
     chips_text = " ".join(page.locator(".gd-plab").all_inner_texts())
     for expected in ("moebtada", "khabar"):
@@ -71,7 +77,8 @@ def test_parse_drag_and_fast(page, base_url):
 
     # Drag-and-drop via pointer events (.gd-plab -> .gd-pslot)
     first_tok = tasks[0]["tokens"][0]
-    chip_box = page.locator(f'.gd-plab[data-value="{first_tok["r"]}"]').bounding_box()
+    first_roles = first_tok.get("roles") or [first_tok["r"]]
+    chip_box = page.locator(f'.gd-plab[data-value="{first_roles[0]}"]').bounding_box()
     slot_box = page.locator('.gd-pslot[data-drop="0"]').bounding_box()
     cx, cy = chip_box["x"] + chip_box["width"] / 2, chip_box["y"] + chip_box["height"] / 2
     sx, sy = slot_box["x"] + slot_box["width"] / 2, slot_box["y"] + slot_box["height"] / 2
@@ -79,17 +86,24 @@ def test_parse_drag_and_fast(page, base_url):
     page.mouse.down()
     page.mouse.move(sx, sy, steps=8)
     page.mouse.up()
-    assert page.locator('.gd-pslot[data-drop="0"] .gd-pdrop').inner_text() != "sleep hierheen"
+    assert page.locator('.gd-pslot[data-drop="0"] .gd-pchip').count() == 1
     assert page.locator(".gd-ptip strong").inner_text() != ""
 
-    # Snelle modus aan + resterende woorden -> direct feedback + automatisch naar opdracht 2
+    # Snelle modus aan + resterende rollen en groepen -> direct feedback + automatisch naar opdracht 2
     page.locator('[data-action="fast"]').click()
     assert page.evaluate("window.GrammarLabParse.fastOn()") is True
+    for r in first_roles[1:]:
+        page.locator(f'[data-action="plab"][data-value="{r}"]').click()
+        page.locator('[data-action="pslot"][data-value="0"]').click()
     for i, tok in enumerate(tasks[0]["tokens"]):
         if i == 0:
             continue
-        page.locator(f'[data-action="plab"][data-value="{tok["r"]}"]').click()
-        page.locator(f'[data-action="pslot"][data-value="{i}"]').click()
+        for r in (tok.get("roles") or [tok["r"]]):
+            page.locator(f'[data-action="plab"][data-value="{r}"]').click()
+            page.locator(f'[data-action="pslot"][data-value="{i}"]').click()
+    for grp in tasks[0].get("groups") or []:
+        page.locator(f'[data-action="plab"][data-value="{grp["r"]}"]').click()
+        page.locator(f'[data-action="pslot"][data-value="{grp["id"]}"]').click()
     assert page.locator(".gd-feedback.good").count() == 1, "Snelle modus moet direct nakijken"
     page.wait_for_function(
         "() => document.querySelector('.gd-stage-tag')?.textContent?.includes('Oefening 2 / 10')",
