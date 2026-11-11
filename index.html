@@ -9,7 +9,7 @@
 <link rel="icon" type="image/svg+xml" href="assets/al-mufrodat-logo.svg">
 <meta name="description" content="Leer Arabische woordenschat, grammatica en dialogen met de Medina-methode. Download de woordenlijsten per les als PDF.">
 <link rel="stylesheet" href="styles.css?v=20261110logo">
-<link rel="stylesheet" href="polish.css?v=20261110medina">
+<link rel="stylesheet" href="polish.css?v=20261110logo">
 <link rel="stylesheet" href="duo-theme.css?v=1">
 <script src="duo-theme-boot.js?v=1"></script>
 <script src="lessons_v2.js?v=20261110logo"></script>
@@ -17,45 +17,16 @@
 <script src="parse_data.js?v=20261110logo"></script>
 <script src="exercises_v2.js?v=20261110logo"></script>
 <script src="conv_duo.js?v=20261110logo"></script>
-<script src="vocab_duo.js?v=20261110medina"></script>
+<script src="vocab_duo.js?v=20261111path"></script>
 <style>
-@import url("duo-theme.css?v=1");
-.duo-head{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin-bottom:18px}
-.duo-stat{flex:1;min-width:100px;background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
-.duo-stat .k{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.duo-stat .v{font-size:22px;font-weight:800;color:var(--forest);line-height:1.15}
-.duo-stat.gold .v{color:var(--gold)}
-.duo-stat.fire .v{color:#e85d04}
-.duo-tools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center}
-.duo-tools .grow{flex:1}
-.duo-path{display:flex;flex-direction:column;align-items:center;gap:0;max-width:420px;margin:0 auto;padding:8px 0 24px}
-.duo-node-wrap{display:flex;flex-direction:column;align-items:center;width:100%;position:relative}
-.duo-connector{width:4px;height:22px;background:var(--line);border-radius:4px}
-.duo-node{width:100%;display:flex;align-items:center;gap:14px;padding:12px 14px;background:var(--surface);border:2px solid var(--line);border-radius:18px;cursor:pointer;text-align:start;font:inherit;color:inherit;box-shadow:0 2px 0 var(--line)}
-.duo-node.done{border-color:var(--ok)}
-.duo-node.busy{border-color:var(--gold)}
-.duo-bubble{width:52px;height:52px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;font-weight:800;font-size:16px;background:var(--paper-deep);color:var(--muted);border:3px solid var(--line)}
-.duo-node.busy .duo-bubble{background:var(--gold);color:#173B3F}
-.duo-node.done .duo-bubble{background:var(--ok);color:#fff}
-.duo-node-body{flex:1;min-width:0}
-.duo-node-body strong{display:block;font-size:15px;font-weight:700}
-.duo-node-body span{font-size:12.5px;color:var(--muted)}
-.duo-node-cta{font-size:12px;font-weight:700;color:var(--forest)}
-.flash-card .hint,.flash-card .translit,.card .translit,.translit{display:none!important}
-.qcard .q-pic{margin:0 0 10px!important}
-.qcard .qar,.qcard .big-ar{font-size:clamp(26px,7vw,38px)!important;margin-top:8px!important}
-.gram-sec-title{display:none!important}
+/* small layout helpers kept in index for boot reliability */
 .vocab-pdf-link{display:inline-flex;align-items:center;justify-content:center;min-height:40px;align-self:flex-end;margin:8px 6px 4px;padding:7px 14px;border:1px solid var(--line);border-radius:12px;color:var(--forest);background:var(--surface);font-size:13px;font-weight:750;text-decoration:none}
 .vocab-pdf-link:hover,.vocab-pdf-link:focus-visible{border-color:var(--gold);background:var(--forest-soft);outline-offset:2px}
-.sb-brand-mark[src]{display:block;width:40px;height:40px;object-fit:contain;border:0;background:transparent;border-radius:0}
 </style>
 </head>
 <body>
-<div id="sidebar-host"></div>
-<div id="topbar-host"></div>
-<div id="app"><p style="padding:2rem;font-family:system-ui">Laden…</p></div>
-<div id="tabbar-host"></div>
-<div class="toast" id="toast"></div>
+<a class="skip" href="#app">Direct naar inhoud</a>
+<div id="app" aria-live="off"><p class="loading" style="padding:2rem;font-family:system-ui">Laden…</p></div>
 <script src="app_bootstrap.js?v=1"></script>
 </body>
 </html>
