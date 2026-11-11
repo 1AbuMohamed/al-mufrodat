@@ -131,50 +131,93 @@
     return seededShuffle(theoryCandidates(n),seed===undefined?n*97+11:seed);
   }
 
-    function buildParsingTasks(n,seed) {
-    var examples=getExamples(n),rows=theoryRows(n), tasks=[];
-    // Alleen expliciete grammaticale functies uit de oorspronkelijke les.
-    // Geen automatische roltoekenning op basis van losse trefwoorden:
-    // een foutieve zinsontleding zou grammatica verkeerd aanleren.
-    // In les 5 benoemt de bron de twee delen van de idafa expliciet.
-    if(n===5){
-      examples.forEach(function(ex){
-        if(plain(ex.ar)==='كِتَابُ بِلَالٍ'){
-          ['كِتَابُ','بِلَالٍ'].forEach(function(word,i){
-            tasks.push({type:'parse',example:ex,word:word,
-              answer:i?'Moedaaf Ilaih':'Moedaaf',
-              options:seededShuffle(['Moedaaf','Moedaaf Ilaih','Harf Djarr','Moebtada'],seed+i),
-              rule:'In «كِتَابُ بِلَالٍ» is het eerste woord het ding dat in bezit is. Dit wordt Moedaaf genoemd. Het tweede woord «بِلَالٍ» is de bezitter. Dit wordt Moedaaf Ilaih genoemd.'});
-          });
-        }
+  
+  // Handmatig geverifieerde koppelingen: [les, exact Arabisch bronvoorbeeld,
+  // gemarkeerd woord, grammaticale functie, unieke tekst uit de bronregel].
+  // Zonder overeenkomst in de originele data wordt de vraag weggelaten.
+  var PARSE_SPECS=[
+    [4,'فِي الْبَيْتِ','فِي','Harf Djarr','Na een voorzetsel (Harf Djarr)'],
+    [4,'فِي الْبَيْتِ','الْبَيْتِ','Madjroer','Over een naamwoord dat vooraf wordt gegaan door een voorzetsel'],
+    [4,'فِيْ بَيْتٍ','فِيْ','Harf Djarr','Na een voorzetsel (Harf Djarr)'],
+    [5,'كِتَابُ بِلَالٍ','كِتَابُ','Moedaaf','In «كِتَابُ بِلَالٍ»'],
+    [5,'كِتَابُ بِلَالٍ','بِلَالٍ','Moedaaf Ilaih','In «كِتَابُ بِلَالٍ»'],
+    [8,'هٰذَا الْكِتَابُ جَدِيْدٌ.','هٰذَا','aanwijzend voornaamwoord','Alle aanwijzende voornaamwoorden'],
+    [9,'بَيْتٌ جَدِيْدٌ','بَيْتٌ','Man‘oet','In het Arabisch wordt het bijvoeglijk naamwoord Na‘t'],
+    [9,'بَيْتٌ جَدِيْدٌ','جَدِيْدٌ','Na‘t','In het Arabisch wordt het bijvoeglijk naamwoord Na‘t'],
+    [14,'بَيْتُ الْإِمَامِ الْجَدِيْدُ.','بَيْتُ','Moedaaf','Hier is «بَيْتُ» de Moedaaf'],
+    [15,'بَعْدَ الدَّرْسِ','بَعْدَ','Moedaaf','Ze zijn altijd Moedaaf'],
+    [15,'قَبْلَ الصَّلَاةِ','قَبْلَ','Moedaaf','Ze zijn altijd Moedaaf'],
+    [18,'هٰذَانِ كِتَابَانِ','كِتَابَانِ','tweevoud','drie grammaticale getallen'],
+    [19,'ثَلَاثَةُ كُتُبٍ','ثَلَاثَةُ','Moedaaf','De getallen 3 t/m 10 worden als Moedaaf gebruikt'],
+    [19,'ثَلَاثَةُ كُتُبٍ','كُتُبٍ','Moedaaf Ilaih','omdat het Moedaaf Ilaih is'],
+    [23,'الْبَيْتُ → فِي الْبَيْتِ','فِي','Harf Djarr','voorzetsel (Harf Djarr)'],
+    [23,'الْبَيْتُ → فِي الْبَيْتِ','الْبَيْتِ','Madjroer','naamwoord genitief (Madjroer)']
+  ];
+  var ROLE_OPTIONS=['Moedaaf','Moedaaf Ilaih','Harf Djarr','Madjroer','Na‘t','Man‘oet','aanwijzend voornaamwoord','tweevoud'];
+  function buildParsingTasks(n,seed){
+    var ex=((DATA[n]&&DATA[n].inhoud)||[]).filter(function(r){return r.type==='voorbeeld'&&plain(r.ar);});
+    var rows=theoryRows(n);
+    return seededShuffle(PARSE_SPECS.filter(function(p){return p[0]===Number(n);}).map(function(p,i){
+      var example=ex.find(function(e){return plain(e.ar)===p[1];});
+      var proof=rows.find(function(r){return plain(r.tekst).includes(p[4]);});
+      if(!example||!proof||!splitArabic(example.ar).includes(p[2]))return null;
+      return {type:'parse',lesson:Number(n),example:example,word:p[2],answer:p[3],
+        options:choiceSet(p[3],ROLE_OPTIONS,[],seed+i*17),
+        rule:plain(proof.tekst),skill:'zinsontleding: '+p[3]};
+    }).filter(Boolean),seed);
+  }
+  function buildWhyTasks(n,seed,parses){
+    var rows=theoryRows(n).map(function(r){return plain(r.tekst);})
+      .filter(function(rule){return rule.length>35&&rule.length<260;});
+    return seededShuffle(parses,seed).map(function(p,i){
+      if(!p.rule||p.rule.length>260)return null;
+      var alternatives=rows.filter(function(rule){
+        return rule!==p.rule && !rule.toLowerCase().includes(p.answer.toLowerCase()) &&
+          !rule.includes(p.word);
       });
-    }
-    if(n===4||n===23){
-      var source=rows.map(function(r){return plain(r.tekst);}).join(' ');
-      if(/voorzetsel|Harf Djarr/i.test(source)){
-        examples.forEach(function(ex){
-          var words=splitArabic(ex.ar);
-          var preposition=words.find(function(w){return w==='فِي'||w==='مِنْ';});
-          if(!preposition)return;
-          tasks.push({type:'parse',example:ex,word:preposition,answer:'Harf Djarr',
-            options:seededShuffle(['Harf Djarr','Moedaaf','Moedaaf Ilaih','Moebtada'],seed+words.length),
-            rule:source.match(/[^.]*voorzetsel[^.]*\./i)?.[0]||source.slice(0,250)});
-        });
-      }
-    }
-    return seededShuffle(tasks,seed).slice(0,5);
+      var options=choiceSet(p.rule,alternatives,[],seed+i*19);
+      return options?{type:'why',lesson:Number(n),example:p.example,word:p.word,
+        prompt:'Welke regel verklaart het gemarkeerde woord?',answer:p.rule,
+        rule:p.rule,options:options,skill:'uitleg: '+p.answer}:null;
+    }).filter(Boolean).slice(0,2);
+  }
+  function grammarWeakItems(){
+    try{var d=JSON.parse(localStorage.getItem(SAVE_KEY_V2)||'{}');return d&&d.grammarWeak||{};}catch(_e){return {};}
+  }
+  function taskIdentity(task){
+    return String(task.lesson===undefined?session.lesson:task.lesson)+'|'+task.type+'|'+
+      plain(task.answer||task.word||(task.example&&task.example.ar))+'|'+plain(task.rule).slice(0,55);
+  }
+  function rememberGrammarOutcome(task,correct){
+    if(!['theory','parse','why'].includes(task.type))return;
+    try{
+      var d=JSON.parse(localStorage.getItem(SAVE_KEY_V2)||'{}')||{};
+      if(!d.grammarWeak||typeof d.grammarWeak!=='object')d.grammarWeak={};
+      var k=taskIdentity(task),prev=d.grammarWeak[k]||{misses:0};
+      if(correct)delete d.grammarWeak[k];
+      else d.grammarWeak[k]={misses:(prev.misses||0)+1,last:new Date().toISOString().slice(0,10)};
+      localStorage.setItem(SAVE_KEY_V2,JSON.stringify(d));
+    }catch(_e){}
   }
   function buildStudyTasks(n,seed){
-    var theory=buildTheoryTasks(n,seed),parse=buildParsingTasks(n,seed+31);
-    var examples=getExamples(n),legacy=buildTasks(n);
-    var result=theory.slice(0,4).concat(parse.slice(0,4));
-    var extra=seededShuffle(legacy,seed+71);
-    while(result.length<Math.min(10,Math.max(8,theory.length+parse.length+3))&&extra.length)result.push(extra.shift());
-    return result.slice(0,10);
+    seed=seed===undefined?n*997+41:seed;
+    var parsing=buildParsingTasks(n,seed+13),why=buildWhyTasks(n,seed+31,parsing);
+    var grammar=seededShuffle(buildTheoryTasks(n,seed).concat(parsing).concat(why),seed+71);
+    var weak=grammarWeakItems();
+    grammar.sort(function(a,b){return Number(!!weak[taskIdentity(b)])-Number(!!weak[taskIdentity(a)]);});
+    // Ten minste 70% grammatica waar de bron genoeg toetsbare regels geeft.
+    var picked=grammar.slice(0,8),nonGrammar=seededShuffle(buildTasks(n),seed+83);
+    var unique=new Set(picked.map(taskIdentity));
+    var limit=picked.length>=7?10:picked.length>=4?Math.min(8,picked.length+2):Math.min(6,picked.length+2);
+    for(var task of nonGrammar){
+      if(picked.length>=limit)break;
+      var k=taskIdentity(task);if(unique.has(k))continue;
+      picked.push(task);unique.add(k);
+    }
+    return picked;
   }
 
-
-  // Bouw de theoretische leerstappen uit de ongewijzigde Medina-bron.
+    // Bouw de theoretische leerstappen uit de ongewijzigde Medina-bron.
   // De inhoudsvolgorde en spelling (inclusief harakāt) blijven behouden.
   function sourceTheoryItems(n) {
     var all = (DATA[n] && DATA[n].inhoud) || [];
