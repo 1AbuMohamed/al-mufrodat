@@ -612,5 +612,239 @@ window.GRAMMATICA_LAB = {
       { "ar": "أَخُوْ مُحَمَّدٍ", "nl": "De broer van Mohammed", "woorden": [["أَخُوْ", "Ism", "", "Moedaaf", "Marfoe‘"], ["مُحَمَّدٍ", "Ism", "", "Moedaaf Ilaih", "Madjroer"]] },
       { "ar": "لِيْ أَخٌ", "nl": "Ik heb een broer.", "woorden": [["لِيْ", "Harf", "Harf Djarr", "", "", "لِ = Harf Djarr · يْ = Dhamier, Madjroer", 1], ["أَخٌ", "Ism", "", "Moebtada", "Marfoe‘"]] }
     ]
+  },
+
+  "11": {
+    "uitleg": [
+      {
+        "kop": "“Erin”: فِيْهِ en فِيْهَا",
+        "tekst": [
+          "**فِيْهِ** betekent “erin” of “in hem”, **فِيْهَا** betekent “erin” of “in haar”. Het zijn het voorzetsel فِيْ (**Harf Djarr**) met een achtervoegsel (**Dhamier**) eraan.",
+          "Gebruik فِيْهِ als het woord waarnaar je verwijst mannelijk is, en فِيْهَا als het vrouwelijk is (bijvoorbeeld de kamer: اَلْغُرْفَةُ)."
+        ],
+        "vb": [["مَنْ فِي الْبَيْتِ؟", "Wie is in het huis?"], ["فِيْهِ أَبِيْ وَأُمِّيْ.", "Mijn vader en mijn moeder zijn erin."], ["فِيْهَا أَخِيْ.", "Mijn broer is erin."]]
+      },
+      {
+        "kop": "“Ik houd van”: أُحِبُّ",
+        "tekst": [
+          "**أُحِبُّ** is een **Fi‘l** en betekent “ik houd van”. In het Arabisch herhaal je het woord **وَ** (“en”) steeds opnieuw, ook in een opsomming."
+        ],
+        "vb": [["أُحِبُّ أَبِيْ وَأُمِّيْ وَأَخِيْ وَأُخْتِيْ.", "Ik houd van mijn vader, moeder, broer en zus."]],
+        "tip": "In het Nederlands zet je “en” alleen voor het laatste woord. In het Arabisch voor elk woord."
+      },
+      {
+        "kop": "Het lijdend voorwerp: Maf‘oel bih en Mansoeb",
+        "tekst": [
+          "Het lijdend voorwerp van een werkwoord heet **Maf‘oel bih**. Het staat in de **Mansoeb** (accusatief) en eindigt daarom op **-a** (Fathah).",
+          "Bij een woord met het achtervoegsel “mijn” (ـيْ) zie je deze -a niet terug."
+        ],
+        "vb": [["أُحِبُّ اللّٰهَ.", "Ik houd van Allah."], ["أُحِبُّ الرَّسُوْلَ.", "Ik houd van de Boodschapper."], ["أُحِبُّ اللُّغَةَ الْعَرَبِيَّةَ.", "Ik houd van de Arabische taal."]],
+        "tip": "Nu ken je alle drie de naamvallen: Marfoe‘ (-oe), Madjroer (-ie) en Mansoeb (-a)."
+      },
+      {
+        "kop": "“Jij houdt van”: تُحِبُّ",
+        "tekst": [
+          "**تُحِبُّ** betekent “jij houdt van” (mannelijk). Met een vraagpartikel of vraagwoord erbij maak je er een vraag van."
+        ],
+        "vb": [["أَتُحِبُّ اللّٰهَ؟", "Houd jij van Allah?"], ["مَنْ تُحِبُّ؟", "Van wie houd jij?"], ["مَاذَا تُحِبُّ؟", "Waar houd je van?"]]
+      }
+    ],
+    "vragen": [
+      { "v": "Wat betekent فِيْهَا?", "o": ["erin, in haar", "erin, in hem", "van haar", "met haar"], "g": 0, "u": "فِيْهَا = in + haar (vrouwelijk)." },
+      { "v": "Wat betekent أُحِبُّ?", "o": ["ik houd van", "jij houdt van", "ik ging", "ik ben"], "g": 0, "u": "أُحِبُّ = ik houd van." },
+      { "v": "Hoe heet het lijdend voorwerp in het Arabisch?", "o": ["Maf‘oel bih", "Faa‘il", "Chabar", "Moedaaf"], "g": 0, "u": "Wat het werkwoord ondergaat, is het Maf‘oel bih." },
+      { "v": "Welke naamval heeft het lijdend voorwerp?", "o": ["Mansoeb", "Marfoe‘", "Madjroer", "Geen"], "g": 0, "u": "Het lijdend voorwerp is Mansoeb: uitgang -a." },
+      { "v": "Welke uitgang hoort bij Mansoeb?", "o": ["-a (Fathah)", "-oe (Dammah)", "-ie (Kasrah)", "-n"], "g": 0, "u": "Mansoeb = accusatief = -a." },
+      { "v": "Welke zin betekent “Ik houd van Allah.”?", "o": ["أُحِبُّ اللّٰهَ.", "أَتُحِبُّ اللّٰهَ؟", "مَنْ تُحِبُّ؟", "أُحِبُّ أَبِيْ."], "g": 0, "u": "أُحِبُّ + اللّٰهَ (Mansoeb)." },
+      { "v": "Wat betekent مَنْ تُحِبُّ؟", "o": ["Van wie houd jij?", "Wie houdt van jou?", "Waar houd je van?", "Houd jij van Allah?"], "g": 0, "u": "مَنْ = wie, تُحِبُّ = jij houdt van." },
+      { "v": "Hoe vaak gebruik je وَ in een opsomming “vader, moeder, broer en zus”?", "o": ["Voor elk woord", "Alleen voor het laatste woord", "Nooit", "Alleen voor het eerste woord"], "g": 0, "u": "Het Arabisch herhaalt وَ elke keer." }
+    ],
+    "ontleding": [
+      { "ar": "أُحِبُّ اللّٰهَ.", "nl": "Ik houd van Allah.", "woorden": [["أُحِبُّ", "Fi‘l", "", "", ""], ["اللّٰهَ.", "Ism", "", "Maf‘oel bih", "Mansoeb"]] },
+      { "ar": "أُحِبُّ الرَّسُوْلَ.", "nl": "Ik houd van de Boodschapper.", "woorden": [["أُحِبُّ", "Fi‘l", "", "", ""], ["الرَّسُوْلَ.", "Ism", "", "Maf‘oel bih", "Mansoeb"]] },
+      { "ar": "أُحِبُّ اللُّغَةَ الْعَرَبِيَّةَ.", "nl": "Ik houd van de Arabische taal.", "woorden": [["أُحِبُّ", "Fi‘l", "", "", ""], ["اللُّغَةَ", "Ism", "", "Maf‘oel bih", "Mansoeb"], ["الْعَرَبِيَّةَ.", "Ism", "", "Na‘t", "Mansoeb"]] },
+      { "ar": "مَنْ تُحِبُّ؟", "nl": "Van wie houd jij?", "woorden": [["مَنْ", "Ism", "Ism Istifhaam", "Maf‘oel bih", ""], ["تُحِبُّ؟", "Fi‘l", "", "", ""]] },
+      { "ar": "فِيْهَا أَخِيْ.", "nl": "Mijn broer is erin.", "woorden": [["فِيْهَا", "Harf", "Harf Djarr", "", "", "فِيْ = Harf Djarr · هَا = Dhamier, Madjroer", 1], ["أَخِيْ.", "Ism", "", "Moebtada", "Marfoe‘"]] }
+    ]
+  },
+
+  "12": {
+    "uitleg": [
+      {
+        "kop": "Jij (vrouwelijk): أَنْتِ en ـكِ",
+        "tekst": [
+          "Voor “jij” tegen een vrouw gebruik je **أَنْتِ**, met een Kasrah op de laatste letter. Het bijbehorende achtervoegsel voor “jouw” is **ـكِ** (-kie). Vergelijk: jij (m.) = أَنْتَ, jouw (m.) = ـكَ."
+        ],
+        "vb": [["مِنْ أَيْنَ أَنْتِ يَا آمِنَةُ؟", "Waar kom jij vandaan, o Aaminah?"], ["أَيْنَ بَيْتُكِ يَا مَرْيَمُ؟", "Waar is jouw huis, o Maryam?"], ["أَيْنَ بَيْتُكَ يَا بِلَالُ؟", "Waar is jouw huis, o Bilaal?"]]
+      },
+      {
+        "kop": "“Zij ging”: ذَهَبَتْ",
+        "tekst": [
+          "De vrouwelijke vorm van ذَهَبَ is **ذَهَبَتْ** (“zij ging”). Er komt een **تْ** met Soekoen achter. Wordt het onderwerp genoemd, dan valt het voornaamwoord “zij” weg en blijft het werkwoord enkelvoud.",
+          "Volgt er een woord met اَلْ, dan wordt de Soekoen een **Kasrah**: ذَهَبَتِ الْبِنْتُ."
+        ],
+        "vb": [["ذَهَبَتْ إِلَى الْجَامِعَةِ.", "Zij ging naar de universiteit."], ["ذَهَبَتْ مَرْيَمُ إِلَى الْمَدْرَسَةِ.", "Maryam ging naar school."], ["ذَهَبَتِ الْبِنْتُ.", "Het meisje ging."]],
+        "tip": "Het werkwoord staat vóór de Faa‘il en past zich in geslacht aan: ذَهَبَ بِلَالٌ, maar ذَهَبَتْ مَرْيَمُ."
+      },
+      {
+        "kop": "Vrouwelijk “die”: اَلَّتِيْ",
+        "tekst": [
+          "Je kent **اَلَّذِيْ** (mannelijk). De vrouwelijke vorm is **اَلَّتِيْ**. Beide zijn een **Ism Mawsoel**, een betrekkelijk voornaamwoord. Het past in geslacht bij het woord ervoor."
+        ],
+        "vb": [["اَلسَّاعَةُ الَّتِيْ عَلَى الْمَكْتَبِ لِلْمُدَرِّسِ.", "Het horloge dat op de tafel is, is van de leraar."]]
+      },
+      {
+        "kop": "Nadruk leggen",
+        "tekst": [
+          "Wil je benadrukken van wie iets is, dan voeg je achter het naamwoord het losse voornaamwoord toe: هٰذَا كِتَابُكَ أَنْتَ (“dit is jóúw boek”). Dat doe je bij twijfel of bij een geschil."
+        ],
+        "vb": [["هٰذَا كِتَابُكَ أَنْتَ", "Dit is jóúw boek"]]
+      }
+    ],
+    "vragen": [
+      { "v": "Welk woord betekent “jij” tegen een vrouw?", "o": ["أَنْتِ", "أَنْتَ", "أَنَا", "هِيَ"], "g": 0, "u": "أَنْتِ (met Kasrah) = jij, vrouwelijk." },
+      { "v": "Wat betekent ـكِ?", "o": ["jouw (vrouwelijk)", "jouw (mannelijk)", "zijn", "haar"], "g": 0, "u": "ـكِ is het achtervoegsel voor een vrouw." },
+      { "v": "Wat betekent ذَهَبَتْ?", "o": ["zij ging", "hij ging", "ik ging", "jij ging"], "g": 0, "u": "ذَهَبَتْ is de vrouwelijke enkelvoudsvorm." },
+      { "v": "Wat gebeurt er met de Soekoen van ذَهَبَتْ voor اَلْ?", "o": ["Hij wordt een Kasrah", "Hij blijft", "Hij wordt een Dammah", "Hij valt weg"], "g": 0, "u": "ذَهَبَتِ الْبِنْتُ: de Soekoen wordt een Kasrah." },
+      { "v": "Welke van de twee is vrouwelijk: اَلَّذِيْ of اَلَّتِيْ?", "o": ["اَلَّتِيْ", "اَلَّذِيْ"], "g": 0, "u": "اَلَّتِيْ is de vrouwelijke vorm." },
+      { "v": "Hoe heet het betrekkelijk voornaamwoord?", "o": ["Ism Mawsoel", "Ism Isjaarah", "Dhamier", "Harf Djarr"], "g": 0, "u": "Ism Mawsoel = betrekkelijk voornaamwoord." },
+      { "v": "Wat is de Faa‘il in ذَهَبَتْ مَرْيَمُ إِلَى الْمَدْرَسَةِ?", "o": ["مَرْيَمُ", "الْمَدْرَسَةِ", "إِلَى", "ذَهَبَتْ"], "g": 0, "u": "Maryam voert de handeling uit." },
+      { "v": "Waarom staat أَنْتَ in هٰذَا كِتَابُكَ أَنْتَ?", "o": ["Voor nadruk", "Als werkwoord", "Als voorzetsel", "Voor een vraag"], "g": 0, "u": "Het voornaamwoord wordt toegevoegd om te benadrukken." }
+    ],
+    "ontleding": [
+      { "ar": "ذَهَبَتْ إِلَى الْجَامِعَةِ.", "nl": "Zij ging naar de universiteit.", "woorden": [["ذَهَبَتْ", "Fi‘l", "", "", ""], ["إِلَى", "Harf", "Harf Djarr", "", ""], ["الْجَامِعَةِ.", "Ism", "", "", "Madjroer"]] },
+      { "ar": "ذَهَبَتْ مَرْيَمُ إِلَى الْمَدْرَسَةِ.", "nl": "Maryam ging naar school.", "woorden": [["ذَهَبَتْ", "Fi‘l", "", "", ""], ["مَرْيَمُ", "Ism", "", "Faa‘il", "Marfoe‘"], ["إِلَى", "Harf", "Harf Djarr", "", ""], ["الْمَدْرَسَةِ.", "Ism", "", "", "Madjroer"]] },
+      { "ar": "ذَهَبَتِ الْبِنْتُ.", "nl": "Het meisje ging.", "woorden": [["ذَهَبَتِ", "Fi‘l", "", "", ""], ["الْبِنْتُ.", "Ism", "", "Faa‘il", "Marfoe‘"]] },
+      { "ar": "مِنْ أَيْنَ أَنْتِ يَا آمِنَةُ؟", "nl": "Waar kom jij vandaan, o Aaminah?", "woorden": [["مِنْ", "Harf", "Harf Djarr", "", ""], ["أَيْنَ", "Ism", "Ism Istifhaam", "", ""], ["أَنْتِ", "Ism", "Dhamier", "Moebtada", ""], ["يَا", "Harf", "Harf an-Nidaa’", "", ""], ["آمِنَةُ؟", "Ism", "", "", "", "", 1]] },
+      { "ar": "اَلسَّاعَةُ الَّتِيْ عَلَى الْمَكْتَبِ لِلْمُدَرِّسِ.", "nl": "Het horloge dat op de tafel is, is van de leraar.", "woorden": [["اَلسَّاعَةُ", "Ism", "", "Moebtada", "Marfoe‘"], ["الَّتِيْ", "Ism", "Ism Mawsoel", "", ""], ["عَلَى", "Harf", "Harf Djarr", "", ""], ["الْمَكْتَبِ", "Ism", "", "", "Madjroer"], ["لِلْمُدَرِّسِ.", "Harf", "Harf Djarr", "", "", "لِ = Harf Djarr · الْمُدَرِّسِ = Madjroer", 1]] }
+    ]
+  },
+
+  "13": {
+    "uitleg": [
+      {
+        "kop": "Twee soorten meervoud",
+        "tekst": [
+          "In het Arabisch hebben ook bijvoeglijke naamwoorden een meervoud. Er zijn twee soorten meervoud: het **ongebroken meervoud** (de oorspronkelijke vorm blijft behouden, er komt iets bij) en het **gebroken meervoud** (de vorm van het woord verandert zelf).",
+          "In het Nederlands lijkt dit op “boek → boeken” (ongebroken) tegenover “epos → epen” (gebroken)."
+        ]
+      },
+      {
+        "kop": "Ongebroken meervoud",
+        "tekst": [
+          "Mannelijk: einde **-oena** (ـُوْنَ). Vrouwelijk: einde **-aat-oe-n** (ـَاتٌ). Bij het vrouwelijke meervoud verandert de Taa’ Marboetah ة in een gewone ت, en de “a” ervoor wordt lang."
+        ],
+        "vb": [["مُدَرِّسٌ → مُدَرِّسُوْنَ", "een leraar → leraren"], ["مُسْلِمَةٌ → مُسْلِمَاتٌ", "een moslima → moslima’s"], ["مُهَنْدِسَةٌ → مُهَنْدِسَاتٌ", "een ingenieur (v.) → ingenieurs (v.)"]],
+        "tip": "Het enige verschil in uitspraak tussen moeslimat-oe-n en moeslimaat-oe-n is de lengte van de “a”."
+      },
+      {
+        "kop": "Gebroken meervoud: leer het per woord",
+        "tekst": [
+          "Het gebroken meervoud wordt in het Arabisch heel vaak gebruikt. Er zijn meer dan twintig patronen; je leert er in deze les acht. Het beste is om bij elk nieuw woord het meervoud mee te leren."
+        ],
+        "vb": [["نَجْمٌ → نُجُوْمٌ", "een ster → sterren"], ["كِتَابٌ → كُتُبٌ", "een boek → boeken"], ["جَبَلٌ → جِبَالٌ", "een berg → bergen"], ["تَاجِرٌ → تُجَّارٌ", "een handelaar → handelaren"], ["قَلَمٌ → أَقْلَامٌ", "een pen → pennen"]]
+      },
+      {
+        "kop": "Meervoudige voornaamwoorden",
+        "tekst": [
+          "**هٰؤُلَاءِ** is het meervoud van هٰذَا en هٰذِهِ (“deze”), meestal voor mensen. **هُمْ** (“zij”, m.) en **ـهُمْ** (“hun”) zijn de meervouden van هُوَ en ـهُ. **هُنَّ** (“zij”, v.) en **ـهُنَّ** (“hun”, v.) zijn de meervouden van هِيَ en ـهَا. **أُولٰئِكَ** is het meervoud van ذٰلِكَ en تِلْكَ (“die”)."
+        ],
+        "vb": [["هٰذَا تَاجِرٌ → هٰؤُلَاءِ تُجَّارٌ", "Dit is een handelaar → Deze zijn handelaren"], ["هُوَ مُدَرِّسٌ → هُمْ مُدَرِّسُوْنَ", "Hij is een leraar → Zij zijn leraren"]]
+      },
+      {
+        "kop": "“Zij gingen”: ذَهَبُوْا en ذَهَبْنَ",
+        "tekst": [
+          "Mannelijk meervoud: **ذَهَبُوْا** (er staat een Alief aan het einde die je niet uitspreekt). Vrouwelijk meervoud: **ذَهَبْنَ**."
+        ],
+        "vb": [["ذَهَبُوْا إِلَى الْجَامِعَةِ.", "Zij gingen naar de universiteit."], ["ذَهَبْنَ إِلَى الْمَكْتَبَةِ.", "Zij gingen naar de bibliotheek."]]
+      },
+      {
+        "kop": "Onregelmatige meervouden",
+        "tekst": [
+          "Een paar vrouwelijke woorden hebben een meervoud van een andere stam: بِنْتٌ → بَنَاتٌ, أُخْتٌ → أَخَوَاتٌ, فَتَاةٌ → فَتَيَاتٌ."
+        ]
+      }
+    ],
+    "vragen": [
+      { "v": "Hoe heet het meervoud waarbij de vorm van het woord zelf verandert?", "o": ["Gebroken meervoud", "Ongebroken meervoud", "Tweevoud", "Enkelvoud"], "g": 0, "u": "Bij het gebroken meervoud wordt het woord zelf gebroken." },
+      { "v": "Welk einde heeft het mannelijk ongebroken meervoud?", "o": ["-oena (ـُوْنَ)", "-aat (ـَاتٌ)", "-aan", "-ie"], "g": 0, "u": "مُدَرِّسٌ → مُدَرِّسُوْنَ." },
+      { "v": "Wat is het meervoud van مُسْلِمَةٌ?", "o": ["مُسْلِمَاتٌ", "مُسْلِمُوْنَ", "مُسْلِمٌ", "مُسْلِمَانِ"], "g": 0, "u": "Vrouwelijk ongebroken meervoud: -aat." },
+      { "v": "Wat is het meervoud van كِتَابٌ?", "o": ["كُتُبٌ", "كِتَابُوْنَ", "كِتَابَاتٌ", "أَكْتَابٌ"], "g": 0, "u": "كِتَابٌ → كُتُبٌ is een gebroken meervoud." },
+      { "v": "Wat is het meervoud van قَلَمٌ?", "o": ["أَقْلَامٌ", "قَلَمُوْنَ", "قُلُمٌ", "قَلَمَاتٌ"], "g": 0, "u": "قَلَمٌ → أَقْلَامٌ." },
+      { "v": "Welk woord betekent “deze” (meervoud, mensen)?", "o": ["هٰؤُلَاءِ", "أُولٰئِكَ", "هٰذِهِ", "هُمْ"], "g": 0, "u": "هٰؤُلَاءِ is het meervoud van هٰذَا en هٰذِهِ." },
+      { "v": "Welk woord betekent “die” (meervoud)?", "o": ["أُولٰئِكَ", "هٰؤُلَاءِ", "تِلْكَ", "هُنَّ"], "g": 0, "u": "أُولٰئِكَ is het meervoud van ذٰلِكَ en تِلْكَ." },
+      { "v": "Wat is het meervoud van هِيَ?", "o": ["هُنَّ", "هُمْ", "أَنْتُمْ", "نَحْنُ"], "g": 0, "u": "هُنَّ = zij (vrouwelijk meervoud)." },
+      { "v": "Wat betekent ذَهَبْنَ?", "o": ["zij gingen (v.)", "zij gingen (m.)", "wij gingen", "jullie gingen"], "g": 0, "u": "ذَهَبْنَ is het vrouwelijk meervoud." },
+      { "v": "Wat is het meervoud van بِنْتٌ?", "o": ["بَنَاتٌ", "بِنْتَاتٌ", "بِنْتُوْنَ", "أَبْنَاتٌ"], "g": 0, "u": "بِنْتٌ → بَنَاتٌ is onregelmatig." }
+    ],
+    "ontleding": [
+      { "ar": "هٰؤُلَاءِ تُجَّارٌ", "nl": "Deze zijn handelaren", "woorden": [["هٰؤُلَاءِ", "Ism", "Ism Isjaarah", "Moebtada", ""], ["تُجَّارٌ", "Ism", "", "Chabar", "Marfoe‘"]] },
+      { "ar": "هُمْ مُدَرِّسُوْنَ", "nl": "Zij zijn leraren", "woorden": [["هُمْ", "Ism", "Dhamier", "Moebtada", ""], ["مُدَرِّسُوْنَ", "Ism", "", "Chabar", "Marfoe‘"]] },
+      { "ar": "ذَهَبُوْا إِلَى الْجَامِعَةِ.", "nl": "Zij gingen naar de universiteit.", "woorden": [["ذَهَبُوْا", "Fi‘l", "", "", ""], ["إِلَى", "Harf", "Harf Djarr", "", ""], ["الْجَامِعَةِ.", "Ism", "", "", "Madjroer"]] },
+      { "ar": "ذَهَبْنَ إِلَى الْمَكْتَبَةِ.", "nl": "Zij gingen naar de bibliotheek.", "woorden": [["ذَهَبْنَ", "Fi‘l", "", "", ""], ["إِلَى", "Harf", "Harf Djarr", "", ""], ["الْمَكْتَبَةِ.", "Ism", "", "", "Madjroer"]] },
+      { "ar": "أَيْنَ إِخْوَتُكَ؟", "nl": "Waar zijn jouw broers?", "woorden": [["أَيْنَ", "Ism", "Ism Istifhaam", "", ""], ["إِخْوَتُكَ؟", "Ism", "", "Moebtada", "Marfoe‘", "إِخْوَةُ = Moedaaf · كَ = Dhamier, Moedaaf Ilaih", 1]] }
+    ]
+  },
+
+  "14": {
+    "uitleg": [
+      {
+        "kop": "Jullie en wij",
+        "tekst": [
+          "**أَنْتُمْ** is “jullie” (mannelijk meervoud); het achtervoegsel is **ـكُمْ**. **نَحْنُ** is “wij” (mannelijk én vrouwelijk); het achtervoegsel is **ـنَا** (“ons”). Alle vier zijn een **Dhamier**."
+        ],
+        "vb": [["مَنْ أَنْتُمْ؟", "Wie zijn jullie?"], ["نَحْنُ مُسْلِمُوْنَ.", "Wij zijn moslims."], ["اللّٰهُ رَبُّنَا.", "Allah is onze Heer."], ["الْإِسْلَامُ دِيْنُنَا.", "Islam is onze religie."]]
+      },
+      {
+        "kop": "Werkwoorden: jullie en wij gingen",
+        "tekst": [
+          "**ذَهَبْتُمْ** betekent “jullie gingen” en **ذَهَبْنَا** “wij gingen”. Let op het verschil met ذَهَبْنَ (“zij gingen”, vrouwelijk): daar is de laatste “a” kort, bij ذَهَبْنَا is hij lang."
+        ],
+        "vb": [["أَيْنَ ذَهَبْتُمْ يَا أَبْنَائِيْ؟", "Waar gingen jullie, o mijn zonen?"]]
+      },
+      {
+        "kop": "Eigennamen zonder Tanwien",
+        "tekst": [
+          "Ook niet-Arabische eigennamen krijgen geen Tanwien, zoals وِلْيَمُ (“Willem”), بَاكِسْتَانُ (“Pakistan”), لَنْدَنُ (“Londen”) en de meeste namen van de Profeten (إِبْرَاهِيْمُ, إِسْمَاعِيْلُ, إِسْحَاقُ, يَعْقُوْبُ).",
+          "Een uitzondering: een mannelijke niet-Arabische naam van precies drie letters met een Soekoen op de tweede letter krijgt wél een Tanwien, bijvoorbeeld خَانٌ, لُوْطٌ en نُوْحٌ."
+        ]
+      },
+      {
+        "kop": "Een Na‘t bij een Moedaaf",
+        "tekst": [
+          "De Moedaaf is bepaald door zijn positie. Daarom is een bijvoeglijk naamwoord bij een Moedaaf ook bepaald (met اَلْ).",
+          "Let op het verschil: in بَيْتُ الْإِمَامِ الْجَدِيْدُ hoort الْجَدِيْدُ bij بَيْتُ (“het nieuwe huis van de imam”). In بَيْتُ الْإِمَامِ الْجَدِيْدِ hoort het bij الْإِمَامِ (“het huis van de nieuwe imam”). De uitgang laat zien bij welk woord het hoort."
+        ],
+        "vb": [["بَيْتُ الْإِمَامِ الْجَدِيْدُ.", "Het nieuwe huis van de imam."], ["بَيْتُ الْإِمَامِ الْجَدِيْدِ.", "Het huis van de nieuwe imam."]],
+        "tip": "Kijk naar de uitgang van de Na‘t. -oe hoort bij de Moedaaf (Marfoe‘), -ie bij de Moedaaf Ilaih (Madjroer)."
+      },
+      {
+        "kop": "“Welk”: أَيٌّ",
+        "tekst": [
+          "**أَيٌّ** betekent “welk(e)” en werkt als een **Moedaaf**: het naamwoord erna is Moedaaf Ilaih en eindigt op -ie. Na een voorzetsel is أَيٌّ zelf Madjroer (أَيِّ); soms is het Mansoeb (أَيَّ)."
+        ],
+        "vb": [["أَيُّ بَيْتٍ هٰذَا؟", "Welk huis is dit?"], ["فِيْ أَيِّ فَصْلٍ جَلَسْتَ؟", "In welke klas zat jij?"], ["أَيَّ لُغَةٍ تُحِبُّ؟", "Welke taal heb je lief?"]]
+      }
+    ],
+    "vragen": [
+      { "v": "Wat betekent أَنْتُمْ?", "o": ["jullie (m.)", "wij", "jij", "zij (m.)"], "g": 0, "u": "أَنْتُمْ = jullie." },
+      { "v": "Wat betekent نَحْنُ?", "o": ["wij", "jullie", "ik", "zij"], "g": 0, "u": "نَحْنُ is het meervoud van أَنَا." },
+      { "v": "Wat betekent بَيْتُنَا?", "o": ["ons huis", "mijn huis", "jullie huis", "hun huis"], "g": 0, "u": "ـنَا = ons." },
+      { "v": "Wat betekent ذَهَبْنَا?", "o": ["wij gingen", "zij gingen (v.)", "jullie gingen", "ik ging"], "g": 0, "u": "ذَهَبْنَا met lange -aa = wij gingen." },
+      { "v": "Wat is het verschil tussen ذَهَبْنَ en ذَهَبْنَا?", "o": ["Korte of lange laatste a", "Geen verschil", "Eerste letter", "Er is geen verschil in betekenis"], "g": 0, "u": "ذَهَبْنَ = zij (v.), ذَهَبْنَا = wij." },
+      { "v": "Welke naam krijgt géén Tanwien?", "o": ["إِبْرَاهِيْمُ", "خَانٌ", "لُوْطٌ", "نُوْحٌ"], "g": 0, "u": "Niet-Arabische namen krijgen geen Tanwien, behalve driefletterige met Soekoen op de tweede letter." },
+      { "v": "Waarom is de Na‘t in بَيْتُ الْإِمَامِ الْجَدِيْدُ Marfoe‘?", "o": ["Hij hoort bij بَيْتُ", "Hij hoort bij الْإِمَامِ", "Hij is een Fi‘l", "Hij is een Harf"], "g": 0, "u": "Dezelfde naamval als het Man‘oet: بَيْتُ is Marfoe‘." },
+      { "v": "Wat betekent بَيْتُ الْإِمَامِ الْجَدِيْدِ?", "o": ["Het huis van de nieuwe imam", "Het nieuwe huis van de imam", "Het nieuwe huis", "De nieuwe imam"], "g": 0, "u": "الْجَدِيْدِ (Madjroer) hoort bij الْإِمَامِ." },
+      { "v": "Wat betekent أَيٌّ?", "o": ["welk(e)", "wie", "waar", "wat"], "g": 0, "u": "أَيٌّ = welk(e)." },
+      { "v": "Welke uitgang heeft het naamwoord ná أَيٌّ?", "o": ["-ie (Madjroer)", "-oe (Marfoe‘)", "-a (Mansoeb)", "geen"], "g": 0, "u": "أَيٌّ is Moedaaf, dus het volgende woord is Moedaaf Ilaih." }
+    ],
+    "ontleding": [
+      { "ar": "نَحْنُ مُسْلِمُوْنَ.", "nl": "Wij zijn moslims.", "woorden": [["نَحْنُ", "Ism", "Dhamier", "Moebtada", ""], ["مُسْلِمُوْنَ.", "Ism", "", "Chabar", "Marfoe‘"]] },
+      { "ar": "اللّٰهُ رَبُّنَا.", "nl": "Allah is onze Heer.", "woorden": [["اللّٰهُ", "Ism", "", "Moebtada", "Marfoe‘"], ["رَبُّنَا.", "Ism", "", "Chabar", "Marfoe‘", "رَبُّ = Moedaaf · نَا = Dhamier, Moedaaf Ilaih"]] },
+      { "ar": "بَيْتُ الْإِمَامِ الْجَدِيْدُ.", "nl": "Het nieuwe huis van de imam.", "woorden": [["بَيْتُ", "Ism", "", "Moedaaf", "Marfoe‘"], ["الْإِمَامِ", "Ism", "", "Moedaaf Ilaih", "Madjroer"], ["الْجَدِيْدُ.", "Ism", "", "Na‘t", "Marfoe‘"]] },
+      { "ar": "بَيْتُ الْإِمَامِ الْجَدِيْدِ.", "nl": "Het huis van de nieuwe imam.", "woorden": [["بَيْتُ", "Ism", "", "Moedaaf", "Marfoe‘"], ["الْإِمَامِ", "Ism", "", "Man‘oet", "Madjroer"], ["الْجَدِيْدِ.", "Ism", "", "Na‘t", "Madjroer"]] },
+      { "ar": "أَيُّ بَيْتٍ هٰذَا؟", "nl": "Welk huis is dit?", "woorden": [["أَيُّ", "Ism", "Ism Istifhaam", "Moedaaf", "Marfoe‘"], ["بَيْتٍ", "Ism", "", "Moedaaf Ilaih", "Madjroer"], ["هٰذَا؟", "Ism", "Ism Isjaarah", "Moebtada", ""]] },
+      { "ar": "فِيْ أَيِّ فَصْلٍ جَلَسْتَ؟", "nl": "In welke klas zat jij?", "woorden": [["فِيْ", "Harf", "Harf Djarr", "", ""], ["أَيِّ", "Ism", "Ism Istifhaam", "Moedaaf", "Madjroer"], ["فَصْلٍ", "Ism", "", "Moedaaf Ilaih", "Madjroer"], ["جَلَسْتَ؟", "Fi‘l", "", "", ""]] }
+    ]
   }
 };
