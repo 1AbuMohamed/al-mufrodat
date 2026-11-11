@@ -1,13 +1,4 @@
-Eigen opnames voor het tabblad LETTERS (optioneel)
---------------------------------------------------
-Zet hier een opname per letter, in alfabetische volgorde, als mp3:
-01.mp3 = alif (ا)   02.mp3 = bā’ (ب)   03.mp3 = tā’ (ت)   04.mp3 = thā’ (ث)
-05.mp3 = jīm (ج)    06.mp3 = ḥā’ (ح)   07.mp3 = khā’ (خ)  08.mp3 = dāl (د)
-09.mp3 = dhāl (ذ)   10.mp3 = rā’ (ر)   11.mp3 = zāy (ز)   12.mp3 = sīn (س)
-13.mp3 = shīn (ش)   14.mp3 = ṣād (ص)   15.mp3 = ḍād (ض)   16.mp3 = ṭā’ (ط)
-17.mp3 = ẓā’ (ظ)    18.mp3 = ʿayn (ع)  19.mp3 = ghayn (غ) 20.mp3 = fā’ (ف)
-21.mp3 = qāf (ق)    22.mp3 = kāf (ك)   23.mp3 = lām (ل)   24.mp3 = mīm (م)
-25.mp3 = nūn (ن)    26.mp3 = hā’ (ه)   27.mp3 = wāw (و)   28.mp3 = yā’ (ي)
-
-Bestaat een bestand, dan speelt de pagina dat af. Ontbreekt het, dan gebruikt de pagina
-de Arabische stem van het apparaat (de naam van de letter en daarna de klank).
+Eigen opnames voor het tabblad LETTERS
+--------------------------------------
+Er staan nu standaard-opnames (01.mp3–28.mp3) voor elke letter.
+Vervang een bestand door je eigen opname om die in de plaats te gebruiken.
