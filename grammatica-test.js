@@ -886,7 +886,10 @@
     }
     if(home&&oldHome){
       var d=readSave();syncLegacyHome(d);writeSave(d);
-      app.innerHTML=oldHome.view();
+      app.innerHTML=oldHome.view()
+        .replace(/Alleen theorie, geen oefenvoorbeelden/g,'Theorie met grammaticaoefeningen')
+        .replace(/alleen theorie/g,'theorie en oefeningen')
+        .replace(/LEES LES/g,'OPEN LES');
       oldHome.afterRender();
     } else {
       app.innerHTML=home?overview():session.stage==='theory'?intro():session.stage==='done'?finished():taskScreen();
