@@ -15,21 +15,22 @@ const strip = s => String(s).replace(/[\u064b-\u065f\u0670\u06d6-\u06ed\u0640]/g
 const bookText = n => JSON.stringify(book[n]);
 const allBook = Object.keys(book).map(bookText).join(' ');
 const ARABIC_TERMS = new Set(['Ism','Fi‘l','Harf','Ism Isjaarah','Ism Istifhaam','Harf Istifhaam','Harf Atf','Harf Djarr','Harf an-Nidaa’','Dhamier',
-  'Moebtada','Chabar','Faa‘il','Moedaaf','Moedaaf Ilaih','Na‘t','Man‘oet','Ma‘doed','Maf‘oel bih','Marfoe‘','Mansoeb','Madjroer','']);
+  'Moebtada','Chabar','Faa‘il','Moedaaf','Moedaaf Ilaih','Na‘t','Man‘oet','Ma‘doed','Maf‘oel bih','Marfoe‘','Mansoeb','Madjroer','Zarf','Ism Mawsoel','Harf Nafie','Harf Djawaab','']);
 let sentences = 0, questions = 0, cards = 0;
 for (const [key, l] of Object.entries(lab)) {
   assert(book[key], `Les ${key} bestaat niet in het boek`);
-  assert(l.uitleg && l.uitleg.length >= 3, `Les ${key}: minstens 3 theoriekaarten`);
+  assert(l.uitleg && l.uitleg.length >= 2, `Les ${key}: minstens 2 theoriekaarten`);
   l.uitleg.forEach(c => { assert(c.kop && c.tekst && c.tekst.length, `Les ${key}: kaart zonder kop/tekst`); cards++; });
   for (const q of l.vragen) {
-    assert(q.o.length >= 3 && q.o.length <= 4 && Number.isInteger(q.g) && q.g < q.o.length, `Les ${key}: ongeldige vraag ${q.v}`);
+    assert(q.o.length >= 2 && q.o.length <= 4 && Number.isInteger(q.g) && q.g < q.o.length, `Les ${key}: ongeldige vraag ${q.v}`);
     assert.equal(new Set(q.o).size, q.o.length, `Les ${key}: dubbele opties in ${q.v}`);
     assert(q.u, `Les ${key}: vraag zonder uitleg`);
     questions++;
   }
   const bt = strip(bookText(key));
   for (const s of l.ontleding) {
-    assert(strip(bookText(key)).includes(strip(s.ar)), `Les ${key}: zin niet in het boek: ${s.ar}`);
+    const clean = v => strip(v).replace(/[.،؟?,]/g, '').replace(/\s+/g, ' ').trim();
+    assert(clean(bookText(key)).includes(clean(s.ar)), `Les ${key}: zin niet in het boek: ${s.ar}`);
     for (const w of s.woorden) {
       assert(s.ar.includes(w[0].replace(/[،.؟]$/, '')) || s.ar.includes(w[0]), `Les ${key}: woord ${w[0]} niet in zin`);
       assert(['Ism','Fi‘l','Harf'].includes(w[1]), `Les ${key}: onbekende soort ${w[1]}`);

@@ -319,5 +319,298 @@ window.GRAMMATICA_LAB = {
       { "ar": "يَا أُسْتَاذُ", "nl": "O leraar", "woorden": [["يَا", "Harf", "Harf an-Nidaa’", "", ""], ["أُسْتَاذُ", "Ism", "", "", "", "", 1]] },
       { "ar": "اِبْنُ الْمُدَرِّسِ طَبِيْبٌ", "nl": "De zoon van de leraar is dokter.", "woorden": [["اِبْنُ", "Ism", "", "Moedaaf", "Marfoe‘"], ["الْمُدَرِّسِ", "Ism", "", "Moedaaf Ilaih", "Madjroer"], ["طَبِيْبٌ", "Ism", "", "Chabar", "Marfoe‘"]] }
     ]
+  },
+
+  "6": {
+    "uitleg": [
+      {
+        "kop": "Vrouwelijk “dit”: هٰذِهِ",
+        "tekst": [
+          "**هٰذِهِ** is de vrouwelijke vorm van هٰذَا. Je spreekt het uit als هَاذِهِ (haadhihi), maar de lange “aa” schrijf je weer niet als gewone Alief.",
+          "Gebruik هٰذَا bij mannelijke en هٰذِهِ bij vrouwelijke woorden."
+        ],
+        "vb": [["هٰذَا وَلَدٌ وَهٰذِهِ بِنْتٌ.", "Dit is een jongen en dit is een meisje."]]
+      },
+      {
+        "kop": "Een woord vrouwelijk maken",
+        "tekst": [
+          "Zelfstandige en bijvoeglijke naamwoorden worden vrouwelijk door de **Taa’ Marboetah** (ة) aan het einde toe te voegen. De letter vóór de ة krijgt een **Fathah**.",
+          "Een paar woorden hebben een eigen vrouwelijke vorm, die je gewoon moet leren."
+        ],
+        "vb": [["مُدَرِّسٌ → مُدَرِّسَةٌ", "een leraar → een lerares"], ["اِبْنٌ → بِنْتٌ", "een zoon → een dochter"], ["أَخٌ → أُخْتٌ", "een broer → een zus"]],
+        "tip": "Leer bij elk nieuw naamwoord meteen het geslacht mee. Niet elk vrouwelijk woord eindigt op ة."
+      },
+      {
+        "kop": "Lichaamsdelen",
+        "tekst": [
+          "Lichaamsdelen die je twee keer hebt, zijn meestal vrouwelijk (een hand, een oog, een oor, een been). Lichaamsdelen die je maar één keer hebt, zijn mannelijk (een hoofd, een neus, een mond)."
+        ],
+        "vb": [["يَدٌ", "een hand (vrouwelijk)"], ["عَيْنٌ", "een oog (vrouwelijk)"], ["رَأْسٌ", "een hoofd (mannelijk)"], ["فَمٌ", "een mond (mannelijk)"]]
+      },
+      {
+        "kop": "Het voorzetsel لِ",
+        "tekst": [
+          "**لِ** is een voorzetsel (**Harf Djarr**) en betekent “behoort aan”, “van” of “voor”. Het schrijf je vast aan het woord erna, dat daardoor **Madjroer** wordt.",
+          "Bij اَللّٰهُ valt alleen de Alief weg: لِلّٰهِ (“aan Allah”). Er komt geen extra Laam bij. Met het vraagwoord مَنْ krijg je **لِمَنْ** (“van wie?”). Staat er اَلْ achter, dan wordt مَنْ → مَنِ."
+        ],
+        "vb": [["هٰذَا لِبِلَالٍ، وَذٰلِكَ لِحَامِدٍ.", "Dit is van Bilaal en dat is van Haamid."], ["لِمَنِ الْكِتَابُ؟", "Van wie is het boek?"]]
+      },
+      {
+        "kop": "“Ook” en “heel”",
+        "tekst": [
+          "**أَيْضًا** betekent “ook” en **جِدًّا** betekent “heel” of “zeer”. Je zet ze achter het woord waar ze bij horen: هٰذَا كَبِيْرٌ جِدًّا."
+        ],
+        "vb": [["هٰذَا جَمِيْلٌ، وَذٰلِكَ أَيْضًا جَمِيْلٌ.", "Dit is mooi, en dat is ook mooi."]]
+      }
+    ],
+    "vragen": [
+      { "v": "Wat is de vrouwelijke vorm van هٰذَا?", "o": ["هٰذِهِ", "ذٰلِكَ", "هُوَ", "هِيَ"], "g": 0, "u": "هٰذِهِ gebruik je bij vrouwelijke woorden." },
+      { "v": "Hoe maak je مُدَرِّسٌ vrouwelijk?", "o": ["مُدَرِّسَةٌ", "مُدَرِّسٍ", "اَلْمُدَرِّسُ", "مُدَرِّسُ"], "g": 0, "u": "Voeg ة toe; de letter ervoor krijgt een Fathah." },
+      { "v": "Welke klinker staat vóór de Taa’ Marboetah ة?", "o": ["Fathah", "Kasrah", "Dammah", "Soekoen"], "g": 0, "u": "De letter vóór ة krijgt altijd een Fathah." },
+      { "v": "Wat is de vrouwelijke vorm van اِبْنٌ (zoon)?", "o": ["بِنْتٌ", "أُخْتٌ", "اِبْنَةٌ", "أُمٌّ"], "g": 0, "u": "Een zoon wordt een dochter: بِنْتٌ." },
+      { "v": "Wat is de vrouwelijke vorm van أَخٌ (broer)?", "o": ["أُخْتٌ", "بِنْتٌ", "أَخَةٌ", "أُمٌّ"], "g": 0, "u": "Een broer wordt een zus: أُخْتٌ." },
+      { "v": "Is يَدٌ (hand) mannelijk of vrouwelijk?", "o": ["vrouwelijk", "mannelijk"], "g": 0, "u": "Lichaamsdelen die je twee keer hebt, zijn meestal vrouwelijk." },
+      { "v": "Welke term hoort bij لِ?", "o": ["Harf Djarr", "Fi‘l", "Moedaaf", "Harf an-Nidaa’"], "g": 0, "u": "لِ is een voorzetsel, dus een Harf Djarr." },
+      { "v": "Hoe schrijf je “aan Allah”?", "o": ["لِلّٰهِ", "لِاللّٰهِ", "لِلّٰهُ", "لِلْلّٰهِ"], "g": 0, "u": "Alleen de Alief vervalt; er komt geen extra Laam bij." },
+      { "v": "Wat betekent لِمَنْ هٰذَا؟", "o": ["Van wie is dit?", "Wie is dit?", "Wat is dit?", "Waar is dit?"], "g": 0, "u": "لِ + مَنْ = van wie." },
+      { "v": "Wat betekent جِدًّا?", "o": ["heel", "ook", "waar", "nieuw"], "g": 0, "u": "جِدًّا = heel, zeer." }
+    ],
+    "ontleding": [
+      { "ar": "هٰذَا لِبِلَالٍ، وَذٰلِكَ لِحَامِدٍ.", "nl": "Dit is van Bilaal en dat is van Haamid.", "woorden": [["هٰذَا", "Ism", "Ism Isjaarah", "Moebtada", ""], ["لِبِلَالٍ،", "Harf", "Harf Djarr", "", "", "لِ = Harf Djarr · بِلَالٍ = Madjroer", 1], ["وَذٰلِكَ", "Harf", "Harf Atf", "", "", "وَ = Harf Atf · ذٰلِكَ = Ism Isjaarah, Moebtada", 1], ["لِحَامِدٍ.", "Harf", "Harf Djarr", "", "", "لِ = Harf Djarr · حَامِدٍ = Madjroer", 1]] },
+      { "ar": "لِمَنِ الْكِتَابُ؟", "nl": "Van wie is het boek?", "woorden": [["لِمَنِ", "Harf", "Harf Djarr", "", "", "لِ = Harf Djarr · مَنِ = Ism Istifhaam", 1], ["الْكِتَابُ؟", "Ism", "", "Moebtada", "Marfoe‘"]] },
+      { "ar": "اَلْحَمْدُ لِلّٰهِ.", "nl": "Alle lof behoort aan Allah.", "woorden": [["اَلْحَمْدُ", "Ism", "", "Moebtada", "Marfoe‘"], ["لِلّٰهِ.", "Harf", "Harf Djarr", "", "", "لِ = Harf Djarr · اللّٰهِ = Madjroer", 1]] },
+      { "ar": "هٰذَا كَبِيْرٌ جِدًّا.", "nl": "Dit is heel groot.", "woorden": [["هٰذَا", "Ism", "Ism Isjaarah", "Moebtada", ""], ["كَبِيْرٌ", "Ism", "", "Chabar", "Marfoe‘"], ["جِدًّا.", "Ism", "", "", "", "", 1]] }
+    ]
+  },
+
+  "7": {
+    "uitleg": [
+      {
+        "kop": "Veraf én vrouwelijk: تِلْكَ",
+        "tekst": [
+          "**تِلْكَ** betekent “dat” of “die” en is de vrouwelijke vorm van ذٰلِكَ. Je gebruikt het voor vrouwelijke woorden die ver weg zijn."
+        ],
+        "vb": [["هٰذِهِ آمِنَةُ، وَتِلْكَ مَرْيَمُ.", "Dit is Aaminah en dat is Maryam."]]
+      },
+      {
+        "kop": "Het overzicht: vier aanwijzende woorden",
+        "tekst": [
+          "Alle vier zijn een **Ism Isjaarah**. Ze verschillen in twee dingen: dichtbij of veraf, en mannelijk of vrouwelijk.",
+          "**Dichtbij:** هٰذَا (m.) en هٰذِهِ (v.). **Veraf:** ذٰلِكَ (m.) en تِلْكَ (v.)."
+        ],
+        "vb": [["هٰذَا بِلَالٌ، وَذٰلِكَ حَامِدٌ.", "Dit is Bilaal en dat is Haamied."]],
+        "tip": "Eerst het geslacht van het woord bepalen, dan kiezen: dichtbij of veraf."
+      }
+    ],
+    "vragen": [
+      { "v": "Welk woord betekent “dat” bij een vrouwelijk woord?", "o": ["تِلْكَ", "ذٰلِكَ", "هٰذِهِ", "هٰذَا"], "g": 0, "u": "تِلْكَ is de vrouwelijke vorm van ذٰلِكَ." },
+      { "v": "Welk woord gebruik je voor iets vrouwelijks dat dichtbij is?", "o": ["هٰذِهِ", "هٰذَا", "تِلْكَ", "ذٰلِكَ"], "g": 0, "u": "هٰذِهِ = dit (v.)." },
+      { "v": "Hoe heet een aanwijzend voornaamwoord in het Arabisch?", "o": ["Ism Isjaarah", "Harf Djarr", "Dhamier", "Fi‘l"], "g": 0, "u": "Een Ism Isjaarah wijst iets aan." },
+      { "v": "Welke zin betekent “Dit is Aaminah en dat is Maryam.”?", "o": ["هٰذِهِ آمِنَةُ، وَتِلْكَ مَرْيَمُ.", "هٰذَا بِلَالٌ، وَذٰلِكَ حَامِدٌ.", "هٰذَا كِتَابٌ.", "مَنْ هٰذَا؟"], "g": 0, "u": "Beide namen zijn vrouwelijk: هٰذِهِ en تِلْكَ." }
+    ],
+    "ontleding": [
+      { "ar": "هٰذَا بِلَالٌ، وَذٰلِكَ حَامِدٌ.", "nl": "Dit is Bilaal en dat is Haamied.", "woorden": [["هٰذَا", "Ism", "Ism Isjaarah", "Moebtada", ""], ["بِلَالٌ،", "Ism", "", "Chabar", "Marfoe‘"], ["وَذٰلِكَ", "Harf", "Harf Atf", "", "", "وَ = Harf Atf · ذٰلِكَ = Ism Isjaarah, Moebtada", 1], ["حَامِدٌ.", "Ism", "", "Chabar", "Marfoe‘"]] },
+      { "ar": "هٰذِهِ آمِنَةُ، وَتِلْكَ مَرْيَمُ.", "nl": "Dit is Aaminah en dat is Maryam.", "woorden": [["هٰذِهِ", "Ism", "Ism Isjaarah", "Moebtada", ""], ["آمِنَةُ،", "Ism", "", "Chabar", "Marfoe‘"], ["وَتِلْكَ", "Harf", "Harf Atf", "", "", "وَ = Harf Atf · تِلْكَ = Ism Isjaarah, Moebtada", 1], ["مَرْيَمُ.", "Ism", "", "Chabar", "Marfoe‘"]] }
+    ]
+  },
+
+  "8": {
+    "uitleg": [
+      {
+        "kop": "“Dit boek” is nog geen zin",
+        "tekst": [
+          "هٰذَا كِتَابٌ betekent “Dit is een boek” (een zin). Maar **هٰذَا الْكِتَابُ** betekent “dit boek”. Dat is nog geen zin, want er ontbreekt iets dat erover gezegd wordt.",
+          "Voeg een **Chabar** toe, en je hebt een zin: هٰذَا الْكِتَابُ جَدِيْدٌ. Samen vormen هٰذَا en الْكِتَابُ hier de **Moebtada**."
+        ],
+        "vb": [["هٰذَا الْكِتَابُ جَدِيْدٌ.", "Dit boek is nieuw."], ["ذٰلِكَ الرَّجُلُ مُهَنْدِسٌ.", "Die man is een ingenieur."], ["هٰذِهِ السَّاعَةُ جَمِيْلَةٌ.", "Dit horloge is mooi."]],
+        "tip": "Het naamwoord ná de Ism Isjaarah heeft altijd اَلْ. Zonder اَلْ is het een gewone zin: هٰذَا كِتَابٌ."
+      },
+      {
+        "kop": "Wanneer wordt -oe een -ie?",
+        "tekst": [
+          "De normale uitgang is -oe (Marfoe‘). Je wisselt naar -ie (Madjroer) in twee gevallen: na een **Harf Djarr** of wanneer het woord een **Moedaaf Ilaih** is."
+        ],
+        "vb": [["بِلَالٌ فِي الْبَيْتِ.", "Bilaal is in het huis."], ["هٰذَا مِفْتَاحُ الْبَيْتِ.", "Dit is de sleutel van het huis."]]
+      },
+      {
+        "kop": "Woorden die nooit veranderen",
+        "tekst": [
+          "Naamwoorden die eindigen op een lange **-aa**, zoals أَمْرِيْكَا, krijgen geen andere uitgang. Ze blijven in elke zin hetzelfde."
+        ],
+        "vb": [["هٰذَا أَمْرِيْكَا.", "Dit is Amerika."], ["أَنَا مِنْ أَمْرِيْكَا.", "Ik kom uit Amerika."], ["هُوَ رَئِيْسُ أَمْرِيْكَا.", "Hij is de president van Amerika."]]
+      },
+      {
+        "kop": "Achter en voor: خَلْفَ en أَمَامَ",
+        "tekst": [
+          "**خَلْفَ** betekent “achter” en **أَمَامَ** betekent “voor”. Zulke plaatswoorden heten een **Zarf**. Ze werken als een Moedaaf: het naamwoord erna is **Moedaaf Ilaih** en eindigt dus op -ie."
+        ],
+        "vb": [["اَلْبَيْتُ خَلْفَ الْمَسْجِدِ.", "Het huis is achter de moskee."], ["حَامِدٌ أَمَامَ الْمُدَرِّسِ.", "Haamid is voor de leraar."]]
+      },
+      {
+        "kop": "Het werkwoord جَلَسَ",
+        "tekst": [
+          "**جَلَسَ** betekent “hij zat”. Het is een **Fi‘l**. Komt er daarna een naamwoord dat zegt wie zat, dan is dat de **Faa‘il** (Marfoe‘).",
+          "Een kleine spellingstip: een ى zonder stippen onder de letter is een lange “aa”. Daarom is فِيْ “fie” maar عَلَى “‘alaa”."
+        ],
+        "vb": [["أَيْنَ جَلَسَ مُحَمَّدٌ؟", "Waar zat Mohammed?"], ["جَلَسَ أَمَامَ الْمُدَرِّسِ.", "Hij zat voor de leraar."]]
+      }
+    ],
+    "vragen": [
+      { "v": "Welke Arabische tekst is een complete zin?", "o": ["هٰذَا الْكِتَابُ جَدِيْدٌ.", "هٰذَا الْكِتَابُ", "ذٰلِكَ الرَّجُلُ", "هٰذِهِ السَّاعَةُ"], "g": 0, "u": "Alleen de eerste heeft een Chabar (جَدِيْدٌ)." },
+      { "v": "Wat betekent هٰذَا الْكِتَابُ (zonder rest)?", "o": ["dit boek", "dit is een boek", "dit boek is nieuw", "wat is dit"], "g": 0, "u": "Met اَلْ is het slechts een woordgroep: “dit boek”." },
+      { "v": "Welke Moebtada hoort bij de Chabar مُهَنْدِسٌ in “Die man is een ingenieur”?", "o": ["ذٰلِكَ الرَّجُلُ", "هٰذِهِ السَّاعَةُ", "هٰذَا كِتَابٌ", "أَمَامَ الْمُدَرِّسِ"], "g": 0, "u": "“Die man” = ذٰلِكَ الرَّجُلُ." },
+      { "v": "Wanneer verandert de uitgang -oe in -ie?", "o": ["Na een Harf Djarr of bij een Moedaaf Ilaih", "Alleen na وَ", "Alleen bij vrouwelijke woorden", "Nooit"], "g": 0, "u": "Beide gevallen maken het naamwoord Madjroer." },
+      { "v": "Wat gebeurt er met naamwoorden die op een lange -aa eindigen, zoals أَمْرِيْكَا?", "o": ["Ze blijven onveranderd", "Ze krijgen -ie", "Ze krijgen -oe", "Ze krijgen Tanwien"], "g": 0, "u": "Ze hebben geen andere uitgangen." },
+      { "v": "Wat betekent خَلْفَ?", "o": ["achter", "voor", "onder", "naast"], "g": 0, "u": "خَلْفَ = achter. أَمَامَ = voor." },
+      { "v": "Welk woord betekent “voor” (ruimtelijk)?", "o": ["أَمَامَ", "خَلْفَ", "تَحْتَ", "عَلَى"], "g": 0, "u": "أَمَامَ = voor, tegenover." },
+      { "v": "Welke uitgang heeft het naamwoord ná خَلْفَ?", "o": ["-ie (Madjroer)", "-oe (Marfoe‘)", "-a", "Tanwien"], "g": 0, "u": "Het is een Moedaaf Ilaih en dus Madjroer." },
+      { "v": "Wat betekent جَلَسَ?", "o": ["hij zat", "hij ging", "hij ging naar buiten", "hij at"], "g": 0, "u": "جَلَسَ = hij zat." },
+      { "v": "Hoe spreek je عَلَى uit?", "o": ["‘alaa", "‘alie", "‘aloe", "‘alay"], "g": 0, "u": "De ى zonder stippen is een lange “aa”." }
+    ],
+    "ontleding": [
+      { "ar": "هٰذَا الْكِتَابُ جَدِيْدٌ.", "nl": "Dit boek is nieuw.", "woorden": [["هٰذَا", "Ism", "Ism Isjaarah", "Moebtada", ""], ["الْكِتَابُ", "Ism", "", "Moebtada", "Marfoe‘"], ["جَدِيْدٌ.", "Ism", "", "Chabar", "Marfoe‘"]] },
+      { "ar": "هٰذَا مِفْتَاحُ الْبَيْتِ.", "nl": "Dit is de sleutel van het huis.", "woorden": [["هٰذَا", "Ism", "Ism Isjaarah", "Moebtada", ""], ["مِفْتَاحُ", "Ism", "", "Moedaaf", "Marfoe‘"], ["الْبَيْتِ.", "Ism", "", "Moedaaf Ilaih", "Madjroer"]] },
+      { "ar": "اَلْبَيْتُ خَلْفَ الْمَسْجِدِ.", "nl": "Het huis is achter de moskee.", "woorden": [["اَلْبَيْتُ", "Ism", "", "Moebtada", "Marfoe‘"], ["خَلْفَ", "Ism", "Zarf", "Moedaaf", ""], ["الْمَسْجِدِ.", "Ism", "", "Moedaaf Ilaih", "Madjroer"]] },
+      { "ar": "أَيْنَ جَلَسَ مُحَمَّدٌ؟", "nl": "Waar zat Mohammed?", "woorden": [["أَيْنَ", "Ism", "Ism Istifhaam", "", ""], ["جَلَسَ", "Fi‘l", "", "", ""], ["مُحَمَّدٌ؟", "Ism", "", "Faa‘il", "Marfoe‘"]] },
+      { "ar": "جَلَسَ أَمَامَ الْمُدَرِّسِ.", "nl": "Hij zat voor de leraar.", "woorden": [["جَلَسَ", "Fi‘l", "", "", ""], ["أَمَامَ", "Ism", "Zarf", "Moedaaf", ""], ["الْمُدَرِّسِ.", "Ism", "", "Moedaaf Ilaih", "Madjroer"]] }
+    ]
+  },
+
+  "9": {
+    "uitleg": [
+      {
+        "kop": "Het bijvoeglijk naamwoord komt erachter: Na‘t en Man‘oet",
+        "tekst": [
+          "In het Arabisch staat het bijvoeglijk naamwoord **ná** het zelfstandig naamwoord, anders dan in het Nederlands: بَيْتٌ جَدِيْدٌ is letterlijk “een huis nieuw”.",
+          "Het bijvoeglijk naamwoord heet **Na‘t**. Het zelfstandig naamwoord dat het beschrijft heet **Man‘oet**."
+        ],
+        "vb": [["بَيْتٌ جَدِيْدٌ", "Een nieuw huis"]]
+      },
+      {
+        "kop": "De Na‘t past zich aan op vier punten",
+        "tekst": [
+          "**1. Geslacht.** Mannelijk bij mannelijk, vrouwelijk bij vrouwelijk.",
+          "**2. Bepaaldheid.** Heeft het Man‘oet اَلْ, dan krijgt ook de Na‘t اَلْ. Heeft het Man‘oet een Tanwien, dan heeft de Na‘t ook een Tanwien.",
+          "**3. Naamval.** Marfoe‘ blijft Marfoe‘; Madjroer blijft Madjroer.",
+          "**4. Aantal.** Enkelvoud, tweevoud en meervoud moeten overeenkomen."
+        ],
+        "vb": [["وَلَدٌ صَغِيْرٌ → بِنْتٌ صَغِيْرَةٌ", "een kleine jongen → een kleine dochter"], ["اَلْمُدَرِّسُ الْجَدِيْدُ فِي الْفَصْلِ.", "De nieuwe leraar is in de klas."], ["أَنَا فِيْ بَيْتٍ جَدِيْدٍ.", "Ik ben in een nieuw huis."]],
+        "tip": "Controleer altijd vier dingen: geslacht, bepaaldheid, naamval, aantal. Pas dan is de Na‘t goed."
+      },
+      {
+        "kop": "Enkelvoud, tweevoud, meervoud",
+        "tekst": [
+          "Het Arabisch heeft een tweevoud (voor precies twee). Het bijvoeglijk naamwoord volgt hierin het zelfstandig naamwoord."
+        ],
+        "vb": [["مُدَرِّسٌ جَدِيْدٌ", "Een nieuwe leraar"], ["مُدَرِّسَانِ جَدِيْدَانِ", "Twee nieuwe leraren"], ["مُدَرِّسُوْنَ جُدُدٌ", "Nieuwe leraren"]]
+      },
+      {
+        "kop": "Bijvoeglijke naamwoorden op -aan",
+        "tekst": [
+          "Bijvoeglijke naamwoorden die eindigen op **-aan** (ان) krijgen geen Tanwien. Voorbeelden: كَسْلَانُ (“lui”), جَوْعَانُ (“hongerig”), عَطْشَانُ (“dorstig”), غَضْبَانُ (“boos”), مَلْآنُ (“vol”)."
+        ]
+      },
+      {
+        "kop": "“Die” en “dat”: اَلَّذِيْ",
+        "tekst": [
+          "**اَلَّذِيْ** is een betrekkelijk voornaamwoord (**Ism Mawsoel**): “die”, “dat”, “wie” of “welk”. Het verbindt een naamwoord met een bijzin.",
+          "Voor een mens vertaal je “die” of “wie”, voor een dier of ding “die”, “dat” of “welk”."
+        ],
+        "vb": [["اَلْبَيْتُ الَّذِيْ أَمَامَ الْمَسْجِدِ لِلْإِمَامِ.", "Het huis dat voor de moskee is, is van de imam."]]
+      },
+      {
+        "kop": "لِ + اَلْ, en het woord عِنْدَ",
+        "tekst": [
+          "Gebruik je لِ vóór een woord met اَلْ, dan valt de Alief van اَلْ weg: اَلْإِمَامُ → لِلْإِمَامِ.",
+          "**عِنْدَ** betekent “bij”. Het naamwoord erna is Moedaaf Ilaih en eindigt op -ie."
+        ],
+        "vb": [["اَلْمُدَرِّسُ عِنْدَ الْمُدِيْرِ.", "De leraar is bij de directeur."]]
+      }
+    ],
+    "vragen": [
+      { "v": "Waar staat het bijvoeglijk naamwoord in het Arabisch?", "o": ["Na het zelfstandig naamwoord", "Voor het zelfstandig naamwoord", "Los aan het begin van de zin", "Altijd aan het einde van de zin"], "g": 0, "u": "بَيْتٌ جَدِيْدٌ: eerst het huis, dan nieuw." },
+      { "v": "Hoe heet het bijvoeglijk naamwoord?", "o": ["Na‘t", "Man‘oet", "Moedaaf", "Chabar"], "g": 0, "u": "Na‘t = bijvoeglijk naamwoord." },
+      { "v": "Hoe heet het woord dat door de Na‘t wordt beschreven?", "o": ["Man‘oet", "Na‘t", "Faa‘il", "Moedaaf Ilaih"], "g": 0, "u": "Man‘oet = het beschreven naamwoord." },
+      { "v": "Welke vier dingen moeten Na‘t en Man‘oet gemeen hebben?", "o": ["Geslacht, bepaaldheid, naamval, aantal", "Alleen geslacht", "Kleur, vorm, naamval, aantal", "Geslacht, tijd, naamval, plaats"], "g": 0, "u": "Dit zijn de vier punten van overeenstemming." },
+      { "v": "Welke combinatie is correct voor “een nieuwe auto”?", "o": ["سَيَّارَةٌ جَدِيْدَةٌ", "سَيَّارَةٌ جَدِيْدٌ", "سَيَّارَةٌ الْجَدِيْدَةُ", "جَدِيْدَةٌ سَيَّارَةٌ"], "g": 0, "u": "Beide vrouwelijk, onbepaald, Marfoe‘ en enkelvoud." },
+      { "v": "Welke combinatie is correct voor “de nieuwe leraar”?", "o": ["اَلْمُدَرِّسُ الْجَدِيْدُ", "اَلْمُدَرِّسُ جَدِيْدٌ", "مُدَرِّسٌ الْجَدِيْدُ", "اَلْمُدَرِّسِ الْجَدِيْدُ"], "g": 0, "u": "Beide met اَلْ en Marfoe‘." },
+      { "v": "In فِي الْبَيْتِ الْجَدِيْدِ: welke naamval heeft الْجَدِيْدِ?", "o": ["Madjroer", "Marfoe‘", "Mansoeb", "Geen"], "g": 0, "u": "De Na‘t heeft dezelfde naamval als zijn Man‘oet." },
+      { "v": "Welke uitgang geldt voor bijvoeglijke naamwoorden op -aan, zoals كَسْلَانُ?", "o": ["Geen Tanwien", "Altijd Tanwien", "Altijd -ie", "Altijd Taa’ Marboetah"], "g": 0, "u": "Woorden op -aan krijgen geen Tanwien." },
+      { "v": "Hoe heet het betrekkelijk voornaamwoord اَلَّذِيْ?", "o": ["Ism Mawsoel", "Ism Isjaarah", "Dhamier", "Harf Djarr"], "g": 0, "u": "Een Ism Mawsoel verbindt een bijzin met het naamwoord." },
+      { "v": "Wat wordt اَلْإِمَامُ na لِ?", "o": ["لِلْإِمَامِ", "لِالْإِمَامِ", "لِاَلْإِمَامِ", "لَإِمَامِ"], "g": 0, "u": "De Alief van اَلْ valt weg: لِلْإِمَامِ." },
+      { "v": "Wat betekent عِنْدَ?", "o": ["bij", "met", "onder", "achter"], "g": 0, "u": "عِنْدَ = bij." }
+    ],
+    "ontleding": [
+      { "ar": "بَيْتٌ جَدِيْدٌ", "nl": "Een nieuw huis", "woorden": [["بَيْتٌ", "Ism", "", "Man‘oet", "Marfoe‘"], ["جَدِيْدٌ", "Ism", "", "Na‘t", "Marfoe‘"]] },
+      { "ar": "اَلْمُدَرِّسُ الْجَدِيْدُ فِي الْفَصْلِ.", "nl": "De nieuwe leraar is in de klas.", "woorden": [["اَلْمُدَرِّسُ", "Ism", "", "Man‘oet", "Marfoe‘"], ["الْجَدِيْدُ", "Ism", "", "Na‘t", "Marfoe‘"], ["فِي", "Harf", "Harf Djarr", "", ""], ["الْفَصْلِ.", "Ism", "", "", "Madjroer"]] },
+      { "ar": "مَنْ فِي الْبَيْتِ الْجَدِيْدِ؟", "nl": "Wie is in het nieuwe huis?", "woorden": [["مَنْ", "Ism", "Ism Istifhaam", "Moebtada", ""], ["فِي", "Harf", "Harf Djarr", "", ""], ["الْبَيْتِ", "Ism", "", "Man‘oet", "Madjroer"], ["الْجَدِيْدِ؟", "Ism", "", "Na‘t", "Madjroer"]] },
+      { "ar": "اَلْمُدَرِّسُ عِنْدَ الْمُدِيْرِ.", "nl": "De leraar is bij de directeur.", "woorden": [["اَلْمُدَرِّسُ", "Ism", "", "Moebtada", "Marfoe‘"], ["عِنْدَ", "Ism", "Zarf", "Moedaaf", ""], ["الْمُدِيْرِ.", "Ism", "", "Moedaaf Ilaih", "Madjroer"]] }
+    ]
+  },
+
+  "10": {
+    "uitleg": [
+      {
+        "kop": "Achtervoegsels voor “mijn”, “jouw”, “zijn”, “haar”",
+        "tekst": [
+          "De bezittelijke voornaamwoorden zijn geen losse woorden maar **achtervoegsels** die je vastmaakt aan het naamwoord: **ـكَ** (“jouw”, m.), **ـهُ** (“zijn”), **ـهَا** (“haar”), **ـيْ** (“mijn”). Zulke achtervoegsels zijn een **Dhamier**.",
+          "Het naamwoord dat het achtervoegsel krijgt, is de **Moedaaf**. Het achtervoegsel is de **Moedaaf Ilaih**."
+        ],
+        "vb": [["كِتَابُكَ", "jouw boek"], ["كِتَابُهُ", "zijn boek"], ["كِتَابُهَا", "haar boek"], ["كِتَابِيْ", "mijn boek"]],
+        "tip": "Bij “mijn” verandert de uitgang van de Moedaaf: kitaab-ie in plaats van kitaab-oe-ie."
+      },
+      {
+        "kop": "De extra Waaw bij “vader” en “broer”",
+        "tekst": [
+          "Als أَبٌ (“vader”) of أَخٌ (“broer”) een Moedaaf is, komt er een extra **Waaw** (و) tussen de Moedaaf en de Moedaaf Ilaih: أَخُوْكَ (niet أَخُكَ) en أَبُوْهُ (niet أَبُهُ).",
+          "Ook voor een naam geldt dit: أَبُوْ مُحَمَّدٍ en أَخُوْ مُحَمَّدٍ. Bij “mijn vader” en “mijn broer” komt géén Waaw: أَبِيْ en أَخِيْ."
+        ],
+        "tip": "Er zijn vijf woorden met deze extra Waaw. Je kent er nu twee; de andere drie volgen in een volgende les."
+      },
+      {
+        "kop": "“Hebben” zeggen: عِنْدَ en لِ",
+        "tekst": [
+          "Het Arabisch heeft geen werkwoord “hebben”. Voor losse dingen gebruik je **عِنْدَ** (“bij”): أَعِنْدَكَ قَلَمٌ؟ = “Is er een pen bij jou?”.",
+          "Voor familie en lichaamsdelen gebruik je **لِ**: لِيْ أَخٌ (“ik heb een broer”). Je zegt dus níet عِنْدِيْ أَخٌ. Het voorzetsel لِ krijgt vóór achtervoegsels een Fathah: لَكَ, لَهُ, لَهَا, maar bij “mij” blijft het لِيْ."
+        ],
+        "vb": [["أَعِنْدَكَ قَلَمٌ؟", "Heb jij een pen?"]]
+      },
+      {
+        "kop": "“Ik ging” en “jij ging”",
+        "tekst": [
+          "Aan het werkwoord ذَهَبَ (“hij ging”) komen persoonsvormen: **ذَهَبْتَ** (“jij ging”, m.) en **ذَهَبْتُ** (“ik ging”). Het zijn allebei een **Fi‘l**."
+        ],
+        "vb": [["أَذَهَبْتَ إِلَى الْمَدْرَسَةِ الْيَوْمَ؟", "Ben jij vandaag naar school gegaan?"], ["نَعَمْ، ذَهَبْتُ.", "Ja, ik ben gegaan."]]
+      },
+      {
+        "kop": "Namen op ة, “met” en “niet”",
+        "tekst": [
+          "Ook mannelijke eigennamen die op ة eindigen, krijgen geen Tanwien: مُعَاوِيَةُ, أُسَامَةُ, حَمْزَةُ.",
+          "**مَعَ** betekent “met”. Het verschil met عِنْدَ: bij عِنْدَ ben je op de plek van die persoon, bij مَعَ mag je overal samen zijn. Het naamwoord erna eindigt op -ie.",
+          "**بِ** betekent “bij” of “in”. En **مَا** is niet alleen “wat”: voor een zin is het ook de ontkenning, een **Harf Nafie**."
+        ],
+        "vb": [["اَلْمُدَرِّسُ مَعَ الْمُدِيْرِ.", "De leraar is met de directeur."]]
+      }
+    ],
+    "vragen": [
+      { "v": "Wat betekent كِتَابُكَ?", "o": ["jouw boek", "zijn boek", "haar boek", "mijn boek"], "g": 0, "u": "ـكَ = jouw (mannelijk)." },
+      { "v": "Wat betekent كِتَابِيْ?", "o": ["mijn boek", "jouw boek", "zijn boek", "haar boek"], "g": 0, "u": "ـيْ = mijn." },
+      { "v": "Wat is de Moedaaf in كِتَابُهَا?", "o": ["كِتَابُ", "هَا", "beide", "geen"], "g": 0, "u": "Het bezit (het boek) is de Moedaaf; هَا is de Moedaaf Ilaih." },
+      { "v": "Welke vorm is correct voor “jouw broer”?", "o": ["أَخُوْكَ", "أَخُكَ", "أَخٌكَ", "أَخِكَ"], "g": 0, "u": "Een extra Waaw komt tussen Moedaaf en Moedaaf Ilaih." },
+      { "v": "Welke vorm is correct voor “zijn vader”?", "o": ["أَبُوْهُ", "أَبُهُ", "أَبٌهُ", "أَبِهُ"], "g": 0, "u": "أَبٌ krijgt als Moedaaf een extra Waaw." },
+      { "v": "Welke vorm is correct voor “mijn vader”?", "o": ["أَبِيْ", "أَبُوْيْ", "أَبُيْ", "أَبَيْ"], "g": 0, "u": "Bij “mijn” komt geen extra Waaw." },
+      { "v": "Hoe zeg je “Ik heb een broer.”?", "o": ["لِيْ أَخٌ.", "عِنْدِيْ أَخٌ.", "أَنَا أَخٌ.", "مَعِيْ أَخٌ."], "g": 0, "u": "Voor familie gebruik je لِ, niet عِنْدَ." },
+      { "v": "Wat betekent أَعِنْدَكَ قَلَمٌ؟", "o": ["Heb jij een pen?", "Is dit jouw pen?", "Waar is jouw pen?", "Wie heeft een pen?"], "g": 0, "u": "عِنْدَ drukt hier “hebben” uit." },
+      { "v": "Welke vorm betekent “ik ging”?", "o": ["ذَهَبْتُ", "ذَهَبْتَ", "ذَهَبَ", "خَرَجَ"], "g": 0, "u": "ـتُ = ik; ـتَ = jij (m.)." },
+      { "v": "Welk woord betekent “met”?", "o": ["مَعَ", "عِنْدَ", "مِنْ", "فِيْ"], "g": 0, "u": "مَعَ = met." },
+      { "v": "Welke functie heeft مَا in مَا عِنْدِيْ سَيَّارَةٌ?", "o": ["Ontkenning (Harf Nafie)", "Vraagwoord", "Voorzetsel", "Bezit"], "g": 0, "u": "Hier betekent مَا “niet”: “Ik heb geen auto.”" }
+    ],
+    "ontleding": [
+      { "ar": "أَعِنْدَكَ قَلَمٌ؟", "nl": "Heb jij een pen?", "woorden": [["أَ", "Harf", "Harf Istifhaam", "", ""], ["عِنْدَكَ", "Ism", "Zarf", "Moedaaf", "", "عِنْدَ = Zarf, Moedaaf · كَ = Dhamier, Moedaaf Ilaih", 1], ["قَلَمٌ؟", "Ism", "", "Moebtada", "Marfoe‘"]] },
+      { "ar": "نَعَمْ، ذَهَبْتُ.", "nl": "Ja, ik ben gegaan.", "woorden": [["نَعَمْ،", "Harf", "Harf Djawaab", "", ""], ["ذَهَبْتُ.", "Fi‘l", "", "", ""]] },
+      { "ar": "اَلْمُدَرِّسُ مَعَ الْمُدِيْرِ.", "nl": "De leraar is met de directeur.", "woorden": [["اَلْمُدَرِّسُ", "Ism", "", "Moebtada", "Marfoe‘"], ["مَعَ", "Ism", "Zarf", "Moedaaf", ""], ["الْمُدِيْرِ.", "Ism", "", "Moedaaf Ilaih", "Madjroer"]] },
+      { "ar": "أَخُوْ مُحَمَّدٍ", "nl": "De broer van Mohammed", "woorden": [["أَخُوْ", "Ism", "", "Moedaaf", "Marfoe‘"], ["مُحَمَّدٍ", "Ism", "", "Moedaaf Ilaih", "Madjroer"]] },
+      { "ar": "لِيْ أَخٌ", "nl": "Ik heb een broer.", "woorden": [["لِيْ", "Harf", "Harf Djarr", "", "", "لِ = Harf Djarr · يْ = Dhamier, Madjroer", 1], ["أَخٌ", "Ism", "", "Moebtada", "Marfoe‘"]] }
+    ]
   }
 };
