@@ -293,7 +293,7 @@
       why:buildWhyTasks(n,seed+331),theory:buildTheoryTasks(n,seed+449)
     };
     var translations=getExamples(n),legacy=buildTasks(n);
-    var other=seededShuffle(legacy,seed+577).map(function(t){return Object.assign({lesson:n,concept:'voorbeeld:'+plain(t.example.ar)},t);});
+    var other=seededShuffle(legacy.filter(function(t){return t.type!=='reflect';}),seed+577).map(function(t){return Object.assign({lesson:n,concept:'voorbeeld:'+plain(t.example.ar)},t);});
     if(translations.length>1) translations.forEach(function(ex,i){
       var otherArabic=translations.map(function(e){return plain(e.ar);}).filter(function(a){return a!==plain(ex.ar);});
       if(otherArabic.length)other.push({type:'reverse',lesson:n,example:ex,prompt:'Kies de Arabische zin.',answer:plain(ex.ar),
