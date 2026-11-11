@@ -257,6 +257,12 @@
     if(part.length)cards.push(part);
     return cards;
   }
+  function formatMedinaInline(value){
+    return esc(value).replace(/«([^»]+)»/g,function(full,content){
+      return /[\u0600-\u06ff◌]/.test(content) ?
+        '<bdi class="gd-inline-ar" lang="ar" dir="rtl">«'+content+'»</bdi>' : full;
+    });
+  }
   function renderTheorySource(item){
     if(item.type==='voorbeeld'){
       return '<div class="gd-theory-example"><div class="gd-arabic" lang="ar" dir="rtl">'+esc(item.ar||'')+'</div>'+
@@ -273,7 +279,7 @@
       return '<div class="gd-theory-table-scroll" role="region" aria-label="Grammaticatabel" tabindex="0"><table class="gd-theory-table">'+header+'<tbody>'+body+'</tbody></table></div>';
     }
     var name=item.type==='kop'?'h2':'p';
-    return '<'+name+' class="gd-theory-text gd-source-'+item.type+'">'+esc(item.tekst||'')+'</'+name+'>';
+    return '<'+name+' class="gd-theory-text gd-source-'+item.type+'">'+formatMedinaInline(item.tekst||'')+'</'+name+'>';
   }
   function renderTheoryStep(){
     var cards=session.theoryCards,idx=session.theoryIndex,items=cards[idx]||[];
@@ -520,7 +526,7 @@
             '<mark class="gd-parse-word">'+esc(task.word)+'</mark>'+esc(w.slice(pos+task.word.length));
         }).join(' ')+'</div>' : '';
       var question=type==='theory' ?
-        '<p class="gd-theory-question" dir="auto">'+esc(task.prompt)+'</p>' :
+        '<p class="gd-theory-question" dir="auto">'+formatMedinaInline(task.prompt)+'</p>' :
         '<p class="gd-subinstruction gd-parsing-prompt">'+(type==='why' ?
           'Waarom heeft het gemarkeerde woord deze functie?' :
           (task.form?'Welke grammaticale vorm heeft het gemarkeerde deel?':'Welke grammaticale functie heeft het gemarkeerde woord?'))+'</p>';
@@ -531,7 +537,7 @@
             (arabic?' gd-option-ar':'')+'" data-action="select" data-value="'+i+
             '" aria-pressed="'+picked+'" '+(session.feedback?'disabled':'')+
             (arabic?' lang="ar" dir="rtl"':'')+'><span class="gd-option-nr" aria-hidden="true">'+(i+1)+'</span>'+
-            '<span class="gd-option-body">'+esc(option)+'</span></button>';
+            '<span class="gd-option-body" dir="auto">'+formatMedinaInline(option)+'</span></button>';
         }).join('')+'</div>';
     }
     if (type === 'choice') {
@@ -631,7 +637,7 @@
       (task.example ? '<p class="gd-arabic" lang="ar" dir="rtl">' + esc(task.example.ar) + '</p>' : '') +
       (task.example && task.example.nl && !/^(?:-|Voorbeeld:)$/i.test(plain(task.example.nl)) ?
         '<p class="gd-dutch-answer">' + esc(task.example.nl) + '</p>' : '') +
-      (task.rule && task.rule!==task.answer ? '<p class="gd-theory-explanation">'+esc(task.rule)+'</p>' : '') +
+      (task.rule && task.rule!==task.answer ? '<p class="gd-theory-explanation">'+formatMedinaInline(task.rule)+'</p>' : '') +
       (good && session.combo>=3 ? '<p class="gd-combo" aria-label="'+session.combo+' goede antwoorden achter elkaar">'+session.combo+'× combo</p>' : '') +
       '<button type="button" class="gd-primary gd-full" data-action="next">Volgende <span aria-hidden="true">→</span></button>' +
       '</div></section>';
