@@ -242,18 +242,20 @@
     var st = streak(p), todayXp = p.days[today()] || 0;
     var b = ui.bump || {};
     var u = (window.AL_AUTH && AL_AUTH.current) ? AL_AUTH.current() : null;
-    var authBtn = u
-      ? ('<button type="button" class="lh-auth-chip" data-h="nav" data-v="profiel" aria-label="Account, ' + esc(u.name || u.email || '') + '">' +
-         (u.picture
-           ? '<img src="' + esc(u.picture) + '" alt="" width="28" height="28" referrerpolicy="no-referrer">'
-           : '<span class="lh-auth-chip-ph">' + esc((u.name || u.email || '?').charAt(0).toUpperCase()) + '</span>') +
-         '</button>')
-      : '<button type="button" class="lh-login-btn" data-h="login">Inloggen</button>';
+    var right;
+    if (u) {
+      var av = u.picture
+        ? '<img class="lh-pfp" src="' + esc(u.picture) + '" alt="" width="36" height="36" referrerpolicy="no-referrer">'
+        : '<span class="lh-pfp lh-pfp-ph" aria-hidden="true">' + esc((u.name || u.email || '?').charAt(0).toUpperCase()) + '</span>';
+      right = '<button type="button" class="lh-pfp-btn" data-h="nav" data-v="profiel" aria-label="Profiel en instellingen">' + av + '</button>';
+    } else {
+      right = '<button type="button" class="lh-login-btn" data-h="login">Inloggen</button>';
+    }
     return '<header class="lh-top"><div class="lh-chips">' +
       chip('flame', 'flame', st, 'Streak: ' + st + ' dagen', (st === 0 ? ' zero' : '') + (b.streak ? ' bump' : '')) +
       chip('bolt', 'bolt', p.xp, 'XP: ' + p.xp + ' totaal, ' + todayXp + ' vandaag', b.xp ? ' bump' : '') +
       chip('heart', 'heart', 5, 'Hartjes: 5', '') +
-      authBtn +
+      right +
       (ui.tip ? '<div class="lh-tip" role="status">' + esc(TIPS[ui.tip]) + '</div>' : '') +
       '</div></header>';
   }
@@ -387,8 +389,12 @@
     var banner = cur ? '<div class="lh-banner"><div><small>LES ' + cur.n + '</small><strong>' +
       esc(cur.sub || 'Medina-grammatica') + '</strong></div>' +
       '<button type="button" class="btn btn-white" data-h="theory" data-v="' + cur.n + '">THEORIE</button></div>' : '';
+    var u = (window.AL_AUTH && AL_AUTH.current) ? AL_AUTH.current() : null;
+    var greet = u && u.name
+      ? ('Welkom, ' + esc(u.name.split(' ')[0]) + '!')
+      : 'Laten we Arabisch leren!';
     return pathSwitch(s) + banner + tabs(s) +
-      '<div class="lh-hero"><h1>Laten we Arabisch leren!</h1><p class="lh-sub">' + sub + '</p>' +
+      '<div class="lh-hero"><h1>' + greet + '</h1><p class="lh-sub">' + sub + '</p>' +
       '<button type="button" class="btn btn-blue lh-go" data-h="go" data-f="go">GA VERDER</button></div>' +
       (s.tab === 'lessons' ? tilesHtml(pl) : pathHtml(pl));
   }
@@ -508,7 +514,8 @@
       seg('Thema', 'theme', [['system', 'Systeem'], ['dark', 'Donker'], ['light', 'Licht']], s.theme) +
       '<a class="lh-morelink" href="index.html#/grammatica">Originele grammatica</a>' +
       ((window.AL_AUTH && AL_AUTH.current && AL_AUTH.current())
-        ? '<button type="button" class="lh-morelink" data-h="logout">Uitloggen</button>'
+        ? '<button type="button" class="lh-morelink" data-h="nav" data-v="profiel">Account & instellingen</button>' +
+          '<button type="button" class="lh-morelink" data-h="logout">Uitloggen</button>'
         : '<button type="button" class="lh-morelink" data-h="login">Inloggen met Gmail</button>') +
       '<button type="button" class="lh-morelink danger" data-h="reset">Voortgang wissen</button></div>';
   }

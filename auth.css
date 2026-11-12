@@ -15,23 +15,27 @@
 .lh-auth-actions .btn{flex:1 1 140px}
 .lh-auth-hint{font-size:13px;line-height:1.5;color:var(--muted,#9aafab);margin:0}
 
-/* Zichtbare login in de bovenbalk */
+/* Bovenbalk: login of proselfoto rechts */
+.lh-chips{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;width:100%}
 .lh-login-btn{
   margin-inline-start:auto;
   min-height:36px;padding:0 14px;
-  border:2px solid var(--line);border-radius:999px;
-  background:var(--blue, #1cb0f6);color:#fff;
-  font:800 13px var(--font-ui,system-ui);letter-spacing:.04em;text-transform:uppercase;
+  border:2px solid transparent;border-radius:999px;
+  background:var(--blue,#1cb0f6);color:#fff;
+  font:800 12px var(--font-ui,system-ui);letter-spacing:.04em;text-transform:uppercase;
   box-shadow:0 3px 0 var(--blue-shade,#1899d6);
-  cursor:pointer;
+  cursor:pointer;white-space:nowrap;flex:none;
 }
 .lh-login-btn:active{transform:translateY(2px);box-shadow:none}
-.lh-auth-chip{
+.lh-pfp-btn{
   margin-inline-start:auto;
-  width:36px;height:36px;padding:0;border:2px solid var(--line);border-radius:50%;
+  width:40px;height:40px;padding:0;border:2px solid var(--line);border-radius:50%;
   background:var(--surface-2);overflow:hidden;cursor:pointer;
-  display:grid;place-items:center;
+  display:grid;place-items:center;flex:none;
 }
-.lh-auth-chip img{width:100%;height:100%;object-fit:cover}
-.lh-auth-chip-ph{font-weight:800;font-size:14px;color:var(--text)}
-.lh-chips{display:flex;align-items:center;gap:8px;flex-wrap:wrap;width:100%}
+.lh-pfp-btn:hover,.lh-pfp-btn:focus-visible{border-color:var(--blue);outline:none}
+.lh-pfp{width:100%;height:100%;object-fit:cover;display:block;border-radius:50%}
+.lh-pfp-ph{
+  width:100%;height:100%;display:grid;place-items:center;
+  font-weight:800;font-size:15px;color:var(--text);background:var(--surface-2);
+}
