@@ -70,7 +70,7 @@
 }
 
 
-/* Klikbare buddy — random plek, trage vlucht */
+/* Buddy: rondvliegen, zwaaien, aankomen */
 .al-mascot-buddy{
   position:fixed;
   z-index:40;
@@ -78,34 +78,60 @@
   width:72px;height:72px;padding:0;
   border:0;background:transparent;cursor:pointer;
   filter:drop-shadow(0 6px 10px rgba(0,0,0,.25));
-  transition:transform .15s ease;
+  transition: top 1.15s cubic-bezier(.22,.7,.3,1), left 1.15s cubic-bezier(.22,.7,.3,1);
   -webkit-tap-highlight-color:transparent;
 }
-.al-mascot-buddy:hover{transform:translateY(-3px) scale(1.04)}
-.al-mascot-buddy:active{transform:scale(.96)}
-.al-mascot-buddy .gd-mascot-buddy,
 .al-mascot-buddy .gd-mascot{
-  width:72px;height:auto;pointer-events:none;
-  content-visibility:visible;
+  width:72px;height:auto;pointer-events:none;display:block;
 }
+.al-mascot-buddy:hover{filter:drop-shadow(0 8px 14px rgba(0,0,0,.3))}
+.al-mascot-buddy:active{transform:scale(.96)}
 
+@keyframes al-mascot-bob{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-7px)}
+}
+@keyframes al-mascot-wave{
+  0%,100%{transform:rotate(0)}
+  20%{transform:rotate(-14deg) translateY(-4px)}
+  40%{transform:rotate(12deg) translateY(-2px)}
+  60%{transform:rotate(-10deg) translateY(-4px)}
+  80%{transform:rotate(8deg)}
+}
+@keyframes al-mascot-arrive{
+  0%{transform:scale(.2) translateY(20px);opacity:0}
+  70%{transform:scale(1.08) translateY(-4px);opacity:1}
+  100%{transform:scale(1) translateY(0);opacity:1}
+}
 @keyframes al-mascot-flyaway{
   0%{transform:translate3d(0,0,0) scale(1) rotate(0);opacity:1}
   12%{transform:translate3d(0,-10px,0) scale(1.06) rotate(-5deg);opacity:1}
-  40%{transform:translate3d(calc(var(--fly-x, 40vw) * .18), calc(var(--fly-y, -40vh) * .18), 0) scale(1.04) rotate(-10deg);opacity:1}
-  100%{transform:translate3d(var(--fly-x, 70vw), var(--fly-y, -45vh), 0) scale(.4) rotate(26deg);opacity:0}
+  40%{transform:translate3d(calc(var(--fly-x,40vw) * .18), calc(var(--fly-y,-40vh) * .18), 0) scale(1.04) rotate(-10deg);opacity:1}
+  100%{transform:translate3d(var(--fly-x,70vw), var(--fly-y,-45vh), 0) scale(.4) rotate(26deg);opacity:0}
 }
+
+.al-mascot-buddy.is-bob .gd-mascot{animation:al-mascot-bob 2.2s ease-in-out infinite}
+.al-mascot-buddy.is-waving .gd-mascot{animation:al-mascot-wave .7s ease-in-out 2}
+.al-mascot-buddy.is-arrive{animation:al-mascot-arrive .55s cubic-bezier(.2,1.2,.4,1) both}
+.al-mascot-buddy.is-gliding{transition: top 1.15s cubic-bezier(.22,.7,.3,1), left 1.15s cubic-bezier(.22,.7,.3,1)}
 .al-mascot-buddy.is-flying{
   pointer-events:none;
+  transition:none;
   animation:al-mascot-flyaway 2s cubic-bezier(.22,.5,.3,1) forwards;
   will-change:transform,opacity;
 }
+.al-mascot-buddy.is-flying .gd-mascot{animation:none}
 
 @media(min-width:900px){
   .al-mascot-buddy{width:88px;height:88px}
   .al-mascot-buddy .gd-mascot{width:88px}
 }
 @media(prefers-reduced-motion:reduce){
-  .al-mascot-buddy.is-flying{animation:none;opacity:0}
+  .al-mascot-buddy{transition:none}
+  .al-mascot-buddy.is-bob .gd-mascot,
+  .al-mascot-buddy.is-waving .gd-mascot,
+  .al-mascot-buddy.is-arrive,
+  .al-mascot-buddy.is-flying{animation:none!important}
+  .al-mascot-buddy.is-flying{opacity:0}
 }
 

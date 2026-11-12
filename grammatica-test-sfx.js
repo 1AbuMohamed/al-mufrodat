@@ -97,8 +97,25 @@
     tone(880, 0, 0.04, 'sine', 0.08);
   }
 
+
+  function sfxMascotChirp() {
+    tone(880, 0, 0.08, 'sine', 0.16);
+    tone(1175, 0.07, 0.1, 'sine', 0.14);
+  }
+  function sfxMascotWhoosh() {
+    tone(420, 0, 0.18, 'triangle', 0.1);
+    tone(280, 0.05, 0.22, 'sine', 0.08);
+    tone(180, 0.12, 0.2, 'triangle', 0.06);
+  }
+  function sfxMascotPop() {
+    tone(660, 0, 0.07, 'sine', 0.14);
+    tone(990, 0.05, 0.09, 'sine', 0.12);
+  }
   window.playLabSfx = {
     correct: sfxCorrect,
+    mascotChirp: sfxMascotChirp,
+    mascotWhoosh: sfxMascotWhoosh,
+    mascotPop: sfxMascotPop,
     wrong: sfxWrong,
     combo: sfxCombo,
     streak: sfxStreak,
