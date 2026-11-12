@@ -70,12 +70,11 @@
 }
 
 
-/* Klikbare buddy — rechtsonder */
+/* Klikbare buddy — random plek, trage vlucht */
 .al-mascot-buddy{
   position:fixed;
   z-index:40;
-  right:max(12px, env(safe-area-inset-right));
-  bottom:calc(72px + env(safe-area-inset-bottom));
+  top:12vh;left:78vw;
   width:72px;height:72px;padding:0;
   border:0;background:transparent;cursor:pointer;
   filter:drop-shadow(0 6px 10px rgba(0,0,0,.25));
@@ -90,25 +89,20 @@
   content-visibility:visible;
 }
 
-/* Wegvlieg-animatie */
 @keyframes al-mascot-flyaway{
   0%{transform:translate3d(0,0,0) scale(1) rotate(0);opacity:1}
-  15%{transform:translate3d(0,-8px,0) scale(1.06) rotate(-6deg);opacity:1}
-  45%{transform:translate3d(calc(var(--fly-x, 40vw) * .2), calc(var(--fly-y, -40vh) * .2), 0) scale(1.05) rotate(-12deg);opacity:1}
-  100%{transform:translate3d(var(--fly-x, 80vw), var(--fly-y, -50vh), 0) scale(.4) rotate(28deg);opacity:0}
-}
-  25%{transform:translate3d(-10px,-30px,0) scale(1.08) rotate(-12deg);opacity:1}
-  55%{transform:translate3d(40px,-120px,0) scale(.95) rotate(18deg);opacity:.9}
-  100%{transform:translate3d(120px,-280px,0) scale(.4) rotate(40deg);opacity:0}
+  12%{transform:translate3d(0,-10px,0) scale(1.06) rotate(-5deg);opacity:1}
+  40%{transform:translate3d(calc(var(--fly-x, 40vw) * .18), calc(var(--fly-y, -40vh) * .18), 0) scale(1.04) rotate(-10deg);opacity:1}
+  100%{transform:translate3d(var(--fly-x, 70vw), var(--fly-y, -45vh), 0) scale(.4) rotate(26deg);opacity:0}
 }
 .al-mascot-buddy.is-flying{
   pointer-events:none;
-  animation:al-mascot-flyaway 1.85s cubic-bezier(.22,.55,.3,1) forwards;
+  animation:al-mascot-flyaway 2s cubic-bezier(.22,.5,.3,1) forwards;
   will-change:transform,opacity;
 }
 
 @media(min-width:900px){
-  .al-mascot-buddy{right:max(24px, env(safe-area-inset-right)); bottom:24px; width:88px;height:88px}
+  .al-mascot-buddy{width:88px;height:88px}
   .al-mascot-buddy .gd-mascot{width:88px}
 }
 @media(prefers-reduced-motion:reduce){

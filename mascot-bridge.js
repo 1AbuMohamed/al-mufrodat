@@ -1,9 +1,10 @@
-/* Mascot inject + klikbare buddy die wegvliegt */
+/* Mascot inject + buddy op random plek, trage wegvlieg */
 (function () {
   var root = null;
   var scheduled = 0;
   var flying = false;
   var goneUntil = 0;
+  var lastSpot = -1;
 
   function img(kind, cls) {
     if (!window.AL_MASCOT || !AL_MASCOT.img) return '';
@@ -83,10 +84,46 @@
     }
   }
 
-  /* Vaste buddy rechtsonder op home */
   function onHome() {
     var lh = document.querySelector('.lh');
     return !!(lh && !document.querySelector('.gd-play, .gd-shell.gd-play'));
+  }
+
+  function randomSpot() {
+    var spots = [
+      { t: 12, l: 6 },
+      { t: 12, l: 78 },
+      { t: 28, l: 8 },
+      { t: 28, l: 76 },
+      { t: 48, l: 6 },
+      { t: 48, l: 78 },
+      { t: 68, l: 10 },
+      { t: 68, l: 74 }
+    ];
+    var i = Math.floor(Math.random() * spots.length);
+    if (spots.length > 1 && i === lastSpot) {
+      i = (i + 1 + Math.floor(Math.random() * (spots.length - 1))) % spots.length;
+    }
+    lastSpot = i;
+    var s = spots[i];
+    var jt = (Math.random() * 6) - 3;
+    var jl = (Math.random() * 6) - 3;
+    return {
+      top: Math.max(8, Math.min(72, s.t + jt)),
+      left: Math.max(4, Math.min(82, s.l + jl))
+    };
+  }
+
+  function placeBuddy(btn) {
+    var s = randomSpot();
+    btn.style.top = s.top + 'vh';
+    btn.style.left = s.left + 'vw';
+    btn.style.right = 'auto';
+    btn.style.bottom = 'auto';
+    var dirX = s.left < 40 ? -1 : 1;
+    var dirY = s.top < 40 ? -1 : 1;
+    btn.style.setProperty('--fly-x', (dirX * (70 + Math.random() * 50)) + 'vw');
+    btn.style.setProperty('--fly-y', (dirY * (45 + Math.random() * 35)) + 'vh');
   }
 
   function ensureBuddy() {
@@ -107,6 +144,7 @@
     btn.className = 'al-mascot-buddy';
     btn.setAttribute('aria-label', 'Mascotte, tik om te laten wegvliegen');
     btn.innerHTML = img('happy', 'gd-mascot gd-mascot-buddy');
+    placeBuddy(btn);
     btn.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -121,12 +159,12 @@
     btn.classList.add('is-flying');
     btn.disabled = true;
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var ms = reduce ? 120 : 1900;
+    var ms = reduce ? 150 : 2000;
     setTimeout(function () {
       if (btn && btn.parentNode) btn.parentNode.removeChild(btn);
       flying = false;
-      goneUntil = Date.now() + 12000; // 12s weg, dan terug
-      setTimeout(ensureBuddy, 12100);
+      goneUntil = Date.now() + 2800;
+      setTimeout(ensureBuddy, 2900);
     }, ms);
   }
 
