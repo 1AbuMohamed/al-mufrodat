@@ -241,10 +241,19 @@
   function topbar(p) {
     var st = streak(p), todayXp = p.days[today()] || 0;
     var b = ui.bump || {};
+    var u = (window.AL_AUTH && AL_AUTH.current) ? AL_AUTH.current() : null;
+    var authBtn = u
+      ? ('<button type="button" class="lh-auth-chip" data-h="nav" data-v="profiel" aria-label="Account, ' + esc(u.name || u.email || '') + '">' +
+         (u.picture
+           ? '<img src="' + esc(u.picture) + '" alt="" width="28" height="28" referrerpolicy="no-referrer">'
+           : '<span class="lh-auth-chip-ph">' + esc((u.name || u.email || '?').charAt(0).toUpperCase()) + '</span>') +
+         '</button>')
+      : '<button type="button" class="lh-login-btn" data-h="login">Inloggen</button>';
     return '<header class="lh-top"><div class="lh-chips">' +
       chip('flame', 'flame', st, 'Streak: ' + st + ' dagen', (st === 0 ? ' zero' : '') + (b.streak ? ' bump' : '')) +
       chip('bolt', 'bolt', p.xp, 'XP: ' + p.xp + ' totaal, ' + todayXp + ' vandaag', b.xp ? ' bump' : '') +
       chip('heart', 'heart', 5, 'Hartjes: 5', '') +
+      authBtn +
       (ui.tip ? '<div class="lh-tip" role="status">' + esc(TIPS[ui.tip]) + '</div>' : '') +
       '</div></header>';
   }
@@ -498,6 +507,9 @@
       seg('Dagdoel', 'goal', [[20, '20 XP'], [30, '30 XP'], [50, '50 XP']], s.goal) +
       seg('Thema', 'theme', [['system', 'Systeem'], ['dark', 'Donker'], ['light', 'Licht']], s.theme) +
       '<a class="lh-morelink" href="index.html#/grammatica">Originele grammatica</a>' +
+      ((window.AL_AUTH && AL_AUTH.current && AL_AUTH.current())
+        ? '<button type="button" class="lh-morelink" data-h="logout">Uitloggen</button>'
+        : '<button type="button" class="lh-morelink" data-h="login">Inloggen met Gmail</button>') +
       '<button type="button" class="lh-morelink danger" data-h="reset">Voortgang wissen</button></div>';
   }
 
