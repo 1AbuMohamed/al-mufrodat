@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="200" height="240">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5eead4"/>
+      <stop offset="100%" stop-color="#0f766e"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="100" cy="222" rx="34" ry="7" fill="#0f766e" opacity=".12"/>
+  <ellipse cx="100" cy="136" rx="60" ry="70" fill="url(#g)"/>
+  <ellipse cx="100" cy="150" rx="36" ry="40" fill="#99f6e4" opacity=".35"/>
+  <path d="M92 70c3-14 10-16 14-8 5-10 13-8 12 2" fill="#2dd4bf" opacity=".9"/>
+  <!-- droopy wings -->
+  <ellipse cx="50" cy="150" rx="20" ry="32" fill="#0d9488" transform="rotate(12 50 150)"/>
+  <ellipse cx="150" cy="150" rx="20" ry="32" fill="#0d9488" transform="rotate(-12 150 150)"/>
+  <ellipse cx="100" cy="122" rx="30" ry="26" fill="#5eead4"/>
+  <!-- soft sad eyes -->
+  <circle cx="88" cy="120" r="5" fill="#134e4a"/>
+  <circle cx="112" cy="120" r="5" fill="#134e4a"/>
+  <!-- small sad mouth -->
+  <path d="M92 136c4-5 12-5 16 0" fill="none" stroke="#134e4a" stroke-width="3" stroke-linecap="round"/>
+  <ellipse cx="84" cy="200" rx="11" ry="7" fill="#0f766e"/>
+  <ellipse cx="116" cy="200" rx="11" ry="7" fill="#0f766e"/>
+</svg>
