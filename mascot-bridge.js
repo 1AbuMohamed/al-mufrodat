@@ -1,10 +1,9 @@
-/* Mascot inject + buddy op random plek, trage wegvlieg */
+/* Mascot inject + klikbare buddy die wegvliegt */
 (function () {
   var root = null;
   var scheduled = 0;
   var flying = false;
   var goneUntil = 0;
-  var lastSpot = -1;
 
   function img(kind, cls) {
     if (!window.AL_MASCOT || !AL_MASCOT.img) return '';
@@ -52,23 +51,6 @@
     }
   }
 
-  function injectStreak() {
-    var nodes = (root || document).querySelectorAll('.lh-streak');
-    for (var i = 0; i < nodes.length; i++) {
-      var el = nodes[i];
-      if (el.querySelector('.lh-streak-mascot')) continue;
-      var zero = !!el.querySelector('.lh-streak-ic.zero');
-      var kind = zero ? 'sad' : 'proud';
-      var wrap = document.createElement('div');
-      wrap.className = 'lh-streak-mascot';
-      wrap.setAttribute('aria-hidden', 'true');
-      wrap.innerHTML = img(kind, 'gd-mascot gd-mascot-sm');
-      var ic = el.querySelector('.lh-streak-ic');
-      if (ic && ic.parentNode === el) ic.insertAdjacentElement('afterend', wrap);
-      else el.appendChild(wrap);
-    }
-  }
-
   function injectEmpty() {
     var nodes = (root || document).querySelectorAll('.lh-empty');
     for (var i = 0; i < nodes.length; i++) {
@@ -84,46 +66,10 @@
     }
   }
 
+  /* Vaste buddy rechtsonder op home */
   function onHome() {
     var lh = document.querySelector('.lh');
     return !!(lh && !document.querySelector('.gd-play, .gd-shell.gd-play'));
-  }
-
-  function randomSpot() {
-    var spots = [
-      { t: 12, l: 6 },
-      { t: 12, l: 78 },
-      { t: 28, l: 8 },
-      { t: 28, l: 76 },
-      { t: 48, l: 6 },
-      { t: 48, l: 78 },
-      { t: 68, l: 10 },
-      { t: 68, l: 74 }
-    ];
-    var i = Math.floor(Math.random() * spots.length);
-    if (spots.length > 1 && i === lastSpot) {
-      i = (i + 1 + Math.floor(Math.random() * (spots.length - 1))) % spots.length;
-    }
-    lastSpot = i;
-    var s = spots[i];
-    var jt = (Math.random() * 6) - 3;
-    var jl = (Math.random() * 6) - 3;
-    return {
-      top: Math.max(8, Math.min(72, s.t + jt)),
-      left: Math.max(4, Math.min(82, s.l + jl))
-    };
-  }
-
-  function placeBuddy(btn) {
-    var s = randomSpot();
-    btn.style.top = s.top + 'vh';
-    btn.style.left = s.left + 'vw';
-    btn.style.right = 'auto';
-    btn.style.bottom = 'auto';
-    var dirX = s.left < 40 ? -1 : 1;
-    var dirY = s.top < 40 ? -1 : 1;
-    btn.style.setProperty('--fly-x', (dirX * (70 + Math.random() * 50)) + 'vw');
-    btn.style.setProperty('--fly-y', (dirY * (45 + Math.random() * 35)) + 'vh');
   }
 
   function ensureBuddy() {
@@ -144,7 +90,6 @@
     btn.className = 'al-mascot-buddy';
     btn.setAttribute('aria-label', 'Mascotte, tik om te laten wegvliegen');
     btn.innerHTML = img('happy', 'gd-mascot gd-mascot-buddy');
-    placeBuddy(btn);
     btn.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -159,21 +104,22 @@
     btn.classList.add('is-flying');
     btn.disabled = true;
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var ms = reduce ? 150 : 2000;
+    var ms = reduce ? 80 : 900;
     setTimeout(function () {
       if (btn && btn.parentNode) btn.parentNode.removeChild(btn);
       flying = false;
-      goneUntil = Date.now() + 2800;
-      setTimeout(ensureBuddy, 2900);
+      goneUntil = Date.now() + 12000; // 12s weg, dan terug
+      setTimeout(ensureBuddy, 12100);
     }, ms);
   }
 
   function inject() {
     scheduled = 0;
     try {
+      /* geen mascot bij streak */
+      document.querySelectorAll('.lh-streak-mascot').forEach(function (n) { n.remove(); });
       injectFeedback();
       injectFinish();
-      injectStreak();
       injectEmpty();
       ensureBuddy();
     } catch (_e) {}
