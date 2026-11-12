@@ -89,6 +89,46 @@
     return !!(lh && !document.querySelector('.gd-play, .gd-shell.gd-play'));
   }
 
+  var lastSpot = -1;
+
+  function randomSpot() {
+    /* 8 zones: vermijd midden-UI en randen met nav */
+    var spots = [
+      { t: 12, l: 6 },   // linksboven
+      { t: 12, l: 78 },  // rechtsboven
+      { t: 28, l: 8 },   // links midden-hoog
+      { t: 28, l: 76 },  // rechts midden-hoog
+      { t: 48, l: 6 },   // links midden
+      { t: 48, l: 78 },  // rechts midden
+      { t: 68, l: 10 },  // linksonder (boven bottom-nav)
+      { t: 68, l: 74 }   // rechtsonder
+    ];
+    var i = Math.floor(Math.random() * spots.length);
+    if (spots.length > 1 && i === lastSpot) i = (i + 1 + Math.floor(Math.random() * (spots.length - 1))) % spots.length;
+    lastSpot = i;
+    var s = spots[i];
+    /* kleine jitter zodat het niet steeds exact hetzelfde pixel is */
+    var jt = (Math.random() * 6) - 3;
+    var jl = (Math.random() * 6) - 3;
+    return {
+      top: Math.max(8, Math.min(72, s.t + jt)),
+      left: Math.max(4, Math.min(82, s.l + jl))
+    };
+  }
+
+  function placeBuddy(btn) {
+    var s = randomSpot();
+    btn.style.top = s.top + 'vh';
+    btn.style.left = s.left + 'vw';
+    btn.style.right = 'auto';
+    btn.style.bottom = 'auto';
+    /* vliegrichting: weg van centrum */
+    var dirX = s.left < 40 ? -1 : 1;
+    var dirY = s.top < 40 ? -1 : 1;
+    btn.style.setProperty('--fly-x', (dirX * (80 + Math.random() * 60)) + 'vw');
+    btn.style.setProperty('--fly-y', (dirY * (50 + Math.random() * 40)) + 'vh');
+  }
+
   function ensureBuddy() {
     if (Date.now() < goneUntil) return;
     if (flying) return;
@@ -107,6 +147,7 @@
     btn.className = 'al-mascot-buddy';
     btn.setAttribute('aria-label', 'Mascotte, tik om te laten wegvliegen');
     btn.innerHTML = img('happy', 'gd-mascot gd-mascot-buddy');
+    placeBuddy(btn);
     btn.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -125,8 +166,8 @@
     setTimeout(function () {
       if (btn && btn.parentNode) btn.parentNode.removeChild(btn);
       flying = false;
-      goneUntil = Date.now() + 12000; // 12s weg, dan terug
-      setTimeout(ensureBuddy, 12100);
+      goneUntil = Date.now() + 2500; // kort weg, dan elders terug
+      setTimeout(ensureBuddy, 2600);
     }, ms);
   }
 
