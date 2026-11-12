@@ -1,7 +1,9 @@
-/* Mascot inject — debounced, alleen #gd-app */
+/* Mascot inject + klikbare buddy die wegvliegt */
 (function () {
   var root = null;
   var scheduled = 0;
+  var flying = false;
+  var goneUntil = 0;
 
   function img(kind, cls) {
     if (!window.AL_MASCOT || !AL_MASCOT.img) return '';
@@ -81,6 +83,53 @@
     }
   }
 
+  /* Vaste buddy rechtsonder op home */
+  function onHome() {
+    var lh = document.querySelector('.lh');
+    return !!(lh && !document.querySelector('.gd-play, .gd-shell.gd-play'));
+  }
+
+  function ensureBuddy() {
+    if (Date.now() < goneUntil) return;
+    if (flying) return;
+    if (!onHome()) {
+      var existing = document.getElementById('al-mascot-buddy');
+      if (existing) existing.remove();
+      return;
+    }
+    if (document.getElementById('al-mascot-buddy')) return;
+    if (!window.AL_MASCOT || !AL_MASCOT.img) return;
+    if (AL_MASCOT.preload) AL_MASCOT.preload('happy');
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = 'al-mascot-buddy';
+    btn.className = 'al-mascot-buddy';
+    btn.setAttribute('aria-label', 'Mascotte, tik om te laten wegvliegen');
+    btn.innerHTML = img('happy', 'gd-mascot gd-mascot-buddy');
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      flyAway(btn);
+    });
+    document.body.appendChild(btn);
+  }
+
+  function flyAway(btn) {
+    if (flying || !btn || !btn.isConnected) return;
+    flying = true;
+    btn.classList.add('is-flying');
+    btn.disabled = true;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var ms = reduce ? 80 : 900;
+    setTimeout(function () {
+      if (btn && btn.parentNode) btn.parentNode.removeChild(btn);
+      flying = false;
+      goneUntil = Date.now() + 12000; // 12s weg, dan terug
+      setTimeout(ensureBuddy, 12100);
+    }, ms);
+  }
+
   function inject() {
     scheduled = 0;
     try {
@@ -88,13 +137,13 @@
       injectFinish();
       injectStreak();
       injectEmpty();
+      ensureBuddy();
     } catch (_e) {}
   }
 
   function schedule() {
     if (scheduled) return;
     scheduled = 1;
-    // rAF: max 1x per frame i.p.v. bij elke DOM-mutatie
     if (window.requestAnimationFrame) requestAnimationFrame(inject);
     else setTimeout(inject, 32);
   }

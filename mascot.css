@@ -68,3 +68,46 @@
   .gd-finish-mascot .gd-mascot{width:88px}
   .lh-streak-mascot .gd-mascot{width:40px}
 }
+
+
+/* Klikbare buddy — rechtsonder */
+.al-mascot-buddy{
+  position:fixed;
+  z-index:40;
+  right:max(12px, env(safe-area-inset-right));
+  bottom:calc(72px + env(safe-area-inset-bottom));
+  width:72px;height:72px;padding:0;
+  border:0;background:transparent;cursor:pointer;
+  filter:drop-shadow(0 6px 10px rgba(0,0,0,.25));
+  transition:transform .15s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.al-mascot-buddy:hover{transform:translateY(-3px) scale(1.04)}
+.al-mascot-buddy:active{transform:scale(.96)}
+.al-mascot-buddy .gd-mascot-buddy,
+.al-mascot-buddy .gd-mascot{
+  width:72px;height:auto;pointer-events:none;
+  content-visibility:visible;
+}
+
+/* Wegvlieg-animatie */
+@keyframes al-mascot-flyaway{
+  0%{transform:translate3d(0,0,0) scale(1) rotate(0);opacity:1}
+  25%{transform:translate3d(-10px,-30px,0) scale(1.08) rotate(-12deg);opacity:1}
+  55%{transform:translate3d(40px,-120px,0) scale(.95) rotate(18deg);opacity:.9}
+  100%{transform:translate3d(120px,-280px,0) scale(.4) rotate(40deg);opacity:0}
+}
+.al-mascot-buddy.is-flying{
+  pointer-events:none;
+  animation:al-mascot-flyaway .9s cubic-bezier(.2,.7,.3,1) forwards;
+  will-change:transform,opacity;
+}
+
+@media(min-width:900px){
+  .al-mascot-buddy{right:max(24px, env(safe-area-inset-right)); bottom:24px; width:88px;height:88px}
+  .al-mascot-buddy .gd-mascot{width:88px}
+}
+@media(prefers-reduced-motion:reduce){
+  .al-mascot-buddy.is-flying{animation:none;opacity:0}
+}
+
