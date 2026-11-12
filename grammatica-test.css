@@ -1,19 +1,13 @@
-/* Zelfstandige proefversie: geen effect op de bestaande site. */
-@font-face {
-  font-family: "Scheherazade New";
-  src: url("fonts/ScheherazadeNew-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-/* NOTE: full file will be restored in next commit - temporary minimal to keep site working */
-body{font-family:system-ui,sans-serif;margin:0;background:#131F24;color:#e8f0ee}
-.gd-app{max-width:480px;margin:0 auto;padding:16px}
-.gd-feedback{padding:16px;border-radius:16px;margin:12px 0}
-.gd-feedback.good{background:#1a3a2f;border:2px solid #58cc02}
-.gd-feedback.review{background:#3a2a1a;border:2px solid #ff9600}
+/* Temporary: import last known-good stylesheet + mascot overrides */
+@import url("https://cdn.jsdelivr.net/gh/1AbuMohamed/al-mufrodat@de26a41/grammatica-test.css");
+
+/* Mascotte in feedback + eindscherm */
 .gd-feedback-head{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.gd-feedback-head>strong{margin:0}
 .gd-mascot{width:72px;height:auto;flex-shrink:0;display:block;filter:drop-shadow(0 4px 10px rgba(20,70,50,.12));animation:gd-mascot-pop .35s cubic-bezier(.2,1.2,.4,1)}
+.gd-feedback-super .gd-mascot{width:56px}
 .gd-finish-mascot{display:flex;justify-content:center;margin:0 auto 8px}
-.gd-finish-mascot .gd-mascot{width:110px}
+.gd-finish-mascot .gd-mascot{width:110px;animation:gd-mascot-pop .45s cubic-bezier(.2,1.2,.4,1)}
 @keyframes gd-mascot-pop{0%{transform:scale(.55);opacity:0}70%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
+@media(prefers-reduced-motion:reduce){.gd-mascot,.gd-finish-mascot .gd-mascot{animation:none}}
+@media(max-width:420px){.gd-mascot{width:58px}.gd-finish-mascot .gd-mascot{width:90px}}
