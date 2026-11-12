@@ -8,7 +8,6 @@
   var K_PROG = 'alm_grammar_test_v2';
   var K_SET = 'alm_grammar_test_settings_v1';
   var K_SCORE = 'alm_grammar_test_scores_v1';
-  var EXPORT_TAG = 'al-mufrodat-grammatica-lab';
   var INTERVALS = [1, 2, 4, 8, 16];
   var OFFSETS = [0, -40, -64, -40, 0, 40, 64, 40];
   var ITEM_H = 120;
@@ -419,13 +418,6 @@
       '<p class="lh-card-text">' + n + (n === 1 ? ' onderdeel' : ' onderdelen') + ' om te herhalen</p>' +
       '<button type="button" class="btn btn-green lh-full" data-h="weak">OEFEN NU</button></section>';
   }
-  function cardSave() {
-    return '<section class="lh-card"><div class="lh-card-head"><h2>Bewaar je voortgang</h2></div>' +
-      '<p class="lh-card-text">Je voortgang staat alleen in deze browser. Maak een back-up of zet hem op een ander apparaat.</p>' +
-      (ui.msg ? '<p class="lh-msg ' + ui.msg.kind + '" role="status">' + esc(ui.msg.text) + '</p>' : '') +
-      '<div class="lh-btnstack"><button type="button" class="btn btn-green lh-full" data-h="export">EXPORTEER</button>' +
-      '<button type="button" class="btn btn-blue lh-full" data-h="import">IMPORTEER</button></div></section>';
-  }
   function cardStats(p, pl) {
     var mastered = pl.list.filter(function (o) { return o.state === 'mastered' && !o.weak; }).length;
     var started = pl.list.filter(function (o) { return o.state !== 'none'; }).length;
@@ -436,7 +428,7 @@
   }
 
   function railCards(p, s, pl) {
-    return cardMissions(p, s) + cardStreak(p) + cardWeak(pl) + cardSave();
+    return cardMissions(p, s) + cardStreak(p) + cardWeak(pl);
   }
 
   function oefenMain(pl) {
@@ -461,7 +453,7 @@
   }
   function profielMain(p, s, pl) {
     return '<div class="lh-pagehead"><h1>Profiel</h1><p class="lh-sub">Je voortgang in dit Grammatica Lab.</p></div>' +
-      cardStats(p, pl) + cardWeak(pl) + cardSave();
+      cardStats(p, pl) + cardWeak(pl);
   }
 
   function seg(label, setting, options, current) {
@@ -505,7 +497,7 @@
     return '<div class="lh" data-section="' + sec + '">' + nav() + topbar(p) +
       '<div class="lh-main">' + main + '</div>' + rail + (ui.more ? moreHtml(s) : '') + sheet +
       '<div class="lh-sr" aria-live="polite">XP ' + p.xp + ', streak ' + streak(p) + ' dagen</div>' +
-      '<input type="file" class="lh-file" accept=".json,application/json" data-h-file="1" tabindex="-1" aria-hidden="true"></div>';
+      '</div>';
   }
 
   /* ---------- gedrag ---------- */
@@ -535,51 +527,6 @@
     }
   }
 
-  function doExport() {
-    var data = {};
-    [K_SCORE, K_PROG, K_SET].forEach(function (k) {
-      var v = jget(k, null);
-      if (v) data[k] = v;
-    });
-    var blob = new Blob([JSON.stringify({ app: EXPORT_TAG, versie: 1, datum: today(), data: data }, null, 2)], { type: 'application/json' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'grammatica-lab-voortgang-' + today() + '.json';
-    document.body.appendChild(a); a.click();
-    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
-    ui.msg = { kind: 'ok', text: 'Back-up gedownload.' };
-    rerender();
-  }
-  function validate(obj) {
-    if (!obj || obj.app !== EXPORT_TAG || !obj.data || typeof obj.data !== 'object') return 'Dit is geen back-up van het Grammatica Lab.';
-    var keys = Object.keys(obj.data);
-    if (!keys.length) return 'Het bestand bevat geen voortgang.';
-    for (var i = 0; i < keys.length; i++) {
-      if ([K_SCORE, K_PROG, K_SET].indexOf(keys[i]) < 0) return 'Onbekende gegevens in het bestand.';
-      var v = obj.data[keys[i]];
-      if (!v || typeof v !== 'object' || Array.isArray(v)) return 'De gegevens in het bestand zijn ongeldig.';
-    }
-    var pr = obj.data[K_PROG];
-    if (pr && ((pr.xp != null && typeof pr.xp !== 'number') || (pr.items != null && typeof pr.items !== 'object') ||
-      (pr.hit != null && !Array.isArray(pr.hit)))) return 'De voortgang in het bestand is ongeldig.';
-    return null;
-  }
-  function doImport(file) {
-    var reader = new FileReader();
-    reader.onload = function () {
-      var obj = null;
-      try { obj = JSON.parse(String(reader.result)); } catch (_e) {}
-      var err = obj ? validate(obj) : 'Dit bestand is geen geldige JSON.';
-      if (err) { ui.msg = { kind: 'err', text: 'Importeren mislukt: ' + err }; return rerender(); }
-      if (!window.confirm('Je huidige voortgang in het Grammatica Lab wordt overschreven. Doorgaan?')) return;
-      Object.keys(obj.data).forEach(function (k) { jset(k, obj.data[k]); });
-      ui.msg = { kind: 'ok', text: 'Voortgang geïmporteerd.' };
-      snap = null; ui.needScroll = true;
-      rerender();
-    };
-    reader.onerror = function () { ui.msg = { kind: 'err', text: 'Het bestand kon niet worden gelezen.' }; rerender(); };
-    reader.readAsText(file);
-  }
 
   function onClick(e) {
     var t = e.target.closest ? e.target.closest('[data-h]') : null;
@@ -634,11 +581,6 @@
           rerender();
         }
         return;
-      case 'export': return doExport();
-      case 'import':
-        var f = app.querySelector('.lh-file');
-        if (f) { f.value = ''; f.click(); }
-        return;
     }
   }
 
@@ -663,11 +605,6 @@
     if (bound) return;
     bound = true;
     el.addEventListener('click', function (e) { if (engine.isHome()) onClick(e); });
-    el.addEventListener('change', function (e) {
-      if (e.target && e.target.getAttribute && e.target.getAttribute('data-h-file') && e.target.files && e.target.files[0]) {
-        doImport(e.target.files[0]);
-      }
-    });
     document.addEventListener('keydown', onKey);
   }
 
