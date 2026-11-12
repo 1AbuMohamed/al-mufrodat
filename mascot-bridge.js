@@ -1,16 +1,22 @@
-/* Mascot: beweegt alleen bij feedback/finish; geen grote mascot midden op home */
+/* Mascot inject — debounced, alleen #gd-app */
 (function () {
+  var root = null;
+  var scheduled = 0;
+
   function img(kind, cls) {
     if (!window.AL_MASCOT || !AL_MASCOT.img) return '';
+    if (AL_MASCOT.preload) AL_MASCOT.preload(kind);
     return AL_MASCOT.img(kind, cls || 'gd-mascot');
   }
 
   function injectFeedback() {
-    document.querySelectorAll('.gd-feedback-inner').forEach(function (el) {
-      if (el.querySelector('.gd-mascot')) return;
-      var sheet = el.closest('.gd-feedback');
-      var good = sheet && sheet.classList.contains('good');
-      var kind = good ? (document.querySelector('.gd-combo') ? 'proud' : 'happy') : 'sad';
+    var nodes = (root || document).querySelectorAll('.gd-feedback-inner');
+    for (var i = 0; i < nodes.length; i++) {
+      var el = nodes[i];
+      if (el.querySelector('.gd-mascot')) continue;
+      var sheet = el.closest('.gd-feedback') || el.closest('.gd-feedback-sheet');
+      var good = sheet && (sheet.classList.contains('good') || sheet.classList.contains('ok'));
+      var kind = good ? ((root || document).querySelector('.gd-combo') ? 'proud' : 'happy') : 'sad';
       var head = document.createElement('div');
       head.className = 'gd-feedback-head';
       head.innerHTML = img(kind, 'gd-mascot gd-mascot-anim');
@@ -21,12 +27,14 @@
       } else {
         el.insertBefore(head, el.firstChild);
       }
-    });
+    }
   }
 
   function injectFinish() {
-    document.querySelectorAll('.gd-finish').forEach(function (el) {
-      if (el.querySelector('.gd-finish-mascot')) return;
+    var nodes = (root || document).querySelectorAll('.gd-finish');
+    for (var i = 0; i < nodes.length; i++) {
+      var el = nodes[i];
+      if (el.querySelector('.gd-finish-mascot')) continue;
       var acc = 50;
       var accEl = el.querySelector('.gd-result-grid span:nth-child(2) strong');
       if (accEl) acc = parseInt(accEl.textContent, 10) || 50;
@@ -38,13 +46,14 @@
       el.insertBefore(wrap, el.firstChild);
       var icon = el.querySelector('.gd-finish-icon');
       if (icon) icon.style.display = 'none';
-    });
+    }
   }
 
   function injectStreak() {
-    /* Klein, stil in de hoek van de streak-kaart */
-    document.querySelectorAll('.lh-streak').forEach(function (el) {
-      if (el.querySelector('.lh-streak-mascot')) return;
+    var nodes = (root || document).querySelectorAll('.lh-streak');
+    for (var i = 0; i < nodes.length; i++) {
+      var el = nodes[i];
+      if (el.querySelector('.lh-streak-mascot')) continue;
       var zero = !!el.querySelector('.lh-streak-ic.zero');
       var kind = zero ? 'sad' : 'proud';
       var wrap = document.createElement('div');
@@ -52,17 +61,16 @@
       wrap.setAttribute('aria-hidden', 'true');
       wrap.innerHTML = img(kind, 'gd-mascot gd-mascot-sm');
       var ic = el.querySelector('.lh-streak-ic');
-      if (ic && ic.parentNode === el) {
-        ic.insertAdjacentElement('afterend', wrap);
-      } else {
-        el.appendChild(wrap);
-      }
-    });
+      if (ic && ic.parentNode === el) ic.insertAdjacentElement('afterend', wrap);
+      else el.appendChild(wrap);
+    }
   }
 
   function injectEmpty() {
-    document.querySelectorAll('.lh-empty').forEach(function (el) {
-      if (el.querySelector('.lh-empty-mascot')) return;
+    var nodes = (root || document).querySelectorAll('.lh-empty');
+    for (var i = 0; i < nodes.length; i++) {
+      var el = nodes[i];
+      if (el.querySelector('.lh-empty-mascot')) continue;
       var wrap = document.createElement('div');
       wrap.className = 'lh-empty-mascot';
       wrap.setAttribute('aria-hidden', 'true');
@@ -70,10 +78,11 @@
       var icon = el.querySelector('.lh-empty-ic');
       if (icon) icon.replaceWith(wrap);
       else el.insertBefore(wrap, el.firstChild);
-    });
+    }
   }
 
   function inject() {
+    scheduled = 0;
     try {
       injectFeedback();
       injectFinish();
@@ -82,11 +91,22 @@
     } catch (_e) {}
   }
 
-  var obs = new MutationObserver(function () { inject(); });
-  function start() {
-    inject();
-    if (document.body) obs.observe(document.body, { childList: true, subtree: true });
+  function schedule() {
+    if (scheduled) return;
+    scheduled = 1;
+    // rAF: max 1x per frame i.p.v. bij elke DOM-mutatie
+    if (window.requestAnimationFrame) requestAnimationFrame(inject);
+    else setTimeout(inject, 32);
   }
+
+  function start() {
+    root = document.getElementById('gd-app') || document.body;
+    inject();
+    if (!root) return;
+    var obs = new MutationObserver(schedule);
+    obs.observe(root, { childList: true, subtree: true });
+  }
+
   if (document.body) start();
   else document.addEventListener('DOMContentLoaded', start);
 })();
