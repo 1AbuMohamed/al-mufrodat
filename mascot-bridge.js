@@ -1,4 +1,4 @@
-/* Mascot inject: feedback, finish, streak, empty — met juiste emotie + animatie */
+/* Mascot: beweegt alleen bij feedback/finish; geen grote mascot midden op home */
 (function () {
   function img(kind, cls) {
     if (!window.AL_MASCOT || !AL_MASCOT.img) return '';
@@ -8,9 +8,9 @@
   function injectFeedback() {
     document.querySelectorAll('.gd-feedback-inner').forEach(function (el) {
       if (el.querySelector('.gd-mascot')) return;
-      var sheet = el.closest('.gd-feedback') || el.closest('.gd-feedback-sheet');
-      var good = sheet && (sheet.classList.contains('good') || sheet.classList.contains('ok'));
-      var kind = good ? (document.querySelector('.gd-combo, .gd-streak-hot') ? 'proud' : 'happy') : 'sad';
+      var sheet = el.closest('.gd-feedback');
+      var good = sheet && sheet.classList.contains('good');
+      var kind = good ? (document.querySelector('.gd-combo') ? 'proud' : 'happy') : 'sad';
       var head = document.createElement('div');
       head.className = 'gd-feedback-head';
       head.innerHTML = img(kind, 'gd-mascot gd-mascot-anim');
@@ -42,6 +42,7 @@
   }
 
   function injectStreak() {
+    /* Klein, stil in de hoek van de streak-kaart */
     document.querySelectorAll('.lh-streak').forEach(function (el) {
       if (el.querySelector('.lh-streak-mascot')) return;
       var zero = !!el.querySelector('.lh-streak-ic.zero');
@@ -49,10 +50,13 @@
       var wrap = document.createElement('div');
       wrap.className = 'lh-streak-mascot';
       wrap.setAttribute('aria-hidden', 'true');
-      wrap.innerHTML = img(kind, 'gd-mascot gd-mascot-sm' + (zero ? '' : ' gd-mascot-anim'));
+      wrap.innerHTML = img(kind, 'gd-mascot gd-mascot-sm');
       var ic = el.querySelector('.lh-streak-ic');
-      if (ic && ic.parentNode === el) ic.insertAdjacentElement('afterend', wrap);
-      else el.appendChild(wrap);
+      if (ic && ic.parentNode === el) {
+        ic.insertAdjacentElement('afterend', wrap);
+      } else {
+        el.appendChild(wrap);
+      }
     });
   }
 
@@ -62,7 +66,7 @@
       var wrap = document.createElement('div');
       wrap.className = 'lh-empty-mascot';
       wrap.setAttribute('aria-hidden', 'true');
-      wrap.innerHTML = img('wave', 'gd-mascot gd-mascot-md gd-mascot-anim');
+      wrap.innerHTML = img('proud', 'gd-mascot gd-mascot-md');
       var icon = el.querySelector('.lh-empty-ic');
       if (icon) icon.replaceWith(wrap);
       else el.insertBefore(wrap, el.firstChild);
