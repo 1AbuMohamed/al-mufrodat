@@ -8,6 +8,7 @@
   var K_PROG = 'alm_grammar_test_v2';
   var K_SET = 'alm_grammar_test_settings_v1';
   var K_SCORE = 'alm_grammar_test_scores_v1';
+  var EXPORT_TAG = 'al-mufrodat-grammatica-lab';
   var INTERVALS = [1, 2, 4, 8, 16];
   var OFFSETS = [0, -40, -64, -40, 0, 40, 64, 40];
   var ITEM_H = 120;
@@ -451,9 +452,32 @@
     return '<div class="lh-pagehead"><h1>Missies</h1><p class="lh-sub">Haal elke dag je dagdoel.</p></div>' +
       cardMissions(p, s) + cardStreak(p);
   }
+
+  function cardAuth() {
+    var u = (window.AL_AUTH && AL_AUTH.current) ? AL_AUTH.current() : null;
+    var configured = window.AL_AUTH && AL_AUTH.configured && AL_AUTH.configured();
+    if (u) {
+      var av = u.picture
+        ? '<img class="lh-auth-av" src="' + esc(u.picture) + '" alt="" width="48" height="48" referrerpolicy="no-referrer">'
+        : '<div class="lh-auth-av ph" aria-hidden="true">' + esc((u.name || u.email || '?').charAt(0).toUpperCase()) + '</div>';
+      return '<section class="lh-card lh-auth-card"><div class="lh-card-head"><h2>Account</h2></div>' +
+        '<div class="lh-auth-row">' + av +
+        '<div class="lh-auth-meta"><strong>' + esc(u.name || 'Gebruiker') + '</strong>' +
+        '<span>' + esc(u.email || '') + '</span></div></div>' +
+        '<div class="lh-auth-actions"><button type="button" class="btn btn-ghost lh-full" data-h="logout">UITLOGGEN</button></div>' +
+        '</section>';
+    }
+    return '<section class="lh-card lh-auth-card"><div class="lh-card-head"><h2>Account</h2></div>' +
+      '<p class="lh-auth-hint">Log in met je Gmail-account om je profiel te bewaren op dit apparaat.</p>' +
+      '<div class="lh-auth-actions"><button type="button" class="btn btn-blue lh-full" data-h="login">' +
+      (configured ? 'INLOGGEN MET GMAIL' : 'INLOGGEN MET GMAIL') + '</button></div>' +
+      (!configured ? '<p class="lh-auth-hint">Tip: zet je Google Client ID in <code>auth-config.js</code>.</p>' : '') +
+      '</section>';
+  }
+
   function profielMain(p, s, pl) {
     return '<div class="lh-pagehead"><h1>Profiel</h1><p class="lh-sub">Je voortgang in dit Grammatica Lab.</p></div>' +
-      cardStats(p, pl) + cardWeak(pl);
+      cardAuth() + cardStats(p, pl) + cardWeak(pl);
   }
 
   function seg(label, setting, options, current) {
@@ -497,7 +521,7 @@
     return '<div class="lh" data-section="' + sec + '">' + nav() + topbar(p) +
       '<div class="lh-main">' + main + '</div>' + rail + (ui.more ? moreHtml(s) : '') + sheet +
       '<div class="lh-sr" aria-live="polite">XP ' + p.xp + ', streak ' + streak(p) + ' dagen</div>' +
-      '</div>';
+      '<input type="file" class="lh-file" accept=".json,application/json" data-h-file="1" tabindex="-1" aria-hidden="true"></div>';
   }
 
   /* ---------- gedrag ---------- */
@@ -527,6 +551,51 @@
     }
   }
 
+  function doExport() {
+    var data = {};
+    [K_SCORE, K_PROG, K_SET].forEach(function (k) {
+      var v = jget(k, null);
+      if (v) data[k] = v;
+    });
+    var blob = new Blob([JSON.stringify({ app: EXPORT_TAG, versie: 1, datum: today(), data: data }, null, 2)], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'grammatica-lab-voortgang-' + today() + '.json';
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+    ui.msg = { kind: 'ok', text: 'Back-up gedownload.' };
+    rerender();
+  }
+  function validate(obj) {
+    if (!obj || obj.app !== EXPORT_TAG || !obj.data || typeof obj.data !== 'object') return 'Dit is geen back-up van het Grammatica Lab.';
+    var keys = Object.keys(obj.data);
+    if (!keys.length) return 'Het bestand bevat geen voortgang.';
+    for (var i = 0; i < keys.length; i++) {
+      if ([K_SCORE, K_PROG, K_SET].indexOf(keys[i]) < 0) return 'Onbekende gegevens in het bestand.';
+      var v = obj.data[keys[i]];
+      if (!v || typeof v !== 'object' || Array.isArray(v)) return 'De gegevens in het bestand zijn ongeldig.';
+    }
+    var pr = obj.data[K_PROG];
+    if (pr && ((pr.xp != null && typeof pr.xp !== 'number') || (pr.items != null && typeof pr.items !== 'object') ||
+      (pr.hit != null && !Array.isArray(pr.hit)))) return 'De voortgang in het bestand is ongeldig.';
+    return null;
+  }
+  function doImport(file) {
+    var reader = new FileReader();
+    reader.onload = function () {
+      var obj = null;
+      try { obj = JSON.parse(String(reader.result)); } catch (_e) {}
+      var err = obj ? validate(obj) : 'Dit bestand is geen geldige JSON.';
+      if (err) { ui.msg = { kind: 'err', text: 'Importeren mislukt: ' + err }; return rerender(); }
+      if (!window.confirm('Je huidige voortgang in het Grammatica Lab wordt overschreven. Doorgaan?')) return;
+      Object.keys(obj.data).forEach(function (k) { jset(k, obj.data[k]); });
+      ui.msg = { kind: 'ok', text: 'Voortgang geïmporteerd.' };
+      snap = null; ui.needScroll = true;
+      rerender();
+    };
+    reader.onerror = function () { ui.msg = { kind: 'err', text: 'Het bestand kon niet worden gelezen.' }; rerender(); };
+    reader.readAsText(file);
+  }
 
   function onClick(e) {
     var t = e.target.closest ? e.target.closest('[data-h]') : null;
@@ -573,6 +642,13 @@
       case 'set-fast': saveSettings({ fast: !settings().fast }); ui.refocus = null; return rerender();
       case 'set-goal': saveSettings({ goal: Number(v) }); return rerender();
       case 'set-theme': saveSettings({ theme: v }); return rerender();
+      case 'login':
+        if (window.AL_AUTH && AL_AUTH.login) AL_AUTH.login();
+        return;
+      case 'logout':
+        if (window.AL_AUTH && AL_AUTH.logout) AL_AUTH.logout();
+        ui.msg = { kind: 'ok', text: 'Uitgelogd.' };
+        return rerender();
       case 'reset':
         if (window.confirm('Alle voortgang van het Grammatica Lab wissen? Dit kan niet ongedaan worden gemaakt.')) {
           [K_SCORE, K_PROG].forEach(function (k) { try { localStorage.removeItem(k); } catch (_e) {} });
@@ -580,6 +656,11 @@
           ui.msg = { kind: 'ok', text: 'Voortgang gewist.' };
           rerender();
         }
+        return;
+      case 'export': return doExport();
+      case 'import':
+        var f = app.querySelector('.lh-file');
+        if (f) { f.value = ''; f.click(); }
         return;
     }
   }
@@ -605,7 +686,15 @@
     if (bound) return;
     bound = true;
     el.addEventListener('click', function (e) { if (engine.isHome()) onClick(e); });
+    el.addEventListener('change', function (e) {
+      if (e.target && e.target.getAttribute && e.target.getAttribute('data-h-file') && e.target.files && e.target.files[0]) {
+        doImport(e.target.files[0]);
+      }
+    });
     document.addEventListener('keydown', onKey);
+    if (window.AL_AUTH && AL_AUTH.onChange) {
+      AL_AUTH.onChange(function () { if (engine && engine.isHome && engine.isHome()) rerender(); });
+    }
   }
 
   function enter() {

@@ -1,0 +1,16 @@
+/* Login / profiel */
+.lh-auth-card{display:flex;flex-direction:column;gap:12px}
+.lh-auth-row{display:flex;align-items:center;gap:12px}
+.lh-auth-av{
+  width:48px;height:48px;border-radius:50%;object-fit:cover;
+  background:var(--surface-2,#1a2a30);border:2px solid var(--line,rgba(255,255,255,.12));
+}
+.lh-auth-av.ph{
+  display:grid;place-items:center;font-weight:800;font-size:18px;color:var(--muted,#9aafab);
+}
+.lh-auth-meta{min-width:0;flex:1}
+.lh-auth-meta strong{display:block;font-size:16px;font-weight:800}
+.lh-auth-meta span{display:block;font-size:13px;color:var(--muted,#9aafab);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lh-auth-actions{display:flex;flex-wrap:wrap;gap:10px}
+.lh-auth-actions .btn{flex:1 1 140px}
+.lh-auth-hint{font-size:13px;line-height:1.5;color:var(--muted,#9aafab);margin:0}
