@@ -1,10 +1,45 @@
-/* Mascotte in feedback + eindscherm */
+/* Mascotte — feedback, eindscherm, hero, streak, empty */
 .gd-feedback-head{display:flex;align-items:center;gap:14px;margin-bottom:6px}
 .gd-feedback-head>strong{margin:0}
-.gd-mascot{width:72px;height:auto;flex-shrink:0;display:block;filter:drop-shadow(0 4px 10px rgba(20,70,50,.12));animation:gd-mascot-pop .35s cubic-bezier(.2,1.2,.4,1)}
+.gd-mascot{
+  width:72px;height:auto;flex-shrink:0;display:block;
+  filter:drop-shadow(0 4px 10px rgba(20,70,50,.12));
+  animation:gd-mascot-pop .35s cubic-bezier(.2,1.2,.4,1)
+}
+.gd-mascot-sm{width:56px}
+.gd-mascot-md{width:88px}
+.gd-mascot-lg{width:120px}
 .gd-feedback-super .gd-mascot{width:56px}
 .gd-finish-mascot{display:flex;justify-content:center;margin:0 auto 8px}
 .gd-finish-mascot .gd-mascot{width:110px;animation:gd-mascot-pop .45s cubic-bezier(.2,1.2,.4,1)}
-@keyframes gd-mascot-pop{0%{transform:scale(.55);opacity:0}70%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
-@media(prefers-reduced-motion:reduce){.gd-mascot,.gd-finish-mascot .gd-mascot{animation:none}}
-@media(max-width:420px){.gd-mascot{width:58px}.gd-finish-mascot .gd-mascot{width:90px}}
+
+/* Home: hero welkom */
+.lh-hero-mascot{
+  display:flex;justify-content:center;margin:0 auto 10px;
+}
+.lh-hero-mascot .gd-mascot{width:112px}
+
+/* Streak-kaart */
+.lh-streak{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.lh-streak-mascot{flex-shrink:0;margin-left:auto}
+.lh-streak-mascot .gd-mascot{width:64px}
+
+/* Empty state (niets om te herhalen) */
+.lh-empty{text-align:center}
+.lh-empty-mascot{display:flex;justify-content:center;margin:0 auto 12px}
+.lh-empty-mascot .gd-mascot{width:96px}
+
+@keyframes gd-mascot-pop{
+  0%{transform:scale(.55);opacity:0}
+  70%{transform:scale(1.06)}
+  100%{transform:scale(1);opacity:1}
+}
+@media(prefers-reduced-motion:reduce){
+  .gd-mascot,.gd-finish-mascot .gd-mascot{animation:none}
+}
+@media(max-width:420px){
+  .gd-mascot{width:58px}
+  .gd-mascot-lg,.lh-hero-mascot .gd-mascot{width:92px}
+  .gd-finish-mascot .gd-mascot{width:90px}
+  .lh-streak-mascot .gd-mascot{width:52px}
+}
