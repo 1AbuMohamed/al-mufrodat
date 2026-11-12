@@ -236,7 +236,7 @@
   var TIPS = {
     flame: 'Streak: dagen op rij waarop je je dagdoel haalde',
     bolt: 'XP: je punten',
-    heart: 'Hartjes: je mag 5 fouten per ronde maken'
+    heart: 'Hartjes: bij elke fout gaat er een half hartje af (max. 10 fouten)'
   };
   function topbar(p) {
     var st = streak(p), todayXp = p.days[today()] || 0;
