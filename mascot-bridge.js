@@ -1,4 +1,4 @@
-/* Mascot bridge: injects mascot into feedback, finish, hero, streak, empty states */
+/* Mascot: beweegt alleen bij feedback/finish; geen grote mascot midden op home */
 (function () {
   function img(kind, cls) {
     if (!window.AL_MASCOT || !AL_MASCOT.img) return '';
@@ -8,11 +8,12 @@
   function injectFeedback() {
     document.querySelectorAll('.gd-feedback-inner').forEach(function (el) {
       if (el.querySelector('.gd-mascot')) return;
-      var good = el.closest('.gd-feedback') && el.closest('.gd-feedback').classList.contains('good');
+      var sheet = el.closest('.gd-feedback');
+      var good = sheet && sheet.classList.contains('good');
       var kind = good ? (document.querySelector('.gd-combo') ? 'proud' : 'happy') : 'sad';
       var head = document.createElement('div');
       head.className = 'gd-feedback-head';
-      head.innerHTML = img(kind, 'gd-mascot');
+      head.innerHTML = img(kind, 'gd-mascot gd-mascot-anim');
       var strong = el.querySelector('strong');
       if (strong) {
         head.appendChild(strong.cloneNode(true));
@@ -32,36 +33,29 @@
       var kind = acc >= 80 ? 'proud' : (acc >= 50 ? 'happy' : 'sad');
       var wrap = document.createElement('div');
       wrap.className = 'gd-finish-mascot';
-      wrap.innerHTML = img(kind, 'gd-mascot');
-      el.insertBefore(wrap, el.firstChild);
-    });
-  }
-
-  function injectHero() {
-    document.querySelectorAll('.lh-hero').forEach(function (el) {
-      if (el.querySelector('.lh-hero-mascot')) return;
-      var wrap = document.createElement('div');
-      wrap.className = 'lh-hero-mascot';
-      wrap.innerHTML = img('happy', 'gd-mascot gd-mascot-lg');
       wrap.setAttribute('aria-hidden', 'true');
+      wrap.innerHTML = img(kind, 'gd-mascot gd-mascot-anim');
       el.insertBefore(wrap, el.firstChild);
+      var icon = el.querySelector('.gd-finish-icon');
+      if (icon) icon.style.display = 'none';
     });
   }
 
   function injectStreak() {
+    /* Klein, stil in de hoek van de streak-kaart */
     document.querySelectorAll('.lh-streak').forEach(function (el) {
       if (el.querySelector('.lh-streak-mascot')) return;
       var zero = !!el.querySelector('.lh-streak-ic.zero');
       var kind = zero ? 'sad' : 'proud';
       var wrap = document.createElement('div');
       wrap.className = 'lh-streak-mascot';
-      wrap.innerHTML = img(kind, 'gd-mascot gd-mascot-sm');
       wrap.setAttribute('aria-hidden', 'true');
+      wrap.innerHTML = img(kind, 'gd-mascot gd-mascot-sm');
       var ic = el.querySelector('.lh-streak-ic');
       if (ic && ic.parentNode === el) {
         ic.insertAdjacentElement('afterend', wrap);
       } else {
-        el.insertBefore(wrap, el.firstChild);
+        el.appendChild(wrap);
       }
     });
   }
@@ -71,14 +65,11 @@
       if (el.querySelector('.lh-empty-mascot')) return;
       var wrap = document.createElement('div');
       wrap.className = 'lh-empty-mascot';
-      wrap.innerHTML = img('proud', 'gd-mascot gd-mascot-md');
       wrap.setAttribute('aria-hidden', 'true');
+      wrap.innerHTML = img('proud', 'gd-mascot gd-mascot-md');
       var icon = el.querySelector('.lh-empty-ic');
-      if (icon) {
-        icon.replaceWith(wrap);
-      } else {
-        el.insertBefore(wrap, el.firstChild);
-      }
+      if (icon) icon.replaceWith(wrap);
+      else el.insertBefore(wrap, el.firstChild);
     });
   }
 
@@ -86,7 +77,6 @@
     try {
       injectFeedback();
       injectFinish();
-      injectHero();
       injectStreak();
       injectEmpty();
     } catch (_e) {}
