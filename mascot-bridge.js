@@ -7,7 +7,7 @@
   var lastSpot = -1;
   var roamTimer = null;
   var emoTimer = null;
-  var moods = ['happy', 'wave', 'proud', 'wave', 'happy'];
+  var moods = ['happy', 'happy', 'proud', 'happy'];
 
   function img(kind, cls) {
     if (!window.AL_MASCOT || !AL_MASCOT.img) return '';
@@ -108,7 +108,9 @@
 
   function setMood(btn, kind) {
     if (!btn || !window.AL_MASCOT || !AL_MASCOT.setKind) return;
-    AL_MASCOT.setKind(btn, kind);
+    /* zwaaien = zelfde mascotte (happy), alleen CSS-animatie — geen ander plaatje */
+    var visual = (kind === 'wave') ? 'happy' : kind;
+    AL_MASCOT.setKind(btn, visual);
     btn.classList.remove('is-waving', 'is-bob');
     if (kind === 'wave') {
       btn.classList.add('is-waving');
