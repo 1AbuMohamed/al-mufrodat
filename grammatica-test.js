@@ -815,7 +815,11 @@
       '<div class="gd-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pct+'"><span style="width:'+pct+'%"></span></div></div>'+
       '<div class="gd-bar-hearts" aria-label="'+String(session.hearts).replace('.',',')+' van 5 hartjes">'+
       Array.from({length:5},function(_,i){var rem=session.hearts-i;var cls=rem>=1?'alive':rem>=0.5?'half':'lost';var ic=rem>=1?'heart':rem>=0.5?'heartHalf':'heartBroken';return '<span class="'+cls+'">'+svgIcon(ic)+'</span>';}).join('')+'</div>'+
-      (P()?'<button type="button" class="gd-fast'+(P().fastOn()?' on':'')+'" data-action="fast" aria-pressed="'+P().fastOn()+'" title="Snelle modus: direct nakijken en automatisch door">⚡ Snel</button>':'')+'</div>';
+      (P()?function(){var m=P().speedMode?P().speedMode():(P().fastOn()?'fast':'off');
+        var lbl=m==='super'?'⚡⚡ Supersnel':'⚡ Snel';
+        var cls='gd-fast'+(m!=='off'?' on':'')+(m==='super'?' super':'');
+        var ttl=m==='super'?'Supersnel: toont alleen juist/fout en gaat meteen door':(m==='fast'?'Snelle modus · klik nogmaals voor Supersnel':'Normaal · klik voor Snel of Supersnel');
+        return '<button type="button" class="'+cls+'" data-action="fast" aria-pressed="'+(m!=='off')+'" title="'+ttl+'">'+lbl+'</button>';}():'')+'</div>';
   }
   function intro(){
     var n=session.lesson,cards=session.theoryCards,p=session.theoryIndex,rows=cards[p]||[];
@@ -923,7 +927,13 @@
   };
   function taskFeedback(task){
     if(!session.feedback)return '';
-    var good=session.feedback.correct,headline=good?['Goed!','Prima!','Uitstekend!'][session.index%3]:'Juiste antwoord:';
+    var good=session.feedback.correct;
+    if(P()&&P().superOn&&P().superOn()){
+      return '<section class="gd-feedback gd-feedback-sheet gd-feedback-super '+(good?'good':'review')+'" role="status" aria-live="assertive">'+
+        '<div class="gd-feedback-inner"><strong>'+(good?'Juist!':'Fout!')+'</strong>'+
+        '<div class="gd-autonext" aria-hidden="true"><i></i></div></div></section>';
+    }
+    var headline=good?['Goed!','Prima!','Uitstekend!'][session.index%3]:'Juiste antwoord:';
     var answer=task.type==='zinsontleding'?'':task.type==='parse'?task.word+' — '+task.answer:task.type==='find'?task.word:
       task.type==='order'?plain(task.example.ar):task.type==='gap'?task.answer:task.answer||task.example&&task.example.nl||'';
     var termNote=(task.type==='ontleed'||task.type==='parse')&&TERM_HELP[task.answer]?TERM_HELP[task.answer]:'';
@@ -1141,7 +1151,8 @@
     recordAnswer(t,good);session.feedback={correct:good};render();
     if(P()&&P().fastOn()){
       clearTimeout(fastTimer);
-      fastTimer=setTimeout(function(){if(session.feedback&&session.stage==='play')next();},good?500:1000);
+      var isSuper=P().superOn&&P().superOn();
+      fastTimer=setTimeout(function(){if(session.feedback&&session.stage==='play')next();},isSuper?250:(good?500:1000));
     }
   }
   function next(){
@@ -1174,7 +1185,7 @@
       return render();
     }
     if(action==='fast'&&P()){
-      P().setFast(!P().fastOn());
+      if(P().cycleSpeed)P().cycleSpeed();else P().setFast(!P().fastOn());
       if(!P().fastOn())clearTimeout(fastTimer);
       return render();
     }

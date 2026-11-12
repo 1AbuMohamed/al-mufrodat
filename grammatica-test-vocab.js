@@ -25,18 +25,24 @@
   var app = null, S = null, bound = false, fastTimer = 0;
 
   /* ---------- hulpfuncties ---------- */
-  function fastOn() {
-    if (window.GrammarLabParse && window.GrammarLabParse.fastOn) return window.GrammarLabParse.fastOn();
-    return jget(K_SET, {}).fast === true;
+  function speedMode() {
+    if (window.GrammarLabParse && window.GrammarLabParse.speedMode) return window.GrammarLabParse.speedMode();
+    var s = jget(K_SET, {});
+    if (s.speed === 'super' || s.speed === 'fast' || s.speed === 'off') return s.speed;
+    return s.fast === true ? 'fast' : 'off';
   }
-  function setFast(on) {
-    if (window.GrammarLabParse && window.GrammarLabParse.setFast) { window.GrammarLabParse.setFast(on); return; }
-    var s = jget(K_SET, {}); s.fast = !!on; jset(K_SET, s);
+  function fastOn() { return speedMode() !== 'off'; }
+  function superOn() { return speedMode() === 'super'; }
+  function cycleSpeed() {
+    if (window.GrammarLabParse && window.GrammarLabParse.cycleSpeed) return window.GrammarLabParse.cycleSpeed();
+    var cur = speedMode(), nxt = cur === 'off' ? 'fast' : (cur === 'fast' ? 'super' : 'off');
+    var s = jget(K_SET, {}); s.speed = nxt; s.fast = (nxt !== 'off'); jset(K_SET, s);
+    return nxt;
   }
   function scheduleFastNext(ok) {
     clearTimeout(fastTimer);
     if (!fastOn()) return;
-    fastTimer = setTimeout(function () { if (S && S.fb && S.screen === 'play') next(); }, ok ? 500 : 1000);
+    fastTimer = setTimeout(function () { if (S && S.fb && S.screen === 'play') next(); }, superOn() ? 250 : (ok ? 500 : 1000));
   }
   function esc(v) {
     return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -263,7 +269,7 @@
       '<div class="gd-progress-wrap"><div class="gd-progress-title"><strong>Woordenschat · Les ' + S.n + '</strong><span>' + esc(label) + '</span></div>' +
       '<div class="gd-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"><span style="width:' + pct + '%"></span></div></div>' +
       '<div class="gd-bar-hearts" aria-label="' + String(S.hearts).replace('.', ',') + ' van ' + MAX_HEARTS + ' hartjes">' + hearts + '</div>' +
-      '<button type="button" class="gd-fast' + (fastOn() ? ' on' : '') + '" data-vl="fast" aria-pressed="' + fastOn() + '" title="Snelle modus: direct nakijken en automatisch door">⚡ Snel</button></div>';
+      '<button type="button" class="gd-fast' + (fastOn() ? ' on' : '') + (superOn() ? ' super' : '') + '" data-vl="fast" aria-pressed="' + fastOn() + '" title="' + (superOn() ? 'Supersnel: toont alleen juist/fout en gaat meteen door' : (fastOn() ? 'Snelle modus · klik nogmaals voor Supersnel' : 'Normaal · klik voor Snel of Supersnel')) + '">' + (superOn() ? '⚡⚡ Supersnel' : '⚡ Snel') + '</button></div>';
   }
 
   function wordsScreen() {
@@ -319,14 +325,20 @@
     var fb = '';
     if (S.fb) {
       var good = S.fb.ok, w = q.word;
-      var headline = good ? ['Goed!', 'Prima!', 'Uitstekend!'][S.i % 3] : 'Juiste antwoord:';
-      var detail = S.fb.match ? '<p class="gd-correct-answer">Alle paren gevonden</p>'
-        : '<p class="gd-correct-answer"' + (q.type === 'nl2ar' ? ' lang="ar" dir="rtl"' : '') + '>' + esc(q.answer) + '</p>' +
-          (q.type === 'nl2ar' ? '<p>' + esc(w.nl) + '</p>' : '<p class="gd-arabic" lang="ar" dir="rtl">' + esc(w.ar) + '</p>');
-      fb = '<section class="gd-feedback gd-feedback-sheet ' + (good ? 'good' : 'review') + '" role="status" aria-live="assertive">' +
-        '<div class="gd-feedback-inner"><strong>' + headline + '</strong>' + detail +
-        (fastOn() ? '<div class="gd-autonext" aria-hidden="true"><i></i></div>' : '') +
-        '<button type="button" class="gd-primary gd-full" data-vl="next">Verder</button></div></section>';
+      if (superOn()) {
+        fb = '<section class="gd-feedback gd-feedback-sheet gd-feedback-super ' + (good ? 'good' : 'review') + '" role="status" aria-live="assertive">' +
+          '<div class="gd-feedback-inner"><strong>' + (good ? 'Juist!' : 'Fout!') + '</strong>' +
+          '<div class="gd-autonext" aria-hidden="true"><i></i></div></div></section>';
+      } else {
+        var headline = good ? ['Goed!', 'Prima!', 'Uitstekend!'][S.i % 3] : 'Juiste antwoord:';
+        var detail = S.fb.match ? '<p class="gd-correct-answer">Alle paren gevonden</p>'
+          : '<p class="gd-correct-answer"' + (q.type === 'nl2ar' ? ' lang="ar" dir="rtl"' : '') + '>' + esc(q.answer) + '</p>' +
+            (q.type === 'nl2ar' ? '<p>' + esc(w.nl) + '</p>' : '<p class="gd-arabic" lang="ar" dir="rtl">' + esc(w.ar) + '</p>');
+        fb = '<section class="gd-feedback gd-feedback-sheet ' + (good ? 'good' : 'review') + '" role="status" aria-live="assertive">' +
+          '<div class="gd-feedback-inner"><strong>' + headline + '</strong>' + detail +
+          (fastOn() ? '<div class="gd-autonext" aria-hidden="true"><i></i></div>' : '') +
+          '<button type="button" class="gd-primary gd-full" data-vl="next">Verder</button></div></section>';
+      }
     }
     return '<div class="gd-shell gd-play vl">' + bar(Math.min(total, S.i + 1) + ' / ' + total, pct) +
       '<div class="gd-card gd-task">' + body + '</div>' + fb + '</div>';
@@ -370,7 +382,7 @@
     e.stopPropagation();
     var a = t.getAttribute('data-vl');
     if (a === 'exit') return leave();
-    if (a === 'fast') { setFast(!fastOn()); if (!fastOn()) clearTimeout(fastTimer); render(); return; }
+    if (a === 'fast') { cycleSpeed(); if (!fastOn()) clearTimeout(fastTimer); render(); return; }
     if (a === 'start') { clearTimeout(fastTimer); S.screen = 'play'; S.qs = build(S.n); S.i = 0; render(); return; }
     if (a === 'continue') {
       clearTimeout(fastTimer);

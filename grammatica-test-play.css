@@ -9,11 +9,15 @@
 }
 .gd-fast:hover { background: var(--surface-2, #f1f5f2); }
 .gd-fast.on { border-color: var(--gold-shade, #cc9a00); background: var(--gold, #ffc800); color: #3b2a00; }
+.gd-fast.super { border-color: #c2410c; background: #ff6b2c; color: #fff; }
 
 /* Auto-doorgaan voortgangsbalk in feedback */
 .gd-autonext { height: 6px; margin: 10px 0 4px; border-radius: 3px; background: rgba(0, 0, 0, .14); overflow: hidden; }
 .gd-autonext i { display: block; height: 100%; width: 100%; background: currentColor; transform-origin: left; animation: gdAuto .5s linear forwards; }
 .gd-feedback-sheet.review .gd-autonext i { animation-duration: 1s; }
+.gd-feedback-sheet.gd-feedback-super .gd-feedback-inner { text-align: center; padding: 10px 16px; }
+.gd-feedback-sheet.gd-feedback-super strong { font-size: 22px; display: block; }
+.gd-feedback-sheet.gd-feedback-super .gd-autonext i { animation-duration: .25s; }
 @keyframes gdAuto { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
 /* Vertalingshint bij invulvraag en zinsontleding */

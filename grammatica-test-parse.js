@@ -90,10 +90,23 @@
   function settings() {
     try { return JSON.parse(localStorage.getItem(K_SET) || '{}') || {}; } catch (_e) { return {}; }
   }
-  function fastOn() { return settings().fast === true; }
-  function setFast(on) {
-    var s = settings(); s.fast = !!on;
+  function speedMode() {
+    var s = settings();
+    if (s.speed === 'super' || s.speed === 'fast' || s.speed === 'off') return s.speed;
+    return s.fast === true ? 'fast' : 'off';
+  }
+  function fastOn() { return speedMode() !== 'off'; }
+  function superOn() { return speedMode() === 'super'; }
+  function setSpeed(mode) {
+    var m = (mode === 'super' || mode === 'fast') ? mode : 'off';
+    var s = settings(); s.speed = m; s.fast = (m !== 'off');
     try { localStorage.setItem(K_SET, JSON.stringify(s)); } catch (_e) {}
+    return m;
+  }
+  function setFast(on) { return setSpeed(on ? 'fast' : 'off'); }
+  function cycleSpeed() {
+    var cur = speedMode();
+    return setSpeed(cur === 'off' ? 'fast' : (cur === 'fast' ? 'super' : 'off'));
   }
 
   /* ---------- rollen & woordgroepen afleiden ---------- */
@@ -589,6 +602,7 @@
   window.GrammarLabParse = {
     available: available, build: build, body: body, complete: complete, grade: grade,
     solution: solution, bindDrag: bindDrag, applySlot: applySlot, unsetSlot: unsetSlot,
-    getSlot: getSlot, fastOn: fastOn, setFast: setFast, name: name, PH: PH
+    getSlot: getSlot, fastOn: fastOn, superOn: superOn, speedMode: speedMode,
+    setFast: setFast, setSpeed: setSpeed, cycleSpeed: cycleSpeed, name: name, PH: PH
   };
 })();
