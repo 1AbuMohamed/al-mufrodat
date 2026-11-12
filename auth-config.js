@@ -1,9 +1,6 @@
-/* Vul hier je Google OAuth Client ID in (type: Web application).
- * Google Cloud Console → APIs & Services → Credentials → Create OAuth client ID
- * Authorized JavaScript origins:
- *   https://1abumohamed.github.io
- *   http://localhost (optioneel, voor lokaal testen)
+/* Google OAuth Client ID (Web application)
+ * Authorized JavaScript origins: https://1abumohamed.github.io
  */
 window.AL_AUTH_CONFIG = {
-  clientId: '' // bv. '123456789-xxxx.apps.googleusercontent.com'
+  clientId: '838549452777-dbgj6addaqlj6vki04vdrr00u2oikc6p.apps.googleusercontent.com'
 };
