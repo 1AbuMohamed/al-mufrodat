@@ -7,7 +7,7 @@
   var lastSpot = -1;
   var roamTimer = null;
   var emoTimer = null;
-  var moods = ['happy', 'happy', 'proud', 'happy'];
+  var moods = ['happy', 'wave', 'proud', 'wave', 'happy'];
 
   function img(kind, cls) {
     if (!window.AL_MASCOT || !AL_MASCOT.img) return '';
@@ -108,13 +108,10 @@
 
   function setMood(btn, kind) {
     if (!btn || !window.AL_MASCOT || !AL_MASCOT.setKind) return;
-    /* zwaaien = zelfde mascotte (happy), alleen CSS-animatie — geen ander plaatje */
-    var visual = (kind === 'wave') ? 'happy' : kind;
-    AL_MASCOT.setKind(btn, visual);
+    AL_MASCOT.setKind(btn, kind);
     btn.classList.remove('is-waving', 'is-bob');
     if (kind === 'wave') {
       btn.classList.add('is-waving');
-      sfx('mascotChirp');
     } else {
       btn.classList.add('is-bob');
     }
@@ -130,7 +127,7 @@
     }, 2800 + Math.random() * 3200);
   }
 
-  function glideTo(btn, spot, withSound) {
+  function glideTo(btn, spot) {
     if (!btn || !btn.isConnected || flying) return;
     btn.classList.add('is-gliding');
     btn.style.top = spot.top + 'vh';
@@ -139,7 +136,6 @@
     var dirY = spot.top < 40 ? -1 : 1;
     btn.style.setProperty('--fly-x', (dirX * (70 + Math.random() * 50)) + 'vw');
     btn.style.setProperty('--fly-y', (dirY * (45 + Math.random() * 35)) + 'vh');
-    if (withSound) sfx('mascotChirp');
     setTimeout(function () {
       if (btn.isConnected) btn.classList.remove('is-gliding');
     }, 1200);
@@ -147,15 +143,15 @@
 
   function scheduleRoam(btn) {
     if (roamTimer) clearTimeout(roamTimer);
+    /* slechts 1x per 1–2 minuten verplaatsen */
     roamTimer = setTimeout(function () {
       if (!btn.isConnected || flying || !onHome()) return;
-      glideTo(btn, randomSpot(), true);
-      // soms zwaaien bij aankomst
+      glideTo(btn, randomSpot());
       setTimeout(function () {
         if (btn.isConnected && !flying && Math.random() < 0.55) setMood(btn, 'wave');
       }, 900);
       scheduleRoam(btn);
-    }, 4500 + Math.random() * 4000);
+    }, 60000 + Math.random() * 60000);
   }
 
   function placeBuddy(btn, animateIn) {
@@ -170,7 +166,6 @@
     btn.style.setProperty('--fly-y', (dirY * (45 + Math.random() * 35)) + 'vh');
     if (animateIn) {
       btn.classList.add('is-arrive');
-      sfx('mascotPop');
       setTimeout(function () {
         if (btn.isConnected) btn.classList.remove('is-arrive');
       }, 600);
