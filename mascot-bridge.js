@@ -106,7 +106,7 @@
   }
 
   function setMood(btn, kind) {
-    if (!btn || !window.AL_MASCOT || || !AL_MASCOT.setKind) return;
+    if (!btn || !window.AL_MASCOT || !AL_MASCOT.setKind) return;
     /* altijd zelfde mascotte-plaatje; wave = alleen CSS */
     var visual = 'happy';
     AL_MASCOT.setKind(btn, visual);
