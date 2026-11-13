@@ -7,7 +7,7 @@
   var lastSpot = -1;
   var roamTimer = null;
   var emoTimer = null;
-  var moods = ['happy', 'happy', 'proud', 'happy'];
+  var moods = ['happy', 'wave', 'proud', 'wave', 'happy'];
 
   function img(kind, cls) {
     if (!window.AL_MASCOT || !AL_MASCOT.img) return '';
@@ -28,10 +28,10 @@
       if (el.querySelector('.gd-mascot')) continue;
       var sheet = el.closest('.gd-feedback') || el.closest('.gd-feedback-sheet');
       var good = sheet && (sheet.classList.contains('good') || sheet.classList.contains('ok'));
-      var kind = 'happy';
+      var kind = good ? ((root || document).querySelector('.gd-combo') ? 'proud' : 'happy') : 'sad';
       var head = document.createElement('div');
       head.className = 'gd-feedback-head';
-      head.innerHTML = img('happy', 'gd-mascot gd-mascot-anim');
+      head.innerHTML = img(kind, 'gd-mascot gd-mascot-anim');
       var strong = el.querySelector('strong');
       if (strong) {
         head.appendChild(strong.cloneNode(true));
@@ -50,10 +50,11 @@
       var acc = 50;
       var accEl = el.querySelector('.gd-result-grid span:nth-child(2) strong');
       if (accEl) acc = parseInt(accEl.textContent, 10) || 50;
+      var kind = acc >= 80 ? 'proud' : (acc >= 50 ? 'happy' : 'sad');
       var wrap = document.createElement('div');
       wrap.className = 'gd-finish-mascot';
       wrap.setAttribute('aria-hidden', 'true');
-      wrap.innerHTML = img('happy', 'gd-mascot gd-mascot-anim');
+      wrap.innerHTML = img(kind, 'gd-mascot gd-mascot-anim');
       el.insertBefore(wrap, el.firstChild);
       var icon = el.querySelector('.gd-finish-icon');
       if (icon) icon.style.display = 'none';
@@ -81,12 +82,20 @@
   }
 
   function randomSpot() {
-    var spots = [
-      { t: 10, l: 5 }, { t: 10, l: 80 },
-      { t: 22, l: 8 }, { t: 22, l: 75 },
-      { t: 36, l: 4 }, { t: 36, l: 82 },
-      { t: 50, l: 7 }, { t: 50, l: 78 },
-      { t: 64, l: 10 }, { t: 64, l: 72 }
+    /* vermijd linker kolom (nav) — vooral desktop */
+    var wide = (typeof window !== 'undefined' && window.innerWidth >= 900);
+    var spots = wide ? [
+      { t: 10, l: 55 }, { t: 10, l: 80 },
+      { t: 22, l: 58 }, { t: 22, l: 78 },
+      { t: 36, l: 52 }, { t: 36, l: 82 },
+      { t: 50, l: 56 }, { t: 50, l: 78 },
+      { t: 64, l: 54 }, { t: 64, l: 74 }
+    ] : [
+      { t: 10, l: 8 }, { t: 10, l: 78 },
+      { t: 22, l: 10 }, { t: 22, l: 75 },
+      { t: 36, l: 8 }, { t: 36, l: 80 },
+      { t: 50, l: 10 }, { t: 50, l: 76 },
+      { t: 64, l: 12 }, { t: 64, l: 72 }
     ];
     var i = Math.floor(Math.random() * spots.length);
     if (spots.length > 1 && i === lastSpot) {
@@ -107,8 +116,7 @@
 
   function setMood(btn, kind) {
     if (!btn || !window.AL_MASCOT || !AL_MASCOT.setKind) return;
-    /* altijd zelfde mascotte-plaatje; wave = alleen CSS */
-    var visual = 'happy';
+    var visual = SRC_KIND(kind);
     AL_MASCOT.setKind(btn, visual);
     btn.classList.remove('is-waving', 'is-bob');
     if (kind === 'wave') {
@@ -117,6 +125,11 @@
       btn.classList.add('is-bob');
     }
   }
+  function SRC_KIND(kind) {
+    if (kind === 'wave' || kind === 'proud' || kind === 'sad' || kind === 'happy') return kind;
+    return 'happy';
+  }
+
 
 
   function scheduleMood(btn) {
