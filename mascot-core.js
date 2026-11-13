@@ -1,4 +1,4 @@
-/* Mascot — consistente emoties (zelfde figuur) */
+/* Mascot — originele AI-vogel (blij / trots / verdrietig / zwaai) */
 window.AL_MASCOT = window.AL_MASCOT || {};
 (function (M) {
   var BASE = 'assets/mascot/';
