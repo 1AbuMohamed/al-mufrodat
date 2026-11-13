@@ -73,7 +73,7 @@
 /* Buddy: rondvliegen, zwaaien, aankomen */
 .al-mascot-buddy{
   position:fixed;
-  z-index:40;
+  z-index:90;
   top:12vh;left:78vw;
   width:72px;height:72px;padding:0;
   border:0;background:transparent;cursor:pointer;
