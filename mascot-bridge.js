@@ -127,7 +127,7 @@
     }, 2800 + Math.random() * 3200);
   }
 
-  function glideTo(btn, spot) {
+  function glideTo(btn, spot, withSound) {
     if (!btn || !btn.isConnected || flying) return;
     btn.classList.add('is-gliding');
     btn.style.top = spot.top + 'vh';
@@ -143,15 +143,15 @@
 
   function scheduleRoam(btn) {
     if (roamTimer) clearTimeout(roamTimer);
-    /* slechts 1x per 1–2 minuten verplaatsen */
     roamTimer = setTimeout(function () {
       if (!btn.isConnected || flying || !onHome()) return;
-      glideTo(btn, randomSpot());
+      glideTo(btn, randomSpot(), true);
+      // soms zwaaien bij aankomst
       setTimeout(function () {
         if (btn.isConnected && !flying && Math.random() < 0.55) setMood(btn, 'wave');
       }, 900);
       scheduleRoam(btn);
-    }, 60000 + Math.random() * 60000);
+    }, 4500 + Math.random() * 4000);
   }
 
   function placeBuddy(btn, animateIn) {
@@ -166,7 +166,7 @@
     btn.style.setProperty('--fly-y', (dirY * (45 + Math.random() * 35)) + 'vh');
     if (animateIn) {
       btn.classList.add('is-arrive');
-      setTimeout(function () {
+            setTimeout(function () {
         if (btn.isConnected) btn.classList.remove('is-arrive');
       }, 600);
     }
@@ -210,6 +210,7 @@
     btn.classList.remove('is-bob', 'is-waving', 'is-gliding', 'is-arrive');
     btn.classList.add('is-flying');
     btn.disabled = true;
+    sfx('mascotBird');
     sfx('mascotWhoosh');
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var ms = reduce ? 150 : 2000;

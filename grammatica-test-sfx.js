@@ -99,8 +99,9 @@
 
 
   function sfxMascotChirp() {
-    tone(880, 0, 0.08, 'sine', 0.16);
-    tone(1175, 0.07, 0.1, 'sine', 0.14);
+    /* korte tjilp */
+    tone(1400, 0, 0.06, 'sine', 0.18);
+    tone(1800, 0.05, 0.07, 'sine', 0.14);
   }
   function sfxMascotWhoosh() {
     tone(420, 0, 0.18, 'triangle', 0.1);
@@ -111,11 +112,20 @@
     tone(660, 0, 0.07, 'sine', 0.14);
     tone(990, 0.05, 0.09, 'sine', 0.12);
   }
+  function sfxMascotBird() {
+    /* vogelachtige tjilp bij klik */
+    tone(1200, 0.00, 0.07, 'sine', 0.22);
+    tone(1600, 0.06, 0.08, 'sine', 0.2);
+    tone(1900, 0.12, 0.06, 'sine', 0.16);
+    tone(1500, 0.18, 0.09, 'sine', 0.14);
+    tone(2100, 0.26, 0.07, 'sine', 0.12);
+  }
   window.playLabSfx = {
     correct: sfxCorrect,
     mascotChirp: sfxMascotChirp,
     mascotWhoosh: sfxMascotWhoosh,
     mascotPop: sfxMascotPop,
+    mascotBird: sfxMascotBird,
     wrong: sfxWrong,
     combo: sfxCombo,
     streak: sfxStreak,
