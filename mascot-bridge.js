@@ -7,7 +7,7 @@
   var lastSpot = -1;
   var roamTimer = null;
   var emoTimer = null;
-  var moods = ['happy', 'wave', 'proud', 'wave', 'happy'];
+  var moods = ['happy', 'happy', 'proud', 'happy'];
 
   function img(kind, cls) {
     if (!window.AL_MASCOT || !AL_MASCOT.img) return '';
@@ -28,10 +28,10 @@
       if (el.querySelector('.gd-mascot')) continue;
       var sheet = el.closest('.gd-feedback') || el.closest('.gd-feedback-sheet');
       var good = sheet && (sheet.classList.contains('good') || sheet.classList.contains('ok'));
-      var kind = good ? ((root || document).querySelector('.gd-combo') ? 'proud' : 'happy') : 'sad';
+      var kind = 'happy';
       var head = document.createElement('div');
       head.className = 'gd-feedback-head';
-      head.innerHTML = img(kind, 'gd-mascot gd-mascot-anim');
+      head.innerHTML = img('happy', 'gd-mascot gd-mascot-anim');
       var strong = el.querySelector('strong');
       if (strong) {
         head.appendChild(strong.cloneNode(true));
@@ -50,11 +50,10 @@
       var acc = 50;
       var accEl = el.querySelector('.gd-result-grid span:nth-child(2) strong');
       if (accEl) acc = parseInt(accEl.textContent, 10) || 50;
-      var kind = acc >= 80 ? 'proud' : (acc >= 50 ? 'happy' : 'sad');
       var wrap = document.createElement('div');
       wrap.className = 'gd-finish-mascot';
       wrap.setAttribute('aria-hidden', 'true');
-      wrap.innerHTML = img(kind, 'gd-mascot gd-mascot-anim');
+      wrap.innerHTML = img('happy', 'gd-mascot gd-mascot-anim');
       el.insertBefore(wrap, el.firstChild);
       var icon = el.querySelector('.gd-finish-icon');
       if (icon) icon.style.display = 'none';
@@ -69,7 +68,7 @@
       var wrap = document.createElement('div');
       wrap.className = 'lh-empty-mascot';
       wrap.setAttribute('aria-hidden', 'true');
-      wrap.innerHTML = img('proud', 'gd-mascot gd-mascot-md');
+      wrap.innerHTML = img('happy', 'gd-mascot gd-mascot-md');
       var icon = el.querySelector('.lh-empty-ic');
       if (icon) icon.replaceWith(wrap);
       else el.insertBefore(wrap, el.firstChild);
@@ -107,8 +106,10 @@
   }
 
   function setMood(btn, kind) {
-    if (!btn || !window.AL_MASCOT || !AL_MASCOT.setKind) return;
-    AL_MASCOT.setKind(btn, kind);
+    if (!btn || !window.AL_MASCOT || || !AL_MASCOT.setKind) return;
+    /* altijd zelfde mascotte-plaatje; wave = alleen CSS */
+    var visual = 'happy';
+    AL_MASCOT.setKind(btn, visual);
     btn.classList.remove('is-waving', 'is-bob');
     if (kind === 'wave') {
       btn.classList.add('is-waving');
@@ -116,6 +117,7 @@
       btn.classList.add('is-bob');
     }
   }
+
 
   function scheduleMood(btn) {
     if (emoTimer) clearTimeout(emoTimer);
@@ -145,13 +147,13 @@
     if (roamTimer) clearTimeout(roamTimer);
     roamTimer = setTimeout(function () {
       if (!btn.isConnected || flying || !onHome()) return;
-      glideTo(btn, randomSpot(), true);
+      glideTo(btn, randomSpot());
       // soms zwaaien bij aankomst
       setTimeout(function () {
         if (btn.isConnected && !flying && Math.random() < 0.55) setMood(btn, 'wave');
       }, 900);
       scheduleRoam(btn);
-    }, 4500 + Math.random() * 4000);
+    }, 60000 + Math.random() * 60000);
   }
 
   function placeBuddy(btn, animateIn) {
@@ -166,7 +168,7 @@
     btn.style.setProperty('--fly-y', (dirY * (45 + Math.random() * 35)) + 'vh');
     if (animateIn) {
       btn.classList.add('is-arrive');
-            setTimeout(function () {
+      setTimeout(function () {
         if (btn.isConnected) btn.classList.remove('is-arrive');
       }, 600);
     }
@@ -210,7 +212,6 @@
     btn.classList.remove('is-bob', 'is-waving', 'is-gliding', 'is-arrive');
     btn.classList.add('is-flying');
     btn.disabled = true;
-    sfx('mascotBird');
     sfx('mascotWhoosh');
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var ms = reduce ? 150 : 2000;
