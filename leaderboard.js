@@ -6,9 +6,6 @@
   var K_FRIENDS = 'alm_lb_friends_v1';
   var K_COUNTRY = 'alm_lb_country_v1';
 
-  var NAMES_NL = ['Yusuf', 'Amina', 'Omar', 'Layla', 'Hassan', 'Fatima', 'Ibrahim', 'Sara', 'Karim', 'Noor', 'Adam', 'Maryam', 'Zayn', 'Huda', 'Samir', 'Rania', 'Bilal', 'Dina', 'Anas', 'Leila'];
-  var NAMES_WORLD = ['Alex', 'Yuki', 'Mei', 'Lucas', 'Aya', 'Noah', 'Sofia', 'Kenji', 'Amara', 'Leo', 'Priya', 'Erik', 'Zahra', 'Hugo', 'Ines', 'Mateo', 'Nur', 'Elena', 'Kai', 'Mila'];
-
   function jget(k, d) {
     try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (_e) { return d; }
   }
@@ -85,46 +82,26 @@
   function removeFriend(id) {
     jset(K_FRIENDS, friends().filter(function (x) { return x.id !== id; }));
   }
-  function ghostBoard(scope, me) {
-    var w = weekId();
-    var seed = hash(w + '|' + scope + '|' + (scope === 'land' ? country() : 'WW'));
-    var names = scope === 'land' ? NAMES_NL : NAMES_WORLD;
-    var n = scope === 'vrienden' ? 0 : 14;
-    var list = [];
-    for (var i = 0; i < n; i++) {
-      var h = hash(seed + ':' + i);
-      var base = 40 + (h % 220);
-      // spreiding rondom jouw score zodat het spannend blijft
-      var xp = Math.max(10, Math.round(me.xp * (0.35 + (h % 100) / 80) + base * ((h % 7) + 1)));
-      if (scope === 'land') xp = Math.round(xp * 0.85);
-      list.push({
-        id: 'g' + i,
-        name: names[h % names.length],
-        xp: xp,
-        picture: '',
-        ghost: true,
-        country: scope === 'land' ? country() : ''
-      });
-    }
-    return list;
-  }
   function board(scope) {
     var me = myUser();
     me.you = true;
     me.country = country();
     var list = [];
-    if (scope === 'vrienden') {
-      list = friends().map(function (f) {
-        return { id: f.id, name: f.name, xp: f.xp | 0, picture: f.picture || '', friend: true, country: f.country || '' };
+    /* alleen echte scores: jij + vrienden (geen nep-entries) */
+    friends().forEach(function (f) {
+      if (scope === 'land' && f.country && f.country !== country()) return;
+      list.push({
+        id: f.id,
+        name: f.name,
+        xp: f.xp | 0,
+        picture: f.picture || '',
+        friend: true,
+        country: f.country || ''
       });
-    } else {
-      list = ghostBoard(scope, me);
-    }
-    // jij erbij
+    });
     list = list.filter(function (x) { return x.id !== me.id; });
     list.push(me);
     list.sort(function (a, b) { return (b.xp | 0) - (a.xp | 0); });
-    // rank
     list.forEach(function (x, i) { x.rank = i + 1; });
     return list;
   }
@@ -156,6 +133,9 @@
       '<span>' + (me.xp | 0) + ' XP · woordenschat</span>' +
       '<span class="lb-week">Week ' + esc(weekId()) + ' · ' + esc(country()) + '</span></div></div>';
 
+    var empty = list.length <= 1
+      ? '<li class="lb-empty">Nog geen andere spelers. Deel je code onder <strong>Vrienden</strong>.</li>'
+      : '';
     var rows = list.slice(0, 20).map(function (r) {
       var av = r.picture
         ? '<img class="lb-av" src="' + esc(r.picture) + '" alt="" width="36" height="36" referrerpolicy="no-referrer">'
@@ -179,12 +159,12 @@
     }
 
     var note = scope === 'vrienden'
-      ? '<p class="lb-note">Vriendenlijst staat op dit apparaat. Codes delen werkt offline.</p>'
-      : '<p class="lb-note">Wekelijkse ranglijst op basis van jouw woordenschat-XP' + (scope === 'land' ? ' in ' + esc(country()) : ' wereldwijd') + '.</p>';
+      ? '<p class="lb-note">Alleen echte scores van jou en vrienden via code. Geen valse namen.</p>'
+      : '<p class="lb-note">Alleen echte scores. Voeg vrienden toe via code om hen hier te zien' + (scope === 'land' ? ' (zelfde land: ' + esc(country()) + ')' : '') + '.</p>';
 
     return '<div class="lh-pagehead"><h1>Ranglijst</h1><p class="lh-sub">Woordenschat · wie heeft de hoogste score?</p></div>' +
       hero + tabHtml + friendBox +
-      '<section class="lh-card lb-card"><ol class="lb-list">' + rows + '</ol></section>' + note;
+      '<section class="lh-card lb-card"><ol class="lb-list">' + rows + empty + '</ol></section>' + note;
   }
 
   function handle(action, value, inputEl) {
