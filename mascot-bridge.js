@@ -142,9 +142,12 @@
     }, 2800 + Math.random() * 3200);
   }
 
-  function glideTo(btn, spot, withSound) {
+  function glideTo(btn, spot, ms) {
     if (!btn || !btn.isConnected || flying) return;
-    btn.classList.add('is-gliding');
+    ms = ms || 1400;
+    btn.classList.add('is-gliding', 'is-flapping');
+    btn.classList.remove('is-bob', 'is-waving');
+    btn.style.transitionDuration = (ms / 1000) + 's';
     btn.style.top = spot.top + 'vh';
     btn.style.left = spot.left + 'vw';
     var dirX = spot.left < 40 ? -1 : 1;
@@ -152,21 +155,38 @@
     btn.style.setProperty('--fly-x', (dirX * (70 + Math.random() * 50)) + 'vw');
     btn.style.setProperty('--fly-y', (dirY * (45 + Math.random() * 35)) + 'vh');
     setTimeout(function () {
-      if (btn.isConnected) btn.classList.remove('is-gliding');
-    }, 1200);
+      if (!btn.isConnected) return;
+      btn.classList.remove('is-gliding', 'is-flapping');
+      btn.classList.add('is-bob');
+      btn.style.transitionDuration = '';
+    }, ms);
+  }
+
+  function tour(btn, hops, done) {
+    if (!btn || !btn.isConnected || flying || !onHome()) {
+      if (done) done();
+      return;
+    }
+    if (hops <= 0) {
+      if (Math.random() < 0.45) setMood(btn, 'wave');
+      if (done) done();
+      return;
+    }
+    var ms = 1100 + Math.floor(Math.random() * 600);
+    glideTo(btn, randomSpot(), ms);
+    setTimeout(function () { tour(btn, hops - 1, done); }, ms + 180);
   }
 
   function scheduleRoam(btn) {
     if (roamTimer) clearTimeout(roamTimer);
     roamTimer = setTimeout(function () {
-      if (!btn.isConnected || flying || !onHome()) return;
-      glideTo(btn, randomSpot());
-      // soms zwaaien bij aankomst
-      setTimeout(function () {
-        if (btn.isConnected && !flying && Math.random() < 0.55) setMood(btn, 'wave');
-      }, 900);
-      scheduleRoam(btn);
-    }, 60000 + Math.random() * 60000);
+      if (!btn.isConnected || flying || !onHome()) {
+        scheduleRoam(btn);
+        return;
+      }
+      var hops = 2 + Math.floor(Math.random() * 3);
+      tour(btn, hops, function () { scheduleRoam(btn); });
+    }, 8000 + Math.random() * 8000);
   }
 
   function placeBuddy(btn, animateIn) {
