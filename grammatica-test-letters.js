@@ -8,6 +8,7 @@
   'use strict';
 
   var K_PROG = 'alm_letters_v1';
+  var K_SET = 'alm_grammar_test_settings_v1';
   var MASTERY = 2;       // zelfde drempel als woordenschat: box >= 2 = beheerst
   var MAX_HEARTS = 5;
   var ROUND = 10;
@@ -47,7 +48,27 @@
   // Letters met dezelfde basisvorm horen bij elkaar (zo leer je ze samen herkennen).
   var G = [[0], [1, 2, 3], [4, 5, 6], [7, 8], [9, 10], [11, 12], [13, 14], [15, 16], [17, 18], [19, 20], [21, 22], [23, 24], [25, 26, 27]];
 
-  var app = null, S = null, bound = false;
+  var app = null, S = null, bound = false, fastTimer = 0;
+
+  function speedMode() {
+    var s = jget(K_SET, {});
+    if (s.speed === 'super' || s.speed === 'fast' || s.speed === 'off') return s.speed;
+    return s.fast === true ? 'fast' : 'off';
+  }
+  function fastOn() { return speedMode() !== 'off'; }
+  function superOn() { return speedMode() === 'super'; }
+  function cycleSpeed() {
+    var cur = speedMode(), nxt = cur === 'off' ? 'fast' : (cur === 'fast' ? 'super' : 'off');
+    var s = jget(K_SET, {}); s.speed = nxt; s.fast = (nxt !== 'off'); jset(K_SET, s);
+  }
+  function scheduleAutoNext(ok) {
+    clearTimeout(fastTimer);
+    if (!fastOn()) return;
+    fastTimer = setTimeout(function () {
+      if (S && S.fb && S.screen === 'play') next();
+    }, superOn() ? 250 : (ok ? 500 : 1000));
+  }
+
 
   /* ---------- hulpfuncties ---------- */
   function esc(v) {
@@ -282,6 +303,7 @@
     if (S.xp > 0 && window.GrammarLabEngine && window.GrammarLabEngine.addXp) window.GrammarLabEngine.addXp(S.xp, perfect);
   }
   function leave() {
+    clearTimeout(fastTimer);
     commitXp();
     S = null;
     var home = window.GrammarLabHome;
@@ -311,8 +333,10 @@
     }
     S.fb = { ok: ok };
     render();
+    scheduleAutoNext(ok);
   }
   function next() {
+    clearTimeout(fastTimer);
     if (!S) return;
     if (S.hearts <= 0) { S.screen = 'fail'; S.fb = null; render(); return; }
     S.i++; S.chosen = -1; S.fb = null;
@@ -340,6 +364,13 @@
       '<button type="button" class="vl-exit" data-ll="exit" aria-label="Terug naar het leerpad">' + icon('close') + '</button>' +
       '<div class="gd-progress-wrap"><div class="gd-progress-title"><strong>Arabisch alfabet</strong><span>' + esc(label) + '</span></div>' +
       '<div class="gd-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"><span style="width:' + pct + '%"></span></div></div>' +
+      (function(){
+      var m = speedMode();
+      var lbl = m === 'super' ? '⚡⚡ Supersnel' : '⚡ Snel';
+      var cls = 'gd-fast' + (m !== 'off' ? ' on' : '') + (m === 'super' ? ' super' : '');
+      var ttl = m === 'super' ? 'Supersnel: toont alleen juist/fout en gaat meteen door' : (m === 'fast' ? 'Snelle modus · klik nogmaals voor Supersnel' : 'Normaal · klik voor Snel of Supersnel');
+      return '<button type="button" class="' + cls + '" data-ll="fast" aria-pressed="' + (m !== 'off') + '" title="' + ttl + '">' + lbl + '</button>';
+    })() +
       '<div class="gd-bar-hearts" aria-label="' + String(S.hearts).replace('.', ',') + ' van ' + MAX_HEARTS + ' hartjes">' + hearts + '</div></div>';
   }
   function introScreen() {
@@ -374,10 +405,11 @@
       '<div class="gd-task-actions"><button type="button" class="gd-primary gd-full" data-ll="check" ' + (S.chosen >= 0 && !S.fb ? '' : 'disabled') + '>Controleer</button></div>';
     if (S.fb) {
       var good = S.fb.ok, headline = good ? ['Goed!', 'Prima!', 'Uitstekend!'][S.i % 3] : 'Juiste antwoord:';
-      fb = '<section class="gd-feedback gd-feedback-sheet ' + (good ? 'good' : 'review') + '" role="status" aria-live="assertive">' +
+      fb = '<section class="gd-feedback gd-feedback-sheet ' + (good ? 'good' : 'review') + (superOn() ? ' gd-feedback-super' : '') + '" role="status" aria-live="assertive">' +
         '<div class="gd-feedback-inner"><strong>' + headline + '</strong>' +
-        '<p class="gd-correct-answer"><span class="ll-fb-ch" lang="ar" dir="rtl">' + esc(glyph(q.i)) + '</span> ' + esc(L[q.i][2]) + '</p>' +
-        '<p>klinkt als: ' + esc(L[q.i][3]) + '</p>' + speakBtn(q.i, 'Luister') +
+        (superOn() ? '' : ('<p class="gd-correct-answer"><span class="ll-fb-ch" lang="ar" dir="rtl">' + esc(glyph(q.i)) + '</span> ' + esc(L[q.i][2]) + '</p>' +
+        '<p>klinkt als: ' + esc(L[q.i][3]) + '</p>' + speakBtn(q.i, 'Luister'))) +
+        (fastOn() ? '<div class="gd-autonext" aria-hidden="true"><i></i></div>' : '') +
         '<button type="button" class="gd-primary gd-full" data-ll="next">Verder</button></div></section>';
     }
     return '<div class="gd-shell gd-play vl ll">' + bar(Math.min(total, S.i + 1) + ' / ' + total, pct) +
@@ -450,7 +482,14 @@
       return nf ? open(nf, 'intro') : leave();
     }
     if (a === 'again') { var f = S.focus; commitXp(); S = null; return open(f, 'play'); }
-    if (a === 'pick') { if (!S.fb) { S.chosen = Number(t.getAttribute('data-i')); render(); } return; }
+    if (a === 'fast') { cycleSpeed(); if (!fastOn()) clearTimeout(fastTimer); render(); return; }
+    if (a === 'pick') {
+      if (!S.fb) {
+        S.chosen = Number(t.getAttribute('data-i'));
+        if (fastOn()) check(); else render();
+      }
+      return;
+    }
     if (a === 'check') return check();
     if (a === 'next') return next();
   }
@@ -459,7 +498,7 @@
     var q = current();
     if (!q) return;
     if (S.fb && e.key === 'Enter') { e.preventDefault(); return next(); }
-    if (/^[1-4]$/.test(e.key) && !S.fb && Number(e.key) <= q.opts.length) { S.chosen = Number(e.key) - 1; render(); }
+    if (/^[1-4]$/.test(e.key) && !S.fb && Number(e.key) <= q.opts.length) { S.chosen = Number(e.key) - 1; if (fastOn()) { e.preventDefault(); return check(); } S.chosen = Number(e.key) - 1; render(); }
     else if (e.key === 'Enter' && !S.fb && S.chosen >= 0) { e.preventDefault(); check(); }
   }
   function bind() {
