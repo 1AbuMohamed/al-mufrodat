@@ -112,49 +112,44 @@
     tone(660, 0, 0.07, 'sine', 0.14);
     tone(990, 0.05, 0.09, 'sine', 0.12);
   }
+  var _lastChirp = -1;
   function sfxMascotBird() {
-    /* vogelachtige tjilp bij klik */
-    tone(1200, 0.00, 0.07, 'sine', 0.22);
-    tone(1600, 0.06, 0.08, 'sine', 0.2);
-    tone(1900, 0.12, 0.06, 'sine', 0.16);
-    tone(1500, 0.18, 0.09, 'sine', 0.14);
-    tone(2100, 0.26, 0.07, 'sine', 0.12);
-  }
-
-  var BIRD_CLIPS = [
-    'assets/sfx/birds/bird1.mp3',
-    'assets/sfx/birds/bird2.mp3',
-    'assets/sfx/birds/bird3.mp3',
-    'assets/sfx/birds/bird4.mp3',
-    'assets/sfx/birds/bird5.mp3',
-    'assets/sfx/birds/bird6.mp3'
-  ];
-  var _lastBird = -1;
-  function playBirdClip() {
+    /* Speelse kindervogeltjes — elke klik een ander deuntje */
     ensureAudio();
-    var pool = BIRD_CLIPS.slice();
-    if (pool.length > 1 && _lastBird >= 0) {
-      pool.splice(_lastBird, 1);
-    }
-    var i = Math.floor(Math.random() * pool.length);
-    var src = pool[i];
-    _lastBird = BIRD_CLIPS.indexOf(src);
-    try {
-      var a = new Audio(src);
-      a.volume = 0.85;
-      var p = a.play();
-      if (p && p.catch) p.catch(function () {});
-    } catch (_e) {
-      sfxMascotBird();
-    }
+    var patterns = [
+      /* piep-piep */
+      [[1400, 0, 0.08, 0.22], [1800, 0.09, 0.09, 0.2], [1600, 0.18, 0.07, 0.16]],
+      /* omhoog fluiten */
+      [[1000, 0, 0.06, 0.18], [1300, 0.07, 0.06, 0.2], [1600, 0.14, 0.06, 0.2], [2000, 0.22, 0.1, 0.18]],
+      /* tweet-tweet-tweet */
+      [[1700, 0, 0.06, 0.2], [1700, 0.1, 0.06, 0.18], [2100, 0.2, 0.08, 0.2]],
+      /* vrolijk dabje */
+      [[1200, 0, 0.05, 0.18], [1600, 0.06, 0.07, 0.22], [1400, 0.14, 0.05, 0.16], [1900, 0.22, 0.09, 0.2]],
+      /* korte lach-tjilp */
+      [[1500, 0, 0.05, 0.2], [1900, 0.07, 0.05, 0.18], [1500, 0.14, 0.05, 0.16], [2200, 0.2, 0.08, 0.18]],
+      /* bobbel-piep */
+      [[1100, 0, 0.07, 0.18], [1500, 0.08, 0.08, 0.2], [1800, 0.16, 0.06, 0.18], [1500, 0.24, 0.07, 0.14]],
+      /* high five chirp */
+      [[2000, 0, 0.05, 0.16], [2400, 0.07, 0.06, 0.18], [1800, 0.14, 0.05, 0.16], [2200, 0.2, 0.07, 0.16]],
+      /* zacht wiegend */
+      [[1300, 0, 0.09, 0.16], [1600, 0.1, 0.09, 0.18], [1450, 0.2, 0.1, 0.14]]
+    ];
+    var idx = Math.floor(Math.random() * patterns.length);
+    if (patterns.length > 1 && idx === _lastChirp) idx = (idx + 1) % patterns.length;
+    _lastChirp = idx;
+    patterns[idx].forEach(function (n) {
+      tone(n[0], n[1], n[2], 'sine', n[3]);
+      /* lichte square voor speels “cartoon” karakter */
+      tone(n[0] * 0.5, n[1], n[2] * 0.7, 'triangle', n[3] * 0.25);
+    });
   }
   window.playLabSfx = {
     correct: sfxCorrect,
     mascotChirp: sfxMascotChirp,
     mascotWhoosh: sfxMascotWhoosh,
     mascotPop: sfxMascotPop,
-    mascotBird: playBirdClip,
-    bird: playBirdClip,
+    mascotBird: sfxMascotBird,
+    bird: sfxMascotBird,
     wrong: sfxWrong,
     combo: sfxCombo,
     streak: sfxStreak,
