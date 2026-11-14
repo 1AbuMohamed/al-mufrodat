@@ -120,12 +120,41 @@
     tone(1500, 0.18, 0.09, 'sine', 0.14);
     tone(2100, 0.26, 0.07, 'sine', 0.12);
   }
+
+  var BIRD_CLIPS = [
+    'assets/sfx/birds/bird1.mp3',
+    'assets/sfx/birds/bird2.mp3',
+    'assets/sfx/birds/bird3.mp3',
+    'assets/sfx/birds/bird4.mp3',
+    'assets/sfx/birds/bird5.mp3',
+    'assets/sfx/birds/bird6.mp3'
+  ];
+  var _lastBird = -1;
+  function playBirdClip() {
+    ensureAudio();
+    var pool = BIRD_CLIPS.slice();
+    if (pool.length > 1 && _lastBird >= 0) {
+      pool.splice(_lastBird, 1);
+    }
+    var i = Math.floor(Math.random() * pool.length);
+    var src = pool[i];
+    _lastBird = BIRD_CLIPS.indexOf(src);
+    try {
+      var a = new Audio(src);
+      a.volume = 0.85;
+      var p = a.play();
+      if (p && p.catch) p.catch(function () {});
+    } catch (_e) {
+      sfxMascotBird();
+    }
+  }
   window.playLabSfx = {
     correct: sfxCorrect,
     mascotChirp: sfxMascotChirp,
     mascotWhoosh: sfxMascotWhoosh,
     mascotPop: sfxMascotPop,
-    mascotBird: sfxMascotBird,
+    mascotBird: playBirdClip,
+    bird: playBirdClip,
     wrong: sfxWrong,
     combo: sfxCombo,
     streak: sfxStreak,

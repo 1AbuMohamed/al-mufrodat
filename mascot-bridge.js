@@ -225,7 +225,7 @@
     btn.classList.remove('is-bob', 'is-waving', 'is-gliding', 'is-arrive');
     btn.classList.add('is-flying');
     btn.disabled = true;
-    sfx('mascotWhoosh');
+    sfx('mascotBird');
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var ms = reduce ? 150 : 2000;
     setTimeout(function () {
