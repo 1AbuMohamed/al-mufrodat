@@ -16,7 +16,7 @@
   var app = null, engine = null, bound = false;
   var snap = null;
   var ui = {
-    section: 'leer', pop: null, sheet: null, more: false, tip: null,
+    section: 'leer', pop: null, sheet: null, more: false, tip: null, lbScope: 'wereld', lbMsg: '',
     needScroll: true, bump: null, msg: null, refocus: null, opener: null
   };
 
@@ -187,6 +187,7 @@
     heart: '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7z"/>',
     star: '<path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>',
     crown: '<path d="M3 19h18M4 17 3 7l5 4 4-7 4 7 5-4-1 10z"/>',
+    trophy: '<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M7 6H4a2 2 0 0 0 2 4"/><path d="M17 6h3a2 2 0 0 1-2 4"/>',
     book: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
     home: '<path d="M3 10.5 12 3l9 7.5V21H3z"/><path d="M9 21v-7h6v7"/>',
     chest: '<path d="M3 11h18v9H3z"/><path d="M4 11a8 5 0 0 1 16 0"/><path d="M12 14v3"/>',
@@ -210,7 +211,7 @@
 
   /* ---------- onderdelen ---------- */
   var NAV = [
-    ['leer', 'home', 'LEER'], ['letters', 'letter', 'LETTERS'], ['oefen', 'target', 'OEFEN'], ['missies', 'chest', 'MISSIES'],
+    ['leer', 'home', 'LEER'], ['letters', 'letter', 'LETTERS'], ['oefen', 'target', 'OEFEN'], ['rank', 'trophy', 'TOP'],
     ['profiel', 'user', 'PROFIEL'], ['more', 'dots', 'MEER']
   ];
 
@@ -520,6 +521,17 @@
       '<button type="button" class="lh-morelink danger" data-h="reset">Voortgang wissen</button></div>';
   }
 
+
+  function rankMain() {
+    if (window.GrammarLabLeaderboard && GrammarLabLeaderboard.publish) {
+      try { GrammarLabLeaderboard.publish(); } catch (_e) {}
+    }
+    if (window.GrammarLabLeaderboard && GrammarLabLeaderboard.render) {
+      return GrammarLabLeaderboard.render(ui.lbScope || 'wereld', ui.lbMsg || '');
+    }
+    return '<div class="lh-pagehead"><h1>Ranglijst</h1><p class="lh-sub">Laden…</p></div>';
+  }
+
   function view() {
     var p = prog(), s = settings(), pl = plan(p);
     applyTheme();
@@ -527,6 +539,7 @@
     var sec = ui.section, main, rail = '';
     if (sec === 'oefen') main = oefenMain(pl);
     else if (sec === 'missies') main = missiesMain(p, s);
+    else if (sec === 'rank') main = rankMain();
     else if (sec === 'profiel') main = profielMain(p, s, pl);
     else if (sec === 'letters' && letters()) main = letters().panel();
     else main = leerMain(p, s, pl);
@@ -661,6 +674,15 @@
       case 'set-fast': saveSettings({ fast: !settings().fast }); ui.refocus = null; return rerender();
       case 'set-goal': saveSettings({ goal: Number(v) }); return rerender();
       case 'set-theme': saveSettings({ theme: v }); return rerender();
+      case 'lb-tab':
+      case 'lb-copy':
+      case 'lb-add':
+        if (window.GrammarLabLeaderboard && GrammarLabLeaderboard.handle) {
+          var inp = app && app.querySelector ? app.querySelector('[data-lb-input]') : null;
+          var res = GrammarLabLeaderboard.handle(h, v, inp);
+          if (res) { ui.section = 'rank'; ui.lbScope = res.scope || ui.lbScope; ui.lbMsg = res.msg || ''; return rerender(); }
+        }
+        return;
       case 'login':
         if (window.AL_AUTH && AL_AUTH.login) AL_AUTH.login();
         return;

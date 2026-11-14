@@ -186,6 +186,7 @@
     S.xp += bonus;
     if (S.xp <= 0) return;
     try { jset(K_XP, Math.max(0, parseInt(localStorage.getItem(K_XP) || '0', 10) || 0) + S.xp); } catch (_e) {}
+    try { if (window.GrammarLabLeaderboard && GrammarLabLeaderboard.publish) GrammarLabLeaderboard.publish(); } catch (_e2) {}
     if (window.GrammarLabEngine && window.GrammarLabEngine.addXp) {
       window.GrammarLabEngine.addXp(S.xp, S.perfect && S.attempts > 0 && S.i >= S.qs.length);
     }
