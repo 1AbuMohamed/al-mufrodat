@@ -103,15 +103,16 @@
 
   function distractVerbs(correct, pool) {
     var opts = [correct];
-    shuffle(pool).forEach(function (v) {
+    var same = shuffle(pool.filter(function (v) {
+      return v.ar !== correct.ar && v.tense === correct.tense;
+    }));
+    var other = shuffle(pool.filter(function (v) {
+      return v.ar !== correct.ar && v.tense !== correct.tense;
+    }));
+    same.concat(other).forEach(function (v) {
       if (opts.length >= 4) return;
-      if (v.ar !== correct.ar && opts.every(function (o) { return o.ar !== v.ar; })) opts.push(v);
+      if (opts.every(function (o) { return o.ar !== v.ar; })) opts.push(v);
     });
-    while (opts.length < 4 && pool.length) {
-      var x = pool[Math.floor(Math.random() * pool.length)];
-      if (opts.every(function (o) { return o.ar !== x.ar; })) opts.push(x);
-      else break;
-    }
     return shuffle(opts).slice(0, 4);
   }
 

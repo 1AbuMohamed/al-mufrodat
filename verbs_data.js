@@ -1,16 +1,11 @@
-/* Werkwoorden-leerpad — eerst woorden, dan zinnen, dan tijden.
- * Strategie:
- *  1) Losse werkwoorden (betekenis) — gaan, komen, slapen, …
- *  2) Eenvoudige zinnen met die werkwoorden
- *  3) Tegenwoordige tijd + contrast verleden/heden
- */
+/* Werkwoorden-leerpad — eerst woorden, dan zinnen, dan tijden. */
 window.AL_VERBS = {
   lessons: [
     {
       n: 1,
       title: 'Gaan en komen',
       focus: 'verbs_only',
-      tip: 'Leer eerst de betekenis. ذَهَبَ = hij ging. جَاءَ = hij kwam. Pas later maken we zinnen.',
+      tip: 'Leer eerst de betekenis van elk werkwoord. Pas later maken we zinnen.',
       verbs: [
         { id: 'v1a', ar: 'ذَهَبَ', nl: 'hij ging', tense: 'past' },
         { id: 'v1b', ar: 'جَاءَ', nl: 'hij kwam', tense: 'past' },
@@ -23,9 +18,9 @@ window.AL_VERBS = {
       n: 2,
       title: 'Lopen, zitten, slapen',
       focus: 'verbs_only',
-      tip: 'Nog meer basiswerkwoorden in de verleden tijd (hij …).',
+      tip: 'Nog meer basiswerkwoorden in de verleden tijd.',
       verbs: [
-        { id: 'v2a', ar: 'مَشَى', nl: 'hij liep', tense: 'past' },
+               { id: 'v2a', ar: 'مَشَى', nl: 'hij liep', tense: 'past' },
         { id: 'v2b', ar: 'جَلَسَ', nl: 'hij zat', tense: 'past' },
         { id: 'v2c', ar: 'قَامَ', nl: 'hij stond op', tense: 'past' },
         { id: 'v2d', ar: 'نَامَ', nl: 'hij sliep', tense: 'past' }
@@ -217,7 +212,7 @@ window.AL_VERBS = {
       n: 12,
       title: 'Herhaling: alles',
       focus: 'mixed',
-      tip: 'Laatste ronde: werkwoorden en zinnen door elkaar, verleden én heden.',
+      tip: 'Laatste ronde: werkwoorden en zinnen, verleden én heden.',
       verbs: [
         { id: 'v12a', ar: 'سَمِعَ', nl: 'hij hoorde', tense: 'past' },
         { id: 'v12b', ar: 'يَسْمَعُ', nl: 'hij hoort', tense: 'present' },
