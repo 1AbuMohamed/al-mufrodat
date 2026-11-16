@@ -251,9 +251,13 @@
     scheduled = 0;
     try {
       document.querySelectorAll('.lh-streak-mascot').forEach(function (n) { n.remove(); });
-      injectFeedback();
-      injectFinish();
-      injectEmpty();
+      /* geen mascot in feedback / eindscherm / empty */
+      document.querySelectorAll('.gd-feedback-head .gd-mascot, .gd-finish-mascot, .lh-empty-mascot').forEach(function (n) {
+        var p = n.closest('.gd-feedback-head, .gd-finish-mascot, .lh-empty-mascot') || n;
+        if (p.classList && (p.classList.contains('gd-finish-mascot') || p.classList.contains('lh-empty-mascot'))) p.remove();
+        else n.remove();
+      });
+      document.querySelectorAll('.gd-finish-mascot, .lh-empty-mascot').forEach(function (n) { n.remove(); });
       ensureBuddy();
     } catch (_e) {}
   }

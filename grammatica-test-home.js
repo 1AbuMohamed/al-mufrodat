@@ -269,10 +269,7 @@
   function lessonCard(o) {
     if (o.kind === 'vocab') {
       var pct = o.total ? Math.round(100 * o.mastered / o.total) : 0;
-      return '<div class="lh-pop-hero" aria-hidden="true">' +
-        (window.AL_MASCOT && AL_MASCOT.img ? AL_MASCOT.img(o.state === 'mastered' ? 'proud' : 'happy', 'gd-mascot gd-mascot-md') : ic('star', 40, true)) +
-        '</div>' +
-        '<h3 class="lh-pop-title">Les ' + o.n + '</h3>' +
+      return '<h3 class="lh-pop-title">Les ' + o.n + '</h3>' +
         (o.sub ? '<p class="lh-pop-sub">' + esc(o.sub) + '</p>' : '') +
         crowns(o.m) +
         '<div class="lh-pop-bar" role="progressbar" aria-valuenow="' + pct + '" aria-valuemin="0" aria-valuemax="100"><i style="width:' + pct + '%"></i></div>' +
