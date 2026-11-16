@@ -1,3 +1,5 @@
+
+/* Werkwoorden UI */
 .vb-tip {
   background: var(--surface-2);
   border: 2px solid var(--line);
@@ -30,15 +32,18 @@
   margin: 8px 0 18px;
   line-height: 1.5;
 }
-.vb-prompt.ar { font-size: 1.85rem; }
+.vb-prompt.ar { font-size: 1.65rem; line-height: 1.7; padding: 8px 4px; }
 
-/* Lesbalk werkwoorden — geen overlap op smal scherm */
-.vb .vb-bar {
-  display: flex;
+/* Compacte lesbalk: X | voortgang | ⚡ | harten */
+.vb .vb-bar,
+.vb.gd-play .gd-lesson-bar.vb-bar {
+  display: flex !important;
   align-items: center;
   gap: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
+  flex-wrap: nowrap;
 }
+.vb .vb-bar .vl-exit { flex: 0 0 auto; }
 .vb .vb-bar .gd-progress-wrap {
   flex: 1 1 auto;
   min-width: 0;
@@ -46,38 +51,55 @@
   flex-direction: column;
   gap: 4px;
 }
-.vb .vb-bar .gd-progress { width: 100%; height: 12px; }
+.vb .vb-bar .gd-progress-title { display: none !important; }
+.vb .vb-bar .gd-progress { width: 100%; height: 12px; border-radius: 999px; }
 .vb .vb-qcount {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--muted, #9aafab);
   line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .vb .vb-bar .gd-fast {
   flex: 0 0 auto;
+  width: 44px;
   min-width: 44px;
-  min-height: 44px;
-  padding: 8px;
-  font-size: 16px;
+  height: 44px;
+  padding: 0;
+  border-radius: 12px;
+  font-size: 18px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
 }
 .vb .vb-bar .gd-bar-hearts {
   flex: 0 0 auto;
   display: flex;
-  gap: 2px;
+  gap: 1px;
+  max-width: 30vw;
+  overflow: hidden;
 }
+.vb .vb-bar .gd-bar-hearts .gd-icon { width: 16px; height: 16px; }
+
+/* Acties onderaan duidelijk */
 .vb .gd-task-actions {
-  margin-top: 20px;
+  margin-top: 18px;
   position: relative;
-  z-index: 2;
+  z-index: 3;
 }
-.vb .gd-task-actions .gd-primary {
+.vb .gd-task-actions .gd-primary,
+.vb .gd-feedback-inner .gd-primary {
   min-height: 52px;
   font-weight: 800;
   letter-spacing: .04em;
   text-transform: uppercase;
+  width: 100%;
 }
-.vb .vb-prompt.ar {
-  font-size: 1.65rem;
-  line-height: 1.7;
-  padding: 8px 4px;
+.vb .gd-feedback-sheet {
+  margin-top: 12px;
+}
+.vb .gd-card.gd-task {
+  padding-bottom: 8px;
 }

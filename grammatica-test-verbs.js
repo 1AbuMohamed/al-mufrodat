@@ -357,8 +357,8 @@
           '" data-vb="pick" data-i="' + k + '" ' + (S.fb ? 'disabled ' : '') +
           (q.optsAr ? ' lang="ar" dir="rtl"' : '') + '>' + esc(o) + '</button>';
       }).join('') + '</div>' +
-      '<div class="gd-task-actions"><button type="button" class="gd-primary gd-full" data-vb="check" ' +
-        (S.chosen >= 0 && !S.fb ? '' : 'disabled') + '>Controleer</button></div>';
+      (S.fb ? '' : ('<div class="gd-task-actions"><button type="button" class="gd-primary gd-full" data-vb="check" ' +
+        (S.chosen >= 0 ? '' : 'disabled') + '>Controleer</button></div>'));
     var fb = '';
     if (S.fb) {
       var good = S.fb.ok;
