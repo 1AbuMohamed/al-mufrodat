@@ -47,8 +47,10 @@
   }
   function core() { return window.GrammarLabCore; }
   function vocab() { return window.GrammarLabVocab && window.AL_VOCAB ? window.GrammarLabVocab : null; }
+  function verbs() { return window.GrammarLabVerbs && window.AL_VERBS ? window.GrammarLabVerbs : null; }
   function letters() { return window.GrammarLabLetters || null; }
   function isVocab() { return !!vocab() && settings().path === 'vocab'; }
+  function isVerbs() { return !!verbs() && settings().path === 'verbs'; }
   function data() { return window.GRAMMATICA || {}; }
 
   /* ---------- opslag ---------- */
@@ -60,7 +62,7 @@
       goal: [20, 30, 50].indexOf(s.goal) >= 0 ? s.goal : 20,
       theme: ['dark', 'light'].indexOf(s.theme) >= 0 ? s.theme : 'system',
       tab: s.tab === 'lessons' ? 'lessons' : 'path',
-      path: s.path === 'vocab' ? 'vocab' : 'grammatica'
+      path: s.path === 'vocab' ? 'vocab' : (s.path === 'verbs' ? 'verbs' : 'grammatica')
     };
   }
   function saveSettings(patch) {
@@ -172,7 +174,7 @@
     return { list: list, weak: weak, cur: cur };
   }
   function statusText(o, isCur) {
-    if (o.kind === 'vocab') return o.state === 'mastered' ? 'alle woorden beheerst' : o.state === 'going' ? o.mastered + ' van ' + o.total + ' woorden beheerst' : (isCur ? 'huidige les' : 'nog niet gestart');
+    if (o.kind === 'vocab' || o.kind === 'verbs') return o.state === 'mastered' ? 'alles beheerst' : o.state === 'going' ? o.mastered + ' van ' + o.total + ' beheerst' : (isCur ? 'huidige les' : 'nog niet gestart');
     if (o.read) return o.state === 'mastered' ? 'gelezen' : 'alleen theorie';
     if (o.weak) return 'herhalen';
     if (o.state === 'mastered') return 'beheerst, 5 van 5';
@@ -267,6 +269,16 @@
     return '<span class="lh-crowns" role="img" aria-label="Beheersing ' + m + ' van 5">' + out + '</span>';
   }
   function lessonCard(o) {
+    if (o.kind === 'verbs') {
+      var vp = o.total ? Math.round(100 * o.mastered / o.total) : 0;
+      return '<h3 class="lh-pop-title">Les ' + o.n + '</h3>' +
+        (o.sub ? '<p class="lh-pop-sub">' + esc(o.sub) + '</p>' : '') +
+        crowns(o.m) +
+        '<div class="lh-pop-bar" role="progressbar" aria-valuenow="' + vp + '"><i style="width:' + vp + '%"></i></div>' +
+        '<p class="lh-pop-note">' + o.mastered + ' van ' + o.total + ' items beheerst</p>' +
+        '<div class="lh-pop-btns"><button type="button" class="btn btn-blue" data-h="vbstart" data-v="' + o.n + '">' +
+        (o.state === 'mastered' ? 'HERHAAL' : 'START') + '</button></div>';
+    }
     if (o.kind === 'vocab') {
       var pct = o.total ? Math.round(100 * o.mastered / o.total) : 0;
       return '<h3 class="lh-pop-title">Les ' + o.n + '</h3>' +
@@ -295,7 +307,7 @@
 
   function nodeHtml(o, i, isCur, blockLast, nextX) {
     var x = OFFSETS[i % 8];
-    var isV = o.kind === 'vocab';
+    var isV = o.kind === 'vocab' || o.kind === 'verbs';
     var locked = o.state === 'none' && !isCur && i > 0;
     var cls = 'lh-node ' + o.state + (isCur && !o.weak ? ' cur' : '') + (o.weak ? ' weak' : '') +
       (locked ? ' locked' : '') + (isV ? ' vocab-node' : '') +
@@ -318,7 +330,7 @@
     }
     var bubble = '';
     if (isCur && ui.pop !== o.n) {
-      bubble = '<button type="button" class="lh-bubble" data-h="' + (isV ? 'vstart' : 'start') + '" data-v="' + o.n + '" data-f="bubble">' +
+      bubble = '<button type="button" class="lh-bubble" data-h="' + (o.kind === 'verbs' ? 'vbstart' : (o.kind === 'vocab' ? 'vstart' : 'start')) + '" data-v="' + o.n + '" data-f="bubble">' +
         (o.weak ? 'HERHAAL' : 'START') + '</button>';
     }
     var mascot = '';
@@ -335,7 +347,7 @@
   function pathHtml(pl) {
     var out = '', block = 0;
     var cur = pl.cur ? pl.cur.n : -1;
-    var isV = isVocab();
+    var isV = isVocab() || isVerbs();
     var unitColors = ['#58CC02', '#1CB0F6', '#FF9600', '#CE82FF', '#FF4B4B', '#2B70C9'];
     for (var start = 0; start < pl.list.length; start += 6) {
       block++;
@@ -382,14 +394,28 @@
   }
 
   function pathSwitch(s) {
-    if (!vocab()) return '';
+    if (!vocab() && !verbs()) return '';
     function b(id, label) {
-      var on = (s.path === 'vocab' ? 'vocab' : 'grammatica') === id;
+      var on = s.path === id;
       return '<button type="button" role="tab" class="lh-pswitch' + (on ? ' on' : '') + '" data-h="path" data-v="' + id + '" data-f="path-' + id +
         '" aria-selected="' + on + '">' + label + '</button>';
     }
-    return '<div class="lh-pathswitch" role="tablist" aria-label="Leerpad">' + b('grammatica', 'GRAMMATICA') + b('vocab', 'WOORDENSCHAT') + '</div>';
+    return '<div class="lh-pathswitch" role="tablist" aria-label="Leerpad">' +
+      b('grammatica', 'GRAMMATICA') +
+      (vocab() ? b('vocab', 'WOORDENSCHAT') : '') +
+      (verbs() ? b('verbs', 'WERKWOORDEN') : '') +
+      '</div>';
   }
+  function verbsMain(s, pl) {
+    var cur = pl.cur, tot = verbs().totals();
+    var banner = cur ? '<div class="lh-banner vocab"><div><small>LES ' + cur.n + '</small><strong>' +
+      esc(cur.sub || 'Werkwoorden') + '</strong></div>' +
+      '<button type="button" class="btn btn-white" data-h="vbstart" data-v="' + cur.n + '">START</button></div>' : '';
+    return '<div class="lh-main">' + pathSwitch(s) + banner +
+      '<div class="lh-meta"><span>' + tot.mastered + ' / ' + tot.total + ' items</span></div>' +
+      tabs(s) + (s.tab === 'lessons' ? tilesHtml(pl) : pathHtml(pl)) + '</div>';
+  }
+
   function vocabMain(s, pl) {
     var cur = pl.cur, t = vocab().totals();
     var banner = cur ? '<div class="lh-banner vocab"><div><small>LES ' + cur.n + '</small><strong>' +
@@ -403,6 +429,7 @@
   }
   function leerMain(p, s, pl) {
     if (isVocab()) return vocabMain(s, vocab().plan());
+    if (isVerbs()) return verbsMain(s, verbs().plan());
     var cur = pl.cur;
     var returning = hasProgress(p);
     var sub = returning && cur ? 'Les ' + cur.n + (cur.sub ? ' · ' + esc(cur.sub) : '') : 'Maak kennis met de Medina-grammatica';
@@ -677,12 +704,14 @@
       case 'close':
         var op = ui.opener; closeAll(); ui.refocus = op; return rerender();
       case 'path':
-        closeAll(); saveSettings({ path: v === 'vocab' ? 'vocab' : 'grammatica' }); ui.needScroll = true; ui.refocus = 'path-' + v;
+        closeAll(); saveSettings({ path: v === 'vocab' ? 'vocab' : (v === 'verbs' ? 'verbs' : 'grammatica') }); ui.needScroll = true; ui.refocus = 'path-' + v;
         window.scrollTo && window.scrollTo(0, 0);
         return rerender();
       case 'vstart': closeAll(); return vocab() && vocab().open(n, 'play');
       case 'vwords': closeAll(); return vocab() && vocab().open(n, 'words');
       case 'vgo': var vp = vocab() && vocab().plan(); closeAll(); return vp && vp.cur && vocab().open(vp.cur.n, 'play');
+      case 'vbstart': closeAll(); return verbs() && verbs().open(n, 'intro');
+      case 'vbgo': var vbp = verbs() && verbs().plan(); closeAll(); return vbp && vbp.cur && verbs().open(vbp.cur.n, 'intro');
       case 'theory': return go(n, 'theory');
       case 'start': return go(n, 'start');
       case 'go': var pl = plan(p); return pl.cur && go(pl.cur.n, 'theory');
