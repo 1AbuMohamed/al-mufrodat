@@ -330,12 +330,15 @@
         return '<button type="button" class="gd-option' + (q.optsAr ? ' gd-option-ar' : '') + (S.chosen === k ? ' selected' : '') + mark +
           '" data-vb="pick" data-i="' + k + '" ' + (S.fb ? 'disabled ' : '') +
           (q.optsAr ? ' lang="ar" dir="rtl"' : '') + '>' + esc(o) + '</button>';
-      }).join('') + '</div>';
+      }).join('') + '</div>' +
+      '<div class="gd-task-actions"><button type="button" class="gd-primary gd-full" data-vb="check" ' +
+        (S.chosen >= 0 && !S.fb ? '' : 'disabled') + '>Controleer</button></div>';
     var fb = '';
     if (S.fb) {
       var good = S.fb.ok;
-      fb = '<section class="gd-feedback gd-feedback-sheet ' + (good ? 'good' : 'review') + (superOn() ? ' gd-feedback-super' : '') + '">' +
-        '<div class="gd-feedback-inner"><strong>' + (good ? 'Goed!' : 'Juiste antwoord:') + '</strong>' +
+      var headline = good ? (['Goed!', 'Prima!', 'Uitstekend!'][S.i % 3]) : 'Juiste antwoord:';
+      fb = '<section class="gd-feedback gd-feedback-sheet ' + (good ? 'good' : 'review') + (superOn() ? ' gd-feedback-super' : '') + '" role="status" aria-live="assertive">' +
+        '<div class="gd-feedback-inner"><strong>' + headline + '</strong>' +
         (superOn() ? '' : ('<p class="gd-correct-answer"' + (q.optsAr || q.promptAr ? ' lang="ar" dir="rtl"' : '') + '>' + esc(q.correct) + '</p>' +
           (q.full ? '<p lang="ar" dir="rtl">' + esc(q.full) + '</p>' : '') +
           (q.nl ? '<p>' + esc(q.nl) + '</p>' : ''))) +
@@ -379,7 +382,7 @@
     if (!t || !S) return;
     e.stopPropagation();
     var a = t.getAttribute('data-vb');
-    if (a === 'exit') { e.preventDefault(); leave(); return; }
+    if (a === 'exit') return leave();
     if (a === 'start') { S.screen = 'play'; S.qs = build(S.n); S.i = 0; S.chosen = -1; S.fb = null; render(); return; }
     if (a === 'fast') { cycleSpeed(); if (!fastOn()) clearTimeout(fastTimer); render(); return; }
     if (a === 'pick') {
