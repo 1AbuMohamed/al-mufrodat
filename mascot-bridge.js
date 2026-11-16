@@ -162,31 +162,22 @@
     }, ms);
   }
 
-  function tour(btn, hops, done) {
-    if (!btn || !btn.isConnected || flying || !onHome()) {
-      if (done) done();
-      return;
-    }
-    if (hops <= 0) {
-      if (Math.random() < 0.45) setMood(btn, 'wave');
-      if (done) done();
-      return;
-    }
-    var ms = 1100 + Math.floor(Math.random() * 600);
-    glideTo(btn, randomSpot(), ms);
-    setTimeout(function () { tour(btn, hops - 1, done); }, ms + 180);
-  }
-
   function scheduleRoam(btn) {
+    /* tijdens kort bezoek hooguit 1 kleine hop, daarna weg */
     if (roamTimer) clearTimeout(roamTimer);
     roamTimer = setTimeout(function () {
-      if (!btn.isConnected || flying || !onHome()) {
-        scheduleRoam(btn);
-        return;
-      }
-      var hops = 2 + Math.floor(Math.random() * 3);
-      tour(btn, hops, function () { scheduleRoam(btn); });
-    }, 8000 + Math.random() * 8000);
+      if (!btn.isConnected || flying || !onHome()) return;
+      glideTo(btn, randomSpot(), 1200);
+    }, 4000 + Math.random() * 3000);
+  }
+
+  function scheduleLeave(btn) {
+    if (emoTimer) clearTimeout(emoTimer);
+    /* na ~25–40 sec weer wegvliegen; daarna 10 min wachten */
+    emoTimer = setTimeout(function () {
+      if (!btn.isConnected || flying) return;
+      flyAway(btn);
+    }, 25000 + Math.random() * 15000);
   }
 
   function placeBuddy(btn, animateIn) {
@@ -235,7 +226,7 @@
     });
     document.body.appendChild(btn);
     scheduleRoam(btn);
-    scheduleMood(btn);
+    scheduleLeave(btn);
   }
 
   function flyAway(btn) {
@@ -251,8 +242,8 @@
     setTimeout(function () {
       if (btn && btn.parentNode) btn.parentNode.removeChild(btn);
       flying = false;
-      goneUntil = Date.now() + 2800;
-      setTimeout(ensureBuddy, 2900);
+      goneUntil = Date.now() + 10 * 60 * 1000;
+      setTimeout(ensureBuddy, 10 * 60 * 1000 + 200);
     }, ms);
   }
 

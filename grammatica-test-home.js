@@ -325,13 +325,10 @@
         (o.weak ? 'HERHAAL' : 'START') + '</button>';
     }
     var mascot = '';
-    if (isCur && isV && window.AL_MASCOT && AL_MASCOT.img) {
-      mascot = '<div class="lh-path-mascot" aria-hidden="true">' + AL_MASCOT.img('happy', 'gd-mascot gd-mascot-sm') + '</div>';
-    }
     var pop = ui.pop === o.n
       ? '<div class="lh-pop" role="dialog" aria-label="Les ' + o.n + '" style="--ax:' + x + 'px">' + lessonCard(o) + '</div>' : '';
     return '<div class="lh-item' + (isCur ? ' is-cur' : '') + '" style="height:' + ITEM_H + 'px">' + conn +
-      '<div class="lh-nodewrap" style="transform:translateX(' + x + 'px)"' + (isCur ? ' data-cur="1"' : '') + '>' + bubble + mascot +
+      '<div class="lh-nodewrap" style="transform:translateX(' + x + 'px)"' + (isCur ? ' data-cur="1"' : '') + '>' + bubble +
       '<button type="button" class="' + cls + '"' + ring + ' data-h="node" data-v="' + o.n + '" data-f="node-' + o.n +
       '" aria-haspopup="dialog" aria-expanded="' + (ui.pop === o.n) + '" aria-label="Les ' + o.n +
       (o.sub ? ', ' + esc(o.sub) : '') + ', ' + statusText(o, isCur) + '"><span class="disc">' + inner + '</span></button>' +
