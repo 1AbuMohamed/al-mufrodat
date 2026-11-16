@@ -1,128 +1,113 @@
-/* Werkwoorden-leerpad — eerst woorden, dan zinnen, dan tijden. */
+/* Werkwoorden: eerst STAM + betekenis, dan verleden/heden, dan zinnen.
+ * Stam = basisbetekenis (gaan, komen…). Arabische citatievorm = 3e p. verleden (فَعَلَ).
+ */
 window.AL_VERBS = {
   lessons: [
     {
       n: 1,
-      title: 'Gaan en komen',
-      focus: 'verbs_only',
-      tip: 'Leer eerst de betekenis van elk werkwoord. Pas later maken we zinnen.',
+      title: 'Stammen: gaan & komen',
+      focus: 'stem',
+      tip: 'Leer eerst de stam: de basisbetekenis. ذَهَبَ hoort bij “gaan”. Later komt hij ging / hij gaat.',
       verbs: [
-        { id: 'v1a', ar: 'ذَهَبَ', nl: 'hij ging', tense: 'past' },
-        { id: 'v1b', ar: 'جَاءَ', nl: 'hij kwam', tense: 'past' },
-        { id: 'v1c', ar: 'خَرَجَ', nl: 'hij ging naar buiten', tense: 'past' },
-        { id: 'v1d', ar: 'دَخَلَ', nl: 'hij kwam binnen', tense: 'past' }
+        { id: 'v1a', ar: 'ذَهَبَ', stem: 'gaan', nl: 'gaan', tense: 'stem' },
+        { id: 'v1b', ar: 'جَاءَ', stem: 'komen', nl: 'komen', tense: 'stem' },
+        { id: 'v1c', ar: 'خَرَجَ', stem: 'naar buiten gaan', nl: 'naar buiten gaan', tense: 'stem' },
+        { id: 'v1d', ar: 'دَخَلَ', stem: 'binnenkomen', nl: 'binnenkomen', tense: 'stem' }
       ],
       sentences: []
     },
     {
       n: 2,
-      title: 'Lopen, zitten, slapen',
-      focus: 'verbs_only',
-      tip: 'Nog meer basiswerkwoorden in de verleden tijd.',
+      title: 'Stammen: lopen & rusten',
+      focus: 'stem',
+      tip: 'Nog vier stammen. Onthoud: Arabisch toont hier de basisvorm (verleden “hij …”), betekenis = de stam.',
       verbs: [
-               { id: 'v2a', ar: 'مَشَى', nl: 'hij liep', tense: 'past' },
-        { id: 'v2b', ar: 'جَلَسَ', nl: 'hij zat', tense: 'past' },
-        { id: 'v2c', ar: 'قَامَ', nl: 'hij stond op', tense: 'past' },
-        { id: 'v2d', ar: 'نَامَ', nl: 'hij sliep', tense: 'past' }
+        { id: 'v2a', ar: 'مَشَى', stem: 'lopen', nl: 'lopen', tense: 'stem' },
+        { id: 'v2b', ar: 'جَلَسَ', stem: 'zitten', nl: 'zitten', tense: 'stem' },
+        { id: 'v2c', ar: 'قَامَ', stem: 'opstaan', nl: 'opstaan', tense: 'stem' },
+        { id: 'v2d', ar: 'نَامَ', stem: 'slapen', nl: 'slapen', tense: 'stem' }
       ],
       sentences: []
     },
     {
       n: 3,
-      title: 'Korte zinnen: gaan',
-      focus: 'past',
-      tip: 'Nu zinnen: werkwoord eerst, daarna wie. ذَهَبَ مُحَمَّدٌ = Mohammed ging.',
+      title: 'Stammen: doen',
+      focus: 'stem',
+      tip: 'Schrijven, lezen, openen, eten — eerst de stam, nog geen zinnen.',
       verbs: [
-        { id: 'v3a', ar: 'ذَهَبَ', nl: 'hij ging', tense: 'past' },
-        { id: 'v3b', ar: 'جَاءَ', nl: 'hij kwam', tense: 'past' },
-        { id: 'v3c', ar: 'خَرَجَ', nl: 'hij ging naar buiten', tense: 'past' }
+        { id: 'v3a', ar: 'كَتَبَ', stem: 'schrijven', nl: 'schrijven', tense: 'stem' },
+        { id: 'v3b', ar: 'قَرَأَ', stem: 'lezen', nl: 'lezen', tense: 'stem' },
+        { id: 'v3c', ar: 'فَتَحَ', stem: 'openen', nl: 'openen', tense: 'stem' },
+        { id: 'v3d', ar: 'أَكَلَ', stem: 'eten', nl: 'eten', tense: 'stem' },
+        { id: 'v3e', ar: 'شَرِبَ', stem: 'drinken', nl: 'drinken', tense: 'stem' }
       ],
-      sentences: [
-        { id: 's3a', ar: 'ذَهَبَ مُحَمَّدٌ.', nl: 'Mohammed ging.', words: ['ذَهَبَ', 'مُحَمَّدٌ'] },
-        { id: 's3b', ar: 'جَاءَ الْوَلَدُ.', nl: 'De jongen kwam.', words: ['جَاءَ', 'الْوَلَدُ'] },
-        { id: 's3c', ar: 'خَرَجَ الطَّالِبُ.', nl: 'De student ging naar buiten.', words: ['خَرَجَ', 'الطَّالِبُ'] },
-        { id: 's3d', ar: 'ذَهَبَ مُحَمَّدٌ إِلَى الْمَسْجِدِ.', nl: 'Mohammed ging naar de moskee.', words: ['ذَهَبَ', 'مُحَمَّدٌ', 'إِلَى', 'الْمَسْجِدِ'] }
-      ]
+      sentences: []
     },
     {
       n: 4,
-      title: 'Zinnen: zitten en slapen',
+      title: 'Verleden: hij ging',
       focus: 'past',
-      tip: 'Zelfde patroon met جَلَسَ، قَامَ، نَامَ.',
+      tip: 'Nu de verleden tijd: ذَهَبَ = hij ging. Zelfde vorm als de stam, nu met “hij …”.',
       verbs: [
-        { id: 'v4a', ar: 'جَلَسَ', nl: 'hij zat', tense: 'past' },
-        { id: 'v4b', ar: 'قَامَ', nl: 'hij stond op', tense: 'past' },
-        { id: 'v4c', ar: 'نَامَ', nl: 'hij sliep', tense: 'past' },
-        { id: 'v4d', ar: 'مَشَى', nl: 'hij liep', tense: 'past' }
+        { id: 'v4a', ar: 'ذَهَبَ', stem: 'gaan', nl: 'hij ging', tense: 'past' },
+        { id: 'v4b', ar: 'جَاءَ', stem: 'komen', nl: 'hij kwam', tense: 'past' },
+        { id: 'v4c', ar: 'خَرَجَ', stem: 'naar buiten gaan', nl: 'hij ging naar buiten', tense: 'past' },
+        { id: 'v4d', ar: 'دَخَلَ', stem: 'binnenkomen', nl: 'hij kwam binnen', tense: 'past' }
       ],
       sentences: [
-        { id: 's4a', ar: 'جَلَسَ الطَّالِبُ.', nl: 'De student zat.', words: ['جَلَسَ', 'الطَّالِبُ'] },
-        { id: 's4b', ar: 'قَامَ الْوَلَدُ.', nl: 'De jongen stond op.', words: ['قَامَ', 'الْوَلَدُ'] },
-        { id: 's4c', ar: 'نَامَ الطِّفْلُ.', nl: 'Het kind sliep.', words: ['نَامَ', 'الطِّفْلُ'] },
-        { id: 's4d', ar: 'جَلَسَ مُحَمَّدٌ عَلَى الْكُرْسِيِّ.', nl: 'Mohammed zat op de stoel.', words: ['جَلَسَ', 'مُحَمَّدٌ', 'عَلَى', 'الْكُرْسِيِّ'] }
+        { id: 's4a', ar: 'ذَهَبَ مُحَمَّدٌ.', nl: 'Mohammed ging.', words: ['ذَهَبَ', 'مُحَمَّدٌ'] },
+        { id: 's4b', ar: 'جَاءَ الْوَلَدُ.', nl: 'De jongen kwam.', words: ['جَاءَ', 'الْوَلَدُ'] },
+        { id: 's4c', ar: 'خَرَجَ الطَّالِبُ.', nl: 'De student ging naar buiten.', words: ['خَرَجَ', 'الطَّالِبُ'] },
+        { id: 's4d', ar: 'ذَهَبَ مُحَمَّدٌ إِلَى الْمَسْجِدِ.', nl: 'Mohammed ging naar de moskee.', words: ['ذَهَبَ', 'مُحَمَّدٌ', 'إِلَى', 'الْمَسْجِدِ'] }
       ]
     },
     {
       n: 5,
-      title: 'Openen en sluiten',
+      title: 'Verleden: zitten & slapen',
       focus: 'past',
-      tip: 'Werkwoord + voorwerp: فَتَحَ الْبَابَ = hij opende de deur.',
+      tip: 'Verleden tijd van lopen, zitten, opstaan, slapen.',
       verbs: [
-        { id: 'v5a', ar: 'فَتَحَ', nl: 'hij opende', tense: 'past' },
-        { id: 'v5b', ar: 'أَغْلَقَ', nl: 'hij sloot', tense: 'past' },
-        { id: 'v5c', ar: 'كَسَرَ', nl: 'hij brak', tense: 'past' }
+        { id: 'v5a', ar: 'مَشَى', stem: 'lopen', nl: 'hij liep', tense: 'past' },
+        { id: 'v5b', ar: 'جَلَسَ', stem: 'zitten', nl: 'hij zat', tense: 'past' },
+        { id: 'v5c', ar: 'قَامَ', stem: 'opstaan', nl: 'hij stond op', tense: 'past' },
+        { id: 'v5d', ar: 'نَامَ', stem: 'slapen', nl: 'hij sliep', tense: 'past' }
       ],
       sentences: [
-        { id: 's5a', ar: 'فَتَحَ الْوَلَدُ الْبَابَ.', nl: 'De jongen opende de deur.', words: ['فَتَحَ', 'الْوَلَدُ', 'الْبَابَ'] },
-        { id: 's5b', ar: 'أَغْلَقَ مُحَمَّدٌ الْبَابَ.', nl: 'Mohammed sloot de deur.', words: ['أَغْلَقَ', 'مُحَمَّدٌ', 'الْبَابَ'] },
-        { id: 's5c', ar: 'فَتَحَ الطَّالِبُ الْكِتَابَ.', nl: 'De student opende het boek.', words: ['فَتَحَ', 'الطَّالِبُ', 'الْكِتَابَ'] },
-        { id: 's5d', ar: 'كَسَرَ الْوَلَدُ الْقَلَمَ.', nl: 'De jongen brak de pen.', words: ['كَسَرَ', 'الْوَلَدُ', 'الْقَلَمَ'] }
+        { id: 's5a', ar: 'جَلَسَ الطَّالِبُ.', nl: 'De student zat.', words: ['جَلَسَ', 'الطَّالِبُ'] },
+        { id: 's5b', ar: 'قَامَ الْوَلَدُ.', nl: 'De jongen stond op.', words: ['قَامَ', 'الْوَلَدُ'] },
+        { id: 's5c', ar: 'نَامَ الطِّفْلُ.', nl: 'Het kind sliep.', words: ['نَامَ', 'الطِّفْلُ'] },
+        { id: 's5d', ar: 'جَلَسَ مُحَمَّدٌ عَلَى الْكُرْسِيِّ.', nl: 'Mohammed zat op de stoel.', words: ['جَلَسَ', 'مُحَمَّدٌ', 'عَلَى', 'الْكُرْسِيِّ'] }
       ]
     },
     {
       n: 6,
-      title: 'Schrijven en lezen',
+      title: 'Verleden: schrijven & eten',
       focus: 'past',
-      tip: 'كَتَبَ en قَرَأَ met een voorwerp (les, boek).',
+      tip: 'Verleden + voorwerp: hij schreef de les, hij opende de deur.',
       verbs: [
-        { id: 'v6a', ar: 'كَتَبَ', nl: 'hij schreef', tense: 'past' },
-        { id: 'v6b', ar: 'قَرَأَ', nl: 'hij las', tense: 'past' },
-        { id: 'v6c', ar: 'فَهِمَ', nl: 'hij begreep', tense: 'past' }
+        { id: 'v6a', ar: 'كَتَبَ', stem: 'schrijven', nl: 'hij schreef', tense: 'past' },
+        { id: 'v6b', ar: 'قَرَأَ', stem: 'lezen', nl: 'hij las', tense: 'past' },
+        { id: 'v6c', ar: 'فَتَحَ', stem: 'openen', nl: 'hij opende', tense: 'past' },
+        { id: 'v6d', ar: 'أَكَلَ', stem: 'eten', nl: 'hij at', tense: 'past' },
+        { id: 'v6e', ar: 'شَرِبَ', stem: 'drinken', nl: 'hij dronk', tense: 'past' }
       ],
       sentences: [
         { id: 's6a', ar: 'كَتَبَ الطَّالِبُ الدَّرْسَ.', nl: 'De student schreef de les.', words: ['كَتَبَ', 'الطَّالِبُ', 'الدَّرْسَ'] },
         { id: 's6b', ar: 'قَرَأَ مُحَمَّدٌ الْكِتَابَ.', nl: 'Mohammed las het boek.', words: ['قَرَأَ', 'مُحَمَّدٌ', 'الْكِتَابَ'] },
-        { id: 's6c', ar: 'كَتَبَ الْمُدَرِّسُ عَلَى السَّبُّورَةِ.', nl: 'De leraar schreef op het bord.', words: ['كَتَبَ', 'الْمُدَرِّسُ', 'عَلَى', 'السَّبُّورَةِ'] },
-        { id: 's6d', ar: 'فَهِمَ الطَّالِبُ الدَّرْسَ.', nl: 'De student begreep de les.', words: ['فَهِمَ', 'الطَّالِبُ', 'الدَّرْسَ'] }
+        { id: 's6c', ar: 'فَتَحَ الْوَلَدُ الْبَابَ.', nl: 'De jongen opende de deur.', words: ['فَتَحَ', 'الْوَلَدُ', 'الْبَابَ'] },
+        { id: 's6d', ar: 'شَرِبَ مُحَمَّدٌ مَاءً.', nl: 'Mohammed dronk water.', words: ['شَرِبَ', 'مُحَمَّدٌ', 'مَاءً'] }
       ]
     },
     {
       n: 7,
-      title: 'Eten en drinken',
-      focus: 'past',
-      tip: 'أَكَلَ (at) en شَرِبَ (dronk).',
-      verbs: [
-        { id: 'v7a', ar: 'أَكَلَ', nl: 'hij at', tense: 'past' },
-        { id: 'v7b', ar: 'شَرِبَ', nl: 'hij dronk', tense: 'past' },
-        { id: 'v7c', ar: 'أَخَذَ', nl: 'hij nam', tense: 'past' }
-      ],
-      sentences: [
-        { id: 's7a', ar: 'أَكَلَ الْوَلَدُ تُفَّاحًا.', nl: 'De jongen at een appel.', words: ['أَكَلَ', 'الْوَلَدُ', 'تُفَّاحًا'] },
-        { id: 's7b', ar: 'شَرِبَ مُحَمَّدٌ مَاءً.', nl: 'Mohammed dronk water.', words: ['شَرِبَ', 'مُحَمَّدٌ', 'مَاءً'] },
-        { id: 's7c', ar: 'أَخَذَ الطَّالِبُ الْكِتَابَ.', nl: 'De student nam het boek.', words: ['أَخَذَ', 'الطَّالِبُ', 'الْكِتَابَ'] },
-        { id: 's7d', ar: 'شَرِبَ الْوَلَدُ الْحَلِيبَ.', nl: 'De jongen dronk de melk.', words: ['شَرِبَ', 'الْوَلَدُ', 'الْحَلِيبَ'] }
-      ]
-    },
-    {
-      n: 8,
       title: 'Heden: hij gaat',
       focus: 'present',
-      tip: 'Tegenwoordige tijd: يَذْهَبُ = hij gaat. Let op يَـ vooraan.',
+      tip: 'Heden: يَذْهَبُ = hij gaat. Zelfde stam “gaan”, andere vorm.',
       verbs: [
-        { id: 'v8a', ar: 'يَذْهَبُ', nl: 'hij gaat', tense: 'present' },
-        { id: 'v8b', ar: 'يَجِيءُ', nl: 'hij komt', tense: 'present' },
-        { id: 'v8c', ar: 'يَخْرُجُ', nl: 'hij gaat naar buiten', tense: 'present' },
-        { id: 'v8d', ar: 'يَدْخُلُ', nl: 'hij komt binnen', tense: 'present' }
+        { id: 'v7a', ar: 'يَذْهَبُ', stem: 'gaan', nl: 'hij gaat', tense: 'present' },
+        { id: 'v7b', ar: 'يَجِيءُ', stem: 'komen', nl: 'hij komt', tense: 'present' },
+        { id: 'v7c', ar: 'يَخْرُجُ', stem: 'naar buiten gaan', nl: 'hij gaat naar buiten', tense: 'present' },
+        { id: 'v7d', ar: 'يَدْخُلُ', stem: 'binnenkomen', nl: 'hij komt binnen', tense: 'present' }
       ],
       pairs: [
         { past: 'ذَهَبَ', present: 'يَذْهَبُ', nl: 'gaan' },
@@ -131,21 +116,21 @@ window.AL_VERBS = {
         { past: 'دَخَلَ', present: 'يَدْخُلُ', nl: 'binnenkomen' }
       ],
       sentences: [
-        { id: 's8a', ar: 'يَذْهَبُ مُحَمَّدٌ إِلَى الْمَسْجِدِ.', nl: 'Mohammed gaat naar de moskee.', words: ['يَذْهَبُ', 'مُحَمَّدٌ', 'إِلَى', 'الْمَسْجِدِ'] },
-        { id: 's8b', ar: 'يَخْرُجُ الْوَلَدُ مِنَ الْبَيْتِ.', nl: 'De jongen gaat uit het huis.', words: ['يَخْرُجُ', 'الْوَلَدُ', 'مِنَ', 'الْبَيْتِ'] },
-        { id: 's8c', ar: 'يَدْخُلُ الطَّالِبُ الْفَصْلَ.', nl: 'De student komt de klas binnen.', words: ['يَدْخُلُ', 'الطَّالِبُ', 'الْفَصْلَ'] }
+        { id: 's7a', ar: 'يَذْهَبُ مُحَمَّدٌ إِلَى الْمَسْجِدِ.', nl: 'Mohammed gaat naar de moskee.', words: ['يَذْهَبُ', 'مُحَمَّدٌ', 'إِلَى', 'الْمَسْجِدِ'] },
+        { id: 's7b', ar: 'يَخْرُجُ الْوَلَدُ مِنَ الْبَيْتِ.', nl: 'De jongen gaat uit het huis.', words: ['يَخْرُجُ', 'الْوَلَدُ', 'مِنَ', 'الْبَيْتِ'] },
+        { id: 's7c', ar: 'يَدْخُلُ الطَّالِبُ الْفَصْلَ.', nl: 'De student komt de klas binnen.', words: ['يَدْخُلُ', 'الطَّالِبُ', 'الْفَصْلَ'] }
       ]
     },
     {
-      n: 9,
-      title: 'Heden: doen',
+      n: 8,
+      title: 'Heden: hij schrijft',
       focus: 'present',
-      tip: 'يَكْتُبُ / يَقْرَأُ / يَفْتَحُ — heden van schrijven, lezen, openen.',
+      tip: 'Heden van schrijven, lezen, openen, zitten.',
       verbs: [
-        { id: 'v9a', ar: 'يَكْتُبُ', nl: 'hij schrijft', tense: 'present' },
-        { id: 'v9b', ar: 'يَقْرَأُ', nl: 'hij leest', tense: 'present' },
-        { id: 'v9c', ar: 'يَفْتَحُ', nl: 'hij opent', tense: 'present' },
-        { id: 'v9d', ar: 'يَجْلِسُ', nl: 'hij zit', tense: 'present' }
+        { id: 'v8a', ar: 'يَكْتُبُ', stem: 'schrijven', nl: 'hij schrijft', tense: 'present' },
+        { id: 'v8b', ar: 'يَقْرَأُ', stem: 'lezen', nl: 'hij leest', tense: 'present' },
+        { id: 'v8c', ar: 'يَفْتَحُ', stem: 'openen', nl: 'hij opent', tense: 'present' },
+        { id: 'v8d', ar: 'يَجْلِسُ', stem: 'zitten', nl: 'hij zit', tense: 'present' }
       ],
       pairs: [
         { past: 'كَتَبَ', present: 'يَكْتُبُ', nl: 'schrijven' },
@@ -154,22 +139,22 @@ window.AL_VERBS = {
         { past: 'جَلَسَ', present: 'يَجْلِسُ', nl: 'zitten' }
       ],
       sentences: [
-        { id: 's9a', ar: 'يَكْتُبُ الطَّالِبُ الدَّرْسَ.', nl: 'De student schrijft de les.', words: ['يَكْتُبُ', 'الطَّالِبُ', 'الدَّرْسَ'] },
-        { id: 's9b', ar: 'يَقْرَأُ مُحَمَّدٌ الْكِتَابَ.', nl: 'Mohammed leest het boek.', words: ['يَقْرَأُ', 'مُحَمَّدٌ', 'الْكِتَابَ'] },
-        { id: 's9c', ar: 'يَفْتَحُ الْوَلَدُ الْبَابَ.', nl: 'De jongen opent de deur.', words: ['يَفْتَحُ', 'الْوَلَدُ', 'الْبَابَ'] },
-        { id: 's9d', ar: 'يَجْلِسُ مُحَمَّدٌ عَلَى الْكُرْسِيِّ.', nl: 'Mohammed zit op de stoel.', words: ['يَجْلِسُ', 'مُحَمَّدٌ', 'عَلَى', 'الْكُرْسِيِّ'] }
+        { id: 's8a', ar: 'يَكْتُبُ الطَّالِبُ الدَّرْسَ.', nl: 'De student schrijft de les.', words: ['يَكْتُبُ', 'الطَّالِبُ', 'الدَّرْسَ'] },
+        { id: 's8b', ar: 'يَقْرَأُ مُحَمَّدٌ الْكِتَابَ.', nl: 'Mohammed leest het boek.', words: ['يَقْرَأُ', 'مُحَمَّدٌ', 'الْكِتَابَ'] },
+        { id: 's8c', ar: 'يَفْتَحُ الْوَلَدُ الْبَابَ.', nl: 'De jongen opent de deur.', words: ['يَفْتَحُ', 'الْوَلَدُ', 'الْبَابَ'] },
+        { id: 's8d', ar: 'يَجْلِسُ مُحَمَّدٌ عَلَى الْكُرْسِيِّ.', nl: 'Mohammed zit op de stoel.', words: ['يَجْلِسُ', 'مُحَمَّدٌ', 'عَلَى', 'الْكُرْسِيِّ'] }
       ]
     },
     {
-      n: 10,
-      title: 'Verleden of heden?',
+      n: 9,
+      title: 'Stam → verleden of heden',
       focus: 'contrast',
-      tip: 'يَـ vooraan ≈ heden. Zonder يَـ met a-klanken ≈ verleden.',
+      tip: 'Je kent de stam. Kies nu: verleden (hij ging) of heden (hij gaat).',
       verbs: [
-        { id: 'v10a', ar: 'ذَهَبَ', nl: 'hij ging', tense: 'past' },
-        { id: 'v10b', ar: 'يَذْهَبُ', nl: 'hij gaat', tense: 'present' },
-        { id: 'v10c', ar: 'كَتَبَ', nl: 'hij schreef', tense: 'past' },
-        { id: 'v10d', ar: 'يَكْتُبُ', nl: 'hij schrijft', tense: 'present' }
+        { id: 'v9a', ar: 'ذَهَبَ', stem: 'gaan', nl: 'hij ging', tense: 'past' },
+        { id: 'v9b', ar: 'يَذْهَبُ', stem: 'gaan', nl: 'hij gaat', tense: 'present' },
+        { id: 'v9c', ar: 'كَتَبَ', stem: 'schrijven', nl: 'hij schreef', tense: 'past' },
+        { id: 'v9d', ar: 'يَكْتُبُ', stem: 'schrijven', nl: 'hij schrijft', tense: 'present' }
       ],
       pairs: [
         { past: 'ذَهَبَ', present: 'يَذْهَبُ', nl: 'gaan' },
@@ -178,46 +163,22 @@ window.AL_VERBS = {
         { past: 'قَرَأَ', present: 'يَقْرَأُ', nl: 'lezen' }
       ],
       sentences: [
-        { id: 's10a', ar: 'ذَهَبَ مُحَمَّدٌ إِلَى السُّوقِ.', nl: 'Mohammed ging naar de markt.', words: ['ذَهَبَ', 'مُحَمَّدٌ', 'إِلَى', 'السُّوقِ'] },
-        { id: 's10b', ar: 'يَذْهَبُ مُحَمَّدٌ إِلَى السُّوقِ.', nl: 'Mohammed gaat naar de markt.', words: ['يَذْهَبُ', 'مُحَمَّدٌ', 'إِلَى', 'السُّوقِ'] },
-        { id: 's10c', ar: 'كَتَبَ الطَّالِبُ رِسَالَةً.', nl: 'De student schreef een brief.', words: ['كَتَبَ', 'الطَّالِبُ', 'رِسَالَةً'] },
-        { id: 's10d', ar: 'يَكْتُبُ الطَّالِبُ رِسَالَةً.', nl: 'De student schrijft een brief.', words: ['يَكْتُبُ', 'الطَّالِبُ', 'رِسَالَةً'] }
+        { id: 's9a', ar: 'ذَهَبَ مُحَمَّدٌ إِلَى السُّوقِ.', nl: 'Mohammed ging naar de markt.', words: ['ذَهَبَ', 'مُحَمَّدٌ', 'إِلَى', 'السُّوقِ'] },
+        { id: 's9b', ar: 'يَذْهَبُ مُحَمَّدٌ إِلَى السُّوقِ.', nl: 'Mohammed gaat naar de markt.', words: ['يَذْهَبُ', 'مُحَمَّدٌ', 'إِلَى', 'السُّوقِ'] },
+        { id: 's9c', ar: 'كَتَبَ الطَّالِبُ رِسَالَةً.', nl: 'De student schreef een brief.', words: ['كَتَبَ', 'الطَّالِبُ', 'رِسَالَةً'] },
+        { id: 's9d', ar: 'يَكْتُبُ الطَّالِبُ رِسَالَةً.', nl: 'De student schrijft een brief.', words: ['يَكْتُبُ', 'الطَّالِبُ', 'رِسَالَةً'] }
       ]
     },
     {
-      n: 11,
-      title: 'Meer contrast',
-      focus: 'contrast',
-      tip: 'Kies de tijd die bij de Nederlandse zin past.',
-      verbs: [
-        { id: 'v11a', ar: 'خَرَجَ', nl: 'hij ging naar buiten', tense: 'past' },
-        { id: 'v11b', ar: 'يَخْرُجُ', nl: 'hij gaat naar buiten', tense: 'present' },
-        { id: 'v11c', ar: 'فَتَحَ', nl: 'hij opende', tense: 'past' },
-        { id: 'v11d', ar: 'يَفْتَحُ', nl: 'hij opent', tense: 'present' }
-      ],
-      pairs: [
-        { past: 'خَرَجَ', present: 'يَخْرُجُ', nl: 'naar buiten gaan' },
-        { past: 'فَتَحَ', present: 'يَفْتَحُ', nl: 'openen' },
-        { past: 'شَرِبَ', present: 'يَشْرَبُ', nl: 'drinken' },
-        { past: 'أَكَلَ', present: 'يَأْكُلُ', nl: 'eten' }
-      ],
-      sentences: [
-        { id: 's11a', ar: 'خَرَجَ الْمُدَرِّسُ مِنَ الْفَصْلِ.', nl: 'De leraar ging uit de klas.', words: ['خَرَجَ', 'الْمُدَرِّسُ', 'مِنَ', 'الْفَصْلِ'] },
-        { id: 's11b', ar: 'يَخْرُجُ الْمُدَرِّسُ مِنَ الْفَصْلِ.', nl: 'De leraar gaat uit de klas.', words: ['يَخْرُجُ', 'الْمُدَرِّسُ', 'مِنَ', 'الْفَصْلِ'] },
-        { id: 's11c', ar: 'فَتَحَتْ فَاطِمَةُ الْبَابَ.', nl: 'Fatima opende de deur.', words: ['فَتَحَتْ', 'فَاطِمَةُ', 'الْبَابَ'] },
-        { id: 's11d', ar: 'تَفْتَحُ فَاطِمَةُ الْبَابَ.', nl: 'Fatima opent de deur.', words: ['تَفْتَحُ', 'فَاطِمَةُ', 'الْبَابَ'] }
-      ]
-    },
-    {
-      n: 12,
-      title: 'Herhaling: alles',
+      n: 10,
+      title: 'Herhaling',
       focus: 'mixed',
-      tip: 'Laatste ronde: werkwoorden en zinnen, verleden én heden.',
+      tip: 'Alles door elkaar: stam herkennen, tijd kiezen, zin begrijpen.',
       verbs: [
-        { id: 'v12a', ar: 'سَمِعَ', nl: 'hij hoorde', tense: 'past' },
-        { id: 'v12b', ar: 'يَسْمَعُ', nl: 'hij hoort', tense: 'present' },
-        { id: 'v12c', ar: 'قَالَ', nl: 'hij zei', tense: 'past' },
-        { id: 'v12d', ar: 'يَقُولُ', nl: 'hij zegt', tense: 'present' }
+        { id: 'v10a', ar: 'سَمِعَ', stem: 'horen', nl: 'hij hoorde', tense: 'past' },
+        { id: 'v10b', ar: 'يَسْمَعُ', stem: 'horen', nl: 'hij hoort', tense: 'present' },
+        { id: 'v10c', ar: 'قَالَ', stem: 'zeggen', nl: 'hij zei', tense: 'past' },
+        { id: 'v10d', ar: 'يَقُولُ', stem: 'zeggen', nl: 'hij zegt', tense: 'present' }
       ],
       pairs: [
         { past: 'سَمِعَ', present: 'يَسْمَعُ', nl: 'horen' },
@@ -225,10 +186,10 @@ window.AL_VERBS = {
         { past: 'ذَهَبَ', present: 'يَذْهَبُ', nl: 'gaan' }
       ],
       sentences: [
-        { id: 's12a', ar: 'سَمِعَ الطَّالِبُ الدَّرْسَ.', nl: 'De student hoorde de les.', words: ['سَمِعَ', 'الطَّالِبُ', 'الدَّرْسَ'] },
-        { id: 's12b', ar: 'يَسْمَعُ الطَّالِبُ الْقُرْآنَ.', nl: 'De student hoort de Koran.', words: ['يَسْمَعُ', 'الطَّالِبُ', 'الْقُرْآنَ'] },
-        { id: 's12c', ar: 'قَالَ مُحَمَّدٌ الْحَقَّ.', nl: 'Mohammed zei de waarheid.', words: ['قَالَ', 'مُحَمَّدٌ', 'الْحَقَّ'] },
-        { id: 's12d', ar: 'ذَهَبَتْ فَاطِمَةُ إِلَى الْجَامِعَةِ.', nl: 'Fatima ging naar de universiteit.', words: ['ذَهَبَتْ', 'فَاطِمَةُ', 'إِلَى', 'الْجَامِعَةِ'] }
+        { id: 's10a', ar: 'سَمِعَ الطَّالِبُ الدَّرْسَ.', nl: 'De student hoorde de les.', words: ['سَمِعَ', 'الطَّالِبُ', 'الدَّرْسَ'] },
+        { id: 's10b', ar: 'يَسْمَعُ الطَّالِبُ الْقُرْآنَ.', nl: 'De student hoort de Koran.', words: ['يَسْمَعُ', 'الطَّالِبُ', 'الْقُرْآنَ'] },
+        { id: 's10c', ar: 'قَالَ مُحَمَّدٌ الْحَقَّ.', nl: 'Mohammed zei de waarheid.', words: ['قَالَ', 'مُحَمَّدٌ', 'الْحَقَّ'] },
+        { id: 's10d', ar: 'ذَهَبَتْ فَاطِمَةُ إِلَى الْجَامِعَةِ.', nl: 'Fatima ging naar de universiteit.', words: ['ذَهَبَتْ', 'فَاطِمَةُ', 'إِلَى', 'الْجَامِعَةِ'] }
       ]
     }
   ]

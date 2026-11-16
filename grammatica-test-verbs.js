@@ -122,19 +122,29 @@
     return out;
   }
 
+  function labelOf(v) {
+    if (v.tense === 'stem') return v.stem || v.nl;
+    return v.nl;
+  }
   function qVerb(v, dir) {
-    var pool = allVerbs();
+    var pool = allVerbs().filter(function (x) {
+      if (v.tense === 'stem') return x.tense === 'stem';
+      return true;
+    });
+    if (pool.length < 2) pool = allVerbs();
     var opts = distractVerbs(v, pool);
+    var want = labelOf(v);
     return {
       type: 'verb', dir: dir, id: v.id,
-      prompt: dir === 'ar2nl' ? v.ar : v.nl,
+      prompt: dir === 'ar2nl' ? v.ar : want,
       promptAr: dir === 'ar2nl',
-      answer: dir === 'ar2nl' ? v.nl : v.ar,
+      answer: dir === 'ar2nl' ? want : v.ar,
       answerAr: dir !== 'ar2nl',
-      opts: opts.map(function (o) { return dir === 'ar2nl' ? o.nl : o.ar; }),
+      opts: opts.map(function (o) { return dir === 'ar2nl' ? labelOf(o) : o.ar; }),
       optsAr: dir !== 'ar2nl',
-      correct: dir === 'ar2nl' ? v.nl : v.ar,
-      tense: v.tense
+      correct: dir === 'ar2nl' ? want : v.ar,
+      tense: v.tense,
+      stem: v.stem || ''
     };
   }
 
@@ -205,7 +215,7 @@
     /* 2) Daarna tijden (verleden ↔ heden), als de les die heeft */
     (L.pairs || []).forEach(function (p) { tenseQs.push(qTense(p)); });
     /* 3) Pas daarna zinnen — niet in pure vocab-lessen */
-    if (L.focus !== 'verbs_only') {
+    if (L.focus !== 'verbs_only' && L.focus !== 'stem') {
       shuffle(L.sentences || []).forEach(function (s) {
         sentQs.push(qSentence(s));
         var f = qFill(s);
@@ -318,8 +328,10 @@
   function introScreen() {
     var L = lesson(S.n);
     var verbs = (L.verbs || []).map(function (v) {
-      return '<li><span lang="ar" dir="rtl">' + esc(v.ar) + '</span> — ' + esc(v.nl) +
-        ' <em class="vb-tense">' + (v.tense === 'present' ? 'heden' : 'verleden') + '</em></li>';
+      var tag = v.tense === 'stem' ? 'stam' : (v.tense === 'present' ? 'heden' : 'verleden');
+      var meaning = v.tense === 'stem' ? (v.stem || v.nl) : v.nl;
+      return '<li><span lang="ar" dir="rtl">' + esc(v.ar) + '</span> — ' + esc(meaning) +
+        ' <em class="vb-tense">' + tag + '</em></li>';
     }).join('');
     return '<div class="gd-shell gd-play vl vb">' +
       '<div class="gd-lesson-bar"><button type="button" class="vl-exit" data-vb="exit">' + icon('close') + '</button>' +
@@ -336,7 +348,7 @@
     var prompt = q.promptAr
       ? '<div class="vb-prompt ar" lang="ar" dir="rtl">' + esc(q.prompt) + '</div>'
       : '<div class="vb-prompt">' + esc(q.prompt) + '</div>';
-    var title = q.type === 'tense' ? 'Kies de juiste tijd' : (q.type === 'fill' ? 'Welk werkwoord past?' : (q.type === 'sentence' ? 'Wat betekent deze zin?' : 'Wat betekent dit?'));
+    var title = q.type === 'tense' ? 'Kies de juiste tijd' : (q.type === 'fill' ? 'Welk werkwoord past?' : (q.type === 'sentence' ? 'Wat betekent deze zin?' : (q.tense === 'stem' ? (q.dir === 'ar2nl' ? 'Welke stam is dit?' : 'Hoe schrijf je deze stam?') : 'Wat betekent dit?')));
     var body = '<h2 class="gd-task-title">' + title + '</h2>' + prompt +
       '<div class="gd-options">' + q.opts.map(function (o, k) {
         var mark = '';
