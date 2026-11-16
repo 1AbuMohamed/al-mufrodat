@@ -424,3 +424,8 @@ body.lh-on, body.lh-skin { overflow-x:hidden; }
   .lh-path-vocab .lh-bubble { animation: none !important; }
 }
 
+
+/* 3 path tabs */
+.lh-pathswitch{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:4px;margin:0 0 12px}
+.lh-pathswitch .lh-pswitch{flex:1 1 0;min-width:0;white-space:nowrap;font-size:12px!important;padding:10px 8px!important}
+@media (max-width:380px){.lh-pathswitch .lh-pswitch{font-size:11px!important;padding:10px 6px!important}}
