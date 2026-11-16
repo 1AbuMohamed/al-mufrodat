@@ -403,9 +403,9 @@
         '" aria-selected="' + on + '">' + label + '</button>';
     }
     return '<div class="lh-pathswitch" role="tablist" aria-label="Leerpad">' +
-      b('grammatica', 'GRAMMATICA') +
-      b('vocab', 'WOORDENSCHAT') +
-      b('verbs', 'WERKWOORDEN') +
+      b('grammatica', 'Grammatica') +
+      b('vocab', 'Woorden') +
+      b('verbs', 'Werkwoorden') +
       '</div>';
   }
   function verbsMain(s, pl) {

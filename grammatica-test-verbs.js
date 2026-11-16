@@ -251,6 +251,10 @@
     S = null;
     var home = window.GrammarLabHome;
     if (home && home.enter) { try { home.enter(); } catch (_e) {} }
+    if (window.GrammarLabEngine && window.GrammarLabEngine.refresh) {
+      try { window.GrammarLabEngine.refresh(); } catch (_e2) {}
+    }
+    if (window.scrollTo) window.scrollTo(0, 0);
   }
 
   function current() { return S && S.qs[S.i]; }
@@ -375,7 +379,7 @@
     if (!t || !S) return;
     e.stopPropagation();
     var a = t.getAttribute('data-vb');
-    if (a === 'exit') return leave();
+    if (a === 'exit') { e.preventDefault(); leave(); return; }
     if (a === 'start') { S.screen = 'play'; S.qs = build(S.n); S.i = 0; S.chosen = -1; S.fb = null; render(); return; }
     if (a === 'fast') { cycleSpeed(); if (!fastOn()) clearTimeout(fastTimer); render(); return; }
     if (a === 'pick') {

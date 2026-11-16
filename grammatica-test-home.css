@@ -425,7 +425,39 @@ body.lh-on, body.lh-skin { overflow-x:hidden; }
 }
 
 
-/* 3 path tabs */
-.lh-pathswitch{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:4px;margin:0 0 12px}
-.lh-pathswitch .lh-pswitch{flex:1 1 0;min-width:0;white-space:nowrap;font-size:12px!important;padding:10px 8px!important}
-@media (max-width:380px){.lh-pathswitch .lh-pswitch{font-size:11px!important;padding:10px 6px!important}}
+
+/* Path switch: 3 equal responsive tabs */
+.lh-pathswitch {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4px;
+  margin: 0 0 14px;
+  padding: 4px;
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface-2, #1a2a30);
+}
+.lh-pathswitch .lh-pswitch {
+  min-height: 44px;
+  margin: 0;
+  padding: 10px 6px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--muted, #9aafab);
+  font: 800 13px/1.2 var(--font-ui, system-ui);
+  letter-spacing: 0.02em;
+  text-transform: none;
+  white-space: normal;
+  text-align: center;
+  cursor: pointer;
+}
+.lh-pathswitch .lh-pswitch.on {
+  background: var(--blue, #1cb0f6);
+  color: #fff;
+  box-shadow: 0 3px 0 var(--blue-shade, #1899d6);
+}
+.lh-pathswitch .lh-pswitch:active { transform: translateY(1px); }
+@media (max-width: 360px) {
+  .lh-pathswitch .lh-pswitch { font-size: 12px; padding: 10px 4px; }
+}
