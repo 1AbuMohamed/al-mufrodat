@@ -47,7 +47,10 @@
   }
   function core() { return window.GrammarLabCore; }
   function vocab() { return window.GrammarLabVocab && window.AL_VOCAB ? window.GrammarLabVocab : null; }
-  function verbs() { return window.GrammarLabVerbs && window.AL_VERBS ? window.GrammarLabVerbs : null; }
+  function verbs() {
+    if (window.GrammarLabVerbs) return window.GrammarLabVerbs;
+    return null;
+  }
   function letters() { return window.GrammarLabLetters || null; }
   function isVocab() { return !!vocab() && settings().path === 'vocab'; }
   function isVerbs() { return !!verbs() && settings().path === 'verbs'; }
@@ -394,7 +397,6 @@
   }
 
   function pathSwitch(s) {
-    if (!vocab() && !verbs()) return '';
     function b(id, label) {
       var on = s.path === id;
       return '<button type="button" role="tab" class="lh-pswitch' + (on ? ' on' : '') + '" data-h="path" data-v="' + id + '" data-f="path-' + id +
@@ -402,8 +404,8 @@
     }
     return '<div class="lh-pathswitch" role="tablist" aria-label="Leerpad">' +
       b('grammatica', 'GRAMMATICA') +
-      (vocab() ? b('vocab', 'WOORDENSCHAT') : '') +
-      (verbs() ? b('verbs', 'WERKWOORDEN') : '') +
+      b('vocab', 'WOORDENSCHAT') +
+      b('verbs', 'WERKWOORDEN') +
       '</div>';
   }
   function verbsMain(s, pl) {
@@ -429,7 +431,12 @@
   }
   function leerMain(p, s, pl) {
     if (isVocab()) return vocabMain(s, vocab().plan());
-    if (isVerbs()) return verbsMain(s, verbs().plan());
+    if (isVerbs()) {
+      if (!verbs() || !window.AL_VERBS) {
+        return pathSwitch(s) + '<div class="lh-card" style="margin:16px"><h2>Werkwoorden laden…</h2><p>Vernieuw de pagina als dit blijft.</p></div>';
+      }
+      return verbsMain(s, verbs().plan());
+    }
     var cur = pl.cur;
     var returning = hasProgress(p);
     var sub = returning && cur ? 'Les ' + cur.n + (cur.sub ? ' · ' + esc(cur.sub) : '') : 'Maak kennis met de Medina-grammatica';
