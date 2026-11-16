@@ -315,14 +315,17 @@
       hearts += '<span class="' + (rem >= 1 ? 'alive' : (rem >= 0.5 ? 'half' : 'lost')) + '">' + icon('heart') + '</span>';
     }
     var m = speedMode();
-    var lbl = m === 'super' ? '⚡⚡ Supersnel' : '⚡ Snel';
     var cls = 'gd-fast' + (m !== 'off' ? ' on' : '') + (m === 'super' ? ' super' : '');
-    return '<div class="gd-lesson-bar">' +
+    var ttl = m === 'super' ? 'Supersnel' : (m === 'fast' ? 'Snel' : 'Normaal');
+    return '<div class="gd-lesson-bar vb-bar">' +
       '<button type="button" class="vl-exit" data-vb="exit" aria-label="Terug">' + icon('close') + '</button>' +
-      '<div class="gd-progress-wrap"><div class="gd-progress-title"><strong>Werkwoorden</strong><span>' + esc(label) + '</span></div>' +
-      '<div class="gd-progress" role="progressbar" aria-valuenow="' + pct + '"><span style="width:' + pct + '%"></span></div></div>' +
-      '<button type="button" class="' + cls + '" data-vb="fast" aria-pressed="' + (m !== 'off') + '">' + lbl + '</button>' +
-      '<div class="gd-bar-hearts">' + hearts + '</div></div>';
+      '<div class="gd-progress-wrap">' +
+      '<div class="gd-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct +
+      '" aria-label="' + esc(label) + '"><span style="width:' + pct + '%"></span></div>' +
+      '<span class="vb-qcount">' + esc(label) + '</span></div>' +
+      '<button type="button" class="' + cls + '" data-vb="fast" aria-pressed="' + (m !== 'off') +
+      '" title="' + ttl + '" aria-label="' + ttl + '">⚡</button>' +
+      '<div class="gd-bar-hearts" aria-label="hartjes">' + hearts + '</div></div>';
   }
 
   function introScreen() {
