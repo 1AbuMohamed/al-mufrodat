@@ -268,9 +268,15 @@
   }
   function lessonCard(o) {
     if (o.kind === 'vocab') {
-      return '<h3 class="lh-pop-title">Les ' + o.n + '</h3>' +
+      var pct = o.total ? Math.round(100 * o.mastered / o.total) : 0;
+      return '<div class="lh-pop-hero" aria-hidden="true">' +
+        (window.AL_MASCOT && AL_MASCOT.img ? AL_MASCOT.img(o.state === 'mastered' ? 'proud' : 'happy', 'gd-mascot gd-mascot-md') : ic('star', 40, true)) +
+        '</div>' +
+        '<h3 class="lh-pop-title">Les ' + o.n + '</h3>' +
         (o.sub ? '<p class="lh-pop-sub">' + esc(o.sub) + '</p>' : '') +
-        crowns(o.m) + '<p class="lh-pop-note">' + o.mastered + ' van ' + o.total + ' woorden beheerst</p>' +
+        crowns(o.m) +
+        '<div class="lh-pop-bar" role="progressbar" aria-valuenow="' + pct + '" aria-valuemin="0" aria-valuemax="100"><i style="width:' + pct + '%"></i></div>' +
+        '<p class="lh-pop-note">' + o.mastered + ' van ' + o.total + ' woorden beheerst</p>' +
         '<div class="lh-pop-btns"><button type="button" class="btn btn-ghost" data-h="vwords" data-v="' + o.n + '">WOORDEN</button>' +
         '<button type="button" class="btn btn-blue" data-h="vstart" data-v="' + o.n + '">' + (o.state === 'mastered' ? 'HERHAAL' : 'START') + '</button></div>';
     }
@@ -292,29 +298,40 @@
 
   function nodeHtml(o, i, isCur, blockLast, nextX) {
     var x = OFFSETS[i % 8];
+    var isV = o.kind === 'vocab';
+    var locked = o.state === 'none' && !isCur && i > 0;
     var cls = 'lh-node ' + o.state + (isCur && !o.weak ? ' cur' : '') + (o.weak ? ' weak' : '') +
+      (locked ? ' locked' : '') + (isV ? ' vocab-node' : '') +
       (ui.bump && ui.bump.lesson === o.n ? ' pop' : '');
     var ring = o.state === 'going' || (isCur && !o.weak) ? ' style="--p:' + (isCur && o.state === 'none' ? 0 : o.pct) + '%"' : '';
     var inner;
     if (o.read) inner = ic('book', 32);
-    else if (o.state === 'mastered' && !o.weak) inner = ic('crown', 30, true) + '<b class="lh-dig">' + o.m + '</b>';
-    else if (o.weak) inner = ic('crown', 26, o.m >= 1) + '<b class="lh-dig">' + o.m + '</b>' + '<span class="lh-badge">' + ic('warn', 16) + '</span>';
+    else if (o.state === 'mastered' && !o.weak) inner = '<span class="lh-node-ico">' + ic('crown', 30, true) + '</span><b class="lh-dig">' + o.m + '</b>';
+    else if (o.weak) inner = '<span class="lh-node-ico">' + ic('star', 26, true) + '</span><b class="lh-dig">' + o.m + '</b><span class="lh-badge">' + ic('warn', 16) + '</span>';
+    else if (isCur) inner = '<span class="lh-node-ico bounce">' + ic('star', 34, true) + '</span>';
+    else if (locked && isV) inner = '<span class="lh-node-ico dim">' + ic('lock', 28) + '</span>';
+    else if (isV && (i + 1) % 5 === 0) inner = '<span class="lh-node-ico">' + ic('chest', 30) + '</span>';
     else inner = '<b class="lh-num">' + o.n + '</b>';
     var conn = '';
     if (!blockLast) {
       var dx = nextX - x, len = Math.sqrt(dx * dx + ITEM_H * ITEM_H), ang = Math.atan2(ITEM_H, dx) * 180 / Math.PI;
-      conn = '<span class="lh-conn" aria-hidden="true" style="left:calc(50% + ' + x + 'px);top:' + (ITEM_H / 2) +
+      var doneConn = o.state === 'mastered' || o.state === 'going';
+      conn = '<span class="lh-conn' + (doneConn ? ' on' : '') + '" aria-hidden="true" style="left:calc(50% + ' + x + 'px);top:' + (ITEM_H / 2) +
         'px;width:' + len.toFixed(1) + 'px;transform:rotate(' + ang.toFixed(2) + 'deg)"></span>';
     }
     var bubble = '';
     if (isCur && ui.pop !== o.n) {
-      bubble = '<button type="button" class="lh-bubble" data-h="' + (o.kind === 'vocab' ? 'vstart' : 'start') + '" data-v="' + o.n + '" data-f="bubble">' +
+      bubble = '<button type="button" class="lh-bubble" data-h="' + (isV ? 'vstart' : 'start') + '" data-v="' + o.n + '" data-f="bubble">' +
         (o.weak ? 'HERHAAL' : 'START') + '</button>';
+    }
+    var mascot = '';
+    if (isCur && isV && window.AL_MASCOT && AL_MASCOT.img) {
+      mascot = '<div class="lh-path-mascot" aria-hidden="true">' + AL_MASCOT.img('happy', 'gd-mascot gd-mascot-sm') + '</div>';
     }
     var pop = ui.pop === o.n
       ? '<div class="lh-pop" role="dialog" aria-label="Les ' + o.n + '" style="--ax:' + x + 'px">' + lessonCard(o) + '</div>' : '';
-    return '<div class="lh-item" style="height:' + ITEM_H + 'px">' + conn +
-      '<div class="lh-nodewrap" style="transform:translateX(' + x + 'px)"' + (isCur ? ' data-cur="1"' : '') + '>' + bubble +
+    return '<div class="lh-item' + (isCur ? ' is-cur' : '') + '" style="height:' + ITEM_H + 'px">' + conn +
+      '<div class="lh-nodewrap" style="transform:translateX(' + x + 'px)"' + (isCur ? ' data-cur="1"' : '') + '>' + bubble + mascot +
       '<button type="button" class="' + cls + '"' + ring + ' data-h="node" data-v="' + o.n + '" data-f="node-' + o.n +
       '" aria-haspopup="dialog" aria-expanded="' + (ui.pop === o.n) + '" aria-label="Les ' + o.n +
       (o.sub ? ', ' + esc(o.sub) : '') + ', ' + statusText(o, isCur) + '"><span class="disc">' + inner + '</span></button>' +
@@ -322,18 +339,26 @@
   }
 
   function pathHtml(pl) {
-    var out = '', i = 0, block = 0;
+    var out = '', block = 0;
     var cur = pl.cur ? pl.cur.n : -1;
+    var isV = isVocab();
+    var unitColors = ['#58CC02', '#1CB0F6', '#FF9600', '#CE82FF', '#FF4B4B', '#2B70C9'];
     for (var start = 0; start < pl.list.length; start += 6) {
       block++;
-      out += '<div class="lh-block" role="separator"><span>BLOK ' + block + '</span></div>';
+      var col = unitColors[(block - 1) % unitColors.length];
+      var first = pl.list[start];
+      var unitTitle = isV
+        ? ('<div class="lh-unit" style="--unit:' + col + '"><div class="lh-unit-inner"><small>EENHEID ' + block + '</small><strong>' +
+          esc((first && first.sub) ? first.sub : ('Les ' + (first ? first.n : block))) + '</strong></div></div>')
+        : ('<div class="lh-block" role="separator"><span>BLOK ' + block + '</span></div>');
+      out += unitTitle;
       var chunk = pl.list.slice(start, start + 6);
       chunk.forEach(function (o, k) {
         var last = k === chunk.length - 1;
         out += nodeHtml(o, start + k, o.n === cur, last, OFFSETS[(start + k + 1) % 8]);
       });
     }
-    return '<div class="lh-path" id="lh-panel-path" role="tabpanel" aria-labelledby="lh-tab-path">' + out + '</div>';
+    return '<div class="lh-path' + (isV ? ' lh-path-vocab' : '') + '" id="lh-panel-path" role="tabpanel" aria-labelledby="lh-tab-path">' + out + '</div>';
   }
 
   function tilesHtml(pl) {

@@ -324,3 +324,103 @@ body.lh-on, body.lh-skin { overflow-x:hidden; }
 @media (prefers-reduced-motion: reduce) {
   .lh *, .lh *::before, .lh *::after { animation:none !important; transition:none !important; }
 }
+
+
+/* ---- Duolingo-achtig woordenschat-pad ---- */
+.lh-path-vocab { padding-top: 4px; }
+.lh-unit {
+  margin: 18px 12px 8px;
+  border-radius: 16px;
+  background: var(--unit, #58CC02);
+  box-shadow: 0 4px 0 rgba(0,0,0,.18);
+  color: #fff;
+}
+.lh-unit-inner { padding: 14px 16px; }
+.lh-unit small { display:block; font:800 12px var(--font-ui); letter-spacing:.06em; opacity:.9; }
+.lh-unit strong { display:block; font:800 18px var(--font-ui); margin-top:2px; }
+
+.lh-path-vocab .lh-conn {
+  border-top: 5px dashed var(--line);
+  opacity: .85;
+}
+.lh-path-vocab .lh-conn.on {
+  border-top-color: var(--blue);
+  animation: lh-dash 1.2s linear infinite;
+}
+@keyframes lh-dash {
+  to { filter: hue-rotate(20deg); }
+}
+
+.lh-path-vocab .lh-node .disc {
+  transition: transform .12s, box-shadow .12s, background .2s;
+}
+.lh-path-vocab .lh-node.cur .disc {
+  animation: lh-pulse 1.8s ease-in-out infinite;
+}
+@keyframes lh-pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+.lh-path-vocab .lh-node.mastered .disc {
+  background: var(--gold);
+}
+.lh-path-vocab .lh-node.locked .disc {
+  background: var(--surface-2);
+  color: var(--muted);
+  box-shadow: 0 6px 0 var(--line-shade);
+}
+.lh-node-ico { display:grid; place-items:center; line-height:0; }
+.lh-node-ico.bounce { animation: lh-ico-bob 1.4s ease-in-out infinite; }
+.lh-node-ico.dim { opacity: .55; }
+@keyframes lh-ico-bob {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.lh-path-mascot {
+  position: absolute;
+  right: -52px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  pointer-events: none;
+  animation: lh-mascot-float 2.4s ease-in-out infinite;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,.2));
+}
+.lh-path-mascot .gd-mascot { width: 48px; height: auto; }
+@keyframes lh-mascot-float {
+  0%,100% { transform: translateY(-50%); }
+  50% { transform: translateY(calc(-50% - 8px)); }
+}
+@media (max-width: 380px) {
+  .lh-path-mascot { right: -40px; width: 40px; }
+  .lh-path-mascot .gd-mascot { width: 40px; }
+}
+
+.lh-pop-hero {
+  display:flex; justify-content:center; margin: -4px 0 8px;
+}
+.lh-pop-hero .gd-mascot { width: 72px; height: auto; }
+.lh-pop-bar {
+  height: 10px; border-radius: 999px; background: var(--line);
+  overflow: hidden; margin: 10px 0 6px;
+}
+.lh-pop-bar i {
+  display:block; height:100%; background: var(--green, #58CC02);
+  border-radius: inherit; transition: width .35s ease;
+}
+
+.lh-item.is-cur { z-index: 2; }
+.lh-path-vocab .lh-bubble {
+  animation: lhbob 1.5s ease-in-out infinite;
+  font-weight: 800;
+  letter-spacing: .04em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lh-path-vocab .lh-node.cur .disc,
+  .lh-node-ico.bounce,
+  .lh-path-mascot,
+  .lh-path-vocab .lh-bubble { animation: none !important; }
+}
+
