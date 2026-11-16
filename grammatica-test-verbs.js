@@ -291,14 +291,17 @@
       hearts += '<span class="' + (rem >= 1 ? 'alive' : (rem >= 0.5 ? 'half' : 'lost')) + '">' + icon('heart') + '</span>';
     }
     var m = speedMode();
-    var lbl = m === 'super' ? '⚡⚡ Supersnel' : '⚡ Snel';
+    var lbl = m === 'super' ? '⚡⚡' : '⚡';
     var cls = 'gd-fast' + (m !== 'off' ? ' on' : '') + (m === 'super' ? ' super' : '');
-    return '<div class="gd-lesson-bar">' +
-      '<button type="button" class="vl-exit" data-vb="exit" aria-label="Terug">' + icon('close') + '</button>' +
-      '<div class="gd-progress-wrap"><div class="gd-progress-title"><strong>Werkwoorden</strong><span>' + esc(label) + '</span></div>' +
-      '<div class="gd-progress" role="progressbar" aria-valuenow="' + pct + '"><span style="width:' + pct + '%"></span></div></div>' +
-      '<button type="button" class="' + cls + '" data-vb="fast" aria-pressed="' + (m !== 'off') + '">' + lbl + '</button>' +
-      '<div class="gd-bar-hearts">' + hearts + '</div></div>';
+    var ttl = m === 'super' ? 'Supersnel' : (m === 'fast' ? 'Snel' : 'Normaal');
+    return '<div class="gd-lesson-bar vb-bar">' +
+      '<button type="button" class="vl-exit" data-vb="exit" aria-label="Terug naar het pad">' + icon('close') + '</button>' +
+      '<div class="gd-progress-wrap">' +
+      '<div class="gd-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct +
+      '" aria-label="' + esc(label) + '"><span style="width:' + pct + '%"></span></div>' +
+      '<span class="vb-qcount">' + esc(label) + '</span></div>' +
+      '<button type="button" class="' + cls + '" data-vb="fast" aria-pressed="' + (m !== 'off') + '" title="' + ttl + '" aria-label="' + ttl + '">' + lbl + '</button>' +
+      '<div class="gd-bar-hearts" aria-label="' + String(S.hearts).replace('.', ',') + ' hartjes">' + hearts + '</div></div>';
   }
 
   function introScreen() {
@@ -331,8 +334,8 @@
           '" data-vb="pick" data-i="' + k + '" ' + (S.fb ? 'disabled ' : '') +
           (q.optsAr ? ' lang="ar" dir="rtl"' : '') + '>' + esc(o) + '</button>';
       }).join('') + '</div>' +
-      '<div class="gd-task-actions"><button type="button" class="gd-primary gd-full" data-vb="check" ' +
-        (S.chosen >= 0 && !S.fb ? '' : 'disabled') + '>Controleer</button></div>';
+      (S.fb ? '' : ('<div class="gd-task-actions"><button type="button" class="gd-primary gd-full" data-vb="check" ' +
+        (S.chosen >= 0 ? '' : 'disabled') + '>Controleer</button></div>'));
     var fb = '';
     if (S.fb) {
       var good = S.fb.ok;
