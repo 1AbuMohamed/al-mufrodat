@@ -194,20 +194,33 @@
   function build(n) {
     var L = lesson(n);
     if (!L) return [];
-    var qs = [];
-    var verbs = shuffle(L.verbs || []);
-    verbs.forEach(function (v, i) {
-      qs.push(qVerb(v, i % 2 ? 'nl2ar' : 'ar2nl'));
-    });
-    (L.pairs || []).forEach(function (p) { qs.push(qTense(p)); });
-    shuffle(L.sentences || []).forEach(function (s) {
-      qs.push(qSentence(s));
-      var f = qFill(s);
-      if (f) qs.push(f);
-    });
-    qs = shuffle(qs).slice(0, ROUND);
+    var verbs = L.verbs || [];
+    var verbQs = [];
+    var tenseQs = [];
+    var sentQs = [];
+    /* 1) Eerst werkwoorden leren (Arabisch→NL en NL→Arabisch) */
+    verbs.forEach(function (v) { verbQs.push(qVerb(v, 'ar2nl')); });
+    verbs.forEach(function (v) { verbQs.push(qVerb(v, 'nl2ar')); });
+    /* 2) Daarna tijden (verleden ↔ heden), als de les die heeft */
+    (L.pairs || []).forEach(function (p) { tenseQs.push(qTense(p)); });
+    /* 3) Pas daarna zinnen — niet in pure vocab-lessen */
+    if (L.focus !== 'verbs_only') {
+      shuffle(L.sentences || []).forEach(function (s) {
+        sentQs.push(qSentence(s));
+        var f = qFill(s);
+        if (f) sentQs.push(f);
+      });
+    }
+    /* Volgorde vast: werkwoorden → tijden → zinnen (geen shuffle van die blokken) */
+    var qs = verbQs.concat(tenseQs).concat(sentQs);
+    if (qs.length > ROUND) {
+      /* behoud alle werkwoordvragen zoveel mogelijk */
+      var keep = verbQs.slice(0, Math.min(verbQs.length, ROUND));
+      var room = ROUND - keep.length;
+      qs = keep.concat(tenseQs.concat(sentQs).slice(0, room));
+    }
     while (qs.length < ROUND && verbs.length) {
-      qs.push(qVerb(verbs[qs.length % verbs.length], 'ar2nl'));
+      qs.push(qVerb(verbs[qs.length % verbs.length], qs.length % 2 ? 'nl2ar' : 'ar2nl'));
     }
     return qs.slice(0, ROUND);
   }
@@ -291,17 +304,14 @@
       hearts += '<span class="' + (rem >= 1 ? 'alive' : (rem >= 0.5 ? 'half' : 'lost')) + '">' + icon('heart') + '</span>';
     }
     var m = speedMode();
-    var lbl = m === 'super' ? '⚡⚡' : '⚡';
+    var lbl = m === 'super' ? '⚡⚡ Supersnel' : '⚡ Snel';
     var cls = 'gd-fast' + (m !== 'off' ? ' on' : '') + (m === 'super' ? ' super' : '');
-    var ttl = m === 'super' ? 'Supersnel' : (m === 'fast' ? 'Snel' : 'Normaal');
-    return '<div class="gd-lesson-bar vb-bar">' +
-      '<button type="button" class="vl-exit" data-vb="exit" aria-label="Terug naar het pad">' + icon('close') + '</button>' +
-      '<div class="gd-progress-wrap">' +
-      '<div class="gd-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct +
-      '" aria-label="' + esc(label) + '"><span style="width:' + pct + '%"></span></div>' +
-      '<span class="vb-qcount">' + esc(label) + '</span></div>' +
-      '<button type="button" class="' + cls + '" data-vb="fast" aria-pressed="' + (m !== 'off') + '" title="' + ttl + '" aria-label="' + ttl + '">' + lbl + '</button>' +
-      '<div class="gd-bar-hearts" aria-label="' + String(S.hearts).replace('.', ',') + ' hartjes">' + hearts + '</div></div>';
+    return '<div class="gd-lesson-bar">' +
+      '<button type="button" class="vl-exit" data-vb="exit" aria-label="Terug">' + icon('close') + '</button>' +
+      '<div class="gd-progress-wrap"><div class="gd-progress-title"><strong>Werkwoorden</strong><span>' + esc(label) + '</span></div>' +
+      '<div class="gd-progress" role="progressbar" aria-valuenow="' + pct + '"><span style="width:' + pct + '%"></span></div></div>' +
+      '<button type="button" class="' + cls + '" data-vb="fast" aria-pressed="' + (m !== 'off') + '">' + lbl + '</button>' +
+      '<div class="gd-bar-hearts">' + hearts + '</div></div>';
   }
 
   function introScreen() {
@@ -334,8 +344,8 @@
           '" data-vb="pick" data-i="' + k + '" ' + (S.fb ? 'disabled ' : '') +
           (q.optsAr ? ' lang="ar" dir="rtl"' : '') + '>' + esc(o) + '</button>';
       }).join('') + '</div>' +
-      (S.fb ? '' : ('<div class="gd-task-actions"><button type="button" class="gd-primary gd-full" data-vb="check" ' +
-        (S.chosen >= 0 ? '' : 'disabled') + '>Controleer</button></div>'));
+      '<div class="gd-task-actions"><button type="button" class="gd-primary gd-full" data-vb="check" ' +
+        (S.chosen >= 0 && !S.fb ? '' : 'disabled') + '>Controleer</button></div>';
     var fb = '';
     if (S.fb) {
       var good = S.fb.ok;
