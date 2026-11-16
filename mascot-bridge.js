@@ -4,6 +4,26 @@
   var scheduled = 0;
   var flying = false;
   var goneUntil = 0;
+  var K_DAY = 'alm_mascot_day_v1';
+  function dayId() {
+    var d = new Date();
+    return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+  }
+  function dayState() {
+    try {
+      var s = JSON.parse(localStorage.getItem(K_DAY) || '{}');
+      if (s.day !== dayId()) return { day: dayId(), shown: false, done: false };
+      return s;
+    } catch (_e) { return { day: dayId(), shown: false, done: false }; }
+  }
+  function saveDay(s) {
+    try { localStorage.setItem(K_DAY, JSON.stringify(s)); } catch (_e) {}
+  }
+  function markDayDone() {
+    var s = dayState(); s.day = dayId(); s.shown = true; s.done = true; saveDay(s);
+    goneUntil = Date.now() + 24 * 60 * 60 * 1000;
+  }
+
   var lastSpot = -1;
   var roamTimer = null;
   var emoTimer = null;
@@ -173,9 +193,10 @@
 
   function scheduleLeave(btn) {
     if (emoTimer) clearTimeout(emoTimer);
-    /* na ~25–40 sec weer wegvliegen; daarna 10 min wachten */
+    /* kort bezoek, daarna weg tot morgen */
     emoTimer = setTimeout(function () {
       if (!btn.isConnected || flying) return;
+      markDayDone();
       flyAway(btn);
     }, 25000 + Math.random() * 15000);
   }
@@ -199,6 +220,9 @@
   }
 
   function ensureBuddy() {
+    var ds = dayState();
+    if (ds.done) return; /* vandaag al geweest (klik of bezoek klaar) */
+    if (ds.shown) return; /* deze dag al getoond */
     if (Date.now() < goneUntil) return;
     if (flying) return;
     if (!onHome()) {
@@ -225,6 +249,7 @@
       flyAway(btn);
     });
     document.body.appendChild(btn);
+    var ds2 = dayState(); ds2.day = dayId(); ds2.shown = true; saveDay(ds2);
     scheduleRoam(btn);
     scheduleLeave(btn);
   }
@@ -242,8 +267,8 @@
     setTimeout(function () {
       if (btn && btn.parentNode) btn.parentNode.removeChild(btn);
       flying = false;
-      goneUntil = Date.now() + 10 * 60 * 1000;
-      setTimeout(ensureBuddy, 10 * 60 * 1000 + 200);
+      markDayDone();
+      /* niet meer vandaag */
     }, ms);
   }
 
