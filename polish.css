@@ -696,3 +696,17 @@ input:focus-visible {
 @media(prefers-reduced-motion:reduce) {
   .duo-node-wrap .duo-node,.gram-lesson-wrap .gram-ex-row { transition:none; }
 }
+
+/* Grammatica-overzicht: onderwerp per les + Lab-banner */
+.gram-list-label { display: flex; flex-direction: column; gap: 2px; }
+.gram-list-topic { font-weight: 500; font-size: 13px; color: var(--muted); }
+.gram-lab-banner {
+  display: flex; align-items: center; gap: 14px; margin: 0 0 14px; padding: 14px 16px; border-radius: 16px;
+  background: var(--blue, #1cb0f6); color: #fff; text-decoration: none; box-shadow: 0 4px 0 rgba(0,0,0,.18);
+}
+.gram-lab-banner:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,.18); }
+.gram-lab-badge { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,.25); font-size: 20px; flex: none; }
+.gram-lab-text { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.gram-lab-text strong { font-size: 17px; }
+.gram-lab-text small { font-size: 13px; opacity: .92; line-height: 1.35; }
+.gram-lab-banner .gram-chevron { color: #fff; font-size: 22px; }

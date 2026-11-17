@@ -22,6 +22,14 @@ function formatDutchText(text){
 
 function renderOverview(){
   const G = window.GRAMMATICA || {};
+  const LESSON_TOPICS = {
+    0: 'Tekens en termen', 1: 'Dit is… · vragen stellen', 2: 'Dit en dat', 3: 'Het lidwoord al',
+    4: 'Voorzetsels en werkwoorden', 5: 'Bezit: Moedaaf Ilaih', 6: 'Vrouwelijk · لِ', 7: 'Dat (vrouwelijk)',
+    8: 'Dit boek · plaatswoorden', 9: 'Bijvoeglijk naamwoord', 10: 'Bezittelijke achtervoegsels',
+    11: 'Houden van · lijdend voorwerp', 12: 'Jij (v.) · zij ging', 13: 'Meervoud', 14: 'Jullie en wij',
+    15: 'Voor en na', 16: 'Verstand en meervoud', 17: 'Voortzetting van les 16', 18: 'Tweevoud · hoeveel',
+    19: 'Getallen 1–10', 20: 'Getallen bij vrouwelijke woorden', 21: 'Oefenles', 22: 'Diptoten', 23: 'Madjroer'
+  };
   const keys = Object.keys(G).map(Number).sort((a,b)=>a-b);
   let rows = '';
   keys.forEach(n => {
@@ -29,14 +37,21 @@ function renderOverview(){
     if(!item) return;
     const isDone = !!doneLessons[n];
     const label = 'Les ' + n;
+    const topic = LESSON_TOPICS[n] ? `<small class="gram-list-topic">${E(LESSON_TOPICS[n])}</small>` : '';
     rows += `<a href="#/grammatica/${n}" class="gram-list-item ${isDone?'is-done':''}" data-act="open-book" data-l="${n}">
-      <span class="gram-list-label">${label}</span>
+      <span class="gram-list-label">${label}${topic}</span>
       <span class="gram-list-status">${isDone?'<span class="gram-check">✓</span>':'<span class="gram-chevron">›</span>'}</span>
     </a>`;
   });
   return `<div class="gram-wrap gram-overview-wrap">
     <div class="gram-overview-header"><h1 class="gram-title">Grammatica</h1>
       <p class="gram-sub">Medina-methode · Deel 1 · Les 0–23</p></div>
+    <a class="gram-lab-banner" href="grammatica-test.html">
+      <span class="gram-lab-badge" aria-hidden="true">★</span>
+      <span class="gram-lab-text"><strong>Grammatica Lab</strong>
+        <small>Eerst theorie, dan vragen en zinsontleding met Arabische termen</small></span>
+      <span class="gram-chevron" aria-hidden="true">›</span>
+    </a>
     <div class="gram-list">${rows}</div>
   </div>`;
 }

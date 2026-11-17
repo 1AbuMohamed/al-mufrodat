@@ -11,6 +11,7 @@ Alle wijzigingen in het kader van het herstel en de herbouw van de grammatica, d
 - **Alle Arabische zinnen** in de ontleding komen letterlijk uit het boek; `scripts/test_lab_content.cjs` controleert dat.
 - **Opmaak:** groene/rode feedbackbalk, gemarkeerd woord bij ontleden, volledige ontleding met gekleurde labels, rustigere theoriekaarten (`grammatica-test-lab.css`).
 - **Browsertest** (`scripts/test_grammar_lab_browser.py`) vernieuwd voor de nieuwe lesopzet; pijlen in voorbeelden wijzen nu de leesrichting van het Arabisch.
+- **Site algemeen:** grammatica-overzicht toont per les het onderwerp en een banner naar het Grammatica Lab; metadata (kleurschema, Open Graph, noscript) verbeterd; verouderde site-controle bijgewerkt.
 - **Dekking:** les 1 t/m 16, 18, 19, 20, 22 en 23. Les 0, 17 en 21 (geen eigen regels) blijven bij de bestaande brongebonden oefeningen.
 
 ## [Gebruikersverfijningen & Didactische Vereenvoudiging] – 2026-11-09

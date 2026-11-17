@@ -45,7 +45,8 @@ def check():
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     assert "lang=\"nl\"" in html and 'meta name="viewport"' in html
     assert 'href="polish.css?' in html
-    assert "window.renderConvUnit" in html and "window.renderConv" in html, "Vernieuwde dialoogweergave wordt niet aangeroepen"
+    assert "conv_duo.js" in html, "Dialoogweergave (conv_duo.js) wordt niet geladen"
+    assert "window.renderConvUnit" in (ROOT / "conv_duo.js").read_text(encoding="utf-8"), "Dialoogweergave definieert renderConvUnit niet meer"
     grammar = (ROOT / "grammar_v2.js").read_text(encoding="utf-8")
     assert "gram-trans-toggle" in grammar and "LS_TRANS_KEY" in grammar
     dialog = (ROOT / "conv_duo.js").read_text(encoding="utf-8")
