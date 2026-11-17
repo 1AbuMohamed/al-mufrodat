@@ -76,7 +76,7 @@
 
 .gd-pbank { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 12px; }
 .gd-plab {
-  min-height: 44px; padding: 8px 14px; font: 800 14px var(--font-ui, sans-serif); text-transform: lowercase; touch-action: none;
+  min-height: 44px; padding: 8px 14px; font: 800 14px var(--font-ui, sans-serif); touch-action: none;
   border: 2px solid var(--line, #d5ddd7); border-bottom-width: 4px; border-radius: 14px;
   background: var(--surface, #fff); color: var(--text, #222); cursor: grab;
 }

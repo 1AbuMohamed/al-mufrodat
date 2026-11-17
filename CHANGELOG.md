@@ -13,6 +13,7 @@ Alle wijzigingen in het kader van het herstel en de herbouw van de grammatica, d
 - **Browsertest** (`scripts/test_grammar_lab_browser.py`) vernieuwd voor de nieuwe lesopzet; pijlen in voorbeelden wijzen nu de leesrichting van het Arabisch.
 - **Site algemeen:** grammatica-overzicht toont per les het onderwerp en een banner naar het Grammatica Lab; metadata (kleurschema, Open Graph, noscript) verbeterd; verouderde site-controle bijgewerkt.
 - **Eenduidige termen** in het hele Lab volgens de spelling van het boek: Khabar, Ism Ishaarah, Damier (voorheen deels Chabar, Isjaarah, Dhamier); ook in het slepen-ontleedscherm.
+- **Oefenvolgorde** in het Lab: eerst losse theorievragen en woordontleding, de volledige zinsontleding aan het eind; inklapbare termenlijst bij zinsontleding; termen in het sleepscherm niet meer in kleine letters.
 - **Dekking:** les 1 t/m 16, 18, 19, 20, 22 en 23. Les 0, 17 en 21 (geen eigen regels) blijven bij de bestaande brongebonden oefeningen.
 
 ## [Gebruikersverfijningen & Didactische Vereenvoudiging] – 2026-11-09

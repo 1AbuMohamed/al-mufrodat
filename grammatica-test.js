@@ -388,12 +388,25 @@
       if (task) out.push(task);
     });
     ['q', 'p', 'e'].forEach(function (k) { while (out.length < total && bag[k].length) out.push(bag[k].shift()); });
+    // Opbouw: eerst losse vragen en woordontleding, daarna de volledige zinsontleding.
     if (P() && P().available(n)) {
       var dz = P().build(n, 3);
-      for (var zi = 0; zi < dz.length; zi++) out.splice(Math.min(out.length, 2 + zi * 4), 0, dz[zi]);
+      for (var zi = 0; zi < dz.length; zi++) out.push(dz[zi]);
     }
     return out;
   }
+  function glossaryHtml(task) {
+    var Pp = P();
+    if (!Pp || !Pp.PH || !task.labels || !task.labels.length) return '';
+    var items = task.labels.filter(function (k) { return Pp.PH[k]; }).map(function (k) {
+      return '<dt>' + esc(Pp.PH[k][0]) + '</dt><dd>' + esc(Pp.PH[k][1]) + '</dd>';
+    }).join('');
+    return '<details class="gd-glossary"' + (session && session.glossOpen ? ' open' : '') +
+      '><summary>Wat betekenen deze termen?</summary><dl>' + items + '</dl></details>';
+  }
+  document.addEventListener('toggle', function (e) {
+    if (e.target && e.target.classList && e.target.classList.contains('gd-glossary') && session) session.glossOpen = e.target.open;
+  }, true);
   function labCardHtml(c) {
     return '<div class="gd-lab-card"><h2 class="gd-lab-kop">' + rich(c.kop) + '</h2>' +
       (c.tekst || []).map(function (p) { return '<p class="gd-lab-p">' + rich(p) + '</p>'; }).join('') +
@@ -871,7 +884,7 @@
       }).join('')+'</div>';
   }
   function taskBody(task){
-    if(task.type==='zinsontleding'&&P())return P().body(task,session);
+    if(task.type==='zinsontleding'&&P())return P().body(task,session)+glossaryHtml(task);
     if(task.type==='lab')return optionsHtml(task,false);
     if(task.type==='ontleed')return sentenceChips(task)+optionsHtml(task,false);
     if(['theory','rule','why'].includes(task.type)){
