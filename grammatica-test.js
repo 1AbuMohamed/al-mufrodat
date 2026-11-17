@@ -206,7 +206,7 @@
       var index=parts.findIndex(function(t){return plain(t)===plain(word);});
       if(index<0)index=parts.findLastIndex(function(t){return normalizeArabic(t)===normalizeArabic(word);});
       if(index<0)return;
-      var roles=['Moedaaf','Moedaaf Ilaih','Harf Djarr','Na‘t','Man‘oet','Ma‘doed','Madjroer','Marfoe‘','Mansoeb','Chabar','Maf‘oel bih','Moebtada'];
+      var roles=['Moedaaf','Moedaaf Ilaih','Harf Djarr','Na‘t','Man‘oet','Ma‘doed','Madjroer','Marfoe‘','Mansoeb','Khabar','Maf‘oel bih','Moebtada'];
       tasks.push({type:'parse',lesson:n,example:ex,wordIndex:index,word:parts[index],
         prompt:role==='vrouwelijk enkelvoud'?'Welke vorm heeft dit woord bij het irrationele meervoud?':(['Mansoeb','Madjroer','Marfoe‘'].includes(role)?'Welke naamval heeft het gemarkeerde woord?':'Welke grammaticale functie heeft het gemarkeerde woord?'),answer:role,
         options:makeOptions(role,roles,seed+tasks.length*17,4),rule:proof,concept:concept||'functie:'+role});
@@ -239,7 +239,7 @@
     if(n===8 && rules.some(function(r){return r.includes('predicaat') && r.includes('هٰذَا الْكِتَابُ');})){
       var proof=sourceRule(n,'predicaat');
       rows.filter(function(ex){return plain(ex.ar)==='هٰذَا الْكِتَابُ جَدِيْدٌ.';}).forEach(function(ex){
-        roleTask(ex,'جَدِيْدٌ.','Chabar',proof,'Chabar');
+        roleTask(ex,'جَدِيْدٌ.','Khabar',proof,'Khabar');
       });
     }
     if(n===11 && rules.some(function(r){return r.includes('lijdend voorwerp')&&r.includes('accusatief');})){
@@ -329,6 +329,11 @@
     return esc(value).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
       .replace(/([\u0600-\u06FF\u25CC]+(?:[ \u00a0]+[\u0600-\u06FF\u25CC]+)*)/g,
         '<span class="gd-ar" lang="ar" dir="rtl">$1</span>');
+  }
+  function titleTerms(text) {
+    return String(text || '').replace(/\bmoebtada\b/g, 'Moebtada').replace(/\bkhabar\b/g, 'Khabar')
+      .replace(/\bfaa‘il\b/g, 'Faa‘il').replace(/\bmaf‘oel bihi\b/g, 'Maf‘oel Bih')
+      .replace(/\bna‘t\b/g, 'Na‘t').replace(/\bmoedaaf\b/g, 'Moedaaf');
   }
   var SOORT_POOL = ['Ism', 'Fi‘l', 'Harf'];
   function labValues(index) {
@@ -912,7 +917,7 @@
   var TERM_HELP={
     Moebtada:'Moebtada: het onderwerp waar een naamwoordelijke zin over gaat.',
     "Moebtada'":'Moebtada: het onderwerp waar een naamwoordelijke zin over gaat.',
-    Chabar:'Chabar: het gezegde, oftewel wat er over de Moebtada wordt gezegd.',
+    Khabar:'Khabar: het gezegde, oftewel wat er over de Moebtada wordt gezegd.',
     'Harf Djarr':'Harf Djarr: een voorzetsel (zoals فِي, عَلَى, مِنْ, إِلَى). Het maakt het volgende woord Madjroer (-ie).',
     Madjroer:'Madjroer: het woord staat op een -ie-uitgang (kasrah), na een voorzetsel of als Moedaaf Ilaih.',
     Moedaaf:'Moedaaf: het eerste deel (het bezit) in een bezitsconstructie; krijgt nooit اَلْ en nooit tanwien.',
@@ -922,8 +927,8 @@
     'Faa‘il':'Faa‘il: het onderwerp (de uitvoerder) bij een werkwoord (Fi‘l), altijd Marfoe‘ (-oe).',
     'Fi‘l':'Fi‘l: het werkwoord (de handeling of toestand in de zin).',
     'Maf‘oel bih':'Maf‘oel bih: het lijdend voorwerp van een werkwoord, altijd Mansoeb (-a).',
-    Dhamier:'Dhamier: persoonlijk voornaamwoord (zoals ik, hij, zij, ons, jouw).',
-    'Ism Isjaarah':'Ism Isjaarah: aanwijzend voornaamwoord (zoals هٰذَا, هٰذِهِ, ذٰلِكَ, تِلْكَ).',
+    Damier:'Damier: persoonlijk voornaamwoord (zoals ik, hij, zij, ons, jouw).',
+    'Ism Ishaarah':'Ism Ishaarah: aanwijzend voornaamwoord (zoals هٰذَا, هٰذِهِ, ذٰلِكَ, تِلْكَ).',
     'Ism Istifhaam':'Ism Istifhaam: vraagwoord (zoals مَا = wat, مَنْ = wie, أَيْنَ = waar, كَمْ = hoeveel).',
     'Harf Istifhaam':'Harf Istifhaam: vraagpartikel aan het begin van een ja/nee-vraag (أَ of هَلْ).',
     'Harf Atf':'Harf Atf: verbindingswoord (zoals وَ = en).',
@@ -952,7 +957,7 @@
       (answer?'<p class="gd-correct-answer">'+(task.rich?rich(answer):esc(answer))+'</p>':'')+
       (task.type==='zinsontleding'&&P()?P().solution(task)+
         (task.nl?'<p class="gd-parse-nl">'+esc(task.nl)+'</p>':'')+
-        ((task.groups&&task.groups.length)?'<p class="gd-theory-explanation">'+esc(task.groups.map(function(g){return g.why;}).join(' '))+'</p>':''):
+        ((task.groups&&task.groups.length)?'<p class="gd-theory-explanation">'+rich(titleTerms(task.groups.map(function(g){return g.why;}).join(' ')))+'</p>':''):
         (task.example?'<p class="gd-arabic" lang="ar" dir="rtl">'+esc(task.example.ar)+'</p>'+
         (plain(task.example.nl)&&plain(task.example.nl)!=='-'?'<p>'+esc(task.example.nl)+'</p>':''):''))+
       (termNote?'<p class="gd-theory-explanation">'+esc(termNote)+'</p>':'')+

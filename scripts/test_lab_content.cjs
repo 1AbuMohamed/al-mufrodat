@@ -14,8 +14,8 @@ const book = context.window.GRAMMATICA, lab = context.window.GRAMMATICA_LAB, cor
 const strip = s => String(s).replace(/[\u064b-\u065f\u0670\u06d6-\u06ed\u0640]/g, '');
 const bookText = n => JSON.stringify(book[n]);
 const allBook = Object.keys(book).map(bookText).join(' ');
-const ARABIC_TERMS = new Set(['Ism','Fi‘l','Harf','Ism Isjaarah','Ism Istifhaam','Harf Istifhaam','Harf Atf','Harf Djarr','Harf an-Nidaa’','Dhamier',
-  'Moebtada','Chabar','Faa‘il','Moedaaf','Moedaaf Ilaih','Na‘t','Man‘oet','Ma‘doed','Maf‘oel bih','Marfoe‘','Mansoeb','Madjroer','Zarf','Ism Mawsoel','Harf Nafie','Harf Djawaab','']);
+const ARABIC_TERMS = new Set(['Ism','Fi‘l','Harf','Ism Ishaarah','Ism Istifhaam','Harf Istifhaam','Harf Atf','Harf Djarr','Harf an-Nidaa’','Damier',
+  'Moebtada','Khabar','Faa‘il','Moedaaf','Moedaaf Ilaih','Na‘t','Man‘oet','Ma‘doed','Maf‘oel bih','Marfoe‘','Mansoeb','Madjroer','Zarf','Ism Mawsoel','Harf Nafie','Harf Djawaab','']);
 let sentences = 0, questions = 0, cards = 0;
 for (const [key, l] of Object.entries(lab)) {
   assert(book[key], `Les ${key} bestaat niet in het boek`);
