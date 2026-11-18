@@ -24,6 +24,60 @@
 
   var app = null, S = null, bound = false, fastTimer = 0;
 
+  var PHOTO = {
+    house:'img/house.jpg',mosque:'img/mosque.jpg',door:'img/door.jpg',book:'img/book.jpg',pen:'img/pen.jpg',
+    key:'img/key.jpg',chair:'img/chair.jpg',bed:'img/bed.jpg',desk:'img/desk.jpg',star:'img/star.jpg',
+    shirt:'img/shirt.jpg',dog:'img/dog.jpg',cat:'img/cat.jpg',horse:'img/horse.jpg',donkey:'img/donkey.jpg',
+    camel:'img/camel.jpg',doctor:'img/doctor.jpg',boy:'img/boy.jpg',girl:'img/girl.jpg',sun:'img/sun.jpg',
+    moon:'img/moon.jpg',teacher:'img/teacher.jpg',man:'img/man.jpg',student:'img/student.jpg',
+    merchant:'img/merchant.jpg',rooster:'img/rooster.jpg',handkerchief:'img/handkerchief.jpg',stone:'img/stone.jpg',
+    sugar:'img/sugar.jpg',milk:'img/milk.jpg',imam:'img/imam.jpg',water:'img/water.jpg',apple:'img/apple.jpg',
+    shop:'img/shop.jpg',paper:'img/paper.jpg',car:'img/car.jpg',bag:'img/bag.jpg',school:'img/school.jpg',
+    clock:'img/clock.jpg',flower:'img/flower.jpg',fish:'img/fish.jpg',tree:'img/tree.jpg',kitchen:'img/kitchen.jpg',
+    bathroom:'img/bathroom.jpg',classroom:'img/classroom.jpg',university:'img/university.jpg',window:'img/window.jpg',
+    tea:'img/tea.jpg',coffee:'img/coffee.jpg',mother:'img/mother.jpg',cow:'img/cow.jpg',bike:'img/bike.jpg',
+    egg:'img/egg.jpg',chicken:'img/chicken.jpg',duck:'img/duck.jpg',hospital:'img/hospital.jpg',knife:'img/knife.jpg',
+    fruit:'img/fruit.jpg',bird:'img/bird.jpg',city:'img/city.jpg',cup:'img/cup.jpg',library:'img/library.jpg',
+    child:'img/child.jpg',room:'img/room.jpg',sky:'img/sky.jpg',fridge:'img/fridge.jpg',spoon:'img/spoon.jpg',
+    generic:'img/generic.jpg'
+  };
+  var NL_PIC = {
+    'huis':'house','moskee':'mosque','deur':'door','boek':'book','pen':'pen','sleutel':'key','bureau':'desk',
+    'bed':'bed','stoel':'chair','ster':'star','hemd':'shirt','dokter':'doctor','jongen':'boy','student':'student',
+    'man':'man','handelaar':'merchant','hond':'dog','kat':'cat','ezel':'donkey','paard':'horse','kameel':'camel',
+    'haan':'rooster','leraar':'teacher','zakdoek':'handkerchief','steen':'stone','suiker':'sugar','melk':'milk',
+    'water':'water','appel':'apple','papier':'paper','winkel':'shop','school':'school','auto':'car','tas':'bag',
+    'zon':'sun','maan':'moon','meisje':'girl','klok':'clock','bloem':'flower','vis':'fish','boom':'tree',
+    'imam':'imam','kamer':'room','badkamer':'bathroom','klaslokaal':'classroom','keuken':'kitchen',
+    'universiteit':'university','raam':'window','thee':'tea','koffie':'coffee','moeder':'mother','koe':'cow',
+    'fiets':'bike','lepel':'spoon','koelkast':'fridge','ei':'egg','kip':'chicken','eend':'duck','mes':'knife',
+    'ziekenhuis':'hospital','fruit':'fruit','vogel':'bird','stad':'city','kopje':'cup','bibliotheek':'library',
+    'kind':'child','docent':'teacher'
+  };
+  function picKey(w) {
+    if (!w) return null;
+    var n = String(w.nl || '').toLowerCase().trim();
+    // strip article
+    n = n.replace(/^een\s+/, '').replace(/^de\s+/, '').replace(/^het\s+/, '');
+    if (NL_PIC[n]) return NL_PIC[n];
+    var keys = Object.keys(NL_PIC).sort(function (a, b) { return b.length - a.length; });
+    var i;
+    for (i = 0; i < keys.length; i++) {
+      if (keys[i].length >= 3 && n.indexOf(keys[i]) >= 0) return NL_PIC[keys[i]];
+    }
+    return null;
+  }
+  function picUrl(w) {
+    var k = picKey(w);
+    return k && PHOTO[k] ? PHOTO[k] : null;
+  }
+  function picHtml(w, cls) {
+    var url = picUrl(w);
+    if (!url) return '';
+    return '<div class="vl-pic ' + (cls || '') + '"><img src="' + url + '" alt="' + esc(w.nl || '') + '" loading="lazy" decoding="async"/></div>';
+  }
+
+
   /* ---------- hulpfuncties ---------- */
   function speedMode() {
     if (window.GrammarLabParse && window.GrammarLabParse.speedMode) return window.GrammarLabParse.speedMode();
@@ -125,13 +179,31 @@
     var options = shuffle([word[field]].concat(distractors(word, n, field, 3)));
     return { type: type, word: word, answer: word[field], options: options };
   }
+  function choiceImg(word, n, type) {
+    /* type: img2ar | img2nl | ar2img */
+    if (type === 'ar2img') {
+      var pool = wordsFor(n).filter(function (w) { return w.id !== word.id && picUrl(w); });
+      if (pool.length < 3) pool = words().filter(function (w) { return w.id !== word.id && picUrl(w); });
+      var opts = shuffle([word].concat(shuffle(pool).slice(0, 3)));
+      return { type: 'ar2img', word: word, answer: word.id, options: opts };
+    }
+    var field = type === 'img2nl' ? 'nl' : 'ar';
+    var options = shuffle([word[field]].concat(distractors(word, n, field, 3)));
+    return { type: type, word: word, answer: word[field], options: options };
+  }
   function build(n) {
     var map = jget(K_PROG, {});
     var ws = wordsFor(n).sort(function (a, b) {
       return getP(map, a.id).box - getP(map, b.id).box || Math.random() - 0.5;
     });
     var targets = shuffle(ws.slice(0, 8));
-    var qs = targets.map(function (w, i) { return choice(w, n, i % 2 ? 'nl2ar' : 'ar2nl'); });
+    var qs = [];
+    targets.forEach(function (w, i) {
+      var hasPic = !!picUrl(w);
+      if (hasPic && i % 3 === 0) qs.push(choiceImg(w, n, 'img2ar'));
+      else if (hasPic && i % 3 === 1) qs.push(choiceImg(w, n, 'ar2img'));
+      else qs.push(choice(w, n, i % 2 ? 'nl2ar' : 'ar2nl'));
+    });
     if (targets.length < 5) {
       targets.forEach(function (w, i) { if (qs.length < 6) qs.push(choice(w, n, i % 2 ? 'ar2nl' : 'nl2ar')); });
     }
@@ -210,7 +282,8 @@
   function check() {
     var q = current();
     if (!q || S.fb || q.type === 'match' || S.chosen < 0) return;
-    var ok = q.options[S.chosen] === q.answer;
+    var pick = q.options[S.chosen];
+    var ok = q.type === 'ar2img' ? (pick && pick.id === q.answer) : (pick === q.answer);
     score(ok, q.word.id);
     if (!ok) S.wrongIds[q.word.id] = true;
     S.fb = { ok: ok };
@@ -308,11 +381,37 @@
     var q = current(), total = S.qs.length, pct = Math.round(100 * S.i / Math.max(1, total));
     var body;
     if (q.type === 'match') body = matchBody(q);
-    else {
+    else if (q.type === 'ar2img') {
+      body = '<h2 class="gd-task-title">Kies het juiste plaatje</h2>' +
+        '<div class="gd-ar-question gd-arabic" lang="ar" dir="rtl">' + esc(q.word.ar) + '</div>' +
+        '<div class="gd-options vl-pic-grid">' + q.options.map(function (w, i) {
+          var picked = S.chosen === i;
+          var mark = '';
+          if (S.fb) mark = w.id === q.answer ? ' correct' : (picked ? ' wrong' : '');
+          var url = picUrl(w) || PHOTO.generic;
+          return '<button type="button" class="gd-option vl-pic-opt' + (picked ? ' selected' : '') + mark +
+            '" data-vl="pick" data-i="' + i + '" ' + (S.fb ? 'disabled ' : '') + 'aria-pressed="' + picked +
+            '" aria-label="' + esc(w.nl) + '"><img src="' + url + '" alt="' + esc(w.nl) + '" loading="lazy"/></button>';
+        }).join('') + '</div>' +
+        '<div class="gd-task-actions"><button type="button" class="gd-primary gd-full" data-vl="check" ' + (answered() && !S.fb ? '' : 'disabled') + '>Controleer</button></div>';
+    } else if (q.type === 'img2ar' || q.type === 'img2nl') {
+      var arOpt = q.type === 'img2ar';
+      body = '<h2 class="gd-task-title">' + (arOpt ? 'Kies het juiste Arabische woord' : 'Wat zie je op het plaatje?') + '</h2>' +
+        picHtml(q.word, 'vl-pic-prompt') +
+        '<div class="gd-options">' + q.options.map(function (o, i) {
+          var picked = S.chosen === i;
+          var mark = '';
+          if (S.fb) mark = o === q.answer ? ' correct' : (picked ? ' wrong' : '');
+          return '<button type="button" class="gd-option' + (arOpt ? ' gd-option-ar gd-option-wide' : '') + (picked ? ' selected' : '') + mark +
+            '" data-vl="pick" data-i="' + i + '" ' + (S.fb ? 'disabled ' : '') + 'aria-pressed="' + picked + '"' +
+            (arOpt ? ' lang="ar" dir="rtl"' : '') + '>' + esc(o) + '</button>';
+        }).join('') + '</div>' +
+        '<div class="gd-task-actions"><button type="button" class="gd-primary gd-full" data-vl="check" ' + (answered() && !S.fb ? '' : 'disabled') + '>Controleer</button></div>';
+    } else {
       var ar = q.type === 'nl2ar';
       body = '<h2 class="gd-task-title">' + (ar ? 'Kies het juiste Arabische woord' : 'Wat betekent dit woord?') + '</h2>' +
-        (ar ? '<div class="gd-nl-question">' + esc(q.word.nl) + '</div>'
-            : '<div class="gd-ar-question gd-arabic" lang="ar" dir="rtl">' + esc(q.word.ar) + '</div>') +
+        (ar ? '<div class="gd-nl-question">' + esc(q.word.nl) + '</div>' + picHtml(q.word, 'vl-pic-side')
+            : '<div class="gd-ar-question gd-arabic" lang="ar" dir="rtl">' + esc(q.word.ar) + '</div>' + picHtml(q.word, 'vl-pic-side')) +
         '<div class="gd-options">' + q.options.map(function (o, i) {
           var picked = S.chosen === i;
           var mark = '';
