@@ -205,7 +205,7 @@ let progress = {};
 let customWords = [];
 let quizDir = 'mix'; // 'mix' | 'nl2ar' | 'ar2nl'
 let flashDir = 'ar2nl'; // show Arabic first, or 'nl2ar'
-let showPics = false;
+let showPics = true;
 let darkMode = false;
 let userName = '';
 let arSize = 'm';
@@ -251,7 +251,7 @@ function load(){
   try{customWords=JSON.parse(localStorage.getItem(LS.c)||'[]')}catch(e){customWords=[]}
   try{const d=localStorage.getItem(LS.d);if(d==='nl2ar'||d==='ar2nl'||d==='mix')quizDir=d}catch(e){}
   try{const f=localStorage.getItem(LS.f);if(f==='nl2ar'||f==='ar2nl')flashDir=f}catch(e){}
-  try{const i=localStorage.getItem(LS.i);if(i!==null)showPics=i==='true'}catch(e){}
+  try{const i=localStorage.getItem(LS.i);if(i!==null)showPics=i==='true';else showPics=true}catch(e){}
   try{onboarded=localStorage.getItem(LS.o)==='1'}catch(e){}
   try{userName=localStorage.getItem(LS.nm)||''}catch(e){}
   try{const s=localStorage.getItem(LS.ars);if(s==='s'||s==='m'||s==='l')arSize=s}catch(e){}
