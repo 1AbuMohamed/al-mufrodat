@@ -99,83 +99,83 @@
   }
 
   var PHOTO_MAP = {
-    'بيت': 'img/house.jpg', 'بيوت': 'img/house.jpg', 'مسجد': 'img/mosque.jpg', 'مساجد': 'img/mosque.jpg',
-    'باب': 'img/door.jpg', 'ابواب': 'img/door.jpg', 'كتاب': 'img/book.jpg', 'كتب': 'img/book.jpg',
-    'قلم': 'img/pen.jpg', 'اقلام': 'img/pen.jpg', 'مفتاح': 'img/key.jpg', 'مفاتيح': 'img/key.jpg',
-    'مكتب': 'img/desk.jpg', 'مكاتب': 'img/desk.jpg', 'سرير': 'img/bed.jpg', 'سرر': 'img/bed.jpg',
-    'كرسي': 'img/chair.jpg', 'كراسي': 'img/chair.jpg', 'نجم': 'img/star.jpg', 'نجوم': 'img/star.jpg',
-    'قميص': 'img/shirt.jpg', 'قمصان': 'img/shirt.jpg', 'طبيب': 'img/doctor.jpg', 'اطباء': 'img/doctor.jpg',
-    'طبيبه': 'img/doctor.jpg', 'طبيبات': 'img/doctor.jpg', 'ولد': 'img/boy.jpg', 'اولاد': 'img/boy.jpg',
-    'طالب': 'img/student.jpg', 'طلاب': 'img/student.jpg', 'طالبه': 'img/student.jpg', 'طالبات': 'img/student.jpg',
-    'رجل': 'img/man.jpg', 'رجال': 'img/man.jpg', 'تاجر': 'img/merchant.jpg', 'تجار': 'img/merchant.jpg',
-    'كلب': 'img/dog.jpg', 'كلاب': 'img/dog.jpg', 'قط': 'img/cat.jpg', 'قطط': 'img/cat.jpg',
-    'حمار': 'img/donkey.jpg', 'حمير': 'img/donkey.jpg', 'حمر': 'img/donkey.jpg', 'حصان': 'img/horse.jpg',
-    'احصنه': 'img/horse.jpg', 'خيل': 'img/horse.jpg', 'فرس': 'img/horse.jpg', 'جمل': 'img/camel.jpg',
-    'جمال': 'img/camel.jpg', 'ناقه': 'img/camel.jpg', 'ديك': 'img/rooster.jpg', 'ديوك': 'img/rooster.jpg',
-    'مدرس': 'img/teacher.jpg', 'مدرسون': 'img/teacher.jpg', 'مدرسه': 'img/school.jpg', 'مدارس': 'img/school.jpg',
-    'استاذ': 'img/teacher.jpg', 'اساتذه': 'img/teacher.jpg', 'منديل': 'img/handkerchief.jpg', 'مناديل': 'img/handkerchief.jpg',
-    'امام': 'img/imam.jpg', 'ائمه': 'img/imam.jpg', 'حجر': 'img/stone.jpg', 'احجار': 'img/stone.jpg',
-    'سكر': 'img/sugar.jpg', 'لبن': 'img/milk.jpg', 'حليب': 'img/milk.jpg', 'ورق': 'img/paper.jpg',
-    'اوراق': 'img/paper.jpg', 'ماء': 'img/water.jpg', 'مياه': 'img/water.jpg', 'تفاح': 'img/apple.jpg',
-    'دكان': 'img/shop.jpg', 'دكاكين': 'img/shop.jpg', 'شمس': 'img/sun.jpg', 'قمر': 'img/moon.jpg',
-    'غرفه': 'img/room.jpg', 'غرف': 'img/room.jpg', 'سماء': 'img/sky.jpg', 'سموات': 'img/sky.jpg',
-    'حمام': 'img/bathroom.jpg', 'حمامات': 'img/bathroom.jpg', 'فصل': 'img/classroom.jpg', 'فصول': 'img/classroom.jpg',
-    'مطبخ': 'img/kitchen.jpg', 'مطابخ': 'img/kitchen.jpg', 'مرحاض': 'img/bathroom.jpg', 'مراحيض': 'img/bathroom.jpg',
-    'جامعه': 'img/university.jpg', 'جامعات': 'img/university.jpg', 'سوق': 'img/shop.jpg', 'اسواق': 'img/shop.jpg',
-    'مدير': 'img/teacher.jpg', 'يابان': 'img/city.jpg', 'صين': 'img/city.jpg', 'هند': 'img/city.jpg',
-    'فلبين': 'img/city.jpg', 'شارع': 'img/city.jpg', 'شوارع': 'img/city.jpg', 'سياره': 'img/car.jpg',
-    'سيارات': 'img/car.jpg', 'حقيبه': 'img/bag.jpg', 'حقائب': 'img/bag.jpg', 'اخت': 'img/girl.jpg',
-    'اخوات': 'img/girl.jpg', 'بنت': 'img/girl.jpg', 'بنات': 'img/girl.jpg', 'قدر': 'img/kitchen.jpg',
-    'ملعقه': 'img/spoon.jpg', 'ملاعق': 'img/spoon.jpg', 'بقره': 'img/cow.jpg', 'بقر': 'img/cow.jpg',
-    'فلاح': 'img/man.jpg', 'فلاحون': 'img/man.jpg', 'ام': 'img/mother.jpg', 'امهات': 'img/mother.jpg',
-    'اب': 'img/man.jpg', 'اباء': 'img/man.jpg', 'شاي': 'img/tea.jpg', 'قهوه': 'img/coffee.jpg',
-    'مشرق': 'img/sun.jpg', 'مغرب': 'img/sun.jpg', 'دراجه': 'img/bike.jpg', 'دراجات': 'img/bike.jpg',
-    'بيضه': 'img/egg.jpg', 'بيض': 'img/egg.jpg', 'مؤذن': 'img/imam.jpg', 'مؤذنون': 'img/imam.jpg',
-    'بطه': 'img/duck.jpg', 'بط': 'img/duck.jpg', 'دجاجه': 'img/chicken.jpg', 'دجاج': 'img/chicken.jpg',
-    'مستشفي': 'img/hospital.jpg', 'مستشفيات': 'img/hospital.jpg', 'سكين': 'img/knife.jpg', 'سكاكين': 'img/knife.jpg',
-    'طائر': 'img/bird.jpg', 'طيور': 'img/bird.jpg', 'عصفور': 'img/bird.jpg', 'عصافير': 'img/bird.jpg',
-    'مدينه': 'img/city.jpg', 'مدن': 'img/city.jpg', 'قاهره': 'img/city.jpg', 'زميل': 'img/student.jpg',
-    'زملاء': 'img/student.jpg', 'زوج': 'img/man.jpg', 'زوجه': 'img/girl.jpg', 'طفل': 'img/child.jpg',
-    'اطفال': 'img/child.jpg', 'كويت': 'img/city.jpg', 'اخ': 'img/boy.jpg', 'اخوه': 'img/boy.jpg',
-    'شجره': 'img/tree.jpg', 'اشجار': 'img/tree.jpg', 'حديقه': 'img/tree.jpg', 'حدائق': 'img/tree.jpg',
-    'مهندس': 'img/man.jpg', 'مهندسون': 'img/man.jpg', 'حاج': 'img/man.jpg', 'حجاج': 'img/man.jpg',
-    'فندق': 'img/city.jpg', 'فنادق': 'img/city.jpg', 'طائره': 'img/sky.jpg', 'طائرات': 'img/sky.jpg',
-    'بحر': 'img/water.jpg', 'بحار': 'img/water.jpg', 'شركه': 'img/city.jpg', 'شركات': 'img/city.jpg',
-    'ساعه': 'img/clock.jpg', 'ساعات': 'img/clock.jpg', 'فنجان': 'img/cup.jpg', 'فناجين': 'img/cup.jpg',
-    'بغداد': 'img/city.jpg', 'جده': 'img/city.jpg', 'مكه': 'img/city.jpg', 'دمشق': 'img/city.jpg',
-    'رياض': 'img/city.jpg', 'اصطنبول': 'img/city.jpg', 'طائف': 'img/city.jpg', 'واشنطن': 'img/city.jpg',
-    'مكتبه': 'img/library.jpg', 'مكتبات': 'img/library.jpg', 'فاكهه': 'img/fruit.jpg', 'فواكه': 'img/fruit.jpg',
-    'سمك': 'img/fish.jpg', 'اسماك': 'img/fish.jpg', 'ثلاجه': 'img/fridge.jpg', 'ثلاجات': 'img/fridge.jpg',
-    'نافذه': 'img/window.jpg', 'نوافذ': 'img/window.jpg', 'زهور': 'img/flower.jpg', 'زهره': 'img/flower.jpg',
-    'ازهار': 'img/flower.jpg'
+    'بيت': 'img/duo/house.svg', 'بيوت': 'img/duo/house.svg', 'مسجد': 'img/duo/mosque.svg', 'مساجد': 'img/duo/mosque.svg',
+    'باب': 'img/duo/door.svg', 'ابواب': 'img/duo/door.svg', 'كتاب': 'img/duo/book.svg', 'كتب': 'img/duo/book.svg',
+    'قلم': 'img/duo/pen.svg', 'اقلام': 'img/duo/pen.svg', 'مفتاح': 'img/duo/key.svg', 'مفاتيح': 'img/duo/key.svg',
+    'مكتب': 'img/duo/desk.svg', 'مكاتب': 'img/duo/desk.svg', 'سرير': 'img/duo/bed.svg', 'سرر': 'img/duo/bed.svg',
+    'كرسي': 'img/duo/chair.svg', 'كراسي': 'img/duo/chair.svg', 'نجم': 'img/duo/star.svg', 'نجوم': 'img/duo/star.svg',
+    'قميص': 'img/duo/shirt.svg', 'قمصان': 'img/duo/shirt.svg', 'طبيب': 'img/duo/doctor.svg', 'اطباء': 'img/duo/doctor.svg',
+    'طبيبه': 'img/duo/doctor.svg', 'طبيبات': 'img/duo/doctor.svg', 'ولد': 'img/duo/boy.svg', 'اولاد': 'img/duo/boy.svg',
+    'طالب': 'img/duo/student.svg', 'طلاب': 'img/duo/student.svg', 'طالبه': 'img/duo/student.svg', 'طالبات': 'img/duo/student.svg',
+    'رجل': 'img/duo/man.svg', 'رجال': 'img/duo/man.svg', 'تاجر': 'img/duo/merchant.svg', 'تجار': 'img/duo/merchant.svg',
+    'كلب': 'img/duo/dog.svg', 'كلاب': 'img/duo/dog.svg', 'قط': 'img/duo/cat.svg', 'قطط': 'img/duo/cat.svg',
+    'حمار': 'img/duo/donkey.svg', 'حمير': 'img/duo/donkey.svg', 'حمر': 'img/duo/donkey.svg', 'حصان': 'img/duo/horse.svg',
+    'احصنه': 'img/duo/horse.svg', 'خيل': 'img/duo/horse.svg', 'فرس': 'img/duo/horse.svg', 'جمل': 'img/duo/camel.svg',
+    'جمال': 'img/duo/camel.svg', 'ناقه': 'img/duo/camel.svg', 'ديك': 'img/duo/rooster.svg', 'ديوك': 'img/duo/rooster.svg',
+    'مدرس': 'img/duo/teacher.svg', 'مدرسون': 'img/duo/teacher.svg', 'مدرسه': 'img/duo/school.svg', 'مدارس': 'img/duo/school.svg',
+    'استاذ': 'img/duo/teacher.svg', 'اساتذه': 'img/duo/teacher.svg', 'منديل': 'img/duo/handkerchief.svg', 'مناديل': 'img/duo/handkerchief.svg',
+    'امام': 'img/duo/imam.svg', 'ائمه': 'img/duo/imam.svg', 'حجر': 'img/duo/stone.svg', 'احجار': 'img/duo/stone.svg',
+    'سكر': 'img/duo/sugar.svg', 'لبن': 'img/duo/milk.svg', 'حليب': 'img/duo/milk.svg', 'ورق': 'img/duo/paper.svg',
+    'اوراق': 'img/duo/paper.svg', 'ماء': 'img/duo/water.svg', 'مياه': 'img/duo/water.svg', 'تفاح': 'img/duo/apple.svg',
+    'دكان': 'img/duo/shop.svg', 'دكاكين': 'img/duo/shop.svg', 'شمس': 'img/duo/sun.svg', 'قمر': 'img/duo/moon.svg',
+    'غرفه': 'img/duo/room.svg', 'غرف': 'img/duo/room.svg', 'سماء': 'img/duo/sky.svg', 'سموات': 'img/duo/sky.svg',
+    'حمام': 'img/duo/bathroom.svg', 'حمامات': 'img/duo/bathroom.svg', 'فصل': 'img/duo/classroom.svg', 'فصول': 'img/duo/classroom.svg',
+    'مطبخ': 'img/duo/kitchen.svg', 'مطابخ': 'img/duo/kitchen.svg', 'مرحاض': 'img/duo/bathroom.svg', 'مراحيض': 'img/duo/bathroom.svg',
+    'جامعه': 'img/duo/university.svg', 'جامعات': 'img/duo/university.svg', 'سوق': 'img/duo/shop.svg', 'اسواق': 'img/duo/shop.svg',
+    'مدير': 'img/duo/teacher.svg', 'يابان': 'img/duo/city.svg', 'صين': 'img/duo/city.svg', 'هند': 'img/duo/city.svg',
+    'فلبين': 'img/duo/city.svg', 'شارع': 'img/duo/city.svg', 'شوارع': 'img/duo/city.svg', 'سياره': 'img/duo/car.svg',
+    'سيارات': 'img/duo/car.svg', 'حقيبه': 'img/duo/bag.svg', 'حقائب': 'img/duo/bag.svg', 'اخت': 'img/duo/girl.svg',
+    'اخوات': 'img/duo/girl.svg', 'بنت': 'img/duo/girl.svg', 'بنات': 'img/duo/girl.svg', 'قدر': 'img/duo/kitchen.svg',
+    'ملعقه': 'img/duo/spoon.svg', 'ملاعق': 'img/duo/spoon.svg', 'بقره': 'img/duo/cow.svg', 'بقر': 'img/duo/cow.svg',
+    'فلاح': 'img/duo/man.svg', 'فلاحون': 'img/duo/man.svg', 'ام': 'img/duo/mother.svg', 'امهات': 'img/duo/mother.svg',
+    'اب': 'img/duo/man.svg', 'اباء': 'img/duo/man.svg', 'شاي': 'img/duo/tea.svg', 'قهوه': 'img/duo/coffee.svg',
+    'مشرق': 'img/duo/sun.svg', 'مغرب': 'img/duo/sun.svg', 'دراجه': 'img/duo/bike.svg', 'دراجات': 'img/duo/bike.svg',
+    'بيضه': 'img/duo/egg.svg', 'بيض': 'img/duo/egg.svg', 'مؤذن': 'img/duo/imam.svg', 'مؤذنون': 'img/duo/imam.svg',
+    'بطه': 'img/duo/duck.svg', 'بط': 'img/duo/duck.svg', 'دجاجه': 'img/duo/chicken.svg', 'دجاج': 'img/duo/chicken.svg',
+    'مستشفي': 'img/duo/hospital.svg', 'مستشفيات': 'img/duo/hospital.svg', 'سكين': 'img/duo/knife.svg', 'سكاكين': 'img/duo/knife.svg',
+    'طائر': 'img/duo/bird.svg', 'طيور': 'img/duo/bird.svg', 'عصفور': 'img/duo/bird.svg', 'عصافير': 'img/duo/bird.svg',
+    'مدينه': 'img/duo/city.svg', 'مدن': 'img/duo/city.svg', 'قاهره': 'img/duo/city.svg', 'زميل': 'img/duo/student.svg',
+    'زملاء': 'img/duo/student.svg', 'زوج': 'img/duo/man.svg', 'زوجه': 'img/duo/girl.svg', 'طفل': 'img/duo/child.svg',
+    'اطفال': 'img/duo/child.svg', 'كويت': 'img/duo/city.svg', 'اخ': 'img/duo/boy.svg', 'اخوه': 'img/duo/boy.svg',
+    'شجره': 'img/duo/tree.svg', 'اشجار': 'img/duo/tree.svg', 'حديقه': 'img/duo/tree.svg', 'حدائق': 'img/duo/tree.svg',
+    'مهندس': 'img/duo/man.svg', 'مهندسون': 'img/duo/man.svg', 'حاج': 'img/duo/man.svg', 'حجاج': 'img/duo/man.svg',
+    'فندق': 'img/duo/city.svg', 'فنادق': 'img/duo/city.svg', 'طائره': 'img/duo/sky.svg', 'طائرات': 'img/duo/sky.svg',
+    'بحر': 'img/duo/water.svg', 'بحار': 'img/duo/water.svg', 'شركه': 'img/duo/city.svg', 'شركات': 'img/duo/city.svg',
+    'ساعه': 'img/duo/clock.svg', 'ساعات': 'img/duo/clock.svg', 'فنجان': 'img/duo/cup.svg', 'فناجين': 'img/duo/cup.svg',
+    'بغداد': 'img/duo/city.svg', 'جده': 'img/duo/city.svg', 'مكه': 'img/duo/city.svg', 'دمشق': 'img/duo/city.svg',
+    'رياض': 'img/duo/city.svg', 'اصطنبول': 'img/duo/city.svg', 'طائف': 'img/duo/city.svg', 'واشنطن': 'img/duo/city.svg',
+    'مكتبه': 'img/duo/library.svg', 'مكتبات': 'img/duo/library.svg', 'فاكهه': 'img/duo/fruit.svg', 'فواكه': 'img/duo/fruit.svg',
+    'سمك': 'img/duo/fish.svg', 'اسماك': 'img/duo/fish.svg', 'ثلاجه': 'img/duo/fridge.svg', 'ثلاجات': 'img/duo/fridge.svg',
+    'نافذه': 'img/duo/window.svg', 'نوافذ': 'img/duo/window.svg', 'زهور': 'img/duo/flower.svg', 'زهره': 'img/duo/flower.svg',
+    'ازهار': 'img/duo/flower.svg'
   };
 
   var NL_PHOTO_MAP = [
-    ['theekopje', 'img/cup.jpg'], ['klaslokaal', 'img/classroom.jpg'], ['universiteit', 'img/university.jpg'],
-    ['bibliotheek', 'img/library.jpg'], ['ziekenhuis', 'img/hospital.jpg'], ['handelaar', 'img/merchant.jpg'],
-    ['badkamer', 'img/bathroom.jpg'], ['koelkast', 'img/fridge.jpg'], ['zakdoek', 'img/handkerchief.jpg'],
-    ['horloge', 'img/clock.jpg'], ['yoghurt', 'img/milk.jpg'], ['sleutel', 'img/key.jpg'],
-    ['student', 'img/student.jpg'], ['moskee', 'img/mosque.jpg'], ['bureau', 'img/desk.jpg'],
-    ['dokter', 'img/doctor.jpg'], ['jongen', 'img/boy.jpg'], ['meisje', 'img/girl.jpg'],
-    ['kameel', 'img/camel.jpg'], ['leraar', 'img/teacher.jpg'], ['docent', 'img/teacher.jpg'],
-    ['suiker', 'img/sugar.jpg'], ['papier', 'img/paper.jpg'], ['winkel', 'img/shop.jpg'],
-    ['toilet', 'img/bathroom.jpg'], ['keuken', 'img/kitchen.jpg'], ['school', 'img/school.jpg'],
-    ['koffie', 'img/coffee.jpg'], ['moeder', 'img/mother.jpg'], ['bloem', 'img/flower.jpg'],
-    ['vogel', 'img/bird.jpg'], ['fruit', 'img/fruit.jpg'], ['kopje', 'img/cup.jpg'],
-    ['lepel', 'img/spoon.jpg'], ['fiets', 'img/bike.jpg'], ['markt', 'img/shop.jpg'],
-    ['hemel', 'img/sky.jpg'], ['lucht', 'img/sky.jpg'], ['kamer', 'img/room.jpg'],
-    ['appel', 'img/apple.jpg'], ['water', 'img/water.jpg'], ['steen', 'img/stone.jpg'],
-    ['paard', 'img/horse.jpg'], ['stoel', 'img/chair.jpg'], ['huis', 'img/house.jpg'],
-    ['deur', 'img/door.jpg'], ['boek', 'img/book.jpg'], ['ster', 'img/star.jpg'],
-    ['hemd', 'img/shirt.jpg'], ['kind', 'img/child.jpg'], ['hond', 'img/dog.jpg'],
-    ['ezel', 'img/donkey.jpg'], ['haan', 'img/rooster.jpg'], ['imam', 'img/imam.jpg'],
-    ['melk', 'img/milk.jpg'], ['maan', 'img/moon.jpg'], ['auto', 'img/car.jpg'],
-    ['thee', 'img/tea.jpg'], ['eend', 'img/duck.jpg'], ['stad', 'img/city.jpg'],
-    ['boom', 'img/tree.jpg'], ['raam', 'img/window.jpg'], ['klok', 'img/clock.jpg'],
-    ['pen', 'img/pen.jpg'], ['bed', 'img/bed.jpg'], ['man', 'img/man.jpg'],
-    ['kat', 'img/cat.jpg'], ['zon', 'img/sun.jpg'], ['tas', 'img/bag.jpg'],
-    ['koe', 'img/cow.jpg'], ['kip', 'img/chicken.jpg'], ['mes', 'img/knife.jpg'],
-    ['mus', 'img/bird.jpg'], ['vis', 'img/fish.jpg']
+    ['theekopje', 'img/duo/cup.svg'], ['klaslokaal', 'img/duo/classroom.svg'], ['universiteit', 'img/duo/university.svg'],
+    ['bibliotheek', 'img/duo/library.svg'], ['ziekenhuis', 'img/duo/hospital.svg'], ['handelaar', 'img/duo/merchant.svg'],
+    ['badkamer', 'img/duo/bathroom.svg'], ['koelkast', 'img/duo/fridge.svg'], ['zakdoek', 'img/duo/handkerchief.svg'],
+    ['horloge', 'img/duo/clock.svg'], ['yoghurt', 'img/duo/milk.svg'], ['sleutel', 'img/duo/key.svg'],
+    ['student', 'img/duo/student.svg'], ['moskee', 'img/duo/mosque.svg'], ['bureau', 'img/duo/desk.svg'],
+    ['dokter', 'img/duo/doctor.svg'], ['jongen', 'img/duo/boy.svg'], ['meisje', 'img/duo/girl.svg'],
+    ['kameel', 'img/duo/camel.svg'], ['leraar', 'img/duo/teacher.svg'], ['docent', 'img/duo/teacher.svg'],
+    ['suiker', 'img/duo/sugar.svg'], ['papier', 'img/duo/paper.svg'], ['winkel', 'img/duo/shop.svg'],
+    ['toilet', 'img/duo/bathroom.svg'], ['keuken', 'img/duo/kitchen.svg'], ['school', 'img/duo/school.svg'],
+    ['koffie', 'img/duo/coffee.svg'], ['moeder', 'img/duo/mother.svg'], ['bloem', 'img/duo/flower.svg'],
+    ['vogel', 'img/duo/bird.svg'], ['fruit', 'img/duo/fruit.svg'], ['kopje', 'img/duo/cup.svg'],
+    ['lepel', 'img/duo/spoon.svg'], ['fiets', 'img/duo/bike.svg'], ['markt', 'img/duo/shop.svg'],
+    ['hemel', 'img/duo/sky.svg'], ['lucht', 'img/duo/sky.svg'], ['kamer', 'img/duo/room.svg'],
+    ['appel', 'img/duo/apple.svg'], ['water', 'img/duo/water.svg'], ['steen', 'img/duo/stone.svg'],
+    ['paard', 'img/duo/horse.svg'], ['stoel', 'img/duo/chair.svg'], ['huis', 'img/duo/house.svg'],
+    ['deur', 'img/duo/door.svg'], ['boek', 'img/duo/book.svg'], ['ster', 'img/duo/star.svg'],
+    ['hemd', 'img/duo/shirt.svg'], ['kind', 'img/duo/child.svg'], ['hond', 'img/duo/dog.svg'],
+    ['ezel', 'img/duo/donkey.svg'], ['haan', 'img/duo/rooster.svg'], ['imam', 'img/duo/imam.svg'],
+    ['melk', 'img/duo/milk.svg'], ['maan', 'img/duo/moon.svg'], ['auto', 'img/duo/car.svg'],
+    ['thee', 'img/duo/tea.svg'], ['eend', 'img/duo/duck.svg'], ['stad', 'img/duo/city.svg'],
+    ['boom', 'img/duo/tree.svg'], ['raam', 'img/duo/window.svg'], ['klok', 'img/duo/clock.svg'],
+    ['pen', 'img/duo/pen.svg'], ['bed', 'img/duo/bed.svg'], ['man', 'img/duo/man.svg'],
+    ['kat', 'img/duo/cat.svg'], ['zon', 'img/duo/sun.svg'], ['tas', 'img/duo/bag.svg'],
+    ['koe', 'img/duo/cow.svg'], ['kip', 'img/duo/chicken.svg'], ['mes', 'img/duo/knife.svg'],
+    ['mus', 'img/duo/bird.svg'], ['vis', 'img/duo/fish.svg']
   ];
 
   var COLOR_MAP = {
@@ -505,7 +505,7 @@
     }
     return '<div class="gd-lesson-bar">' +
       '<button type="button" class="vl-exit" data-vl="exit" aria-label="Terug naar het leerpad">' + icon('close') + '</button>' +
-      '<div class="gd-progress-wrap"><div class="gd-progress-title"><strong>Woordenschat · Les ' + S.n + '</strong><span>' + esc(label) + '</span></div>' +
+      '<div class="gd-progress-wrap"><div class="gd-progress-title"><strong>Les ' + S.n + '</strong><span>' + esc(label) + '</span></div>' +
       '<div class="gd-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"><span style="width:' + pct + '%"></span></div></div>' +
       '<div class="gd-bar-hearts" aria-label="' + String(S.hearts).replace('.', ',') + ' van ' + MAX_HEARTS + ' hartjes">' + hearts + '</div>' +
       '<button type="button" class="gd-fast' + (fastOn() ? ' on' : '') + (superOn() ? ' super' : '') + '" data-vl="fast" aria-pressed="' + fastOn() + '" title="' + (superOn() ? 'Supersnel: toont alleen juist/fout en gaat meteen door' : (fastOn() ? 'Snelle modus · klik nogmaals voor Supersnel' : 'Normaal · klik voor Snel of Supersnel')) + '">' + (superOn() ? '⚡⚡ Supersnel' : '⚡ Snel') + '</button></div>';
@@ -577,10 +577,11 @@
           var picked = S.chosen === i;
           var mark = '';
           if (S.fb) mark = w.id === q.answer ? ' correct' : (picked ? ' wrong' : '');
-          var url = picUrl(w) || 'img/generic.jpg';
+          var url = picUrl(w) || 'img/duo/generic.svg';
           return '<button type="button" class="gd-option vl-pic-opt' + (picked ? ' selected' : '') + mark +
             '" data-vl="pick" data-i="' + i + '" ' + (S.fb ? 'disabled ' : '') + 'aria-pressed="' + picked +
-            '" aria-label="' + esc(w.nl) + '"><img src="' + esc(url) + '" alt="' + esc(w.nl) + '" loading="lazy" decoding="async"/>' +
+            '" aria-label="' + esc(w.nl) + '"><span class="vl-pic-num" aria-hidden="true">' + (i + 1) + '</span>' +
+            '<img src="' + esc(url) + '" alt="' + esc(w.nl) + '" loading="lazy" decoding="async"/>' +
             '<span class="vl-pic-opt-lbl">' + esc(w.nl) + '</span></button>';
         }).join('') + '</div>' +
         '<div class="gd-task-actions"><button type="button" class="gd-primary gd-full" data-vl="check" ' + (answered() && !S.fb ? '' : 'disabled') + '>Controleer</button></div>';

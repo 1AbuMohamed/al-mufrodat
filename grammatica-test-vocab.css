@@ -19,13 +19,14 @@ body.lh-skin .vl .vl-exit {
 body.lh-skin .vl .vl-exit:hover { background:var(--surface-2); color:var(--text); }
 body.lh-skin .vl .vl-exit:focus-visible { outline:3px solid var(--blue); outline-offset:2px; }
 body.lh-skin .vl .vl-exit .gd-icon { width:24px; height:24px; }
-.vl .gd-lesson-bar { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
-.vl .gd-progress-wrap { flex:1 1 auto; min-width:0; }
-.vl .gd-progress-title { display:flex; justify-content:space-between; gap:8px; white-space:nowrap; margin-bottom:8px; font-size:13px; font-weight:800; }
-.vl .gd-progress { height:16px; border-radius:8px; background:var(--line); overflow:hidden; }
+.vl .gd-lesson-bar { display:flex; align-items:center; gap:10px; margin-bottom:20px; }
+.vl .gd-progress-wrap { flex:1 1 auto; min-width:72px; }
+.vl .gd-progress-title { display:flex; justify-content:space-between; align-items:center; gap:6px; white-space:nowrap; margin-bottom:6px; font-size:12px; font-weight:800; overflow:hidden; }
+.vl .gd-progress { height:14px; border-radius:8px; background:var(--line); overflow:hidden; }
 .vl .gd-progress span { display:block; height:100%; background:var(--green); border-radius:8px; transition:width .25s; }
-.vl .gd-bar-hearts { display:flex; gap:3px; align-items:center; flex:none; }
-.vl .gd-bar-hearts .gd-icon { width:19px; height:19px; }
+.vl .gd-bar-hearts { display:flex; gap:2px; align-items:center; flex:none; }
+.vl .gd-bar-hearts .gd-icon { width:18px; height:18px; }
+body.lh-skin #mascot-buddy, body.lh-skin .mascot-buddy, body.lh-skin .mb-flyer { display:none !important; }
 .vl .gd-bar-hearts .alive, .vl .gd-bar-hearts .half { color:#FF4B4B; opacity:1; }
 .vl .gd-bar-hearts .alive svg { fill:#FF4B4B; }
 .vl .gd-bar-hearts .lost { color:var(--muted,#8b949e); opacity:.35; }
@@ -41,18 +42,18 @@ body.lh-skin .vl .vl-exit .gd-icon { width:24px; height:24px; }
 
 /* ---- held-afbeelding (pic2ar) ---- */
 .vl-hero-visual {
-  margin:10px auto 18px; max-width:380px; width:100%; border-radius:18px;
+  margin:8px auto 16px; width:164px; height:164px; border-radius:28px;
   border:2px solid var(--line); border-bottom-width:4px; overflow:hidden;
-  background:var(--surface-2); box-shadow:0 4px 14px rgba(0,0,0,0.08);
+  background:var(--surface-2); display:flex; align-items:center; justify-content:center;
 }
 .vl-hero-img {
-  width:100%; height:180px; object-fit:cover; display:block; transition:transform .2s;
+  width:100%; height:100%; object-fit:contain; display:block;
 }
 @media (max-width:430px) {
-  .vl-hero-img { height:145px; }
+  .vl-hero-visual { width:148px; height:148px; border-radius:26px; }
 }
 @media (max-height:700px) {
-  .vl-hero-img { height:125px; }
+  .vl-hero-visual { width:132px; height:132px; border-radius:24px; }
 }
 .vl-hero-color {
   display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
@@ -78,40 +79,49 @@ body.lh-skin .vl .vl-exit .gd-icon { width:24px; height:24px; }
   gap:12px;
 }
 .vl-pic-opt {
-  padding:8px 8px 10px !important;
-  min-height:132px;
+  position:relative;
+  padding:12px 10px 10px !important;
+  min-height:148px;
   display:flex !important;
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:6px;
+  gap:8px;
 }
+.vl-pic-num {
+  position:absolute; top:8px; left:8px; width:22px; height:22px; border-radius:7px;
+  border:2px solid var(--line); background:var(--surface); color:var(--muted);
+  font:800 12px/18px var(--font-ui); text-align:center; pointer-events:none;
+}
+.vl-pic-opt.selected .vl-pic-num { border-color:var(--blue); color:var(--blue-ink); }
+.vl-pic-opt.correct .vl-pic-num { border-color:var(--green); color:var(--green); }
+.vl-pic-opt.wrong .vl-pic-num { border-color:var(--red); color:var(--red-ink); }
 .vl-pic-opt img {
-  width:100%;
-  height:104px;
-  object-fit:cover;
-  border-radius:12px;
+  width:96px;
+  height:96px;
+  object-fit:contain;
+  border-radius:20px;
   pointer-events:none;
 }
 .vl-pic-opt-lbl {
   font:800 13px/1.2 var(--font-ui);
-  color:var(--muted);
+  color:var(--text);
   text-align:center;
   pointer-events:none;
 }
-.vl-pic-opt.selected { outline:3px solid var(--blue); }
-.vl-pic-opt.correct { outline:3px solid var(--green, #58CC02); }
-.vl-pic-opt.wrong { outline:3px solid var(--red, #ff4b4b); }
+.vl-pic-opt.selected { border-color:var(--blue); }
+.vl-pic-opt.correct { border-color:var(--green, #58CC02); }
+.vl-pic-opt.wrong { border-color:var(--red, #ff4b4b); }
 
 /* ---- vraagkaarten (ar2nl, nl2ar) met visuele kaart ---- */
 .vl-question-box {
   display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:16px;
 }
 .vl-q-photo {
-  width:100%; max-width:320px; height:120px; border-radius:14px; overflow:hidden;
-  border:2px solid var(--line); border-bottom-width:3px; background:var(--surface-2);
+  width:116px; height:116px; border-radius:22px; overflow:hidden;
+  border:2px solid var(--line); border-bottom-width:4px; background:var(--surface-2);
 }
-.vl-q-photo img { width:100%; height:100%; object-fit:cover; display:block; }
+.vl-q-photo img { width:100%; height:100%; object-fit:contain; display:block; }
 .vl-q-color { display:flex; justify-content:center; padding:4px; }
 .vl-swatch-dot { width:34px; height:34px; border-radius:50%; box-shadow:0 2px 6px rgba(0,0,0,0.15); }
 .vl-q-badge { font-size:36px; line-height:1; margin:2px 0; }

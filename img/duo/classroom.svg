@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none"><rect width="160" height="160" rx="28" fill="#E8F8E8"/><circle cx="80" cy="76" r="56" fill="#FFFFFF" fill-opacity="0.55"/><ellipse cx="80" cy="134" rx="44" ry="8" fill="rgba(0,0,0,0.08)"/>
+        <rect x="28" y="34" width="104" height="64" rx="8" fill="#2E6F40" stroke="#C87D3B" stroke-width="6"/>
+        <text x="80" y="75" text-anchor="middle" font-size="28" fill="#FFFFFF" font-family="serif">الْعَرَبِيَّة</text>
+        <rect x="44" y="112" width="72" height="18" rx="4" fill="#C87D3B"/>
+    </svg>
