@@ -37,6 +37,8 @@
   };
 
   function plain(value) { return String(value == null ? '' : value).trim(); }
+  // Bronregels beginnen soms met hun eigen nummer ("3) ", "4. ", "b. "); bij weergave als optie haalt dat weg zodat nummers niet dubbel staan.
+  function stripLead(t){return String(t==null?'':t).replace(/^\s*(?:\d+|[a-z])\s*[.)]\s+/i,'');}
   function esc(value) {
     return plain(value).replace(/&/g, '&amp;').replace(/</g, '&lt;')
       .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
@@ -152,6 +154,18 @@
     });
     return seededShuffle(tasks,seed);
   }
+  // Eerste voorbeeld dat in de bron direct onder een regel staat (zonder tussenliggende nieuwe regel).
+  function exampleAfterRule(n,rule){
+    var rows=(DATA[n]&&DATA[n].inhoud)||[];
+    var i=rows.findIndex(function(r){return plain(r.tekst)===rule;});
+    if(i<0)return null;
+    for(var j=i+1;j<rows.length&&j<=i+8;j++){
+      var r=rows[j];
+      if(r.type==='voorbeeld'&&plain(r.ar)&&!/^(?:\-|voorbeeld:?)$/i.test(plain(r.ar)))return r;
+      if(r.type==='regel'&&/^\s*(?:\d+|[a-z])\s*[.)]/i.test(plain(r.tekst)))return null;
+    }
+    return null;
+  }
   function buildWhyTasks(n,seed) {
     var rules=theoryPool(n), candidates=[];
     var connector=/\b(omdat|vanwege|doordat|waardoor|zodat|aangezien|daarom)\b/i;
@@ -167,7 +181,9 @@
       return /na een voorzetsel|vooraf wordt gegaan door|wanneer|als het|als de|in plaats van/i.test(rule) && rule.length>35 && rule.length<310;
     });
     conditional.forEach(function(rule,i){
-      candidates.push({rule:rule,prompt:'Welke regel legt deze grammaticale verandering uit?',context:'Les '+n,answer:rule,concept:'waarom-voorwaarde:'+i});
+      var shown=exampleAfterRule(n,rule);
+      if(!shown)return;   // zonder voorbeeld is de vraag niet te beantwoorden
+      candidates.push({rule:rule,prompt:'Welke regel hoort bij dit voorbeeld?',context:plain(shown.ar),example:shown,answer:rule,concept:'waarom-voorwaarde:'+i});
     });
     // Waarom-vragen met specifieke Arabische woorden: het antwoord is
     // letterlijk de onderbouwende regel uit de betreffende Medina-les.
@@ -187,7 +203,7 @@
       var proof=rules.find(function(r){return r.includes(spec[0]);});
       if(!proof)return;
       var ex=spec[2] ? sourceExamples(n).find(function(e){return plain(e.ar)===spec[2];}) : null;
-      candidates.unshift({rule:proof,prompt:spec[1],context:ex?plain(ex.ar):'Les '+n,
+      candidates.unshift({rule:proof,prompt:spec[1],context:ex?plain(ex.ar):'',
         example:ex||null,answer:proof,concept:'waarom:'+spec[3]});
     });
     // Alle afleiders zijn ook authentieke, elders aangehaalde regels of redenen.
@@ -871,7 +887,7 @@
     return '<div class="gd-options">'+task.options.map(function(option,i){
       var selected=session.chosen===i;
       return '<button type="button" class="gd-option'+(selected?' selected':'')+'" data-action="select" data-value="'+i+'" aria-pressed="'+selected+'"'+(session.feedback?' disabled':'')+
-        (arabic&&!task.rich?' lang="ar" dir="rtl"':'')+'><span>'+(i+1)+'.</span> '+(task.rich?rich(option):esc(option))+'</button>';
+        (arabic&&!task.rich?' lang="ar" dir="rtl"':'')+'><span>'+(i+1)+'.</span> '+(task.rich?rich(stripLead(option)):esc(stripLead(option)))+'</button>';
     }).join('')+'</div>';
   }
   function sentenceButtons(task){
@@ -888,7 +904,8 @@
     if(task.type==='lab')return optionsHtml(task,false);
     if(task.type==='ontleed')return sentenceChips(task)+optionsHtml(task,false);
     if(['theory','rule','why'].includes(task.type)){
-      return (task.context?'<p class="gd-theory-question">'+esc(task.context)+'</p>':'')+optionsHtml(task,task.type==='theory');
+      var arCtx=task.example&&plain(task.example.ar)===task.context;
+      return (task.context?'<p class="gd-theory-question'+(arCtx?' gd-theory-question-ar':'')+'"'+(arCtx?' lang="ar" dir="rtl"':'')+'>'+esc(stripLead(task.context))+'</p>':'')+optionsHtml(task,task.type==='theory');
     }
     if(task.type==='find'){
       return '<p class="gd-theory-question">'+esc(task.context)+'</p>'+sentenceButtons(task);
@@ -967,14 +984,14 @@
     return '<section class="gd-feedback gd-feedback-sheet '+(good?'good':'review')+'" role="status" aria-live="assertive">'+
       '<div class="gd-feedback-inner"><div class="gd-feedback-head">'+mascot(good?(session.combo>=3?'proud':'happy'):'sad')+'<strong>'+headline+'</strong></div>'+
       (session.combo>=3?'<span class="gd-combo">'+session.combo+'× combo</span>':'')+
-      (answer?'<p class="gd-correct-answer">'+(task.rich?rich(answer):esc(answer))+'</p>':'')+
+      (answer?'<p class="gd-correct-answer">'+(task.rich?rich(stripLead(answer)):esc(stripLead(answer)))+'</p>':'')+
       (task.type==='zinsontleding'&&P()?P().solution(task)+
         (task.nl?'<p class="gd-parse-nl">'+esc(task.nl)+'</p>':'')+
         ((task.groups&&task.groups.length)?'<p class="gd-theory-explanation">'+rich(titleTerms(task.groups.map(function(g){return g.why;}).join(' ')))+'</p>':''):
         (task.example?'<p class="gd-arabic" lang="ar" dir="rtl">'+esc(task.example.ar)+'</p>'+
         (plain(task.example.nl)&&plain(task.example.nl)!=='-'?'<p>'+esc(task.example.nl)+'</p>':''):''))+
       (termNote?'<p class="gd-theory-explanation">'+esc(termNote)+'</p>':'')+
-      (task.rule&&task.type!=='ontleed'?'<p class="gd-theory-explanation">'+(task.rich?rich(task.rule):esc(task.rule))+'</p>':'')+
+      (task.rule&&task.type!=='ontleed'?'<p class="gd-theory-explanation">'+(task.rich?rich(stripLead(task.rule)):esc(stripLead(task.rule)))+'</p>':'')+
       (task.type==='ontleed'?ontleedTable(task.sentence,task.wordIndex):'')+
       (P()&&P().fastOn()?'<div class="gd-autonext" aria-hidden="true"><i></i></div>':'')+
       '<button type="button" class="gd-primary gd-full" data-action="next">Verder</button></div></section>';

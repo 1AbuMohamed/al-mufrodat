@@ -130,3 +130,4 @@ body.lh-skin .gd-lab-tip {
 }
 body.lh-skin .gd-task-title { color: var(--text); }
 body.lh-skin .gd-task-lesson { color: var(--text); }
+body.lh-skin .gd-theory-question-ar { border-left-width:2px; border-right:6px solid var(--green); font-family:var(--font-ar); font-size:28px; line-height:1.8; }
