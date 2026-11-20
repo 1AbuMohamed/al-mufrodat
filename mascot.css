@@ -1,147 +1,145 @@
-/* Mascot — licht & GPU-vriendelijk */
-.gd-mascot{
-  display:block;
-  width:72px;height:auto;max-width:28vw;
-  object-fit:contain;
-  user-select:none;pointer-events:none;
-  background:transparent;
-  content-visibility:auto;
-  contain:layout style;
-}
-.gd-mascot-sm{width:44px}
-.gd-mascot-md{width:72px}
-.gd-mascot-lg{width:110px}
+/* Mascotte: vector-figuur met poses, idle-animaties, binnenvliegen, reacties en spraakwolkjes (Duolingo-achtig). */
 
-.gd-feedback-head{display:flex;align-items:center;gap:12px;margin-bottom:6px}
-.gd-feedback-head .gd-mascot{width:64px;flex-shrink:0}
-.gd-feedback-head strong{font-size:1.15em}
+/* ---------- figuur ---------- */
+.am { --am-size:76px; display:inline-block; position:relative; flex:none; width:var(--am-size); height:calc(var(--am-size) * 1.19); line-height:0; }
+.am-svg { width:100%; height:100%; overflow:visible; display:block; }
+.am-shadow { fill:rgba(0,0,0,.20); transform-box:fill-box; transform-origin:center; }
+.am-feet ellipse { fill:#FFB224; }
+.am-wing path:first-child { fill:#129891; }
+.am-wing-hi { fill:none; stroke:#35BDB1; stroke-width:3; stroke-linecap:round; }
+.am-tuft path { fill:#129891; }
+.am-feather { fill:none; stroke:#8FD6C7; stroke-width:2.6; stroke-linecap:round; }
+.am-cheek { fill:#FF8DA1; opacity:.65; }
+.am-white { fill:#fff; }
+.am-pupil { fill:#12313A; }
+.am-glint { fill:#fff; }
+.am-lid { fill:#34C5B5; transform-box:fill-box; transform-origin:50% 0; transform:scaleY(0); }
+.am-beak { fill:#FFB224; stroke:#EE8E10; stroke-width:1.6; stroke-linejoin:round; }
+.e-arc path, .brows path { fill:none; stroke:#12313A; stroke-width:5; stroke-linecap:round; }
+.brows path { stroke-width:4.2; }
+.m-smile, .m-sad { fill:none; stroke:#12313A; stroke-width:3.2; stroke-linecap:round; }
+.m-o { fill:#12313A; }
+.mouth-in { fill:#7A2336; } .tongue { fill:#FF7A93; }
+.tear { fill:#7FD4F5; }
+.sp { fill:#FFD54A; transform-box:fill-box; transform-origin:center; }
 
-.gd-finish-mascot{display:flex;justify-content:center;margin:4px 0 10px}
-.gd-finish-mascot .gd-mascot{width:110px}
-.gd-finish:has(.gd-finish-mascot) .gd-finish-icon{display:none}
+/* ---------- poses ---------- */
+.e-arc, .brows, .tear, .m-open, .m-sad, .m-o, .am-sparkles { display:none; }
+.am[data-pose="happy"] .m-smile, .am[data-pose="cheer"] .m-smile, .am[data-pose="proud"] .m-open,
+.am[data-pose="sad"] .m-smile, .am[data-pose="think"] .m-smile, .am[data-pose="wave"] .m-smile { display:none; }
+.am[data-pose="happy"] .m-open, .am[data-pose="cheer"] .m-open, .am[data-pose="wave"] .m-open { display:inline; }
+.am[data-pose="cheer"] .eyes-open, .am[data-pose="proud"] .eyes-open { display:none; }
+.am[data-pose="cheer"] .e-arc, .am[data-pose="proud"] .e-arc { display:inline; }
+.am[data-pose="cheer"] .am-sparkles { display:inline; }
+.am[data-pose="sad"] .m-sad, .am[data-pose="sad"] .brows, .am[data-pose="sad"] .tear { display:inline; }
+.am[data-pose="think"] .m-o { display:inline; }
+.am[data-pose="think"] .am-look { transform:translate(3px,-4px); }
+.am[data-pose="sad"] .am-look { transform:translateY(2px); }
+.am[data-pose="sad"] .am-body { transform:translateY(4px) scale(.97,.95); transform-origin:50% 100%; transform-box:fill-box; }
+.am[data-pose="sad"] .am-wing-l { transform:rotate(-12deg); } .am[data-pose="sad"] .am-wing-r { transform:rotate(12deg); }
+.am[data-pose="cheer"] .am-wing-l { transform:rotate(62deg); } .am[data-pose="cheer"] .am-wing-r { transform:rotate(-62deg); }
+.am[data-pose="proud"] .am-wing-r { transform:rotate(-40deg); }
+.am[data-pose="proud"] .am-torso, .am[data-pose="proud"] .am-belly { transform:scale(1.03); transform-box:fill-box; transform-origin:50% 100%; }
+.am[data-pose="think"] .am-wing-r { transform:rotate(-32deg); }
+.am[data-pose="wave"] .am-wing-r { transform:rotate(-52deg); animation:am-wave .55s ease-in-out infinite alternate; }
+.am-wing { transform-box:fill-box; }
+.am-wing-l { transform-origin:100% 8%; } .am-wing-r { transform-origin:0% 8%; }
+.am-wing { transition:transform .25s cubic-bezier(.3,1.4,.5,1); }
+.am-look { transition:transform .2s; }
 
-.lh-hero-mascot{display:none!important}
-.lh-streak{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.lh-streak-mascot{flex-shrink:0;margin-left:auto}
-.lh-streak-mascot .gd-mascot{width:48px}
-.lh-empty{text-align:center}
-.lh-empty-mascot{display:flex;justify-content:center;margin:0 auto 12px}
-.lh-empty-mascot .gd-mascot{width:96px}
+/* ---------- idle: ademen en knipperen ---------- */
+.am .am-body { animation:am-bob 3.6s ease-in-out infinite; transform-box:fill-box; transform-origin:50% 100%; }
+.am .am-lid { animation:am-blink 5s infinite; animation-delay:var(--am-d,0s); }
+.am[data-pose="cheer"] .am-lid, .am[data-pose="proud"] .am-lid { animation:none; }
+.am[data-pose="sad"] .am-body { animation:am-sad 3s ease-in-out infinite; }
+@keyframes am-bob { 0%,100% { transform:translateY(0) scale(1,1); } 50% { transform:translateY(-2.5px) scale(1.012,.99); } }
+@keyframes am-sad { 0%,100% { transform:translateY(4px) scale(.97,.95); } 50% { transform:translateY(5px) scale(.97,.94); } }
+@keyframes am-blink { 0%,90%,100% { transform:scaleY(0); } 94% { transform:scaleY(1); } }
+@keyframes am-wave { from { transform:rotate(-40deg); } to { transform:rotate(-70deg); } }
+.am[data-pose="sad"] .tear { animation:am-tear 2.4s ease-in infinite; }
+@keyframes am-tear { 0% { transform:translateY(0); opacity:0; } 15% { opacity:1; } 80% { opacity:1; } 100% { transform:translateY(22px); opacity:0; } }
 
-@keyframes gd-mascot-pop{
-  0%{transform:translate3d(0,12px,0) scale(.5);opacity:0}
-  70%{transform:translate3d(0,-2px,0) scale(1.06);opacity:1}
-  100%{transform:translate3d(0,0,0) scale(1);opacity:1}
+/* ---------- binnenvliegen, poppen, springen ---------- */
+.am-fly { animation:am-fly-in 1.15s cubic-bezier(.3,.7,.3,1) both; }
+.am-fly .am-wing-l { animation:am-flap-l .15s ease-in-out 7 alternate; }
+.am-fly .am-wing-r { animation:am-flap-r .15s ease-in-out 7 alternate; }
+.am-fly .am-shadow { animation:am-shadow-in 1.15s ease-out both; }
+@keyframes am-fly-in {
+  0%   { transform:translate(-170px,-150px) rotate(-26deg) scale(.55); opacity:0; }
+  14%  { opacity:1; }
+  46%  { transform:translate(-44px,-34px) rotate(12deg) scale(.92); }
+  68%  { transform:translate(6px,10px) rotate(-6deg) scale(1.06,.94); }
+  84%  { transform:translate(0,-12px) rotate(3deg) scale(.98,1.04); }
+  100% { transform:translate(0,0) rotate(0) scale(1); opacity:1; }
 }
-@keyframes gd-mascot-happy{
-  0%,100%{transform:translate3d(0,0,0)}
-  40%{transform:translate3d(0,-10px,0)}
-}
-@keyframes gd-mascot-proud{
-  0%,100%{transform:translate3d(0,0,0) scale(1)}
-  40%{transform:translate3d(0,-8px,0) scale(1.06)}
-}
-@keyframes gd-mascot-sad{
-  0%,100%{transform:translate3d(0,0,0)}
-  45%{transform:translate3d(0,5px,0)}
-}
+@keyframes am-flap-l { from { transform:rotate(44deg); } to { transform:rotate(-20deg); } }
+@keyframes am-flap-r { from { transform:rotate(-44deg); } to { transform:rotate(20deg); } }
+@keyframes am-shadow-in { 0%,60% { opacity:0; transform:scale(.4); } 100% { opacity:1; transform:scale(1); } }
+.am-pop { animation:am-pop .45s cubic-bezier(.2,1.3,.4,1) both; }
+@keyframes am-pop { 0% { transform:scale(.4) translateY(14px); opacity:0; } 65% { transform:scale(1.08); opacity:1; } 100% { transform:scale(1); opacity:1; } }
+.am-jump .am-fig { animation:am-jump .62s cubic-bezier(.3,.9,.4,1) 2; }
+.am-jump .am-shadow { animation:am-jump-shadow .62s ease-in-out 2; }
+@keyframes am-jump { 0%,100% { transform:translateY(0) scale(1,1); } 18% { transform:translateY(0) scale(1.06,.9); } 50% { transform:translateY(-30px) scale(.96,1.05); } 82% { transform:translateY(0) scale(1.05,.93); } }
+@keyframes am-jump-shadow { 0%,100% { transform:scale(1); opacity:1; } 50% { transform:scale(.6); opacity:.5; } }
+.am-jump .sp { animation:am-twinkle .5s ease-in-out 4 alternate; }
+@keyframes am-twinkle { from { transform:scale(.4) rotate(0); opacity:.4; } to { transform:scale(1.2) rotate(35deg); opacity:1; } }
+.am-shake .am-fig { animation:am-shake .55s ease-in-out 1; }
+@keyframes am-shake { 0%,100% { transform:translateX(0) rotate(0); } 20% { transform:translateX(-7px) rotate(-4deg); } 40% { transform:translateX(7px) rotate(4deg); } 60% { transform:translateX(-5px) rotate(-2deg); } 80% { transform:translateX(4px) rotate(2deg); } }
+.am-hop .am-fig { animation:am-hop .45s cubic-bezier(.3,.9,.4,1) 1; }
+@keyframes am-hop { 0%,100% { transform:translateY(0); } 40% { transform:translateY(-16px) scale(.97,1.04); } }
+.am-click { cursor:pointer; }
 
-.gd-mascot-anim{
-  animation:gd-mascot-pop .4s cubic-bezier(.2,1.2,.4,1) both;
-  will-change:transform,opacity;
+/* ---------- spraakwolk ---------- */
+.am-bubble {
+  position:relative; flex:1; min-width:0; padding:12px 16px; border:2px solid var(--line,#E5E5E5); border-radius:16px;
+  background:var(--surface,#fff); color:var(--text,#4B4B4B); font:700 18px/1.4 var(--font-ui,inherit); text-align:left;
+  animation:am-bubble-in .35s cubic-bezier(.2,1.3,.4,1) .12s both; transform-origin:0 50%;
 }
-.gd-mascot-anim.gd-mascot--happy{animation:gd-mascot-pop .35s cubic-bezier(.2,1.2,.4,1) both,gd-mascot-happy .7s ease-out .3s 1}
-.gd-mascot-anim.gd-mascot--proud{animation:gd-mascot-pop .35s cubic-bezier(.2,1.2,.4,1) both,gd-mascot-proud .7s ease-out .3s 1}
-.gd-mascot-anim.gd-mascot--sad{animation:gd-mascot-pop .35s cubic-bezier(.2,1.2,.4,1) both,gd-mascot-sad .75s ease-out .3s 1}
+.am-bubble::before {
+  content:""; position:absolute; left:-9px; top:50%; width:14px; height:14px; background:var(--surface,#fff);
+  border-left:2px solid var(--line,#E5E5E5); border-bottom:2px solid var(--line,#E5E5E5); transform:translateY(-50%) rotate(45deg);
+}
+.am-bubble [lang="ar"] { font-family:var(--font-ar,serif); font-size:1.25em; line-height:1.6; }
+@keyframes am-bubble-in { from { transform:scale(.6); opacity:0; } to { transform:scale(1); opacity:1; } }
 
-/* will-change uitzetten na animatie */
-.gd-mascot-anim{animation-fill-mode:both}
+/* ---------- naast de vraag ---------- */
+.am-coach { display:flex; align-items:center; gap:14px; margin:14px 0 18px; }
+.am-coach .am { --am-size:74px; }
+.am-title-hidden { position:absolute !important; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+.am-tip .am-bubble { font-weight:600; font-size:16px; }
 
-@media(prefers-reduced-motion:reduce){
-  .gd-mascot-anim,
-  .gd-mascot-anim.gd-mascot--happy,
-  .gd-mascot-anim.gd-mascot--proud,
-  .gd-mascot-anim.gd-mascot--sad{animation:none!important;will-change:auto}
-}
-@media(max-width:420px){
-  .gd-mascot{width:56px}
-  .gd-finish-mascot .gd-mascot{width:88px}
-  .lh-streak-mascot .gd-mascot{width:40px}
-}
+/* ---------- startpagina ---------- */
+.am-hero { display:flex; justify-content:center; align-items:flex-end; gap:14px; margin:0 auto 6px; max-width:420px; }
+.am-hero .am { --am-size:96px; }
+.am-hero .am-bubble { flex:0 1 auto; margin-bottom:34px; max-width:240px; }
+.am-hero .am-click:active { transform:scale(.97); }
 
+/* ---------- feedbackbalk ---------- */
+.gd-feedback-head { display:flex; align-items:center; gap:12px; margin-bottom:6px; }
+.gd-feedback-head > strong { margin:0; }
+.gd-feedback-head .am { --am-size:62px; margin-top:-26px; }
 
-/* Buddy: rondvliegen, zwaaien, aankomen */
-.al-mascot-buddy{
-  position:fixed;
-  z-index:90;
-  top:12vh;left:78vw;
-  width:72px;height:72px;padding:0;
-  border:0;background:transparent;cursor:pointer;
-  filter:drop-shadow(0 6px 10px rgba(0,0,0,.25));
-  transition: top 1.15s cubic-bezier(.22,.7,.3,1), left 1.15s cubic-bezier(.22,.7,.3,1);
-  -webkit-tap-highlight-color:transparent;
-}
-.al-mascot-buddy .gd-mascot{
-  width:72px;height:auto;pointer-events:none;display:block;
-}
-.al-mascot-buddy:hover{filter:drop-shadow(0 8px 14px rgba(0,0,0,.3))}
-.al-mascot-buddy:active{transform:scale(.96)}
+/* ---------- eindscherm, streak, leeg ---------- */
+.gd-finish-mascot { position:relative; display:flex; justify-content:center; margin:0 auto 6px; }
+.gd-finish-mascot .am { --am-size:132px; }
+.lh-streak-mascot { flex:none; margin-left:auto; }
+.lh-streak-mascot .am { --am-size:58px; }
+.lh-empty-mascot { display:flex; justify-content:center; margin:0 auto 12px; }
+.lh-empty-mascot .am { --am-size:104px; }
 
-@keyframes al-mascot-bob{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-7px)}
-}
-@keyframes al-mascot-wave{
-  0%,100%{transform:rotate(0)}
-  20%{transform:rotate(-14deg) translateY(-4px)}
-  40%{transform:rotate(12deg) translateY(-2px)}
-  60%{transform:rotate(-10deg) translateY(-4px)}
-  80%{transform:rotate(8deg)}
-}
-@keyframes al-mascot-arrive{
-  0%{transform:scale(.2) translateY(20px);opacity:0}
-  70%{transform:scale(1.08) translateY(-4px);opacity:1}
-  100%{transform:scale(1) translateY(0);opacity:1}
-}
-@keyframes al-mascot-flyaway{
-  0%{transform:translate3d(0,0,0) scale(1) rotate(0);opacity:1}
-  12%{transform:translate3d(0,-10px,0) scale(1.06) rotate(-5deg);opacity:1}
-  40%{transform:translate3d(calc(var(--fly-x,40vw) * .18), calc(var(--fly-y,-40vh) * .18), 0) scale(1.04) rotate(-10deg);opacity:1}
-  100%{transform:translate3d(var(--fly-x,70vw), var(--fly-y,-45vh), 0) scale(.4) rotate(26deg);opacity:0}
-}
+/* ---------- confetti ---------- */
+.am-confetti { position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:50; }
+.am-confetti i { position:absolute; top:-12px; width:9px; height:14px; border-radius:2px; animation:am-fall 2s linear forwards; }
+@keyframes am-fall { 0% { transform:translateY(-10px) rotate(0); opacity:1; } 100% { transform:translateY(105vh) rotate(540deg); opacity:.9; } }
 
-.al-mascot-buddy.is-bob .gd-mascot{animation:al-mascot-bob 1.6s ease-in-out infinite}
-.al-mascot-buddy.is-waving .gd-mascot{animation:al-mascot-wave .7s ease-in-out 2}
-.al-mascot-buddy.is-arrive{animation:al-mascot-arrive .55s cubic-bezier(.2,1.2,.4,1) both}
-.al-mascot-buddy.is-gliding{
-  transition: top 1.4s cubic-bezier(.22,.7,.3,1), left 1.4s cubic-bezier(.22,.7,.3,1);
+@media (max-width:420px) {
+  .am-coach .am { --am-size:64px; }
+  .am-bubble { font-size:17px; padding:10px 14px; }
+  .am-hero .am { --am-size:84px; }
+  .gd-finish-mascot .am { --am-size:116px; }
 }
-.al-mascot-buddy.is-flapping .gd-mascot{
-  animation:al-mascot-flap .28s ease-in-out infinite;
+@media (prefers-reduced-motion: reduce) {
+  .am, .am *, .am-bubble, .am-confetti i { animation:none !important; transition:none !important; }
+  .am-fly, .am-pop { opacity:1 !important; transform:none !important; }
+  .am-confetti { display:none; }
 }
-@keyframes al-mascot-flap{
-  0%,100%{transform:translateY(0) rotate(-4deg) scale(1)}
-  50%{transform:translateY(-6px) rotate(5deg) scale(1.04)}
-}
-.al-mascot-buddy.is-flying{
-  pointer-events:none;
-  transition:none;
-  animation:al-mascot-flyaway 2s cubic-bezier(.22,.5,.3,1) forwards;
-  will-change:transform,opacity;
-}
-.al-mascot-buddy.is-flying .gd-mascot{animation:none}
-
-@media(min-width:900px){
-  .al-mascot-buddy{width:88px;height:88px}
-  .al-mascot-buddy .gd-mascot{width:88px}
-}
-@media(prefers-reduced-motion:reduce){
-  .al-mascot-buddy{transition:none}
-  .al-mascot-buddy.is-bob .gd-mascot,
-  .al-mascot-buddy.is-waving .gd-mascot,
-  .al-mascot-buddy.is-flapping .gd-mascot,
-  .al-mascot-buddy.is-arrive,
-  .al-mascot-buddy.is-flying{animation:none!important}
-  .al-mascot-buddy.is-flying{opacity:0}
-}
-
