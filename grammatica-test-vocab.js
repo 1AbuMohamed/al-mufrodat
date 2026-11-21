@@ -1,11 +1,11 @@
-/* Al-Mufrodat · Grammatica Lab: woordenschat-leerpad en oefenrondes.
+/* Al-Mufrodat · Grammatica Lab: woordenschat-leerpad, flashcards en oefenrondes.
  * - Woorden komen uit vocab_words.js (afgeleid van BASE_WORDS in app_core.js).
  * - Voortgang staat in dezelfde sleutel als de gewone woordenschat (alm_progress),
  *   zodat beide kanten van de site dezelfde beheersing tonen.
  * - XP en streak gaan naar de XP van het Grammatica Lab (+ Leaderboard).
- * - Didactische opbouw met echte foto's (img/), 2x2 foto-keuze (ar2img),
- *   beeldherkenning (img2ar / img2nl), kleurstalen, conceptbadges, uitspraak
- *   en herhaling van fouten aan het eind van de ronde.
+ * - Didactische opbouw met strakke Duolingo-stijl vector-illustraties (img/duo/*.svg),
+ *   interactieve flip-flashcards, 2x2 beeldkeuze (ar2img), beeldherkenning (pic2ar),
+ *   snelle waar/niet-waar checks (tf), kleurstalen, uitspraak & herhaling van fouten.
  * Er worden geen woorden of vertalingen verzonnen.
  */
 (function () {
@@ -68,7 +68,11 @@
   }
   function getP(map, id) { return map[id] || { box: 0, seen: 0, correct: 0 }; }
 
-  function speak(text) {
+  function speak(text, btn) {
+    if (btn && btn.classList) {
+      btn.classList.add('speaking');
+      setTimeout(function () { if (btn && btn.classList) btn.classList.remove('speaking'); }, 800);
+    }
     if (!text || typeof window === 'undefined' || !window.speechSynthesis) return;
     try {
       window.speechSynthesis.cancel();
@@ -88,95 +92,174 @@
       home: '<path d="m3 10 9-7 9 7v11H3Z"/><path d="M9 21v-8h6v8"/>',
       close: '<path d="M6 6l12 12M18 6 6 18"/>',
       speaker: '<path d="M4 9v6h4l5 4V5L8 9Z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/>',
-      camera: '<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>'
+      bulb: '<path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.7.6 1 1.4 1 2.3h6c0-.9.3-1.7 1-2.3A7 7 0 0 0 12 2Z"/>'
     };
     return '<svg class="gd-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (paths[name] || '') + '</svg>';
   }
 
-  /* ---------- visuele ondersteuning (foto's, kleuren & badges) ---------- */
+  /* ---------- visuele ondersteuning (exacte stam-koppeling zonder foutieve deelstrings) ---------- */
   function norm(s) {
-    return String(s || '').replace(/[\u064B-\u065F\u0670\u0640]/g, '').replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').trim();
+    return String(s || '')
+      .replace(/[\u064B-\u065F\u0670\u0640]/g, '')
+      .replace(/[أإآ]/g, 'ا')
+      .replace(/ة/g, 'ه')
+      .replace(/ى/g, 'ي')
+      .trim();
   }
 
-  var PHOTO_MAP = {
-    'بيت': 'img/duo/house.svg', 'بيوت': 'img/duo/house.svg', 'مسجد': 'img/duo/mosque.svg', 'مساجد': 'img/duo/mosque.svg',
-    'باب': 'img/duo/door.svg', 'ابواب': 'img/duo/door.svg', 'كتاب': 'img/duo/book.svg', 'كتب': 'img/duo/book.svg',
-    'قلم': 'img/duo/pen.svg', 'اقلام': 'img/duo/pen.svg', 'مفتاح': 'img/duo/key.svg', 'مفاتيح': 'img/duo/key.svg',
-    'مكتب': 'img/duo/desk.svg', 'مكاتب': 'img/duo/desk.svg', 'سرير': 'img/duo/bed.svg', 'سرر': 'img/duo/bed.svg',
-    'كرسي': 'img/duo/chair.svg', 'كراسي': 'img/duo/chair.svg', 'نجم': 'img/duo/star.svg', 'نجوم': 'img/duo/star.svg',
-    'قميص': 'img/duo/shirt.svg', 'قمصان': 'img/duo/shirt.svg', 'طبيب': 'img/duo/doctor.svg', 'اطباء': 'img/duo/doctor.svg',
-    'طبيبه': 'img/duo/doctor.svg', 'طبيبات': 'img/duo/doctor.svg', 'ولد': 'img/duo/boy.svg', 'اولاد': 'img/duo/boy.svg',
-    'طالب': 'img/duo/student.svg', 'طلاب': 'img/duo/student.svg', 'طالبه': 'img/duo/student.svg', 'طالبات': 'img/duo/student.svg',
-    'رجل': 'img/duo/man.svg', 'رجال': 'img/duo/man.svg', 'تاجر': 'img/duo/merchant.svg', 'تجار': 'img/duo/merchant.svg',
-    'كلب': 'img/duo/dog.svg', 'كلاب': 'img/duo/dog.svg', 'قط': 'img/duo/cat.svg', 'قطط': 'img/duo/cat.svg',
-    'حمار': 'img/duo/donkey.svg', 'حمير': 'img/duo/donkey.svg', 'حمر': 'img/duo/donkey.svg', 'حصان': 'img/duo/horse.svg',
-    'احصنه': 'img/duo/horse.svg', 'خيل': 'img/duo/horse.svg', 'فرس': 'img/duo/horse.svg', 'جمل': 'img/duo/camel.svg',
-    'جمال': 'img/duo/camel.svg', 'ناقه': 'img/duo/camel.svg', 'ديك': 'img/duo/rooster.svg', 'ديوك': 'img/duo/rooster.svg',
-    'مدرس': 'img/duo/teacher.svg', 'مدرسون': 'img/duo/teacher.svg', 'مدرسه': 'img/duo/school.svg', 'مدارس': 'img/duo/school.svg',
-    'استاذ': 'img/duo/teacher.svg', 'اساتذه': 'img/duo/teacher.svg', 'منديل': 'img/duo/handkerchief.svg', 'مناديل': 'img/duo/handkerchief.svg',
-    'امام': 'img/duo/imam.svg', 'ائمه': 'img/duo/imam.svg', 'حجر': 'img/duo/stone.svg', 'احجار': 'img/duo/stone.svg',
-    'سكر': 'img/duo/sugar.svg', 'لبن': 'img/duo/milk.svg', 'حليب': 'img/duo/milk.svg', 'ورق': 'img/duo/paper.svg',
-    'اوراق': 'img/duo/paper.svg', 'ماء': 'img/duo/water.svg', 'مياه': 'img/duo/water.svg', 'تفاح': 'img/duo/apple.svg',
-    'دكان': 'img/duo/shop.svg', 'دكاكين': 'img/duo/shop.svg', 'شمس': 'img/duo/sun.svg', 'قمر': 'img/duo/moon.svg',
-    'غرفه': 'img/duo/room.svg', 'غرف': 'img/duo/room.svg', 'سماء': 'img/duo/sky.svg', 'سموات': 'img/duo/sky.svg',
-    'حمام': 'img/duo/bathroom.svg', 'حمامات': 'img/duo/bathroom.svg', 'فصل': 'img/duo/classroom.svg', 'فصول': 'img/duo/classroom.svg',
-    'مطبخ': 'img/duo/kitchen.svg', 'مطابخ': 'img/duo/kitchen.svg', 'مرحاض': 'img/duo/bathroom.svg', 'مراحيض': 'img/duo/bathroom.svg',
-    'جامعه': 'img/duo/university.svg', 'جامعات': 'img/duo/university.svg', 'سوق': 'img/duo/shop.svg', 'اسواق': 'img/duo/shop.svg',
-    'مدير': 'img/duo/teacher.svg', 'يابان': 'img/duo/city.svg', 'صين': 'img/duo/city.svg', 'هند': 'img/duo/city.svg',
-    'فلبين': 'img/duo/city.svg', 'شارع': 'img/duo/city.svg', 'شوارع': 'img/duo/city.svg', 'سياره': 'img/duo/car.svg',
-    'سيارات': 'img/duo/car.svg', 'حقيبه': 'img/duo/bag.svg', 'حقائب': 'img/duo/bag.svg', 'اخت': 'img/duo/girl.svg',
-    'اخوات': 'img/duo/girl.svg', 'بنت': 'img/duo/girl.svg', 'بنات': 'img/duo/girl.svg', 'قدر': 'img/duo/kitchen.svg',
-    'ملعقه': 'img/duo/spoon.svg', 'ملاعق': 'img/duo/spoon.svg', 'بقره': 'img/duo/cow.svg', 'بقر': 'img/duo/cow.svg',
-    'فلاح': 'img/duo/man.svg', 'فلاحون': 'img/duo/man.svg', 'ام': 'img/duo/mother.svg', 'امهات': 'img/duo/mother.svg',
-    'اب': 'img/duo/man.svg', 'اباء': 'img/duo/man.svg', 'شاي': 'img/duo/tea.svg', 'قهوه': 'img/duo/coffee.svg',
-    'مشرق': 'img/duo/sun.svg', 'مغرب': 'img/duo/sun.svg', 'دراجه': 'img/duo/bike.svg', 'دراجات': 'img/duo/bike.svg',
-    'بيضه': 'img/duo/egg.svg', 'بيض': 'img/duo/egg.svg', 'مؤذن': 'img/duo/imam.svg', 'مؤذنون': 'img/duo/imam.svg',
-    'بطه': 'img/duo/duck.svg', 'بط': 'img/duo/duck.svg', 'دجاجه': 'img/duo/chicken.svg', 'دجاج': 'img/duo/chicken.svg',
-    'مستشفي': 'img/duo/hospital.svg', 'مستشفيات': 'img/duo/hospital.svg', 'سكين': 'img/duo/knife.svg', 'سكاكين': 'img/duo/knife.svg',
+  var PHOTO_EXACT = {
+    'بيت': 'img/duo/house.svg', 'بيوت': 'img/duo/house.svg',
+    'مسجد': 'img/duo/mosque.svg', 'مساجد': 'img/duo/mosque.svg',
+    'باب': 'img/duo/door.svg', 'ابواب': 'img/duo/door.svg',
+    'كتاب': 'img/duo/book.svg', 'كتب': 'img/duo/book.svg',
+    'قلم': 'img/duo/pen.svg', 'اقلام': 'img/duo/pen.svg',
+    'مفتاح': 'img/duo/key.svg', 'مفاتيح': 'img/duo/key.svg',
+    'مكتب': 'img/duo/desk.svg', 'مكاتب': 'img/duo/desk.svg',
+    'طاوله': 'img/duo/desk.svg',
+    'سرير': 'img/duo/bed.svg', 'سرر': 'img/duo/bed.svg',
+    'كرسي': 'img/duo/chair.svg', 'كراسي': 'img/duo/chair.svg',
+    'نجم': 'img/duo/star.svg', 'نجوم': 'img/duo/star.svg',
+    'قميص': 'img/duo/shirt.svg', 'قمصان': 'img/duo/shirt.svg',
+    'طبيب': 'img/duo/doctor.svg', 'اطباء': 'img/duo/doctor.svg',
+    'طبيبه': 'img/duo/doctor.svg', 'طبيبات': 'img/duo/doctor.svg',
+    'ممرض': 'img/duo/doctor.svg', 'ممرضه': 'img/duo/doctor.svg',
+    'ولد': 'img/duo/boy.svg', 'اولاد': 'img/duo/boy.svg',
+    'ابن': 'img/duo/boy.svg', 'ابناء': 'img/duo/boy.svg',
+    'اخ': 'img/duo/boy.svg', 'اخوه': 'img/duo/boy.svg',
+    'طفل': 'img/duo/child.svg', 'اطفال': 'img/duo/child.svg',
+    'طالب': 'img/duo/student.svg', 'طلاب': 'img/duo/student.svg',
+    'طالبه': 'img/duo/student.svg', 'طالبات': 'img/duo/student.svg',
+    'زميل': 'img/duo/student.svg', 'زملاء': 'img/duo/student.svg', 'زميله': 'img/duo/student.svg',
+    'رجل': 'img/duo/man.svg', 'رجال': 'img/duo/man.svg',
+    'اب': 'img/duo/man.svg', 'اباء': 'img/duo/man.svg',
+    'عم': 'img/duo/man.svg', 'اعمام': 'img/duo/man.svg',
+    'خال': 'img/duo/man.svg', 'فلاح': 'img/duo/man.svg', 'فلاحون': 'img/duo/man.svg',
+    'زوج': 'img/duo/man.svg', 'حاج': 'img/duo/man.svg', 'حجاج': 'img/duo/man.svg',
+    'مفتش': 'img/duo/man.svg', 'وزير': 'img/duo/man.svg', 'وزراء': 'img/duo/man.svg',
+    'مهندس': 'img/duo/engineer.svg', 'مهندسون': 'img/duo/engineer.svg',
+    'تاجر': 'img/duo/merchant.svg', 'تجار': 'img/duo/merchant.svg',
+    'كلب': 'img/duo/dog.svg', 'كلاب': 'img/duo/dog.svg',
+    'قط': 'img/duo/cat.svg', 'قطط': 'img/duo/cat.svg',
+    'حمار': 'img/duo/donkey.svg', 'حمير': 'img/duo/donkey.svg', 'حمر': 'img/duo/donkey.svg',
+    'حصان': 'img/duo/horse.svg', 'احصنه': 'img/duo/horse.svg', 'خيل': 'img/duo/horse.svg', 'فرس': 'img/duo/horse.svg',
+    'جمل': 'img/duo/camel.svg', 'جمال': 'img/duo/camel.svg', 'ناقه': 'img/duo/camel.svg',
+    'ديك': 'img/duo/rooster.svg', 'ديوك': 'img/duo/rooster.svg',
+    'مدرس': 'img/duo/teacher.svg', 'مدرسون': 'img/duo/teacher.svg',
+    'مدرسه': 'img/duo/school.svg', 'مدارس': 'img/duo/school.svg',
+    'مدير': 'img/duo/teacher.svg',
+    'استاذ': 'img/duo/teacher.svg', 'اساتذه': 'img/duo/teacher.svg',
+    'منديل': 'img/duo/handkerchief.svg', 'مناديل': 'img/duo/handkerchief.svg',
+    'امام': 'img/duo/imam.svg', 'ائمه': 'img/duo/imam.svg',
+    'مؤذن': 'img/duo/imam.svg', 'مؤذنون': 'img/duo/imam.svg',
+    'حجر': 'img/duo/stone.svg', 'احجار': 'img/duo/stone.svg',
+    'سكر': 'img/duo/sugar.svg',
+    'لبن': 'img/duo/milk.svg', 'حليب': 'img/duo/milk.svg',
+    'ورق': 'img/duo/paper.svg', 'اوراق': 'img/duo/paper.svg',
+    'ماء': 'img/duo/water.svg', 'مياه': 'img/duo/water.svg',
+    'بحر': 'img/duo/water.svg', 'بحار': 'img/duo/water.svg', 'نهر': 'img/duo/water.svg', 'انهار': 'img/duo/water.svg',
+    'تفاح': 'img/duo/apple.svg', 'تفاحه': 'img/duo/apple.svg',
+    'فاكهه': 'img/duo/fruit.svg', 'فواكه': 'img/duo/fruit.svg',
+    'دكان': 'img/duo/shop.svg', 'دكاكين': 'img/duo/shop.svg',
+    'سوق': 'img/duo/shop.svg', 'اسواق': 'img/duo/shop.svg',
+    'شمس': 'img/duo/sun.svg', 'مشرق': 'img/duo/sun.svg', 'شرق': 'img/duo/sun.svg', 'صباح': 'img/duo/sun.svg',
+    'قمر': 'img/duo/moon.svg', 'مساء': 'img/duo/moon.svg', 'بارحه': 'img/duo/moon.svg',
+    'غرفه': 'img/duo/room.svg', 'غرف': 'img/duo/room.svg',
+    'سماء': 'img/duo/sky.svg', 'سموات': 'img/duo/sky.svg',
+    'حمام': 'img/duo/bathroom.svg', 'حمامات': 'img/duo/bathroom.svg',
+    'مرحاض': 'img/duo/bathroom.svg', 'مراحيض': 'img/duo/bathroom.svg',
+    'فصل': 'img/duo/classroom.svg', 'فصول': 'img/duo/classroom.svg',
+    'سبوره': 'img/duo/classroom.svg',
+    'مطبخ': 'img/duo/kitchen.svg', 'مطابخ': 'img/duo/kitchen.svg', 'قدر': 'img/duo/kitchen.svg',
+    'جامعه': 'img/duo/university.svg', 'جامعات': 'img/duo/university.svg', 'كليه': 'img/duo/university.svg',
+    'شارع': 'img/duo/city.svg', 'شوارع': 'img/duo/city.svg',
+    'مدينه': 'img/duo/city.svg', 'مدن': 'img/duo/city.svg', 'حي': 'img/duo/city.svg',
+    'مكه': 'img/duo/mosque.svg', 'قاهره': 'img/duo/city.svg', 'بغداد': 'img/duo/city.svg',
+    'جده': 'img/duo/city.svg', 'دمشق': 'img/duo/city.svg', 'رياض': 'img/duo/city.svg',
+    'اصطنبول': 'img/duo/city.svg', 'طائف': 'img/duo/city.svg', 'واشنطن': 'img/duo/city.svg',
+    'يابان': 'img/duo/globe.svg', 'صين': 'img/duo/globe.svg', 'هند': 'img/duo/globe.svg',
+    'فلبين': 'img/duo/globe.svg', 'مصر': 'img/duo/globe.svg', 'باكستان': 'img/duo/globe.svg',
+    'امريكا': 'img/duo/globe.svg', 'المانيا': 'img/duo/globe.svg', 'عراق': 'img/duo/globe.svg',
+    'انكلترا': 'img/duo/globe.svg', 'سويسرا': 'img/duo/globe.svg', 'كويت': 'img/duo/globe.svg',
+    'اندونيسيا': 'img/duo/globe.svg', 'اوروبا': 'img/duo/globe.svg', 'اسيا': 'img/duo/globe.svg',
+    'بلد': 'img/duo/globe.svg', 'بلاد': 'img/duo/globe.svg',
+    'سياره': 'img/duo/car.svg', 'سيارات': 'img/duo/car.svg',
+    'طائره': 'img/duo/plane.svg', 'طائرات': 'img/duo/plane.svg',
+    'مطار': 'img/duo/airport.svg',
+    'فندق': 'img/duo/hotel.svg', 'فنادق': 'img/duo/hotel.svg',
+    'شركه': 'img/duo/city.svg', 'شركات': 'img/duo/city.svg',
+    'حقيبه': 'img/duo/bag.svg', 'حقائب': 'img/duo/bag.svg',
+    'بنت': 'img/duo/girl.svg', 'بنات': 'img/duo/girl.svg',
+    'اخت': 'img/duo/girl.svg', 'اخوات': 'img/duo/girl.svg',
+    'فتاه': 'img/duo/girl.svg', 'زوجه': 'img/duo/girl.svg', 'عمه': 'img/duo/girl.svg', 'خاله': 'img/duo/girl.svg',
+    'ام': 'img/duo/mother.svg', 'امهات': 'img/duo/mother.svg',
+    'ملعقه': 'img/duo/spoon.svg', 'ملاعق': 'img/duo/spoon.svg',
+    'بقره': 'img/duo/cow.svg', 'بقر': 'img/duo/cow.svg',
+    'شاي': 'img/duo/tea.svg', 'قهوه': 'img/duo/coffee.svg',
+    'فنجان': 'img/duo/cup.svg', 'فناجين': 'img/duo/cup.svg', 'كوب': 'img/duo/cup.svg', 'اكواب': 'img/duo/cup.svg',
+    'دراجه': 'img/duo/bike.svg', 'دراجات': 'img/duo/bike.svg',
+    'بيضه': 'img/duo/egg.svg', 'بيض': 'img/duo/egg.svg',
+    'بطه': 'img/duo/duck.svg', 'بط': 'img/duo/duck.svg',
+    'دجاجه': 'img/duo/chicken.svg', 'دجاج': 'img/duo/chicken.svg',
+    'مستشفي': 'img/duo/hospital.svg', 'مستشفيات': 'img/duo/hospital.svg', 'مستوصف': 'img/duo/hospital.svg',
+    'سكين': 'img/duo/knife.svg', 'سكاكين': 'img/duo/knife.svg',
     'طائر': 'img/duo/bird.svg', 'طيور': 'img/duo/bird.svg', 'عصفور': 'img/duo/bird.svg', 'عصافير': 'img/duo/bird.svg',
-    'مدينه': 'img/duo/city.svg', 'مدن': 'img/duo/city.svg', 'قاهره': 'img/duo/city.svg', 'زميل': 'img/duo/student.svg',
-    'زملاء': 'img/duo/student.svg', 'زوج': 'img/duo/man.svg', 'زوجه': 'img/duo/girl.svg', 'طفل': 'img/duo/child.svg',
-    'اطفال': 'img/duo/child.svg', 'كويت': 'img/duo/city.svg', 'اخ': 'img/duo/boy.svg', 'اخوه': 'img/duo/boy.svg',
-    'شجره': 'img/duo/tree.svg', 'اشجار': 'img/duo/tree.svg', 'حديقه': 'img/duo/tree.svg', 'حدائق': 'img/duo/tree.svg',
-    'مهندس': 'img/duo/man.svg', 'مهندسون': 'img/duo/man.svg', 'حاج': 'img/duo/man.svg', 'حجاج': 'img/duo/man.svg',
-    'فندق': 'img/duo/city.svg', 'فنادق': 'img/duo/city.svg', 'طائره': 'img/duo/sky.svg', 'طائرات': 'img/duo/sky.svg',
-    'بحر': 'img/duo/water.svg', 'بحار': 'img/duo/water.svg', 'شركه': 'img/duo/city.svg', 'شركات': 'img/duo/city.svg',
-    'ساعه': 'img/duo/clock.svg', 'ساعات': 'img/duo/clock.svg', 'فنجان': 'img/duo/cup.svg', 'فناجين': 'img/duo/cup.svg',
-    'بغداد': 'img/duo/city.svg', 'جده': 'img/duo/city.svg', 'مكه': 'img/duo/city.svg', 'دمشق': 'img/duo/city.svg',
-    'رياض': 'img/duo/city.svg', 'اصطنبول': 'img/duo/city.svg', 'طائف': 'img/duo/city.svg', 'واشنطن': 'img/duo/city.svg',
-    'مكتبه': 'img/duo/library.svg', 'مكتبات': 'img/duo/library.svg', 'فاكهه': 'img/duo/fruit.svg', 'فواكه': 'img/duo/fruit.svg',
-    'سمك': 'img/duo/fish.svg', 'اسماك': 'img/duo/fish.svg', 'ثلاجه': 'img/duo/fridge.svg', 'ثلاجات': 'img/duo/fridge.svg',
-    'نافذه': 'img/duo/window.svg', 'نوافذ': 'img/duo/window.svg', 'زهور': 'img/duo/flower.svg', 'زهره': 'img/duo/flower.svg',
-    'ازهار': 'img/duo/flower.svg'
+    'شجره': 'img/duo/tree.svg', 'اشجار': 'img/duo/tree.svg',
+    'حديقه': 'img/duo/park.svg', 'حدائق': 'img/duo/park.svg',
+    'ساعه': 'img/duo/clock.svg', 'ساعات': 'img/duo/clock.svg',
+    'مكتبه': 'img/duo/library.svg', 'مكتبات': 'img/duo/library.svg',
+    'دفتر': 'img/duo/notebook.svg', 'دفاتر': 'img/duo/notebook.svg',
+    'اختبار': 'img/duo/exam.svg', 'امتحان': 'img/duo/exam.svg',
+    'سمك': 'img/duo/fish.svg', 'سمكه': 'img/duo/fish.svg', 'اسماك': 'img/duo/fish.svg',
+    'ثلاجه': 'img/duo/fridge.svg', 'ثلاجات': 'img/duo/fridge.svg',
+    'نافذه': 'img/duo/window.svg', 'نوافذ': 'img/duo/window.svg',
+    'زهره': 'img/duo/flower.svg', 'زهور': 'img/duo/flower.svg', 'ازهار': 'img/duo/flower.svg',
+    'يد': 'img/duo/hand.svg', 'ايد': 'img/duo/hand.svg',
+    'عين': 'img/duo/eye.svg', 'عيون': 'img/duo/eye.svg',
+    'اذن': 'img/duo/ear.svg', 'اذان': 'img/duo/ear.svg'
   };
 
-  var NL_PHOTO_MAP = [
-    ['theekopje', 'img/duo/cup.svg'], ['klaslokaal', 'img/duo/classroom.svg'], ['universiteit', 'img/duo/university.svg'],
-    ['bibliotheek', 'img/duo/library.svg'], ['ziekenhuis', 'img/duo/hospital.svg'], ['handelaar', 'img/duo/merchant.svg'],
-    ['badkamer', 'img/duo/bathroom.svg'], ['koelkast', 'img/duo/fridge.svg'], ['zakdoek', 'img/duo/handkerchief.svg'],
-    ['horloge', 'img/duo/clock.svg'], ['yoghurt', 'img/duo/milk.svg'], ['sleutel', 'img/duo/key.svg'],
-    ['student', 'img/duo/student.svg'], ['moskee', 'img/duo/mosque.svg'], ['bureau', 'img/duo/desk.svg'],
-    ['dokter', 'img/duo/doctor.svg'], ['jongen', 'img/duo/boy.svg'], ['meisje', 'img/duo/girl.svg'],
-    ['kameel', 'img/duo/camel.svg'], ['leraar', 'img/duo/teacher.svg'], ['docent', 'img/duo/teacher.svg'],
-    ['suiker', 'img/duo/sugar.svg'], ['papier', 'img/duo/paper.svg'], ['winkel', 'img/duo/shop.svg'],
-    ['toilet', 'img/duo/bathroom.svg'], ['keuken', 'img/duo/kitchen.svg'], ['school', 'img/duo/school.svg'],
-    ['koffie', 'img/duo/coffee.svg'], ['moeder', 'img/duo/mother.svg'], ['bloem', 'img/duo/flower.svg'],
-    ['vogel', 'img/duo/bird.svg'], ['fruit', 'img/duo/fruit.svg'], ['kopje', 'img/duo/cup.svg'],
-    ['lepel', 'img/duo/spoon.svg'], ['fiets', 'img/duo/bike.svg'], ['markt', 'img/duo/shop.svg'],
-    ['hemel', 'img/duo/sky.svg'], ['lucht', 'img/duo/sky.svg'], ['kamer', 'img/duo/room.svg'],
-    ['appel', 'img/duo/apple.svg'], ['water', 'img/duo/water.svg'], ['steen', 'img/duo/stone.svg'],
-    ['paard', 'img/duo/horse.svg'], ['stoel', 'img/duo/chair.svg'], ['huis', 'img/duo/house.svg'],
-    ['deur', 'img/duo/door.svg'], ['boek', 'img/duo/book.svg'], ['ster', 'img/duo/star.svg'],
-    ['hemd', 'img/duo/shirt.svg'], ['kind', 'img/duo/child.svg'], ['hond', 'img/duo/dog.svg'],
-    ['ezel', 'img/duo/donkey.svg'], ['haan', 'img/duo/rooster.svg'], ['imam', 'img/duo/imam.svg'],
-    ['melk', 'img/duo/milk.svg'], ['maan', 'img/duo/moon.svg'], ['auto', 'img/duo/car.svg'],
-    ['thee', 'img/duo/tea.svg'], ['eend', 'img/duo/duck.svg'], ['stad', 'img/duo/city.svg'],
-    ['boom', 'img/duo/tree.svg'], ['raam', 'img/duo/window.svg'], ['klok', 'img/duo/clock.svg'],
-    ['pen', 'img/duo/pen.svg'], ['bed', 'img/duo/bed.svg'], ['man', 'img/duo/man.svg'],
-    ['kat', 'img/duo/cat.svg'], ['zon', 'img/duo/sun.svg'], ['tas', 'img/duo/bag.svg'],
-    ['koe', 'img/duo/cow.svg'], ['kip', 'img/duo/chicken.svg'], ['mes', 'img/duo/knife.svg'],
-    ['mus', 'img/duo/bird.svg'], ['vis', 'img/duo/fish.svg']
-  ];
+  var NL_PHOTO_WORDS = {
+    'huis': 'img/duo/house.svg', 'moskee': 'img/duo/mosque.svg', 'deur': 'img/duo/door.svg',
+    'boek': 'img/duo/book.svg', 'pen': 'img/duo/pen.svg', 'sleutel': 'img/duo/key.svg',
+    'bureau': 'img/duo/desk.svg', 'tafel': 'img/duo/desk.svg', 'bed': 'img/duo/bed.svg',
+    'stoel': 'img/duo/chair.svg', 'ster': 'img/duo/star.svg', 'hemd': 'img/duo/shirt.svg',
+    'dokter': 'img/duo/doctor.svg', 'arts': 'img/duo/doctor.svg', 'verpleger': 'img/duo/doctor.svg',
+    'verpleegster': 'img/duo/doctor.svg', 'jongen': 'img/duo/boy.svg', 'broer': 'img/duo/boy.svg',
+    'zoon': 'img/duo/boy.svg', 'kind': 'img/duo/child.svg', 'baby': 'img/duo/child.svg',
+    'meisje': 'img/duo/girl.svg', 'zus': 'img/duo/girl.svg', 'dochter': 'img/duo/girl.svg',
+    'jongedame': 'img/duo/girl.svg', 'student': 'img/duo/student.svg', 'studente': 'img/duo/student.svg',
+    'klasgenoot': 'img/duo/student.svg', 'klasgenoten': 'img/duo/student.svg',
+    'man': 'img/duo/man.svg', 'vader': 'img/duo/man.svg', 'ingenieur': 'img/duo/engineer.svg',
+    'handelaar': 'img/duo/merchant.svg', 'hond': 'img/duo/dog.svg', 'kat': 'img/duo/cat.svg',
+    'ezel': 'img/duo/donkey.svg', 'paard': 'img/duo/horse.svg', 'kameel': 'img/duo/camel.svg',
+    'haan': 'img/duo/rooster.svg', 'leraar': 'img/duo/teacher.svg', 'docent': 'img/duo/teacher.svg',
+    'directeur': 'img/duo/teacher.svg', 'zakdoek': 'img/duo/handkerchief.svg', 'imam': 'img/duo/imam.svg',
+    'steen': 'img/duo/stone.svg', 'suiker': 'img/duo/sugar.svg', 'melk': 'img/duo/milk.svg',
+    'yoghurt': 'img/duo/milk.svg', 'papier': 'img/duo/paper.svg', 'water': 'img/duo/water.svg',
+    'zee': 'img/duo/water.svg', 'rivier': 'img/duo/water.svg', 'appel': 'img/duo/apple.svg',
+    'winkel': 'img/duo/shop.svg', 'markt': 'img/duo/shop.svg', 'zon': 'img/duo/sun.svg',
+    'maan': 'img/duo/moon.svg', 'kamer': 'img/duo/room.svg', 'kamers': 'img/duo/room.svg',
+    'hemel': 'img/duo/sky.svg', 'badkamer': 'img/duo/bathroom.svg', 'toilet': 'img/duo/bathroom.svg',
+    'klaslokaal': 'img/duo/classroom.svg', 'schrijfbord': 'img/duo/classroom.svg', 'keuken': 'img/duo/kitchen.svg',
+    'kookpot': 'img/duo/kitchen.svg', 'school': 'img/duo/school.svg', 'universiteit': 'img/duo/university.svg',
+    'faculteit': 'img/duo/university.svg', 'straat': 'img/duo/city.svg', 'auto': 'img/duo/car.svg',
+    'vliegtuig': 'img/duo/plane.svg', 'vliegveld': 'img/duo/airport.svg', 'luchthaven': 'img/duo/airport.svg',
+    'hotel': 'img/duo/hotel.svg', 'tas': 'img/duo/bag.svg', 'moeder': 'img/duo/mother.svg',
+    'moeders': 'img/duo/mother.svg', 'lepel': 'img/duo/spoon.svg', 'koe': 'img/duo/cow.svg',
+    'thee': 'img/duo/tea.svg', 'koffie': 'img/duo/coffee.svg', 'kopje': 'img/duo/cup.svg',
+    'theekopje': 'img/duo/cup.svg', 'beker': 'img/duo/cup.svg', 'glas': 'img/duo/cup.svg',
+    'fiets': 'img/duo/bike.svg', 'ei': 'img/duo/egg.svg', 'eend': 'img/duo/duck.svg',
+    'kip': 'img/duo/chicken.svg', 'ziekenhuis': 'img/duo/hospital.svg', 'kliniek': 'img/duo/hospital.svg',
+    'mes': 'img/duo/knife.svg', 'fruit': 'img/duo/fruit.svg', 'vogel': 'img/duo/bird.svg',
+    'mus': 'img/duo/bird.svg', 'stad': 'img/duo/city.svg', 'bibliotheek': 'img/duo/library.svg',
+    'schrift': 'img/duo/notebook.svg', 'schriften': 'img/duo/notebook.svg',
+    'examen': 'img/duo/exam.svg', 'toets': 'img/duo/exam.svg',
+    'boom': 'img/duo/tree.svg', 'tuin': 'img/duo/park.svg', 'park': 'img/duo/park.svg',
+    'klok': 'img/duo/clock.svg', 'horloge': 'img/duo/clock.svg', 'bloem': 'img/duo/flower.svg',
+    'vis': 'img/duo/fish.svg', 'koelkast': 'img/duo/fridge.svg', 'raam': 'img/duo/window.svg',
+    'hand': 'img/duo/hand.svg', 'oog': 'img/duo/eye.svg', 'oor': 'img/duo/ear.svg',
+    'been': 'img/duo/foot.svg', 'voet': 'img/duo/foot.svg'
+  };
 
   var COLOR_MAP = {
     'ابيض': { color: '#FFFFFF', border: '#D0D0D0', name: 'wit' },
@@ -189,33 +272,58 @@
 
   var BADGE_MAP = {
     'بارد': '❄️', 'حار': '🔥', 'طويل': '📏', 'قصير': '📐', 'كبير': '🐘', 'صغير': '🐜',
-    'غني': '💰', 'فقير': '🪙', 'جديد': '✨', 'قديم': '⏳', 'نظيف': '🧼', 'وسخ': '🫧',
-    'خفيف': '🪶', 'ثقيل': '🏋️', 'مفتوح': '🔓', 'مكسور': '🔨', 'حلو': '🍯', 'مريض': '🩹',
-    'جميل': '🌸', 'قريب': '📍', 'بعيد': '🔭', 'واسع': '↔️', 'شكرا': '🙏', 'سؤال': '❓',
-    'يوم': '📅', 'دقيقه': '⏱️', 'مجله': '📰', 'درس': '📚', 'حرف': '🔤', 'كلمه': '💬',
-    'كلمات': '💬', 'لون': '🎨', 'الوان': '🎨', 'جالس': '🪑', 'واقف': '🚶', 'كريم': '🎁',
-    'ذهب': '🚶‍♂️', 'خرج': '🚪🚶', 'دخل': '🚪👈', 'جلس': '🪑', 'قال': '🗣️', 'قالت': '🗣️',
-    'سافر': '✈️', 'ساعد': '🤝', 'امس': '⏪', 'البارحه': '🌙', 'في': '📥', 'علي': '📦',
-    'تحت': '⬇️', 'امام': '➡️', 'خلف': '⬅️', 'واحد': '1️⃣', 'اثنان': '2️⃣', 'ثلاثه': '3️⃣',
-    'اربعه': '4️⃣', 'خمسه': '5️⃣', 'سته': '6️⃣', 'سبعه': '7️⃣', 'ثمانيه': '8️⃣', 'تسعه': '9️⃣',
-    'عشره': '🔟'
+    'غني': '💰', 'فقير': '🪙', 'جديد': '✨', 'قديم': '⏳', 'قدامي': '⏳', 'نظيف': '🧼', 'وسخ': '🫧',
+    'خفيف': '🪶', 'ثقيل': '🏋️', 'مفتوح': '🔓', 'مكسور': '🔨', 'مغلق': '🔒',
+    'حلو': '🍯', 'مريض': '🩹', 'جميل': '🌸', 'قريب': '📍', 'بعيد': '🔭', 'واسع': '↔️',
+    'سريع': '⚡', 'سهل': '👍', 'صعب': '🧩', 'رخيص': '🏷️', 'جوعان': '🍽️', 'عطشان': '🥤',
+    'غضبان': '😠', 'كسلان': '😴', 'ملان': '🥛', 'حاد': '✂️',
+    'شكرا': '🙏', 'سؤال': '❓', 'يوم': '📅', 'اسبوع': '📆', 'شهر': '🗓️', 'سنه': '🗓️',
+    'دقيقه': '⏱️', 'مجله': '📰', 'درس': '📚', 'دروس': '📚', 'حرف': '🔤', 'كلمه': '💬',
+    'كلمات': '💬', 'لغه': '🗣️', 'لون': '🎨', 'الوان': '🎨', 'جالس': '🪑', 'واقف': '🧍', 'كريم': '🎁',
+    'ذهب': '🚶', 'ذهبت': '🚶', 'ذهبوا': '🚶', 'ذهبن': '🚶', 'ذهبتم': '🚶', 'ذهبنا': '🚶',
+    'خرج': '🚪', 'دخل': '🚪', 'رجع': '↩️', 'جلس': '🪑', 'قال': '🗣️', 'قالت': '🗣️',
+    'سافر': '✈️', 'ساعد': '🤝', 'استقبل': '🤝', 'انتظر': '⏳', 'رحب': '👋',
+    'امس': '⏪', 'اليوم': '📅', 'الان': '⏱️', 'قبل': '⏪',
+    'في': '📥', 'علي': '📦', 'تحت': '⬇️', 'امام': '➡️', 'خلف': '⬅️',
+    'حافله': '🚌', 'جيب': '👖', 'نقود': '🪙', 'قرش': '🪙', 'ريال': '🪙',
+    'عجله': '⭕', 'مسطره': '📏', 'حفيد': '👦', 'كعبه': '🕋',
+    'واحد': '1️⃣', 'اثنان': '2️⃣', 'ثلاثه': '3️⃣', 'اربعه': '4️⃣', 'خمسه': '5️⃣',
+    'سته': '6️⃣', 'سبعه': '7️⃣', 'ثمانيه': '8️⃣', 'تسعه': '9️⃣', 'عشره': '🔟'
   };
 
   function getVisual(w) {
     if (!w) return null;
-    var ar = norm(w.ar);
-    for (var ck in COLOR_MAP) {
-      if (ar.indexOf(ck) >= 0) return { type: 'color', color: COLOR_MAP[ck].color, border: COLOR_MAP[ck].border, name: COLOR_MAP[ck].name };
+    // Homografen eerst onderscheiden op id / harakat (قَطُّ vs قِطٌّ, رِجْل vs رَجُل)
+    if (w.id === 'l24-3' || /\u0642\u064e\u0637/.test(w.ar || '')) return { type: 'badge', icon: '🕰️' };
+    if (w.id === 'l6-4' || /\u0631\u0650\u062c\u0652\u0644/.test(w.ar || '')) return { type: 'photo', src: 'img/duo/foot.svg' };
+    if (w.id === 'l24-19') return { type: 'photo', src: 'img/duo/chair.svg' };
+
+    var tokens = norm(w.ar).split(/\s+/).filter(Boolean);
+    var i, tok, stem;
+    for (i = 0; i < tokens.length; i++) {
+      tok = tokens[i];
+      stem = tok.indexOf('ال') === 0 && tok.length > 3 ? tok.slice(2) : tok;
+      if (COLOR_MAP[tok] || COLOR_MAP[stem]) {
+        var c = COLOR_MAP[tok] || COLOR_MAP[stem];
+        return { type: 'color', color: c.color, border: c.border, name: c.name };
+      }
+      if (PHOTO_EXACT[tok]) return { type: 'photo', src: PHOTO_EXACT[tok] };
+      if (PHOTO_EXACT[stem]) return { type: 'photo', src: PHOTO_EXACT[stem] };
     }
-    for (var pk in PHOTO_MAP) {
-      if (ar.indexOf(pk) >= 0) return { type: 'photo', src: PHOTO_MAP[pk] };
+
+    // Arabische conceptbadge op exact woord
+    for (i = 0; i < tokens.length; i++) {
+      tok = tokens[i];
+      stem = tok.indexOf('ال') === 0 && tok.length > 3 ? tok.slice(2) : tok;
+      if (BADGE_MAP[tok]) return { type: 'badge', icon: BADGE_MAP[tok] };
+      if (BADGE_MAP[stem]) return { type: 'badge', icon: BADGE_MAP[stem] };
     }
-    var nl = String(w.nl || '').toLowerCase().trim().replace(/^(een|de|het)\s+/, '');
-    for (var i = 0; i < NL_PHOTO_MAP.length; i++) {
-      if (nl.indexOf(NL_PHOTO_MAP[i][0]) >= 0) return { type: 'photo', src: NL_PHOTO_MAP[i][1] };
-    }
-    for (var bk in BADGE_MAP) {
-      if (ar.indexOf(bk) >= 0) return { type: 'badge', icon: BADGE_MAP[bk] };
+
+    // Nederlandse woordmatch alleen op hele kernwoorden (zonder toelichting tussen haakjes)
+    var coreNl = String(w.nl || '').replace(/\([^)]*\)/g, ' ').toLowerCase();
+    var nlWords = coreNl.split(/[^a-z\u00C0-\u017F]+/).filter(Boolean);
+    for (i = 0; i < nlWords.length; i++) {
+      if (NL_PHOTO_WORDS[nlWords[i]]) return { type: 'photo', src: NL_PHOTO_WORDS[nlWords[i]] };
     }
     return null;
   }
@@ -241,7 +349,7 @@
           '<span class="vl-hero-swatch" style="background:' + v.color + ';border:2px solid ' + (v.border || 'transparent') + '"></span>' +
           '<strong class="vl-hero-color-name">' + esc(v.name || (w && w.nl) || '') + '</strong></div>';
       }
-      return '<div class="vl-hero-badge"><span class="vl-hero-emoji">' + v.icon + '</span><span class="vl-hero-badgelb">' + esc((w && w.nl) || '') + '</span></div>';
+      return '<div class="vl-hero-badge"><span class="vl-hero-emoji">' + v.icon + '</span></div>';
     }
     if (mode === 'question') {
       if (v.type === 'photo') return '<div class="vl-q-photo"><img src="' + esc(v.src) + '" alt="' + esc((w && w.nl) || '') + '" loading="lazy" decoding="async"></div>';
@@ -334,6 +442,18 @@
     var opts = shuffle([word].concat(picked));
     return { type: 'ar2img', word: word, answer: word.id, options: opts };
   }
+  function choiceTF(word, n) {
+    var truth = Math.random() >= 0.45;
+    var shownNl = truth ? word.nl : (distractors(word, n, 'nl', 1)[0] || word.nl);
+    if (shownNl === word.nl) truth = true;
+    return {
+      type: 'tf',
+      word: word,
+      shownNl: shownNl,
+      answer: truth ? 'Ja, klopt' : 'Nee, klopt niet',
+      options: ['Ja, klopt', 'Nee, klopt niet']
+    };
+  }
   function build(n) {
     var map = jget(K_PROG, {});
     var ws = wordsFor(n).sort(function (a, b) {
@@ -342,21 +462,25 @@
     var targets = shuffle(ws.slice(0, 8));
     var qs = [];
 
-    // Strategie voor makkelijk leren (van herkennen naar produceren):
-    // 1. Eerst visuele herkenning & begrip (ar2img: 2x2 foto-keuze, of ar2nl met plaatje)
-    // 2. Daarna actieve productie (pic2ar: foto -> Arabisch, of nl2ar met plaatje)
-    // 3. Koppelspel (match) halverwege voor snelle automatisering
+    // Didactische opbouw van herkennen -> koppelen -> produceren:
+    // Fase 1 (eerste 3 opgaven): ar2img (2x2 beeldkeuze), tf (snelle stelling) of ar2nl (begrip)
+    // Fase 2 (opgave 4): match (4-paren koppelspel)
+    // Fase 3 (daarna): pic2ar (foto/kleur -> Arabisch) & nl2ar (actieve productie)
+    var recog = [], prod = [];
     targets.forEach(function (w, i) {
-      var hasPhoto = !!picUrl(w);
-      var box = getP(map, w.id).box || 0;
-      if (hasPhoto && (i % 3 === 0 || (box === 0 && i < 2))) {
-        qs.push(i % 2 === 0 ? choice(w, n, 'pic2ar') : choiceImgGrid(w, n));
-      } else if (i % 2 === 0) {
-        qs.push(choice(w, n, 'ar2nl'));
+      var vis = getVisual(w);
+      var hasPhoto = vis && vis.type === 'photo';
+      var hasColor = vis && vis.type === 'color';
+      if (i < 4) {
+        if (hasPhoto && i % 2 === 0) recog.push(choiceImgGrid(w, n));
+        else if (i === 1 && ws.length >= 3) recog.push(choiceTF(w, n));
+        else recog.push(choice(w, n, 'ar2nl'));
       } else {
-        qs.push(choice(w, n, 'nl2ar'));
+        if ((hasPhoto || hasColor) && i % 2 === 0) prod.push(choice(w, n, 'pic2ar'));
+        else prod.push(choice(w, n, 'nl2ar'));
       }
     });
+    qs = recog.concat(prod);
 
     if (qs.length < 5) {
       targets.forEach(function (w, i) {
@@ -385,8 +509,12 @@
     app = document.getElementById('gd-app');
     if (!app) return;
     bind();
-    S = { n: n, screen: mode === 'words' ? 'words' : 'play', qs: [], i: 0, hearts: MAX_HEARTS, correct: 0, attempts: 0,
-      xp: 0, chosen: -1, fb: null, committed: false, wrongIds: {}, missed: [], queued: false, perfect: true };
+    S = {
+      n: n, screen: mode === 'words' ? 'words' : 'play', qs: [], i: 0, hearts: MAX_HEARTS,
+      correct: 0, attempts: 0, xp: 0, combo: 0, chosen: -1, hintShown: false, fb: null,
+      committed: false, wrongIds: {}, missed: [], queued: false, perfect: true,
+      wordView: 'cards', cardIdx: 0, cardFlip: false, filterTodo: false
+    };
     if (S.screen === 'play') S.qs = build(n);
     document.body.classList.remove('lh-on');
     document.body.classList.add('lh-skin');
@@ -404,8 +532,8 @@
   }
   function score(ok, id, xp) {
     S.attempts++;
-    if (ok) { S.correct++; S.xp += xp == null ? 10 : xp; }
-    else { S.hearts = Math.max(0, S.hearts - 0.5); S.perfect = false; }
+    if (ok) { S.correct++; S.combo++; S.xp += xp == null ? 10 : xp; }
+    else { S.combo = 0; S.hearts = Math.max(0, S.hearts - 0.5); S.perfect = false; }
     if (id) bump(id, ok);
   }
   function commitXp() {
@@ -444,7 +572,11 @@
     score(ok, q.word.id);
     if (!ok) {
       S.wrongIds[q.word.id] = true;
-      if (!S.queued) S.missed.push(choice(q.word, S.n, picUrl(q.word) ? 'pic2ar' : 'nl2ar'));
+      if (!S.queued) {
+        var retryQ = choice(q.word, S.n, picUrl(q.word) ? 'pic2ar' : 'nl2ar');
+        retryQ.retry = true;
+        S.missed.push(retryQ);
+      }
     }
     S.fb = { ok: ok };
     render();
@@ -454,7 +586,7 @@
     clearTimeout(fastTimer);
     if (!S) return;
     if (S.hearts <= 0) { S.screen = 'fail'; S.fb = null; render(); return; }
-    S.i++; S.chosen = -1; S.fb = null;
+    S.i++; S.chosen = -1; S.hintShown = false; S.fb = null;
     // Herhaal gemiste woorden als de leerling nog hartjes heeft
     if (S.i >= S.qs.length && S.hearts > 0 && !S.queued && S.missed.length) {
       S.queued = true;
@@ -483,7 +615,7 @@
     // fout paar: kost een half hartje; de twee woorden worden als fout geteld
     var a = q.sel.id, b = id;
     q.wrong = { a: a, b: b, side: side };
-    S.hearts = Math.max(0, S.hearts - 0.5); S.perfect = false;
+    S.combo = 0; S.hearts = Math.max(0, S.hearts - 0.5); S.perfect = false;
     [a, b].forEach(function (x) { if (!q.slipped[x]) { q.slipped[x] = true; S.attempts++; bump(x, false); } });
     render();
     setTimeout(function () {
@@ -511,18 +643,54 @@
       '<button type="button" class="gd-fast' + (fastOn() ? ' on' : '') + (superOn() ? ' super' : '') + '" data-vl="fast" aria-pressed="' + fastOn() + '" title="' + (superOn() ? 'Supersnel: toont alleen juist/fout en gaat meteen door' : (fastOn() ? 'Snelle modus · klik nogmaals voor Supersnel' : 'Normaal · klik voor Snel of Supersnel')) + '">' + (superOn() ? '⚡⚡ Supersnel' : '⚡ Snel') + '</button></div>';
   }
 
+  function flashcardDeck(ws, map) {
+    var idx = Math.max(0, Math.min(S.cardIdx | 0, ws.length - 1));
+    var w = ws[idx];
+    var box = getP(map, w.id).box || 0;
+    var status = box >= MASTERY ? 'known' : (box === 1 ? 'learning' : 'new');
+    var statusLabel = box >= MASTERY ? '✓ Beheerst' : (box === 1 ? 'In oefening' : 'Nieuw');
+    var vis = getVisual(w);
+    var heroVis = vis ? renderVisual(w, 'hero') : '';
+    return '<div class="vl-deck">' +
+      '<div class="vl-deck-head"><span>Kaart ' + (idx + 1) + ' van ' + ws.length + '</span><span class="vl-status-chip ' + status + '">' + statusLabel + '</span></div>' +
+      '<div class="vl-flashcard' + (S.cardFlip ? ' flipped' : '') + '" role="button" tabindex="0" data-vl="flip" aria-pressed="' + !!S.cardFlip + '" aria-label="Tik om de betekenis te tonen">' +
+        heroVis +
+        '<div class="vl-flash-ar" lang="ar" dir="rtl">' + esc(w.ar) + '</div>' +
+        '<div class="vl-flash-tools"><button type="button" class="vl-speak-btn vl-speak-pill" data-vl="speak" data-ar="' + esc(w.ar) + '" aria-label="Beluister ' + esc(w.ar) + '">' + icon('speaker') + '<span>Luister</span></button></div>' +
+        (S.cardFlip
+          ? '<div class="vl-flash-back"><strong>' + esc(w.nl) + '</strong>' +
+              '<div class="vl-flash-rate">' +
+                '<button type="button" class="vl-rate-btn" data-vl="mark" data-id="' + esc(w.id) + '" data-ok="0">Nog oefenen</button>' +
+                '<button type="button" class="vl-rate-btn ok" data-vl="mark" data-id="' + esc(w.id) + '" data-ok="1">✓ Ken ik</button>' +
+              '</div></div>'
+          : '<div class="vl-flash-cue">Tik op de kaart voor de betekenis</div>') +
+      '</div>' +
+      '<div class="vl-deck-nav">' +
+        '<button type="button" class="gd-soft" data-vl="cprev" ' + (idx === 0 ? 'disabled ' : '') + '>‹ Vorige</button>' +
+        '<button type="button" class="gd-soft" data-vl="cnext" ' + (idx >= ws.length - 1 ? 'disabled ' : '') + '>Volgende ›</button>' +
+      '</div></div>';
+  }
+
   function wordsScreen() {
     var ws = wordsFor(S.n), map = jget(K_PROG, {});
     var totalMastered = ws.filter(function (w) { return getP(map, w.id).box >= MASTERY; }).length;
     var pct = ws.length ? Math.round((100 * totalMastered) / ws.length) : 0;
-    return '<div class="gd-shell gd-play vl">' +
-      '<div class="gd-lesson-bar"><button type="button" class="vl-exit" data-vl="exit" aria-label="Terug naar het leerpad">' + icon('close') + '</button>' +
-      '<div class="gd-progress-wrap"><div class="gd-progress-title"><strong>Woordenschat · Les ' + S.n + '</strong><span>' + ws.length + ' woorden</span></div>' +
-      '<div class="gd-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"><span style="width:' + pct + '%"></span></div></div></div>' +
-      '<div class="gd-card"><div class="gd-stage-tag">Eerst bekijken</div><h1>' + esc(TITLES[S.n] || 'Les ' + S.n) + '</h1>' +
-      '<p class="gd-support">Bekijk de woorden met hun afbeeldingen. Klik op het luidsprekertje om de uitspraak te horen en start daarna de oefening.</p>' +
-      '<div class="vl-words-meta"><span class="vl-words-count">📚 ' + ws.length + ' woorden</span><span class="vl-mastery-count">✓ ' + totalMastered + ' beheerst</span></div>' +
-      '<ul class="vl-words">' + ws.map(function (w) {
+    var viewMode = S.wordView || 'list';
+    var filtered = S.filterTodo ? ws.filter(function (w) { return getP(map, w.id).box < MASTERY; }) : ws;
+    if (!filtered.length) filtered = ws;
+
+    var switcher = '<div class="vl-view-switch" role="tablist" aria-label="Weergave">' +
+      '<button type="button" role="tab" class="vl-vtab' + (viewMode === 'cards' ? ' on' : '') + '" data-vl="wview" data-v="cards" aria-selected="' + (viewMode === 'cards') + '">Kaarten</button>' +
+      '<button type="button" role="tab" class="vl-vtab' + (viewMode === 'list' ? ' on' : '') + '" data-vl="wview" data-v="list" aria-selected="' + (viewMode === 'list') + '">Woordenlijst</button>' +
+      '</div>';
+
+    var listHtml = '<div class="vl-words-meta">' +
+        '<span class="vl-words-count">' + ws.length + ' woorden · ' + totalMastered + ' beheerst</span>' +
+        (totalMastered > 0 && totalMastered < ws.length
+          ? '<button type="button" class="vl-filter-btn' + (S.filterTodo ? ' on' : '') + '" data-vl="ftodo">' + (S.filterTodo ? 'Alle tonen' : 'Nog te leren (' + (ws.length - totalMastered) + ')') + '</button>'
+          : '') +
+      '</div>' +
+      '<ul class="vl-words">' + filtered.map(function (w) {
         var box = getP(map, w.id).box || 0;
         var status = box >= MASTERY ? 'known' : (box === 1 ? 'learning' : 'new');
         var statusLabel = box >= MASTERY ? '✓ Beheerst' : (box === 1 ? 'In oefening' : 'Nieuw');
@@ -539,11 +707,21 @@
             '<span class="vl-status-chip ' + status + '">' + statusLabel + '</span>' +
           '</div>' +
         '</li>';
-      }).join('') + '</ul>' +
+      }).join('') + '</ul>';
+
+    return '<div class="gd-shell gd-play vl">' +
+      '<div class="gd-lesson-bar"><button type="button" class="vl-exit" data-vl="exit" aria-label="Terug naar het leerpad">' + icon('close') + '</button>' +
+      '<div class="gd-progress-wrap"><div class="gd-progress-title"><strong>Woordenschat · Les ' + S.n + '</strong><span>' + totalMastered + ' / ' + ws.length + ' beheerst</span></div>' +
+      '<div class="gd-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"><span style="width:' + pct + '%"></span></div></div></div>' +
+      '<div class="gd-card"><div class="gd-stage-tag">Eerst bekijken</div><h1>' + esc(TITLES[S.n] || 'Les ' + S.n) + '</h1>' +
+      '<p class="gd-support">Oefen de woorden eerst met de kaarten of bekijk de lijst, en start daarna de ronde.</p>' +
+      switcher +
+      (viewMode === 'cards' ? flashcardDeck(ws, map) : listHtml) +
       '<div class="gd-finish-actions"><button type="button" class="gd-primary gd-full" data-vl="start">Start oefenen</button></div></div></div>';
   }
 
   function matchBody(q) {
+    var doneCount = Object.keys(q.done).length;
     function tile(side, id) {
       var w = wordById(id), done = q.done[id];
       var sel = q.sel && q.sel.side === side && q.sel.id === id;
@@ -557,23 +735,35 @@
         (done ? '<span class="vl-tile-check" aria-hidden="true">✓</span>' : '') +
         '</button>';
     }
-    return '<div class="vl-task-header"><span class="vl-task-tag">Koppelspel</span>' +
+    return '<div class="vl-task-header"><span class="vl-task-tag">Koppelspel · ' + doneCount + ' / ' + q.words.length + '</span>' +
       '<h2 class="gd-task-title">Maak de juiste paren</h2>' +
       '<p class="gd-subinstruction">Tik een Arabisch woord en daarna de bijbehorende vertaling.</p></div>' +
       '<div class="vl-match"><div class="vl-col">' + q.left.map(function (id) { return tile('l', id); }).join('') + '</div>' +
       '<div class="vl-col">' + q.right.map(function (id) { return tile('r', id); }).join('') + '</div></div>';
   }
 
+  function optButton(o, i, arOpt, q) {
+    var picked = S.chosen === i;
+    var mark = '';
+    if (S.fb) mark = o === q.answer ? ' correct' : (picked ? ' wrong' : '');
+    return '<button type="button" class="gd-option vl-opt-row' + (arOpt ? ' gd-option-ar gd-option-wide' : '') + (picked ? ' selected' : '') + mark +
+      '" data-vl="pick" data-i="' + i + '" ' + (S.fb ? 'disabled ' : '') + 'aria-pressed="' + picked + '"' +
+      (arOpt ? ' lang="ar" dir="rtl"' : '') + '>' +
+      '<span class="vl-opt-key" aria-hidden="true">' + (i + 1) + '</span>' +
+      '<span class="vl-opt-lbl">' + esc(o) + '</span></button>';
+  }
+
   function playScreen() {
     var q = current(), total = S.qs.length, pct = Math.round(100 * S.i / Math.max(1, total));
+    var tagPrefix = q.retry ? 'Herhaling · ' : '';
     var body;
     if (q.type === 'match') body = matchBody(q);
     else if (q.type === 'ar2img') {
-      body = '<div class="vl-task-header"><span class="vl-task-tag">Beeldkeuze</span>' +
+      body = '<div class="vl-task-header"><span class="vl-task-tag">' + tagPrefix + 'Beeldkeuze</span>' +
         '<h2 class="gd-task-title">Kies het juiste plaatje</h2></div>' +
         '<div class="vl-question-box"><div class="gd-ar-question gd-arabic" lang="ar" dir="rtl">' + esc(q.word.ar) +
         '<button type="button" class="vl-speak-btn vl-speak-inline" data-vl="speak" data-ar="' + esc(q.word.ar) + '" aria-label="Beluister">' + icon('speaker') + '</button></div></div>' +
-        '<div class="gd-options vl-pic-grid">' + q.options.map(function (w, i) {
+        '<div class="gd-options vl-pic-grid' + (S.fb ? ' revealed' : '') + '">' + q.options.map(function (w, i) {
           var picked = S.chosen === i;
           var mark = '';
           if (S.fb) mark = w.id === q.answer ? ' correct' : (picked ? ' wrong' : '');
@@ -582,42 +772,45 @@
             '" data-vl="pick" data-i="' + i + '" ' + (S.fb ? 'disabled ' : '') + 'aria-pressed="' + picked +
             '" aria-label="' + esc(w.nl) + '"><span class="vl-pic-num" aria-hidden="true">' + (i + 1) + '</span>' +
             '<img src="' + esc(url) + '" alt="' + esc(w.nl) + '" loading="lazy" decoding="async"/>' +
-            '<span class="vl-pic-opt-lbl">' + esc(w.nl) + '</span></button>';
+            (S.fb ? '<span class="vl-pic-opt-lbl">' + esc(w.nl) + '</span>' : '') + '</button>';
         }).join('') + '</div>' +
+        '<div class="gd-task-actions"><button type="button" class="gd-primary gd-full" data-vl="check" ' + (answered() && !S.fb ? '' : 'disabled') + '>Controleer</button></div>';
+    } else if (q.type === 'tf') {
+      body = '<div class="vl-task-header"><span class="vl-task-tag">' + tagPrefix + 'Snelle check</span>' +
+        '<h2 class="gd-task-title">Klopt deze vertaling?</h2></div>' +
+        '<div class="vl-tf-card">' +
+          '<div class="gd-ar-question gd-arabic" lang="ar" dir="rtl">' + esc(q.word.ar) +
+            '<button type="button" class="vl-speak-btn vl-speak-inline" data-vl="speak" data-ar="' + esc(q.word.ar) + '" aria-label="Beluister">' + icon('speaker') + '</button>' +
+          '</div>' +
+          '<div class="vl-tf-eq" aria-hidden="true">=</div>' +
+          '<div class="gd-nl-question">' + esc(q.shownNl) + '</div>' +
+        '</div>' +
+        '<div class="gd-options vl-tf-opts">' + q.options.map(function (o, i) { return optButton(o, i, false, q); }).join('') + '</div>' +
         '<div class="gd-task-actions"><button type="button" class="gd-primary gd-full" data-vl="check" ' + (answered() && !S.fb ? '' : 'disabled') + '>Controleer</button></div>';
     } else if (q.type === 'pic2ar' || q.type === 'img2ar' || q.type === 'img2nl') {
       var arOpt = q.type !== 'img2nl';
       var v = getVisual(q.word);
-      body = '<div class="vl-task-header"><span class="vl-task-tag">Beeldherkenning</span>' +
+      body = '<div class="vl-task-header"><span class="vl-task-tag">' + tagPrefix + 'Beeldherkenning</span>' +
         '<h2 class="gd-task-title">' + (arOpt ? 'Wat zie je op de afbeelding?' : 'Wat betekent dit plaatje?') + '</h2></div>' +
         (v ? renderVisual(q.word, 'hero') : '') +
-        '<div class="gd-options">' + q.options.map(function (o, i) {
-          var picked = S.chosen === i;
-          var mark = '';
-          if (S.fb) mark = o === q.answer ? ' correct' : (picked ? ' wrong' : '');
-          return '<button type="button" class="gd-option' + (arOpt ? ' gd-option-ar gd-option-wide' : '') + (picked ? ' selected' : '') + mark +
-            '" data-vl="pick" data-i="' + i + '" ' + (S.fb ? 'disabled ' : '') + 'aria-pressed="' + picked + '"' +
-            (arOpt ? ' lang="ar" dir="rtl"' : '') + '>' + esc(o) + '</button>';
-        }).join('') + '</div>' +
+        '<div class="gd-options">' + q.options.map(function (o, i) { return optButton(o, i, arOpt, q); }).join('') + '</div>' +
         '<div class="gd-task-actions"><button type="button" class="gd-primary gd-full" data-vl="check" ' + (answered() && !S.fb ? '' : 'disabled') + '>Controleer</button></div>';
     } else {
       var ar = q.type === 'nl2ar';
-      var vHtml = renderVisual(q.word, 'question');
-      body = '<div class="vl-task-header"><span class="vl-task-tag">' + (ar ? 'Nederlands naar Arabisch' : 'Betekenis') + '</span>' +
+      var hasVis = !!getVisual(q.word);
+      var qVis = ar ? renderVisual(q.word, 'question') : (S.hintShown ? renderVisual(q.word, 'question') : '');
+      var hintBtn = (!ar && hasVis && !S.hintShown && !S.fb)
+        ? '<button type="button" class="vl-hint-btn" data-vl="hint">' + icon('bulb') + '<span>Plaatje als hint</span></button>'
+        : '';
+      body = '<div class="vl-task-header"><span class="vl-task-tag">' + tagPrefix + (ar ? 'Nederlands naar Arabisch' : 'Betekenis') + '</span>' +
         '<h2 class="gd-task-title">' + (ar ? 'Kies het juiste Arabische woord' : 'Wat betekent dit woord?') + '</h2></div>' +
-        '<div class="vl-question-box">' + vHtml +
+        '<div class="vl-question-box">' + qVis +
           (ar ? '<div class="gd-nl-question">' + esc(q.word.nl) + '</div>'
               : '<div class="gd-ar-question gd-arabic" lang="ar" dir="rtl">' + esc(q.word.ar) +
                 '<button type="button" class="vl-speak-btn vl-speak-inline" data-vl="speak" data-ar="' + esc(q.word.ar) + '" aria-label="Beluister">' + icon('speaker') + '</button></div>') +
+          hintBtn +
         '</div>' +
-        '<div class="gd-options">' + q.options.map(function (o, i) {
-          var picked = S.chosen === i;
-          var mark = '';
-          if (S.fb) mark = o === q.answer ? ' correct' : (picked ? ' wrong' : '');
-          return '<button type="button" class="gd-option' + (ar ? ' gd-option-ar gd-option-wide' : '') + (picked ? ' selected' : '') + mark +
-            '" data-vl="pick" data-i="' + i + '" ' + (S.fb ? 'disabled ' : '') + 'aria-pressed="' + picked + '"' +
-            (ar ? ' lang="ar" dir="rtl"' : '') + '>' + esc(o) + '</button>';
-        }).join('') + '</div>' +
+        '<div class="gd-options">' + q.options.map(function (o, i) { return optButton(o, i, ar, q); }).join('') + '</div>' +
         '<div class="gd-task-actions"><button type="button" class="gd-primary gd-full" data-vl="check" ' + (answered() && !S.fb ? '' : 'disabled') + '>Controleer</button></div>';
     }
     var fb = '';
@@ -629,6 +822,7 @@
           '<div class="gd-autonext" aria-hidden="true"><i></i></div></div></section>';
       } else {
         var headline = good ? ['Goed!', 'Prima!', 'Uitstekend!'][S.i % 3] : 'Juiste antwoord:';
+        var comboBadge = (good && S.combo >= 3) ? '<span class="gd-combo">' + S.combo + '× combo</span>' : '';
         var fbVis = renderVisual(w, 'feedback');
         var detail = S.fb.match ? '<p class="gd-correct-answer">Alle paren gevonden! Goed gedaan.</p>'
           : '<div class="vl-fb-card">' + fbVis +
@@ -639,7 +833,7 @@
               '<button type="button" class="vl-speak-btn" data-vl="speak" data-ar="' + esc(w.ar) + '" aria-label="Beluister">' + icon('speaker') + '</button>' +
             '</div>';
         fb = '<section class="gd-feedback gd-feedback-sheet ' + (good ? 'good' : 'review') + '" role="status" aria-live="assertive">' +
-          '<div class="gd-feedback-inner"><strong>' + headline + '</strong>' + detail +
+          '<div class="gd-feedback-inner"><strong>' + headline + '</strong>' + comboBadge + detail +
           (fastOn() ? '<div class="gd-autonext" aria-hidden="true"><i></i></div>' : '') +
           '<button type="button" class="gd-primary gd-full" data-vl="next">Verder</button></div></section>';
       }
@@ -660,6 +854,7 @@
       '<p>' + S.correct + ' van de ' + S.attempts + ' antwoorden juist.</p>' +
       '<div class="gd-finish-actions"><button type="button" class="gd-primary gd-full" data-vl="continue">Doorgaan</button>' +
       '<button type="button" class="gd-soft gd-full" data-vl="again">Nog een ronde</button>' +
+      '<button type="button" class="gd-soft gd-full" data-vl="review-words">Woorden bekijken</button>' +
       '<button type="button" class="gd-soft gd-full" data-vl="exit">Terug naar het leerpad</button></div></div></div>';
   }
   function failScreen() {
@@ -668,6 +863,7 @@
       '<div class="gd-card gd-finish"><span class="gd-finish-icon">' + icon('heart') + '</span>' +
       '<h1>Geen hartjes meer</h1><p>Je voortgang van deze ronde is bewaard. Probeer het zo nog een keer.</p>' +
       '<div class="gd-finish-actions"><button type="button" class="gd-primary gd-full" data-vl="again">Opnieuw proberen</button>' +
+      '<button type="button" class="gd-soft gd-full" data-vl="review-words">Woorden bekijken</button>' +
       '<button type="button" class="gd-soft gd-full" data-vl="exit">Terug naar het leerpad</button></div></div></div>';
   }
 
@@ -687,7 +883,23 @@
     var a = t.getAttribute('data-vl');
     if (a === 'exit') return leave();
     if (a === 'fast') { cycleSpeed(); if (!fastOn()) clearTimeout(fastTimer); render(); return; }
-    if (a === 'start') { clearTimeout(fastTimer); S.screen = 'play'; S.qs = build(S.n); S.i = 0; render(); return; }
+    if (a === 'start') { clearTimeout(fastTimer); S.screen = 'play'; S.qs = build(S.n); S.i = 0; S.chosen = -1; S.hintShown = false; S.fb = null; render(); return; }
+    if (a === 'review-words') { clearTimeout(fastTimer); var wn = S.n; commitXp(); S = null; return open(wn, 'words'); }
+    if (a === 'wview') { S.wordView = t.getAttribute('data-v') === 'cards' ? 'cards' : 'list'; S.cardFlip = false; render(); return; }
+    if (a === 'ftodo') { S.filterTodo = !S.filterTodo; render(); return; }
+    if (a === 'flip') { S.cardFlip = !S.cardFlip; render(); return; }
+    if (a === 'cprev') { S.cardIdx = Math.max(0, (S.cardIdx | 0) - 1); S.cardFlip = false; render(); return; }
+    if (a === 'cnext') { S.cardIdx = Math.min(wordsFor(S.n).length - 1, (S.cardIdx | 0) + 1); S.cardFlip = false; render(); return; }
+    if (a === 'mark') {
+      var mid = t.getAttribute('data-id'), mok = t.getAttribute('data-ok') === '1';
+      bump(mid, mok);
+      var wsLen = wordsFor(S.n).length;
+      if (S.cardIdx < wsLen - 1) S.cardIdx++;
+      S.cardFlip = false;
+      render();
+      return;
+    }
+    if (a === 'hint') { S.hintShown = true; render(); return; }
     if (a === 'continue') {
       clearTimeout(fastTimer);
       var nums = lessonNums(), cur = S.n, follow = nums.filter(function (x) { return x > cur; })[0];
@@ -698,8 +910,7 @@
     }
     if (a === 'again') { clearTimeout(fastTimer); var n = S.n; commitXp(); S = null; return open(n, 'play'); }
     if (a === 'speak') {
-      var arTxt = t.getAttribute('data-ar') || '';
-      speak(arTxt);
+      speak(t.getAttribute('data-ar') || '', t);
       return;
     }
     if (a === 'pick') {
@@ -714,7 +925,14 @@
     if (a === 'tile') return matchTap(t.getAttribute('data-side'), t.getAttribute('data-id'));
   }
   function onKey(e) {
-    if (!S || S.screen !== 'play' || e.ctrlKey || e.altKey || e.metaKey) return;
+    if (!S || e.ctrlKey || e.altKey || e.metaKey) return;
+    if (S.screen === 'words' && (S.wordView || 'cards') === 'cards') {
+      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); S.cardFlip = !S.cardFlip; render(); return; }
+      if (e.key === 'ArrowRight') { S.cardIdx = Math.min(wordsFor(S.n).length - 1, (S.cardIdx | 0) + 1); S.cardFlip = false; render(); return; }
+      if (e.key === 'ArrowLeft') { S.cardIdx = Math.max(0, (S.cardIdx | 0) - 1); S.cardFlip = false; render(); return; }
+      return;
+    }
+    if (S.screen !== 'play') return;
     var q = current();
     if (!q) return;
     if (S.fb && e.key === 'Enter') { e.preventDefault(); return next(); }

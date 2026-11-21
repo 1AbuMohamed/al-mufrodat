@@ -25,7 +25,7 @@ html[data-theme="light"] body.lh-on, html[data-theme="light"] body.lh-skin {
   --red-ink:#C62828; --flame-ink:#B45F00;
 }
 body.lh-on .site-header, body.lh-skin .site-header { display:none; }
-body.lh-on, body.lh-skin { overflow-x:hidden; }
+body.lh-on, body.lh-skin { overflow-x:hidden; overflow-x:clip; }
 
 .lh, .lh * { box-sizing:border-box; }
 .lh { min-height:100vh; color:var(--text); font-size:17px; line-height:1.4; }
@@ -115,7 +115,7 @@ body.lh-on, body.lh-skin { overflow-x:hidden; }
   padding:12px 14px; border:2px solid var(--line); border-radius:12px; background:var(--surface-2); font-size:15px; font-weight:700;
 }
 @media (max-width:699px) {
-  .lh-top { height:calc(56px + env(safe-area-inset-top)); padding:env(safe-area-inset-top) 8px 0; border-bottom:2px solid var(--line); }
+  .lh-top { min-height:calc(56px + env(safe-area-inset-top)); padding:calc(4px + env(safe-area-inset-top)) 10px 4px; border-bottom:2px solid var(--line); }
   .lh-chips { width:100%; }
   .lh-chip { flex:1; }
 }
@@ -329,12 +329,13 @@ body.lh-on, body.lh-skin { overflow-x:hidden; }
 /* ---- Duolingo-achtig woordenschat-pad ---- */
 .lh-path-vocab { padding-top: 4px; }
 .lh-unit {
-  margin: 18px 12px 8px;
+  margin: 18px 12px 42px;
   border-radius: 16px;
   background: var(--unit, #58CC02);
   box-shadow: 0 4px 0 rgba(0,0,0,.18);
   color: #fff;
 }
+.lh-block + .lh-item.is-cur { margin-top: 28px; }
 .lh-unit-inner { padding: 14px 16px; }
 .lh-unit small { display:block; font:800 12px var(--font-ui); letter-spacing:.06em; opacity:.9; }
 .lh-unit strong { display:block; font:800 18px var(--font-ui); margin-top:2px; }
@@ -431,11 +432,14 @@ body.lh-on, body.lh-skin { overflow-x:hidden; }
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 4px;
-  margin: 0 0 14px;
+  margin: 10px 0 14px;
   padding: 4px;
   border: 2px solid var(--line);
   border-radius: 16px;
   background: var(--surface-2, #1a2a30);
+}
+@media (max-width: 699px) {
+  .lh-pathswitch { margin: 10px 16px 12px; }
 }
 .lh-pathswitch .lh-pswitch {
   min-height: 44px;

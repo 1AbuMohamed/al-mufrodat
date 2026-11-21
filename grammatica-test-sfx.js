@@ -227,7 +227,7 @@
 
     if (finish && finish !== lastFinish) {
       lastFinish = finish;
-      var hearts = document.querySelectorAll('.gd-bar-hearts .on, .gd-hearts .alive');
+      var hearts = document.querySelectorAll('.gd-bar-hearts .alive, .gd-bar-hearts .on, .gd-hearts .alive');
       if (hearts.length >= 5) sfxPerfect();
       else sfxStreak();
     }
@@ -252,7 +252,7 @@
       function (e) {
         ensureAudio();
         var btn = e.target.closest
-          ? e.target.closest('[data-action="check"], [data-action="next"], .gd-primary, .gd-option, .gd-parse-lab')
+          ? e.target.closest('[data-action="check"], [data-action="next"], [data-vl="pick"], [data-vl="check"], [data-vl="next"], [data-vl="tile"], .gd-primary, .gd-option, .gd-parse-lab')
           : null;
         if (!btn) return;
         var lab = (btn.getAttribute('data-value') || btn.textContent || '').trim();

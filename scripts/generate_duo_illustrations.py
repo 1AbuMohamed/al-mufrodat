@@ -28,7 +28,7 @@ def person_head(cx=80, cy=56, r=22, skin="#FFCC99", hair_svg="", extra=""):
         f'<path d="M{cx-5} {cy+7} Q{cx} {cy+12} {cx+5} {cy+7}" stroke="#2B2B2B" stroke-width="2.4" stroke-linecap="round" fill="none"/>'
     )
     ears = (
-        f'<rect x="{cx-7}" y="{cy+r-4}" width="14" height="24" rx="5" fill="{skin}"/>'
+        f'<rect x="{cx-7}" y="{cy+r-6}" width="14" height="22" rx="5" fill="{skin}"/>'
         f'<circle cx="{cx-r+1}" cy="{cy+1}" r="5" fill="{skin}"/>'
         f'<circle cx="{cx+r-1}" cy="{cy+1}" r="5" fill="{skin}"/>'
     )
@@ -142,50 +142,50 @@ ICONS: dict[str, tuple[str, str]] = {
         <circle cx="80" cy="90" r="3" fill="#FFF"/>
         <rect x="86" y="56" width="12" height="14" rx="3" fill="#0F7DB3" opacity="0.45"/>
     """),
-    "doctor": ("#E5F9F6", person_head(80, 56, 21, "#FFCC99",
-        '<path d="M58 52 C58 34 102 34 102 52 C94 44 66 44 58 52 Z" fill="#3A2A1D"/>'
-        '<rect x="68" y="26" width="24" height="14" rx="5" fill="#FFF" stroke="#E0E0E0" stroke-width="1.5"/>'
-        '<path d="M80 29 V37 M76 33 H84" stroke="#FF4B4B" stroke-width="3" stroke-linecap="round"/>'
+    "doctor": ("#E5F9F6", person_head(80, 64, 21, "#FFCC99",
+        '<path d="M58 60 C58 42 102 42 102 60 C94 52 66 52 58 60 Z" fill="#3A2A1D"/>'
+        '<rect x="68" y="32" width="24" height="14" rx="5" fill="#FFF" stroke="#E0E0E0" stroke-width="1.5"/>'
+        '<path d="M80 35 V43 M76 39 H84" stroke="#FF4B4B" stroke-width="3" stroke-linecap="round"/>'
     ) + """
-        <path d="M46 132 C46 98 114 98 114 132 Z" fill="#FFFFFF"/>
-        <path d="M72 98 L80 120 L88 98 Z" fill="#1CB0F6"/>
+        <path d="M46 132 C46 92 114 92 114 132 Z" fill="#FFFFFF"/>
+        <path d="M72 96 L80 118 L88 96 Z" fill="#1CB0F6"/>
         <path d="M64 96 C64 114 72 118 72 124" stroke="#4B5563" stroke-width="3.5" stroke-linecap="round"/>
         <path d="M96 96 C96 114 88 118 88 124" stroke="#4B5563" stroke-width="3.5" stroke-linecap="round"/>
         <circle cx="88" cy="124" r="4.5" fill="#9CA3AF"/>
     """),
-    "boy": ("#E5F6FF", person_head(80, 62, 22, "#FFCC99",
-        '<path d="M56 58 C56 36 104 36 104 58 Z" fill="#1CB0F6"/>'
-        '<path d="M54 56 H114 C114 50 98 48 80 50 Z" fill="#1899D6"/>'
+    "boy": ("#E5F6FF", person_head(80, 68, 22, "#FFCC99",
+        '<path d="M56 64 C56 42 104 42 104 64 Z" fill="#1CB0F6"/>'
+        '<path d="M54 62 H114 C114 56 98 54 80 56 Z" fill="#1899D6"/>'
     ) + """
-        <path d="M48 132 C48 100 112 100 112 132 Z" fill="#58CC02"/>
-        <path d="M68 104 H92 V132 H68 Z" fill="#89E219" opacity="0.4"/>
+        <path d="M48 132 C48 96 112 96 112 132 Z" fill="#58CC02"/>
+        <path d="M68 102 H92 V132 H68 Z" fill="#89E219" opacity="0.4"/>
     """),
     "girl": ("#FFEBF3", """
-        <circle cx="56" cy="70" r="10" fill="#4A2C18"/>
-        <circle cx="104" cy="70" r="10" fill="#4A2C18"/>
-    """ + person_head(80, 60, 21, "#FFCC99",
-        '<path d="M58 56 C58 34 102 34 102 56 C92 46 68 46 58 56 Z" fill="#4A2C18"/>'
-        '<circle cx="62" cy="46" r="5" fill="#FF4B4B"/>'
-        '<circle cx="98" cy="46" r="5" fill="#FF4B4B"/>'
+        <circle cx="56" cy="76" r="10" fill="#4A2C18"/>
+        <circle cx="104" cy="76" r="10" fill="#4A2C18"/>
+    """ + person_head(80, 66, 21, "#FFCC99",
+        '<path d="M58 62 C58 40 102 40 102 62 C92 52 68 52 58 62 Z" fill="#4A2C18"/>'
+        '<circle cx="62" cy="52" r="5" fill="#FF4B4B"/>'
+        '<circle cx="98" cy="52" r="5" fill="#FF4B4B"/>'
     ) + """
-        <path d="M48 132 C48 100 112 100 112 132 Z" fill="#CE82FF"/>
+        <path d="M48 132 C48 96 112 96 112 132 Z" fill="#CE82FF"/>
     """),
-    "student": ("#EDE8FF", person_head(80, 62, 20, "#FFCC99",
-        '<polygon points="80,26 44,40 80,52 116,40" fill="#2B2B2B"/>'
-        '<rect x="64" y="44" width="32" height="8" rx="3" fill="#3F3F46"/>'
-        '<path d="M108 42 V58" stroke="#FFC800" stroke-width="3" stroke-linecap="round"/>'
-        '<circle cx="108" cy="60" r="3" fill="#FFC800"/>'
+    "student": ("#EDE8FF", person_head(80, 68, 20, "#FFCC99",
+        '<polygon points="80,32 44,46 80,58 116,46" fill="#2B2B2B"/>'
+        '<rect x="64" y="50" width="32" height="8" rx="3" fill="#3F3F46"/>'
+        '<path d="M108 48 V64" stroke="#FFC800" stroke-width="3" stroke-linecap="round"/>'
+        '<circle cx="108" cy="66" r="3" fill="#FFC800"/>'
     ) + """
-        <path d="M46 132 C46 100 114 100 114 132 Z" fill="#1CB0F6"/>
+        <path d="M46 132 C46 96 114 96 114 132 Z" fill="#1CB0F6"/>
         <rect x="64" y="108" width="32" height="22" rx="4" fill="#FFC800"/>
         <line x1="80" y1="108" x2="80" y2="130" stroke="#FFF" stroke-width="2"/>
     """),
-    "man": ("#E8F4FA", person_head(80, 56, 22, "#F5B982",
-        '<path d="M58 50 C58 30 102 30 102 50 C92 42 68 42 58 50 Z" fill="#2B2B2B"/>',
-        '<path d="M62 64 C62 82 98 82 98 64 C92 72 68 72 62 64 Z" fill="#2B2B2B"/>'
+    "man": ("#E8F4FA", person_head(80, 66, 22, "#F5B982",
+        '<path d="M58 60 C58 40 102 40 102 60 C92 52 68 52 58 60 Z" fill="#2B2B2B"/>',
+        '<path d="M62 74 C62 92 98 92 98 74 C92 82 68 82 62 74 Z" fill="#2B2B2B"/>'
     ) + """
-        <path d="M44 132 C44 96 116 96 116 132 Z" fill="#2B70C9"/>
-        <path d="M72 96 L80 114 L88 96 Z" fill="#FFF"/>
+        <path d="M44 132 C44 92 116 92 116 132 Z" fill="#2B70C9"/>
+        <path d="M72 98 L80 116 L88 98 Z" fill="#FFF"/>
     """),
     "merchant": ("#FFF3DF", person_head(80, 54, 19, "#F5B982",
         '<path d="M60 46 C60 32 100 32 100 46 Z" fill="#5C3A21"/>'
@@ -627,6 +627,104 @@ ICONS: dict[str, tuple[str, str]] = {
         <circle cx="122" cy="56" r="3" fill="#FFC800"/>
         <circle cx="112" cy="112" r="2" fill="#FFF"/>
         <path d="M96 32 C64 32 42 56 42 84 C42 112 64 132 96 132 C76 122 68 104 68 84 C68 64 76 42 96 32 Z" fill="#FFC800"/>
+    """),
+    "plane": ("#DDF4FF", """
+        <g transform="rotate(-22 80 80)">
+          <path d="M24 76 L64 74 L86 30 L100 30 L86 74 L122 72 L134 54 L142 54 L134 80 L142 106 L134 106 L122 88 L86 86 L100 130 L86 130 L64 86 L24 84 C16 84 16 76 24 76 Z" fill="#1CB0F6"/>
+          <path d="M26 78 C20 78 20 82 26 82 L64 82 L64 78 Z" fill="#84D8FF"/>
+          <circle cx="52" cy="80" r="3" fill="#FFFFFF"/>
+          <circle cx="66" cy="80" r="3" fill="#FFFFFF"/>
+          <circle cx="80" cy="80" r="3" fill="#FFFFFF"/>
+        </g>
+    """),
+    "eye": ("#E8F7FF", """
+        <path d="M26 80 C44 50 116 50 134 80 C116 110 44 110 26 80 Z" fill="#FFFFFF" stroke="#1CB0F6" stroke-width="5" stroke-linejoin="round"/>
+        <circle cx="80" cy="80" r="20" fill="#1CB0F6"/>
+        <circle cx="80" cy="80" r="10" fill="#1E293B"/>
+        <circle cx="74" cy="73" r="4" fill="#FFFFFF"/>
+    """),
+    "hand": ("#FFF3E0", """
+        <rect x="48" y="64" width="60" height="54" rx="22" fill="#FFCC99"/>
+        <rect x="48" y="42" width="12" height="36" rx="6" fill="#FFCC99"/>
+        <rect x="64" y="30" width="12" height="44" rx="6" fill="#FFCC99"/>
+        <rect x="80" y="34" width="12" height="40" rx="6" fill="#FFCC99"/>
+        <rect x="96" y="46" width="12" height="34" rx="6" fill="#FFCC99"/>
+        <rect x="34" y="76" width="22" height="12" rx="6" transform="rotate(-32 45 82)" fill="#FFCC99"/>
+        <path d="M60 92 Q80 100 96 92" stroke="#E0A370" stroke-width="3" stroke-linecap="round" fill="none"/>
+    """),
+    "foot": ("#FFF1E2", """
+        <path d="M60 30 H88 L94 74 C104 82 124 88 126 106 C128 122 108 126 84 126 C56 126 48 114 52 92 L60 30 Z" fill="#1CB0F6"/>
+        <path d="M52 114 H126 C126 124 114 128 84 128 C58 128 50 122 52 114 Z" fill="#FFFFFF"/>
+        <rect x="82" y="84" width="16" height="5" rx="2.5" fill="#FFFFFF"/>
+        <rect x="88" y="94" width="16" height="5" rx="2.5" fill="#FFFFFF"/>
+    """),
+    "ear": ("#FFF2E6", """
+        <path d="M60 56 C60 34 106 34 106 66 C106 88 88 94 88 112 C88 126 68 128 60 116" stroke="#FFCC99" stroke-width="18" stroke-linecap="round" fill="none"/>
+        <path d="M66 58 C66 44 96 44 96 66 C96 80 82 86 80 102" stroke="#D99B66" stroke-width="5" stroke-linecap="round" fill="none"/>
+    """),
+    "exam": ("#EEF2FF", """
+        <rect x="42" y="28" width="76" height="102" rx="10" fill="#FFFFFF" stroke="#6366F1" stroke-width="4"/>
+        <path d="M54 52 L60 58 L70 46" stroke="#58CC02" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="78" y="50" width="28" height="7" rx="3.5" fill="#CBD5E1"/>
+        <path d="M54 78 L60 84 L70 72" stroke="#58CC02" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="78" y="76" width="28" height="7" rx="3.5" fill="#CBD5E1"/>
+        <circle cx="96" cy="108" r="14" fill="#FFC800"/>
+        <text x="96" y="114" text-anchor="middle" font-size="16" font-weight="800" fill="#3B2A00" font-family="sans-serif">A+</text>
+    """),
+    "hotel": ("#FEF3C7", """
+        <rect x="38" y="34" width="84" height="98" rx="8" fill="#1CB0F6"/>
+        <rect x="48" y="46" width="16" height="14" rx="3" fill="#FFC800"/>
+        <rect x="72" y="46" width="16" height="14" rx="3" fill="#FFC800"/>
+        <rect x="96" y="46" width="16" height="14" rx="3" fill="#FFC800"/>
+        <rect x="48" y="70" width="16" height="14" rx="3" fill="#84D8FF"/>
+        <rect x="72" y="70" width="16" height="14" rx="3" fill="#FFC800"/>
+        <rect x="96" y="70" width="16" height="14" rx="3" fill="#84D8FF"/>
+        <rect x="66" y="100" width="28" height="32" rx="4" fill="#FFFFFF"/>
+        <rect x="52" y="24" width="56" height="14" rx="5" fill="#FF4B4B"/>
+    """),
+    "park": ("#E8F9E4", """
+        <rect x="38" y="44" width="14" height="84" rx="4" fill="#8B5A2B"/>
+        <circle cx="45" cy="46" r="24" fill="#58CC02"/>
+        <rect x="74" y="102" width="54" height="10" rx="4" fill="#C87D3B"/>
+        <rect x="80" y="90" width="42" height="8" rx="3" fill="#E08E45"/>
+        <rect x="80" y="112" width="8" height="18" rx="3" fill="#8B5A2B"/>
+        <rect x="114" y="112" width="8" height="18" rx="3" fill="#8B5A2B"/>
+        <circle cx="62" cy="118" r="5" fill="#FF6B9E"/>
+        <circle cx="50" cy="122" r="5" fill="#FFC800"/>
+    """),
+    "airport": ("#E0F2FE", """
+        <rect x="28" y="80" width="104" height="50" rx="8" fill="#FFFFFF" stroke="#93C5FD" stroke-width="3"/>
+        <rect x="106" y="34" width="14" height="48" rx="4" fill="#1CB0F6"/>
+        <rect x="98" y="28" width="30" height="12" rx="5" fill="#0F7DB3"/>
+        <rect x="38" y="92" width="54" height="24" rx="5" fill="#84D8FF"/>
+        <path d="M36 58 L76 46 L68 64 L36 64 Z" fill="#FF4B4B"/>
+    """),
+    "notebook": ("#FFF7E6", """
+        <rect x="44" y="30" width="76" height="100" rx="10" fill="#58CC02"/>
+        <rect x="50" y="36" width="64" height="88" rx="7" fill="#FFFFFF"/>
+        <rect x="40" y="42" width="12" height="7" rx="3.5" fill="#FFC800"/>
+        <rect x="40" y="64" width="12" height="7" rx="3.5" fill="#FFC800"/>
+        <rect x="40" y="86" width="12" height="7" rx="3.5" fill="#FFC800"/>
+        <rect x="40" y="108" width="12" height="7" rx="3.5" fill="#FFC800"/>
+        <rect x="62" y="54" width="42" height="6" rx="3" fill="#84D8FF"/>
+        <rect x="62" y="72" width="42" height="6" rx="3" fill="#CBD5E1"/>
+        <rect x="62" y="90" width="30" height="6" rx="3" fill="#CBD5E1"/>
+    """),
+    "globe": ("#E3F6FF", """
+        <circle cx="80" cy="80" r="46" fill="#1CB0F6"/>
+        <path d="M52 54 C62 46 76 52 74 66 C72 78 54 78 50 92 C48 100 58 112 72 110 C78 108 78 96 66 86 C58 80 48 64 52 54 Z" fill="#58CC02"/>
+        <path d="M90 46 C106 46 118 62 114 78 C110 92 94 94 92 80 C90 66 82 54 90 46 Z" fill="#58CC02"/>
+        <path d="M96 96 C106 94 114 104 108 112 C100 118 92 108 96 96 Z" fill="#58CC02"/>
+        <circle cx="80" cy="80" r="46" stroke="#0F7DB3" stroke-width="3" fill="none"/>
+    """),
+    "engineer": ("#FFF7E0", person_head(80, 60, 21, "#F5B982",
+        '<path d="M56 50 C56 30 104 30 104 50 Z" fill="#FFC800"/>'
+        '<rect x="52" y="48" width="56" height="7" rx="3.5" fill="#E5A800"/>'
+        '<rect x="74" y="34" width="12" height="12" rx="3" fill="#FFF3C4"/>'
+    ) + """
+        <path d="M46 132 C46 98 114 98 114 132 Z" fill="#FF9600"/>
+        <rect x="62" y="106" width="8" height="26" fill="#FFE082"/>
+        <rect x="90" y="106" width="8" height="26" fill="#FFE082"/>
     """),
     "generic": ("#E5F6FF", """
         <rect x="36" y="36" width="88" height="88" rx="20" fill="#1CB0F6"/>

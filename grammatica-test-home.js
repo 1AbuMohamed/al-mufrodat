@@ -413,9 +413,11 @@
     var banner = cur ? '<div class="lh-banner vocab"><div><small>LES ' + cur.n + '</small><strong>' +
       esc(cur.sub || 'Werkwoorden') + '</strong></div>' +
       '<button type="button" class="btn btn-white" data-h="vbstart" data-v="' + cur.n + '">START</button></div>' : '';
-    return '<div class="lh-main">' + pathSwitch(s) + banner +
-      '<div class="lh-meta"><span>' + tot.mastered + ' / ' + tot.total + ' items</span></div>' +
-      tabs(s) + (s.tab === 'lessons' ? tilesHtml(pl) : pathHtml(pl)) + '</div>';
+    return pathSwitch(s) + banner + tabs(s) +
+      '<div class="lh-hero"><h1>Werkwoorden oefenen</h1><p class="lh-sub">' + tot.mastered + ' van ' + tot.total + ' vormen beheerst' +
+      (cur ? ' · Les ' + cur.n : '') + '</p>' +
+      '<button type="button" class="btn btn-blue lh-go" data-h="vbgo" data-f="go">GA VERDER</button></div>' +
+      (s.tab === 'lessons' ? tilesHtml(pl) : pathHtml(pl));
   }
 
   function vocabMain(s, pl) {

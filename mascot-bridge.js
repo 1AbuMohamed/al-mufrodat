@@ -102,20 +102,14 @@
   }
 
   function randomSpot() {
-    /* vermijd linker kolom (nav) — vooral desktop */
+    /* rustige randposities zonder tekst/kaarten te bedekken */
     var wide = (typeof window !== 'undefined' && window.innerWidth >= 900);
     var spots = wide ? [
-      { t: 10, l: 55 }, { t: 10, l: 80 },
-      { t: 22, l: 58 }, { t: 22, l: 78 },
-      { t: 36, l: 52 }, { t: 36, l: 82 },
-      { t: 50, l: 56 }, { t: 50, l: 78 },
-      { t: 64, l: 54 }, { t: 64, l: 74 }
+      { t: 74, l: 88 }, { t: 62, l: 90 },
+      { t: 78, l: 82 }, { t: 72, l: 22 }
     ] : [
-      { t: 10, l: 8 }, { t: 10, l: 78 },
-      { t: 22, l: 10 }, { t: 22, l: 75 },
-      { t: 36, l: 8 }, { t: 36, l: 80 },
-      { t: 50, l: 10 }, { t: 50, l: 76 },
-      { t: 64, l: 12 }, { t: 64, l: 72 }
+      { t: 68, l: 78 }, { t: 58, l: 78 },
+      { t: 68, l: 10 }, { t: 62, l: 76 }
     ];
     var i = Math.floor(Math.random() * spots.length);
     if (spots.length > 1 && i === lastSpot) {
@@ -124,8 +118,8 @@
     lastSpot = i;
     var s = spots[i];
     return {
-      top: Math.max(6, Math.min(74, s.t + (Math.random() * 5 - 2.5))),
-      left: Math.max(3, Math.min(84, s.l + (Math.random() * 5 - 2.5)))
+      top: Math.max(8, Math.min(80, s.t + (Math.random() * 4 - 2))),
+      left: Math.max(3, Math.min(90, s.l + (Math.random() * 3 - 1.5)))
     };
   }
 
